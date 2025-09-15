@@ -1,14 +1,16 @@
 :root {
   --bg: #0a0a0a;
-  --bg-2: #1a1a1a;
-  --text: #ffffff;
-  --muted: #cccccc;
-  --accent: #ff4d00;
+  --bg-2: #161616;
+  --text: #f0f0f0;
+  --muted: #999;
+  --accent: #00ffff;
 
-  --float-speed: 40s;
-  --glow-1: rgba(255, 77, 0, 0.2);
-  --glow-2: rgba(255, 77, 0, 0.1);
-  --glow-3: rgba(255, 77, 0, 0.05);
+  --float-speed: 60s;
+
+  /* 💫 Fondo animado glow violet-cyan */
+  --glow-1: rgba(0, 255, 255, 0.08);       /* cyan suave */
+  --glow-2: rgba(138, 43, 226, 0.06);      /* blue-violet */
+  --glow-3: rgba(186, 85, 211, 0.04);      /* orchid */
 }
 
 * {
@@ -41,14 +43,20 @@ a:focus {
   margin-inline: auto;
 }
 
-/* Header fijo con contenido centrado */
+/* Header sticky */
 .site-header {
   background: var(--bg-2);
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding-block: 0.75rem;
-  box-shadow: 0 0 5px rgba(0,0,0,0.4);
+  padding-block: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
@@ -61,7 +69,6 @@ a:focus {
   gap: 0.5rem;
 }
 
-/* Menú burger accesible */
 .menu-toggle {
   background: none;
   border: none;
@@ -101,14 +108,8 @@ a:focus {
   clip: rect(0 0 0 0);
 }
 
-/* Desktop nav */
+/* Nav desktop */
 @media (min-width: 768px) {
-  .site-header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .menu-toggle {
     display: none;
   }
@@ -131,17 +132,31 @@ a:focus {
 .button {
   display: inline-block;
   background: var(--accent);
-  color: #fff;
+  color: #000;
   padding: 0.5rem 1rem;
   border: none;
   text-decoration: none;
   border-radius: 4px;
   font-weight: bold;
+  transition: background 0.2s ease-in-out;
 }
 
 .button:hover,
 .button:focus {
-  background: #e64500;
+  background: #00dddd;
+}
+
+/* Secciones */
+main section {
+  padding-block: 3rem;
+  border-bottom: 1px solid var(--bg-2);
+  min-height: 40vh;
+}
+
+main h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--accent);
 }
 
 /* Galería de fotos */
@@ -158,30 +173,20 @@ a:focus {
   border-radius: 4px;
 }
 
-/* Secciones */
-main section {
-  padding-block: 3rem;
-  border-bottom: 1px solid var(--bg-2);
-}
-
-main h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: var(--accent);
-}
-
-/* Fondo animado */
+/* Fondo animado glow cyan/violeta */
 .bg-anim {
   position: fixed;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at 20% 30%, var(--glow-1), transparent 70%),
-              radial-gradient(circle at 70% 60%, var(--glow-2), transparent 80%),
-              radial-gradient(circle at 50% 50%, var(--glow-3), transparent 90%);
+  background:
+    radial-gradient(circle at 20% 30%, var(--glow-1), transparent 70%),
+    radial-gradient(circle at 70% 60%, var(--glow-2), transparent 80%),
+    radial-gradient(circle at 50% 50%, var(--glow-3), transparent 90%);
   z-index: -1;
   animation: float var(--float-speed) linear infinite;
+  pointer-events: none;
 }
 
 @keyframes float {
@@ -196,9 +201,9 @@ main h2 {
   }
 }
 
+/* Accesibilidad: sin animaciones si el usuario prefiere */
 @media (prefers-reduced-motion: reduce) {
   .bg-anim {
     animation: none !important;
   }
 }
-
