@@ -1,12 +1,10 @@
 :root {
-  /* 🎨 COLORES PRINCIPALES - editar acá */
   --bg: #0a0a0a;
   --bg-2: #1a1a1a;
   --text: #ffffff;
   --muted: #cccccc;
   --accent: #ff4d00;
 
-  /* 🌫️ BACKGROUND DINÁMICO */
   --float-speed: 40s;
   --glow-1: rgba(255, 77, 0, 0.2);
   --glow-2: rgba(255, 77, 0, 0.1);
@@ -37,16 +35,20 @@ a:focus {
 }
 
 .container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  padding-inline: 1.5rem;
+  margin-inline: auto;
 }
 
+/* Header fijo con contenido centrado */
 .site-header {
   background: var(--bg-2);
   position: sticky;
   top: 0;
   z-index: 1000;
+  padding-block: 0.75rem;
+  box-shadow: 0 0 5px rgba(0,0,0,0.4);
 }
 
 .logo {
@@ -55,8 +57,11 @@ a:focus {
   font-weight: bold;
   font-size: 1.2rem;
   color: var(--text);
+  text-decoration: none;
+  gap: 0.5rem;
 }
 
+/* Menú burger accesible */
 .menu-toggle {
   background: none;
   border: none;
@@ -67,6 +72,7 @@ a:focus {
 
 .nav {
   display: none;
+  margin-top: 1rem;
 }
 
 .nav ul {
@@ -87,7 +93,6 @@ a:focus {
   display: block;
 }
 
-/* Accesibilidad */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -96,18 +101,27 @@ a:focus {
   clip: rect(0 0 0 0);
 }
 
-/* Responsive */
+/* Desktop nav */
 @media (min-width: 768px) {
+  .site-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .menu-toggle {
     display: none;
   }
+
   .nav {
     display: block !important;
   }
+
   .nav ul {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
   }
+
   .nav li {
     margin: 0;
   }
@@ -135,12 +149,25 @@ a:focus {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
+  margin-top: 1rem;
 }
 
 .photo-grid img {
   width: 100%;
   display: block;
   border-radius: 4px;
+}
+
+/* Secciones */
+main section {
+  padding-block: 3rem;
+  border-bottom: 1px solid var(--bg-2);
+}
+
+main h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--accent);
 }
 
 /* Fondo animado */
@@ -174,3 +201,4 @@ a:focus {
     animation: none !important;
   }
 }
+
