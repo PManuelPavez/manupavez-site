@@ -2,22 +2,27 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0a0a0a" />
   <title>Manu Pavez</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body id="top">
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
   <header class="site-header">
     <div class="container">
-      <a href="/" class="logo">
-        <img src="img/logo.svg" alt="Manu Pavez logo" height="24" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';" />
+      <a href="#top" class="logo">
+        <!-- Logo: si no existe img/logo.svg, se muestra el texto -->
+        <img src="img/logo.svg" alt="Manu Pavez" height="24" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';" />
         <span class="logo-fallback" style="display:none;">Manu Pavez</span>
       </a>
-      <button class="menu-toggle" aria-controls="main-nav" aria-expanded="false">
-        ☰
-        <span class="sr-only">Abrir menú</span>
+
+      <button class="menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Abrir menú de navegación">
+        <span class="burger" aria-hidden="true"></span>
       </button>
-      <nav id="main-nav" class="nav">
+
+      <nav id="main-nav" class="nav" aria-label="Navegación principal">
         <ul>
           <li><a href="#fechas">Fechas</a></li>
           <li><a href="#musica">Música</a></li>
@@ -32,12 +37,13 @@
     </div>
   </header>
 
+  <!-- Fondo dinámico -->
   <div class="bg-anim" aria-hidden="true"></div>
 
-  <main>
+  <main id="main" class="container">
     <section id="fechas">
       <h2>Fechas</h2>
-      <!-- contenido -->
+      <p>Próximamente.</p>
     </section>
 
     <section id="musica">
@@ -51,18 +57,26 @@
     <section id="videos">
       <h2>Videos</h2>
       <!-- Reemplazar TU_PLAYLIST_ID por el ID real -->
-      <iframe width="100%" height="315" src="https://www.youtube.com/embed/videoseries?list=TU_PLAYLIST_ID" frameborder="0" allowfullscreen></iframe>
+      <div class="video-embed">
+        <iframe
+          title="Playlist de YouTube de Manu Pavez"
+          width="560" height="315"
+          src="https://www.youtube.com/embed/videoseries?list=TU_PLAYLIST_ID"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          loading="lazy"></iframe>
+      </div>
     </section>
 
     <section id="fotos">
       <h2>Fotos</h2>
       <div class="photo-grid">
-        <img src="img/p1.jpg" alt="Foto 1" />
-        <img src="img/p2.jpg" alt="Foto 2" />
-        <img src="img/p3.jpg" alt="Foto 3" />
-        <img src="img/p4.jpg" alt="Foto 4" />
-        <img src="img/p5.jpg" alt="Foto 5" />
-        <img src="img/p6.jpg" alt="Foto 6" />
+        <img src="img/p1.jpg" alt="Foto 1" loading="lazy" />
+        <img src="img/p2.jpg" alt="Foto 2" loading="lazy" />
+        <img src="img/p3.jpg" alt="Foto 3" loading="lazy" />
+        <img src="img/p4.jpg" alt="Foto 4" loading="lazy" />
+        <img src="img/p5.jpg" alt="Foto 5" loading="lazy" />
+        <img src="img/p6.jpg" alt="Foto 6" loading="lazy" />
       </div>
     </section>
 
@@ -73,19 +87,18 @@
 
     <section id="bio">
       <h2>Bio</h2>
-      <p><!-- texto bio --></p>
+      <p><!-- Pegá acá tu bio --></p>
     </section>
 
     <section id="prensa">
       <h2>Prensa</h2>
+      <p>Descargá press kit:</p>
       <a href="img/press.zip" class="button" download>Descargar Press Kit</a>
     </section>
 
     <section id="contacto">
       <h2>Contacto</h2>
-      <form>
-        <!-- Formulario de contacto futuro -->
-      </form>
+      <p>Escribime a <a href="mailto:contacto@manupavez.com">contacto@manupavez.com</a></p>
     </section>
   </main>
 
