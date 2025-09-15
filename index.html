@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manu Pavez</title>
+  <meta name="description" content="Manu Pavez — música, proceso y decisión. Presskit oficial: fechas, música, videos, fotos y contacto.">
+  <style>
+    :root{
+      --bg:#0e0e10;          /* fondo oscuro serio */
+      --bg-2:#141418;        /* bloques */
+      --text:#e9e9ef;        /* texto principal */
+      --muted:#b7b7c2;       /* texto secundario */
+      --accent:#9ad79a;      /* acento suave (podés cambiar) */
+      --border:#22232a;
+      --maxw:1100px;
+    }
+    html{scroll-behavior:smooth;}
+    body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    a{color:var(--text);text-decoration:none}
+    img{max-width:100%;height:auto;border-radius:12px}
+    .container{width:100%;max-width:var(--maxw);margin-inline:auto;padding:0 20px}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:rgba(14,14,16,.75);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--border)}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .brand{font-weight:700;letter-spacing:.5px}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{color:var(--muted)}
+    .menu a:hover{color:var(--text)}
+    .btn{display:inline-block;padding:10px 16px;border:1px solid var(--border);border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.08));}
+    .btn--accent{border-color:transparent;background:var(--accent);color:#08150a;font-weight:700}
+
+    /* Mobile nav */
+    .burger{display:none;gap:8px;flex-direction:column}
+    .burger span{width:24px;height:2px;background:var(--text);display:block}
+    @media (max-width:880px){
+      .menu{display:none}
+      .burger{display:flex}
+      .menu--mobile{display:none;position:absolute;top:64px;left:0;right:0;background:var(--bg-2);border-bottom:1px solid var(--border)}
+      .menu--mobile a{display:block;padding:14px 20px;border-top:1px solid var(--border);color:var(--muted)}
+      .menu--mobile a:hover{background:#15161b;color:var(--text)}
+    }
+
+    /* Hero */
+    .hero{padding:72px 0 32px}
+    .hero-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center}
+    .kicker{color:var(--muted);font-size:14px;letter-spacing:.4px;text-transform:uppercase}
+    h1{font-size:42px;line-height:1.15;margin:10px 0 14px}
+    .sub{color:var(--muted);max-width:56ch}
+    .cta{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+    .hero-img{border:1px solid var(--border)}
+    @media (max-width:880px){
+      .hero-inner{grid-template-columns:1fr}
+      h1{font-size:36px}
+    }
+
+    /* Sections */
+    section{padding:48px 0;border-top:1px solid var(--border)}
+    section h2{font-size:24px;margin:0 0 14px}
+    .muted{color:var(--muted)}
+
+    /* Dates */
+    .dates{display:grid;gap:10px}
+    .date{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg-2);border:1px solid var(--border);border-radius:12px}
+    .date strong{letter-spacing:.2px}
+    .date .where{color:var(--muted)}
+
+    /* Music buttons */
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chip{padding:10px 14px;border:1px solid var(--border);border-radius:999px;background:#121319;color:var(--muted)}
+    .chip:hover{color:var(--text);border-color:#2a2b33}
+
+    /* Videos */
+    .video{aspect-ratio:16/9;background:#000;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .video iframe{width:100%;height:100%}
+
+    /* Gallery */
+    .grid{display:grid;gap:14px;grid-template-columns:repeat(3,1fr)}
+    @media (max-width:880px){.grid{grid-template-columns:1fr 1fr}}
+    @media (max-width:520px){.grid{grid-template-columns:1fr}}
+
+    /* Footer */
+    footer{padding:36px 0;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">Manu Pavez</div>
+      <nav class="menu" aria-label="Principal">
+        <a href="#fechas">Fechas</a>
+        <a href="#musica">Música</a>
+        <a href="#videos">Videos</a>
+        <a href="#fotos">Fotos</a>
+        <a href="#clinicas">Clínicas</a>
+        <a href="#bio">Bio</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <button class="burger" aria-label="Abrir menú" aria-controls="mobile" aria-expanded="false" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav id="mobile" class="menu--mobile" aria-label="Móvil">
+      <a href="#fechas" onclick="toggleMenu(1)">Fechas</a>
+      <a href="#musica" onclick="toggleMenu(1)">Música</a>
+      <a href="#videos" onclick="toggleMenu(1)">Videos</a>
+      <a href="#fotos" onclick="toggleMenu(1)">Fotos</a>
+      <a href="#clinicas" onclick="toggleMenu(1)">Clínicas</a>
+      <a href="#bio" onclick="toggleMenu(1)">Bio</a>
+      <a href="#contacto" onclick="toggleMenu(1)">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div>
+          <div class="kicker">Presskit oficial</div>
+          <h1>Manu Pavez</h1>
+          <p class="sub">Música, proceso y decisión. Esta página reúne lo esencial: fechas, música, videos, imágenes y contacto. Simple, claro y actualizado.</p>
+          <div class="cta">
+            <a href="#musica" class="btn">Escuchar</a>
+            <a href="#clinicas" class="btn btn--accent">Clínicas</a>
+          </div>
+        </div>
+        <div>
+          <img class="hero-img" src="img/portada.jpg" alt="Foto de Manu Pavez en vivo">
+        </div>
+      </div>
+    </section>
+
+    <section id="fechas">
+      <div class="container">
+        <h2>Fechas</h2>
+        <div class="dates">
+          <!-- Reemplazá con tus fechas reales; si no hay, dejá “Anuncio pronto” -->
+          <div class="date">
+            <div>
+              <strong>15/11</strong>
+              <span class="where">Rosario — Club X</span>
+            </div>
+            <a class="btn" href="#" target="_blank" rel="noopener">Tickets</a>
+          </div>
+          <div class="date">
+            <div>
+              <strong>28/11</strong>
+              <span class="where">Buenos Aires — Venue Y</span>
+            </div>
+            <a class="btn" href="#" target="_blank" rel="noopener">Tickets</a>
+          </div>
+          <div class="date">
+            <div>
+              <strong>Anuncio pronto</strong>
+              <span class="where">Nuevas fechas en camino</span>
+            </div>
+            <span class="muted">—</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="musica">
+      <div class="container">
+        <h2>Música</h2>
+        <p class="muted">Elegí dónde escuchar.</p>
+        <div class="chips" style="margin-bottom:16px">
+          <a class="chip" href="https://soundcloud.com/manupavez" target="_blank" rel="noopener">SoundCloud</a>
+          <a class="chip" href="https://www.beatport.com/artist/manu-pavez/1005502" target="_blank" rel="noopener">Beatport</a>
+        </div>
+        <!-- Embed de SoundCloud (pegá tu link en url=) -->
+        <div class="video" style="aspect-ratio:600/166">
+          <iframe title="Reproductor SoundCloud" scrolling="no" frameborder="no" allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/manupavez&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&visual=false"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section id="videos">
+      <div class="container">
+        <h2>Videos</h2>
+        <!-- Reemplazá TU_PLAYLIST_ID por la playlist de YouTube -->
+        <div class="video">
+          <iframe title="Playlist YouTube" src="https://www.youtube.com/embed/videoseries?list=TU_PLAYLIST_ID" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section id="fotos">
+      <div class="container">
+        <h2>Fotos</h2>
+        <div class="grid">
+          <!-- Subí tus imágenes a /img y cambiá los nombres -->
+          <img src="img/p1.jpg" alt="Manu Pavez — foto 1" />
+          <img src="img/p2.jpg" alt="Manu Pavez — foto 2" />
+          <img src="img/p3.jpg" alt="Manu Pavez — foto 3" />
+          <img src="img/p4.jpg" alt="Manu Pavez — foto 4" />
+          <img src="img/p5.jpg" alt="Manu Pavez — foto 5" />
+          <img src="img/p6.jpg" alt="Manu Pavez — foto 6" />
+        </div>
+        <p style="margin-top:14px">
+          <a class="btn" href="#" target="_blank" rel="noopener">Descargar press photos (.zip)</a>
+          <a class="btn" href="#" target="_blank" rel="noopener">Logo (PNG/SVG)</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="clinicas">
+      <div class="container">
+        <h2>Clínicas</h2>
+        <p class="muted">Clínicas de Producción con Filosofía. Entrenamos decisiones para terminar más música con menos estrés.</p>
+        <p><a class="btn btn--accent" href="#" target="_blank" rel="noopener">Saber más</a></p>
+      </div>
+    </section>
+
+    <section id="bio">
+      <div class="container">
+        <h2>Bio</h2>
+        <p>Manu Pavez pone el foco en el proceso y la claridad. Esta página reúne lo esencial: fechas, música, videos, imágenes y un canal para quienes quieren profundizar en su propio proceso creativo. La idea es simple: decidir mejor, sufrir menos.</p>
+      </div>
+    </section>
+
+    <section id="prensa">
+      <div class="container">
+        <h2>Prensa</h2>
+        <p class="muted">“Lo más sólido es cómo aterriza el proceso en decisiones musicales.” — Testimonio</p>
+        <p class="muted">“Set hipnótico y funcional para pista.” — Medio</p>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="container">
+        <h2>Contacto</h2>
+        <p>Booking / Prensa: <a href="mailto:hola@manupavez.com">hola@manupavez.com</a></p>
+        <p>
+          <a class="chip" href="https://www.instagram.com/manupavez_/" target="_blank" rel="noopener">Instagram</a>
+          <a class="chip" href="https://www.youtube.com/@manupavez" target="_blank" rel="noopener">YouTube</a>
+          <a class="chip" href="https://soundcloud.com/manupavez" target="_blank" rel="noopener">SoundCloud</a>
+          <a class="chip" href="https://www.beatport.com/artist/manu-pavez/1005502" target="_blank" rel="noopener">Beatport</a>
+          <a class="chip" href="#clinicas">Comunidad / Clínicas</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="muted">© <span id="y"></span> Manu Pavez</div>
+    </div>
+  </footer>
+
+  <script>
+    // Año dinámico
+    document.getElementById('y').textContent = new Date().getFullYear()
+    // Toggle menú móvil
+    function toggleMenu(close){
+      const m = document.getElementById('mobile');
+      const btn = document.querySelector('.burger');
+      const open = m.style.display === 'block';
+      m.style.display = close || open ? 'none' : 'block';
+      btn.setAttribute('aria-expanded', (!open && !close) ? 'true' : 'false');
+    }
+  </script>
+</body>
+</html>
