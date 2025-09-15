@@ -2,103 +2,144 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0a0a0a" />
+  <meta name="color-scheme" content="dark" />
   <title>Manu Pavez</title>
+
+  <!-- LCP: precarga del logo y poster -->
+  <link rel="preload" as="image" href="logos/CUBO%20BLANCO%20MP.png" />
+  <link rel="preload" as="image" href="img/portada.jpg" />
+
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body id="top">
-  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <a class="skip-link" href="#main">SALTAR AL CONTENIDO</a>
 
+  <!-- ===== HEADER: IZQ (HAMBURGUESA) / CENTRO (LOGO) / DER (BOOK NOW!) ===== -->
   <header class="site-header">
-    <div class="container">
-      <a href="#top" class="logo">
-        <!-- Logo: si no existe img/logo.svg, se muestra el texto -->
-        <img src="img/logo.svg" alt="Manu Pavez" height="24" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';" />
-        <span class="logo-fallback" style="display:none;">Manu Pavez</span>
+    <div class="container header-grid">
+      <!-- IZQUIERDA: Toggle del menú -->
+      <div class="menu-left">
+        <button class="menu-toggle" aria-controls="menu-panel" aria-expanded="false" aria-label="Abrir menú principal">
+          <span class="burger" aria-hidden="true"></span>
+          <span class="sr-only"></span>
+        </button>
+      </div>
+
+      <!-- CENTRO: Logo -->
+      <a href="#top" class="center-logo" aria-label="Ir al inicio">
+        <img src="logos/CUBO%20BLANCO%20MP.png" alt="Manu Pavez" />
       </a>
 
-      <button class="menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Abrir menú de navegación">
-        <span class="burger" aria-hidden="true"></span>
-      </button>
+      <!-- DERECHA: CTA BOOK NOW! -->
+      <div class="right-cta">
+        <a href="#booking" class="cta-book">BOOK NOW!</a>
+      </div>
 
-      <nav id="main-nav" class="nav" aria-label="Navegación principal">
+      <!-- PANEL DE MENÚ -->
+      <nav id="menu-panel" class="menu-panel" aria-label="Menú principal" hidden>
         <ul>
-          <li><a href="#fechas">Fechas</a></li>
-          <li><a href="#musica">Música</a></li>
-          <li><a href="#videos">Videos</a></li>
-          <li><a href="#fotos">Fotos</a></li>
-          <li><a href="#clinicas">Clínicas</a></li>
-          <li><a href="#bio">Bio</a></li>
-          <li><a href="#prensa">Prensa</a></li>
-          <li><a href="#contacto">Contacto</a></li>
+          <li><a href="#presskit">PRESSKIT 2025</a></li>
+          <li><a href="#booking">BOOKING</a></li>
+          <li><a href="#musica">MÚSICA</a></li>
+          <li><a href="#bio">BIOGRAFÍA</a></li>
+          <li class="divider" aria-hidden="true"></li>
+          <li><a href="#contacto">CONTACTO</a></li>
         </ul>
       </nav>
+      <div class="menu-overlay" hidden></div>
     </div>
   </header>
 
-  <!-- Fondo dinámico -->
+  <!-- Fondo glow (fallback) -->
   <div class="bg-anim" aria-hidden="true"></div>
+  <!-- Capa de video/GIF (si la usás) -->
+  <div class="bg-media" aria-hidden="true">
+    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="metadata" poster="img/portada.jpg">
+      <source src="img/gifbackground-alpha.webm" type="video/webm" />
+      <source src="img/gifbackground.webm" type="video/webm" />
+      <source src="img/gifbackground.mp4" type="video/mp4" />
+      <img src="img/gifbackground.gif" alt="" />
+    </video>
+  </div>
 
+  <!-- ===== CONTENIDO (orden siguiendo tu menú) ===== -->
   <main id="main" class="container">
-    <section id="fechas">
-      <h2>Fechas</h2>
-      <p>Próximamente.</p>
+    <section id="presskit" class="cv">
+      <h2>PRESSKIT 2025</h2>
+      <a href="img/press.zip" class="button" download>DESCARGAR PRESS KIT</a>
     </section>
 
-    <section id="musica">
-      <h2>Música</h2>
-      <ul class="music-links">
-        <li><a href="https://soundcloud.com/manupavez" target="_blank" rel="noopener">SoundCloud</a></li>
-        <li><a href="https://www.beatport.com/artist/manu-pavez/1005502" target="_blank" rel="noopener">Beatport</a></li>
+    <section id="booking" class="cv">
+      <h2>BOOKING</h2>
+      <p>Contrataciones: <a href="mailto:booking@manupavez.com">booking@manupavez.com</a></p>
+    </section>
+
+    <!-- ➜ MÚSICA = Lanzamientos con miniaturas + link -->
+    <section id="musica" class="cv">
+      <h2>MÚSICA</h2>
+
+      <!-- Lanzamientos: duplicá <li> y cambiá imagen/título/link -->
+      <ul class="releases-grid">
+        <li>
+          <a class="release-card" href="https://www.beatport.com/" target="_blank" rel="noopener" aria-label="Escuchar Release 1 en Beatport">
+            <img src="img/releases/release1.jpg" alt="Release 1" loading="lazy" decoding="async" />
+            <span class="release-meta">
+              <span class="release-title">NOISY SILENCES</span>
+              <span class="release-label">Album 2025 - Spotify</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="release-card" href="https://open.spotify.com/" target="_blank" rel="noopener" aria-label="Escuchar Release 2 en Spotify">
+            <img src="img/releases/release2.jpg" alt="Release 2" loading="lazy" decoding="async" />
+            <span class="release-meta">
+              <span class="release-title">YOURSELF</span>
+              <span class="release-label">Album 2025 - Spotify</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="release-card" href="https://manupavez.bandcamp.com" target="_blank" rel="noopener" aria-label="Escuchar Release 3 en Bandcamp">
+            <img src="img/releases/release3.jpg" alt="Release 3" loading="lazy" decoding="async" />
+            <span class="release-meta">
+              <span class="release-title">RELEASE 3</span>
+              <span class="release-label">Bandcamp</span>
+            </span>
+          </a>
+        </li>
+        <!-- Agregá más ítems aquí siguiendo el mismo patrón -->
       </ul>
     </section>
 
-    <section id="videos">
-      <h2>Videos</h2>
-      <!-- Reemplazar TU_PLAYLIST_ID por el ID real -->
-      <div class="video-embed">
-        <iframe
-          title="Playlist de YouTube de Manu Pavez"
-          width="560" height="315"
-          src="https://www.youtube.com/embed/videoseries?list=TU_PLAYLIST_ID"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-          loading="lazy"></iframe>
-      </div>
+    <section id="bio" class="cv">
+      <h2>BIOGRAFÍA</h2>
+      <p>DJ y productor argentino con años de trabajo minucioso en estudio, llevando su “frequency storytelling” al corazón del progressive house. Su firma aparece en sellos de referencia como 
+        Sound Avenue, Mango Alley, Droid9 South America, 3rd Avenue, Coral Tide y Traful, consolidando un perfil moderno, exportable y curado. 
+        En pista, construye viajes narrativos que crecen del warm-up elegante al prime time hipnótico, con bajos precisos, texturas melódicas y una tensión que sostiene la pista sin excesos.
+        Su música y su número cuentan con el aval de figuras de primera línea: Hernán Cattáneo, Nick Warren y Mariano Mellino han respaldado su sonido; además, compartió cabina y realizó warm-ups para 
+        Graziano Raffa, confirmando tracción real en booth y programación. Con releases consistentes y una propuesta artística clara, Manu Pavez se proyecta como joven promesa del progresivo sudamericano: 
+        confiable para promotores, atractivo para audiencias exigentes y listo para escalar line-ups de salas boutique y festivales internacionales.</p>
     </section>
 
-    <section id="fotos">
-      <h2>Fotos</h2>
+    <section id="contacto" class="cv">
+      <h2>CONTACTO</h2>
+      <p>FOR BOOKINGS: <a href="mailto:tothemoonmng@gmail.com">tothemoonmng@gmail.com</a></p>
+      <p>REMIXES/RELEASES: <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a></p>
+    </section>
+
+    <!-- MULTIMEDIA ➜ solo FOTOS (quitamos YouTube para sintetizar) -->
+    <section id="multimedia" class="cv">
+      <h2>MULTIMEDIA</h2>
       <div class="photo-grid">
-        <img src="img/p1.jpg" alt="Foto 1" loading="lazy" />
-        <img src="img/p2.jpg" alt="Foto 2" loading="lazy" />
-        <img src="img/p3.jpg" alt="Foto 3" loading="lazy" />
-        <img src="img/p4.jpg" alt="Foto 4" loading="lazy" />
-        <img src="img/p5.jpg" alt="Foto 5" loading="lazy" />
-        <img src="img/p6.jpg" alt="Foto 6" loading="lazy" />
+        <img src="img/p1.jpg" alt="Foto 1" loading="lazy" decoding="async" />
+        <img src="img/p2.jpg" alt="Foto 2" loading="lazy" decoding="async" />
+        <img src="img/p3.jpg" alt="Foto 3" loading="lazy" decoding="async" />
+        <img src="img/p4.jpg" alt="Foto 4" loading="lazy" decoding="async" />
+        <img src="img/p5.jpg" alt="Foto 5" loading="lazy" decoding="async" />
+        <img src="img/p6.jpg" alt="Foto 6" loading="lazy" decoding="async" />
       </div>
-    </section>
-
-    <section id="clinicas">
-      <h2>Clínicas</h2>
-      <a href="#" class="button">Ver más</a> <!-- Pegar link de Skool/landing -->
-    </section>
-
-    <section id="bio">
-      <h2>Bio</h2>
-      <p><!-- Pegá acá tu bio --></p>
-    </section>
-
-    <section id="prensa">
-      <h2>Prensa</h2>
-      <p>Descargá press kit:</p>
-      <a href="img/press.zip" class="button" download>Descargar Press Kit</a>
-    </section>
-
-    <section id="contacto">
-      <h2>Contacto</h2>
-      <p>Escribime a <a href="mailto:contacto@manupavez.com">contacto@manupavez.com</a></p>
     </section>
   </main>
 
