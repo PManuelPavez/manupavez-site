@@ -1,0 +1,35 @@
+[
+  {
+    "title": "Noisy Silences (ALBUM)",
+    "date": "2025-05-1205",
+    "cover": "img/releases/aurora.jpg",
+    "links": {
+      "Youtube": "https://www.youtube.com/playlist?list=PLhxkZA7sdZ0-3jrk810h_aCSEbAJ6dBIF",
+      "soundcloud": "https://soundcloud.com/manupavez/sets/noisy-silences-ep"
+    },
+    "label": "Progressive House",
+    "notes": "1st SOLO ALBUM"
+  },
+  {
+    "title": "Cyan Dreams (EP)",
+    "date": "2025-05-30",
+    "cover": "img/releases/cyan-dreams.jpg",
+    "links": {
+      "beatport": "https://www.beatport.com/artist/manu-pavez/1005502",
+      "youtube": "https://youtube.com/playlist?list=TU_PLAYLIST_ID"
+    },
+    "label": "Self Release",
+    "notes": ""
+  },
+  {
+    "title": "Nightflow",
+    "date": "2024-11-02",
+    "cover": "img/releases/nightflow.jpg",
+    "links": {
+      "spotify": "https://open.spotify.com/",
+      "soundcloud": "https://soundcloud.com/manupavez"
+    },
+    "label": "Indie Label",
+    "notes": "Single."
+  }
+]

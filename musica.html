@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Música — Manu Pavez</title>
+  <meta name="description" content="Lanzamientos, EPs y singles de Manu Pavez." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <meta name="color-scheme" content="dark" />
+
+  <!-- Seguridad básica: evita cargas de recursos externos no autorizados y fugas de referrer -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; media-src 'self'; connect-src 'self';">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Permissions-Policy" content="accelerometer=(), camera=(), geolocation=(), microphone=()">
+</head>
+<body id="top" data-page="musica">
+  <!-- Loader -->
+  <div class="page-loader" aria-hidden="true">
+    <div class="loader-spinner" role="status" aria-label="Cargando"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-grid">
+      <div class="menu-left">
+        <button class="menu-toggle" aria-controls="menu-panel" aria-expanded="false" aria-label="Abrir menú principal">
+          <span class="burger" aria-hidden="true"></span>
+        </button>
+      </div>
+      <a href="index.html" class="center-logo" aria-label="Ir al inicio">
+        <img src="logos/CUBO%20BLANCO%20MP.png" alt="Manu Pavez" />
+      </a>
+      <div class="right-cta"><a href="booking.html" class="cta-book">BOOK NOW!</a></div>
+
+      <nav id="menu-panel" class="menu-panel" aria-label="Menú principal" hidden>
+        <ul>
+          <li><a href="presskit.html">PRESSKIT 2025</a></li>
+          <li><a href="booking.html">BOOKING</a></li>
+          <li><a href="musica.html" aria-current="true" class="is-active">MÚSICA</a></li>
+          <!-- Eliminado enlace a Clínicas mientras no exista la página -->
+          <li><a href="bio.html">BIOGRAFÍA</a></li>
+          <li class="divider" aria-hidden="true"></li>
+          <li><a href="contacto.html">CONTACTO</a></li>
+        </ul>
+      </nav>
+      <div class="menu-overlay" hidden></div>
+    </div>
+  </header>
+
+  <!-- Fondo -->
+  <div class="bg-anim" aria-hidden="true"></div>
+
+  <!-- Contenido -->
+  <main class="container page" id="main">
+    <section class="cv">
+      <h2>MÚSICA</h2>
+      <p class="muted">Se actualiza automáticamente desde <code>data/releases.json</code>.</p>
+    </section>
+
+    <section class="cv">
+      <ul id="releases-grid" class="releases-grid cards--glass"></ul>
+      <div class="center">
+        <button id="load-more" class="button">CARGAR MÁS</button>
+      </div>
+      <p id="rel-error" class="muted" hidden>No se pudo cargar la música. Intentá nuevamente.</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <a href="index.html" class="footer-brand" aria-label="Ir al inicio">
+        <img src="logos/CUBO%20BLANCO%20MP.png" alt="Manu Pavez" />
+      </a>
+      <p class="footer-copy"><strong>MANU PAVEZ</strong> — © 2025 · Todos los derechos reservados</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/dataClient.js"></script>
+  <script src="js/musica.js"></script>
+
+  <!-- Modal para contenido adicional de Música -->
+  <div class="modal-overlay" id="musicModal" hidden>
+    <div class="modal-content">
+      <h2>Lanzamientos adicionales</h2>
+      <p>Ejemplo de contenido para la sección de música. Aquí se podrían mostrar más lanzamientos, ediciones especiales o material inédito. Este texto ilustra el diseño del menú centrado con efecto blur.</p>
+      <button type="button" class="modal-close button">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Script externo para controlar el modal de música -->
+  <script src="js/modal-musica.js"></script>
+</body>
+</html>

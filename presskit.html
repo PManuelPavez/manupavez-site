@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Presskit — Manu Pavez</title>
+  <meta name="description" content="Presskit 2025 con fotos oficiales y biografía de Manu Pavez.">
+  <link rel="canonical" href="https://manupavez.com/presskit.html" />
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Seguridad básica: evita cargas de recursos externos no autorizados y fugas de referrer -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; media-src 'self'; connect-src 'self';">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Permissions-Policy" content="accelerometer=(), camera=(), geolocation=(), microphone=()">
+</head>
+<!-- === Footer global === --
+<body id="top" data-page="presskit">
+  <!-- Loader -->
+  <div class="page-loader" aria-hidden="true">
+    <div class="loader-spinner" role="status" aria-label="Cargando"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-grid">
+      <div class="menu-left">
+        <button class="menu-toggle" aria-controls="menu-panel" aria-expanded="false" aria-label="Abrir menú principal">
+          <span class="burger" aria-hidden="true"></span><span class="sr-only"></span>
+        </button>
+      </div>
+      <a href="index.html" class="center-logo" aria-label="Ir al inicio">
+        <img src="logos/CUBO%20BLANCO%20MP.png" alt="Manu Pavez" />
+      </a>
+      <div class="right-cta"><a href="booking.html" class="cta-book">BOOK NOW!</a></div>
+
+<nav id="menu-panel" class="menu-panel" aria-label="Menú principal" hidden>
+       <ul>
+          <li><a href="presskit.html">PRESSKIT 2025</a></li>
+         <li><a href="booking.html">BOOKING</a></li>
+         <li><a href="musica.html">MÚSICA</a></li>
+         <!-- Eliminado enlace a Clínicas mientras no exista la página -->
+         <li><a href="bio.html">BIOGRAFÍA</a></li>
+         <li class="divider" aria-hidden="true"></li>
+         <li><a href="contacto.html">CONTACTO</a></li>
+        </ul>
+      </nav>
+      <div class="menu-overlay" hidden></div>
+    </div>
+  </header>
+
+  <!-- Solo glow (sin video) para rendimiento -->
+  <div class="bg-anim" aria-hidden="true"></div>
+
+  <main class="container page" id="main">
+    <!-- 1) FOTOS -->
+    <section class="cv">
+      <h2>FOTOS</h2>
+      <!-- Slider de fotos con navegación. Las imágenes se reemplazarán por fotos reales -->
+      <div class="photo-slider" aria-label="Galería de fotos">
+        <div class="slides">
+          <div class="slide">
+          <!-- Se actualizan las imágenes del slider para utilizar fotos reales en formato JPG -->
+          <img src="img/fotos/slide1.jpg" alt="Manu Pavez tocando música 1" loading="lazy" decoding="async" />
+          </div>
+          <div class="slide">
+          <img src="img/fotos/slide2.jpg" alt="Manu Pavez tocando música 2" loading="lazy" decoding="async" />
+          </div>
+          <div class="slide">
+          <img src="img/fotos/slide3.jpg" alt="Manu Pavez tocando música 3" loading="lazy" decoding="async" />
+          </div>
+        <!-- Nueva diapositiva con ambiente rojizo para contraste -->
+        <div class="slide">
+          <img src="img/fotos/slide4.jpg" alt="Manu Pavez tocando con luces rojas" loading="lazy" decoding="async" />
+        </div>
+        <!-- Nueva diapositiva con foto adicional proporcionada por el usuario -->
+        <div class="slide">
+          <img src="img/fotos/slide5.jpg" alt="Manu Pavez en cabina" loading="lazy" decoding="async" />
+        </div>
+        </div>
+        <button class="prev" type="button" aria-label="Anterior">&#10094;</button>
+        <button class="next" type="button" aria-label="Siguiente">&#10095;</button>
+        <div class="slider-nav">
+          <button type="button" aria-label="Ir a la foto 1"></button>
+          <button type="button" aria-label="Ir a la foto 2"></button>
+          <button type="button" aria-label="Ir a la foto 3"></button>
+          <button type="button" aria-label="Ir a la foto 4"></button>
+          <button type="button" aria-label="Ir a la foto 5"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) BIOGRAFÍA (con VER MÁS en mobile) -->
+    <section id="bio" class="cv">
+      <h2>BIOGRAFÍA</h2>
+      <div class="bio-collapsible" id="bio-content" data-expanded="false">
+        <p><!-- Pegá tu biografía completa acá. En mobile se muestra resumida y con VER MÁS. --></p>
+      </div>
+      <button class="more-btn" type="button" aria-controls="bio-content" aria-expanded="false">VER MÁS</button>
+    </section>
+
+    <!-- 3) DESCARGA DEL PRESSKIT -->
+    <section class="cv">
+      <h2>DESCARGA</h2>
+      <p>Descargá el press kit con fotos en alta, logos y biografía.</p>
+      <a href="img/press.zip" class="button" download>DESCARGAR PRESS KIT</a>
+    </section>
+  </main>
+  
+<footer class="site-footer" role="contentinfo">
+  <div class="container footer-inner">
+    <a href="index.html" class="footer-brand" aria-label="Ir al inicio">
+      <img src="logos/CUBO%20BLANCO%20MP.png" alt="Manu Pavez" />
+    </a>
+
+    <p class="footer-copy">
+      <strong>MANU PAVEZ</strong> — © 2025 · Todos los derechos reservados
+    </p>
+  </div>
+</footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/slider.js"></script>
+</body>
+</html>

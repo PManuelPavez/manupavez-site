@@ -5,144 +5,115 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0a0a0a" />
   <meta name="color-scheme" content="dark" />
-  <title>Manu Pavez</title>
+  <title>Manu Pavez — Landing</title>
 
-  <!-- LCP: precarga del logo y poster -->
+  <!-- SEO/OG -->
+  <meta name="description" content="Manu Pavez — Producer/DJ. Música, fechas y booking.">
+  <link rel="canonical" href="https://manupavez.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Manu Pavez — Producer/DJ">
+  <meta property="og:description" content="Escuchá la música de Manu, mirá fotos y realizá el booking.">
+  <meta property="og:image" content="https://manupavez.com/img/portada.jpg">
+  <meta property="og:url" content="https://manupavez.com/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Seguridad básica: evita cargas de recursos externos no autorizados y fugas de referrer -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; media-src 'self'; connect-src 'self';">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Permissions-Policy" content="accelerometer=(), camera=(), geolocation=(), microphone=()">
+
+  <!-- LCP -->
   <link rel="preload" as="image" href="logos/CUBO%20BLANCO%20MP.png" />
-  <link rel="preload" as="image" href="img/portada.jpg" />
-
+  <link rel="preload" as="image" href="img/bg-poster.jpg" />
   <link rel="stylesheet" href="css/styles.css" />
-</head>
-<body id="top">
-  <a class="skip-link" href="#main">SALTAR AL CONTENIDO</a>
 
-  <!-- ===== HEADER: IZQ (HAMBURGUESA) / CENTRO (LOGO) / DER (BOOK NOW!) ===== -->
+  <!-- Prefetch app-like -->
+  <link rel="prefetch" href="bio.html" />
+  <link rel="prefetch" href="musica.html" />
+  <link rel="prefetch" href="booking.html" />
+</head>
+
+<body id="top" data-page="index">
+  <!-- Loader -->
+  <div class="page-loader" aria-hidden="true">
+    <div class="loader-spinner" role="status" aria-label="Cargando"></div>
+  </div>
+
+  <!-- Header -->
   <header class="site-header">
     <div class="container header-grid">
-      <!-- IZQUIERDA: Toggle del menú -->
       <div class="menu-left">
         <button class="menu-toggle" aria-controls="menu-panel" aria-expanded="false" aria-label="Abrir menú principal">
-          <span class="burger" aria-hidden="true"></span>
-          <span class="sr-only"></span>
+          <span class="burger" aria-hidden="true"></span><span class="sr-only"></span>
         </button>
       </div>
-
-      <!-- CENTRO: Logo -->
-      <a href="#top" class="center-logo" aria-label="Ir al inicio">
+      <a href="index.html" class="center-logo" aria-label="Ir al inicio">
         <img src="logos/CUBO%20BLANCO%20MP.png" alt="Manu Pavez" />
       </a>
+      <div class="right-cta"><a href="booking.html" class="cta-book">BOOK NOW!</a></div>
 
-      <!-- DERECHA: CTA BOOK NOW! -->
-      <div class="right-cta">
-        <a href="#booking" class="cta-book">BOOK NOW!</a>
-      </div>
-
-      <!-- PANEL DE MENÚ -->
       <nav id="menu-panel" class="menu-panel" aria-label="Menú principal" hidden>
-        <ul>
-          <li><a href="#presskit">PRESSKIT 2025</a></li>
-          <li><a href="#booking">BOOKING</a></li>
-          <li><a href="#musica">MÚSICA</a></li>
-          <li><a href="#bio">BIOGRAFÍA</a></li>
-          <li class="divider" aria-hidden="true"></li>
-          <li><a href="#contacto">CONTACTO</a></li>
+       <ul>
+          <li><a href="presskit.html">PRESSKIT 2025</a></li>
+         <li><a href="booking.html">BOOKING</a></li>
+         <li><a href="musica.html">MÚSICA</a></li>
+         <!-- Eliminado enlace a Clínicas mientras no exista la página -->
+         <li><a href="bio.html">BIOGRAFÍA</a></li>
+         <li class="divider" aria-hidden="true"></li>
+         <li><a href="contacto.html">CONTACTO</a></li>
         </ul>
       </nav>
       <div class="menu-overlay" hidden></div>
     </div>
   </header>
 
-  <!-- Fondo glow (fallback) -->
+  <!-- Fondo glow + video optimizado -->
   <div class="bg-anim" aria-hidden="true"></div>
-  <!-- Capa de video/GIF (si la usás) -->
   <div class="bg-media" aria-hidden="true">
-    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="metadata" poster="img/portada.jpg">
-      <source src="img/gifbackground-alpha.webm" type="video/webm" />
-      <source src="img/gifbackground.webm" type="video/webm" />
-      <source src="img/gifbackground.mp4" type="video/mp4" />
-      <img src="img/gifbackground.gif" alt="" />
+    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="none" poster="img/bg-poster.jpg">
+      <source data-src="img/bg-720.webm"  type="video/webm" media="(max-width: 767px)">
+      <source data-src="img/bg-1080.webm" type="video/webm" media="(min-width: 768px)">
+      <img src="img/bg-poster.jpg" alt="">
     </video>
   </div>
 
-  <!-- ===== CONTENIDO (orden siguiendo tu menú) ===== -->
-  <main id="main" class="container">
-    <section id="presskit" class="cv">
-      <h2>PRESSKIT 2025</h2>
-      <a href="img/press.zip" class="button" download>DESCARGAR PRESS KIT</a>
-    </section>
+  <main id="main" class="landing landing--compact">
+  <div class="container">
+    <div class="landing-hero">
+      <img class="landing-logo" src="logos/CUBO%20BLANCO%20MP.png" alt="" />
+      <h1 class="landing-title">MANU PAVEZ</h1>
+      <p class="landing-sub">PRODUCER / DJ</p>
 
-    <section id="booking" class="cv">
-      <h2>BOOKING</h2>
-      <p>Contrataciones: <a href="mailto:booking@manupavez.com">booking@manupavez.com</a></p>
-    </section>
-
-    <!-- ➜ MÚSICA = Lanzamientos con miniaturas + link -->
-    <section id="musica" class="cv">
-      <h2>MÚSICA</h2>
-
-      <!-- Lanzamientos: duplicá <li> y cambiá imagen/título/link -->
-      <ul class="releases-grid">
-        <li>
-          <a class="release-card" href="https://www.beatport.com/" target="_blank" rel="noopener" aria-label="Escuchar Release 1 en Beatport">
-            <img src="img/releases/release1.jpg" alt="Release 1" loading="lazy" decoding="async" />
-            <span class="release-meta">
-              <span class="release-title">NOISY SILENCES</span>
-              <span class="release-label">Album 2025 - Spotify</span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="release-card" href="https://open.spotify.com/" target="_blank" rel="noopener" aria-label="Escuchar Release 2 en Spotify">
-            <img src="img/releases/release2.jpg" alt="Release 2" loading="lazy" decoding="async" />
-            <span class="release-meta">
-              <span class="release-title">YOURSELF</span>
-              <span class="release-label">Album 2025 - Spotify</span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="release-card" href="https://manupavez.bandcamp.com" target="_blank" rel="noopener" aria-label="Escuchar Release 3 en Bandcamp">
-            <img src="img/releases/release3.jpg" alt="Release 3" loading="lazy" decoding="async" />
-            <span class="release-meta">
-              <span class="release-title">RELEASE 3</span>
-              <span class="release-label">Bandcamp</span>
-            </span>
-          </a>
-        </li>
-        <!-- Agregá más ítems aquí siguiendo el mismo patrón -->
-      </ul>
-    </section>
-
-    <section id="bio" class="cv">
-      <h2>BIOGRAFÍA</h2>
-      <p>DJ y productor argentino con años de trabajo minucioso en estudio, llevando su “frequency storytelling” al corazón del progressive house. Su firma aparece en sellos de referencia como 
-        Sound Avenue, Mango Alley, Droid9 South America, 3rd Avenue, Coral Tide y Traful, consolidando un perfil moderno, exportable y curado. 
-        En pista, construye viajes narrativos que crecen del warm-up elegante al prime time hipnótico, con bajos precisos, texturas melódicas y una tensión que sostiene la pista sin excesos.
-        Su música y su número cuentan con el aval de figuras de primera línea: Hernán Cattáneo, Nick Warren y Mariano Mellino han respaldado su sonido; además, compartió cabina y realizó warm-ups para 
-        Graziano Raffa, confirmando tracción real en booth y programación. Con releases consistentes y una propuesta artística clara, Manu Pavez se proyecta como joven promesa del progresivo sudamericano: 
-        confiable para promotores, atractivo para audiencias exigentes y listo para escalar line-ups de salas boutique y festivales internacionales.</p>
-    </section>
-
-    <section id="contacto" class="cv">
-      <h2>CONTACTO</h2>
-      <p>FOR BOOKINGS: <a href="mailto:tothemoonmng@gmail.com">tothemoonmng@gmail.com</a></p>
-      <p>REMIXES/RELEASES: <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a></p>
-    </section>
-
-    <!-- MULTIMEDIA ➜ solo FOTOS (quitamos YouTube para sintetizar) -->
-    <section id="multimedia" class="cv">
-      <h2>MULTIMEDIA</h2>
-      <div class="photo-grid">
-        <img src="img/p1.jpg" alt="Foto 1" loading="lazy" decoding="async" />
-        <img src="img/p2.jpg" alt="Foto 2" loading="lazy" decoding="async" />
-        <img src="img/p3.jpg" alt="Foto 3" loading="lazy" decoding="async" />
-        <img src="img/p4.jpg" alt="Foto 4" loading="lazy" decoding="async" />
-        <img src="img/p5.jpg" alt="Foto 5" loading="lazy" decoding="async" />
-        <img src="img/p6.jpg" alt="Foto 6" loading="lazy" decoding="async" />
+      <!-- BOTONES: todos iguales -->
+      <div class="landing-actions">
+        <a class="button button--lg" href="booking.html">BOOKING</a>
+        <a class="button button--lg" href="musica.html">MÚSICA</a>
+        <a class="button button--lg" href="presskit.html">PRESSKIT</a>
       </div>
-    </section>
-  </main>
+    </div>
 
+    <!-- Tira destacada: CLÍNICAS -->
+    <section class="strip strip-clinicas glass" aria-labelledby="clinicas-title">
+      <h2 id="clinicas-title" class="strip-title">CLÍNICAS</h2>
+      <p class="strip-text">Workshops, masterclasses y sesiones 1:1 de producción.</p>
+      <a class="button button--green" href="#" aria-label="Ir a Clínicas">RESERVAR LUGAR</a>
+      <!-- Reemplazar href="#" por tu link de Skool/Landing -->
+    </section>
+  </div>
+</main>
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner"><!-- interno centrado -->
+    <a href="index.html" class="footer-brand" aria-label="Ir al inicio">
+      <img src="logos/CUBO%20BLANCO%20MP.png" alt="Manu Pavez" />
+    </a>
+    <p class="footer-copy">
+      <strong>MANU PAVEZ</strong> — © 2025 · Todos los derechos reservados
+    </p>
+  </div>
+</footer>
+
+
+<!-- Scripts -->  
   <script src="js/main.js"></script>
 </body>
 </html>
