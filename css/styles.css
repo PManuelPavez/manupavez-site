@@ -837,4 +837,9 @@ main.container.page { padding-bottom: 0; }
   animation: shimmer 1s linear infinite;
 }
 @keyframes shimmer{ from{ transform: translateX(-100%);} to{ transform: translateX(100%);} }
+/* Negritas claras en la BIO */
+#bio strong{
+  font-weight: 700;
+  color: #fff; /* opcional: asegura contraste sobre fondos oscuros */
+}
 
