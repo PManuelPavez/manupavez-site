@@ -1,119 +1,142 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0a0a0a" />
-  <meta name="color-scheme" content="dark" />
-  <title>Manu Pavez — Landing</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To The Moon Management</title>
 
-  <!-- SEO/OG -->
-  <meta name="description" content="Manu Pavez — Producer/DJ. Música, fechas y booking.">
-  <link rel="canonical" href="https://manupavez.com/">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Manu Pavez — Producer/DJ">
-  <meta property="og:description" content="Escuchá la música de Manu, mirá fotos y realizá el booking.">
-  <meta property="og:image" content="https://manupavez.com/img/portada.jpg">
-  <meta property="og:url" content="https://manupavez.com/">
-  <meta name="twitter:card" content="summary_large_image">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg" href="assets/favicon.svg">
 
-  <!-- Seguridad básica: evita cargas de recursos externos no autorizados y fugas de referrer -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; media-src 'self'; connect-src 'self';">
-  <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Permissions-Policy" content="accelerometer=(), camera=(), geolocation=(), microphone=()">
-
-  <!-- LCP -->
-  <link rel="preload" as="image" href="logos/CUBO%20BLANCO%20MP.png" />
-  <link rel="preload" as="image" href="img/bg-poster.jpg" />
-  <link rel="stylesheet" href="css/styles.css" />
-
-  <!-- Prefetch app-like -->
-  <link rel="prefetch" href="bio.html" />
-  <link rel="prefetch" href="musica.html" />
-  <link rel="prefetch" href="booking.html" />
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 
-<body id="top" data-page="index">
-  <!-- Loader -->
-  <div class="page-loader" aria-hidden="true">
-    <div class="loader-spinner" role="status" aria-label="Cargando"></div>
-  </div>
+<body>
 
-  <!-- Header -->
+  <!-- HEADER -->
   <header class="site-header">
-    <div class="container header-grid">
-      <div class="menu-left">
-        <button class="menu-toggle" aria-controls="menu-panel" aria-expanded="false" aria-label="Abrir menú principal">
-          <span class="burger" aria-hidden="true"></span><span class="sr-only"></span>
-        </button>
+    <div class="brandbar">
+      <div class="brandbar-inner">
+        <picture>
+            <source srcset="assets/logo.svg" type="image/svg+xml">
+            <img src="assets/logo.svg" alt="To The Moon Management" width="320" height="76" loading="eager" decoding="async">
+          </picture>
+           <span class="brand-sub"></span>
+        </a>
       </div>
-      <a href="index.html" class="center-logo" aria-label="Ir al inicio">
-        <img src="logos/CUBO%20BLANCO%20MP.png" alt="Manu Pavez" />
-      </a>
-      <div class="right-cta"><a href="booking.html" class="cta-book">BOOK NOW!</a></div>
-
-      <nav id="menu-panel" class="menu-panel" aria-label="Menú principal" hidden>
-       <ul>
-          <li><a href="presskit.html">PRESSKIT 2025</a></li>
-         <li><a href="booking.html">BOOKING</a></li>
-         <li><a href="musica.html">MÚSICA</a></li>
-         <!-- Eliminado enlace a Clínicas mientras no exista la página -->
-         <li><a href="bio.html">BIOGRAFÍA</a></li>
-         <li class="divider" aria-hidden="true"></li>
-         <li><a href="contacto.html">CONTACTO</a></li>
-        </ul>
-      </nav>
-      <div class="menu-overlay" hidden></div>
     </div>
+
+    <nav class="tabsbar">
+      <button class="nav-toggle" aria-label="Abrir menú">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+      <ul class="nav-tabs">
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="artists.html">Artists</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="team.html">Team</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <!-- Fondo glow + video optimizado -->
-  <div class="bg-anim" aria-hidden="true"></div>
-  <div class="bg-media" aria-hidden="true">
-    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="none" poster="img/bg-poster.jpg">
-      <source data-src="img/bg-720.webm"  type="video/webm" media="(max-width: 767px)">
-      <source data-src="img/bg-1080.webm" type="video/webm" media="(min-width: 768px)">
-      <img src="img/bg-poster.jpg" alt="">
-    </video>
-  </div>
-
-  <main id="main" class="landing landing--compact">
-  <div class="container">
-    <div class="landing-hero">
-      <img class="landing-logo" src="logos/CUBO%20BLANCO%20MP.png" alt="" />
-      <h1 class="landing-title">MANU PAVEZ</h1>
-      <p class="landing-sub">PRODUCER / DJ</p>
-
-      <!-- BOTONES: todos iguales -->
-      <div class="landing-actions">
-        <a class="button button--lg" href="booking.html">BOOKING</a>
-        <a class="button button--lg" href="musica.html">MÚSICA</a>
-        <a class="button button--lg" href="presskit.html">PRESSKIT</a>
+  <!-- HERO / SLIDER -->
+  <section class="fade-slider">
+    <div class="slide active" style="background-image:url('assets/slide1.jpg')">
+      <div class="caption">
+        <h2>Unlock Potential</h2>
+        <p>Representamos artistas con propósito, visión y autenticidad.</p>
       </div>
     </div>
+    <div class="slide" style="background-image:url('assets/slide2.jpg')">
+      <div class="caption">
+        <h2>Music. Identity. Growth.</h2>
+        <p>Gestión integral de carrera con enfoque humano y estratégico.</p>
+      </div>
+    </div>
+    <div class="slide" style="background-image:url('assets/slide3.jpg')">
+      <div class="caption">
+        <h2>To The Moon Management</h2>
+        <p>Donde la pasión se convierte en trayectoria.</p>
+      </div>
+    </div>
+    <div class="dots"></div>
+  </section>
 
-    <!-- Tira destacada: CLÍNICAS -->
-    <section class="strip strip-clinicas glass" aria-labelledby="clinicas-title">
-      <h2 id="clinicas-title" class="strip-title">CLÍNICAS</h2>
-      <p class="strip-text">Workshops, masterclasses y sesiones 1:1 de producción.</p>
-      <a class="button button--green" href="#" aria-label="Ir a Clínicas">RESERVAR LUGAR</a>
-      <!-- Reemplazar href="#" por tu link de Skool/Landing -->
+      <!-- NUESTRO OBJETIVO -->
+    <section class="section-goal">
+      <div class="container">
+        <h2>NUESTRO OBJETIVO</h2>
+        <p class="prose">Ayudar a artistas a desarrollar carreras sostenibles, auténticas y de alto impacto. Nos enfocamos en estrategia, bienestar y profesionalización con equipo propio de producción, fotografía y gestión.</p>
+      </div>
     </section>
-  </div>
-</main>
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-inner"><!-- interno centrado -->
-    <a href="index.html" class="footer-brand" aria-label="Ir al inicio">
-      <img src="logos/CUBO%20BLANCO%20MP.png" alt="Manu Pavez" />
-    </a>
-    <p class="footer-copy">
-      <strong>MANU PAVEZ</strong> — © 2025 · Todos los derechos reservados
-    </p>
-  </div>
-</footer>
 
+  <!-- SECCIONES HOME -->
+  <section class="section section-home-links">
+    <div class="container home-links">
+      <a href="artists.html" class="home-card">Artists</a>
+      <a href="services.html" class="home-card">Services</a>
+      <a href="team.html" class="home-card">Team</a>
+      <a href="contact.html" class="home-card">Contact</a>
+    </div>
+  </section>
 
-<!-- Scripts -->  
-  <script src="js/main.js"></script>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <p>© 2025 To The Moon Management</p>
+      <div class="social">
+        <a href="https://www.instagram.com/tothemoonmanagement" target="_blank" class="soc ig" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7m10 2c1.6 0 3 1.4 3 3v10c0 1.6-1.4 3-3 3H7c-1.6 0-3-1.4-3-3V7c0-1.6 1.4-3 3-3h10M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10m0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>
+        </a>
+        <button class="soc mail" id="openForm" aria-label="Email">
+          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 13.5 2 6.75V18h20V6.75L12 13.5Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL DE CONTACTO -->
+<div class="contact-modal" id="contactModal" hidden>
+  <div class="modal-overlay"></div>
+  <div class="modal-content">
+    <button class="close-modal" id="closeForm" aria-label="Cerrar formulario">&times;</button>
+    <h2>Contacto</h2>
+
+    <form id="contactForm" action="https://formspree.io/f/yourFormID" method="POST">
+      <input type="text" name="name" id="name" placeholder="Nombre" required>
+
+      <select name="subject" id="subject" required>
+        <option value="" disabled selected>Seleccioná el motivo</option>
+        <option value="Services">Services</option>
+        <option value="Booking">Booking</option>
+        <option value="General Inquiry">General Inquiry</option>
+      </select>
+
+      <div id="artistSelectContainer" hidden>
+        <select name="artist" id="artist">
+          <option value="" disabled selected>Elegí un artista</option>
+          <option value="Servando">Servando</option>
+          <option value="Luciano Bedini">Luciano Bedini</option>
+          <option value="Manu Pavez">Manu Pavez</option>
+          <option value="Fideksen">Fideksen</option>
+          <option value="Kentavros">Kentavros</option>
+          <option value="p37ro">p37ro</option>
+        </select>
+      </div>
+
+      <textarea name="message" id="message" rows="6" required placeholder="Hola TTM! Me contacto por:"></textarea>
+
+      <button type="submit" class="btn-primary">Enviar</button>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast" hidden>¡Gracias por contactarte con To The Moon! Te responderemos pronto.</div>
+
+<script src="script.js"></script>
 </body>
 </html>
+
