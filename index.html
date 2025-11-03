@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Manu Pavez | Frequency Storyteller</title>
+  <meta name="description" content="Manu Pavez — DJ & Producer. Booking, Clínicas, Presskit y últimos lanzamientos." />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Scripts (defer) -->
+  <script defer src="js/slider.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+
+<body>
+  <!-- HEADER FIJO -->
+  <header class="site-header fixed" role="banner">
+    <div class="header-inner">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <img src="img/logos/CUBO BLANCO MP.png" alt="Manu Pavez" onerror="this.style.display='none'">
+      </a>
+
+      <nav class="nav" role="navigation" aria-label="Navegación principal">
+        <a href="#inicio">INICIO</a>
+        <a href="#releases">RELEASES</a>
+        <a href="#story">STORYTELLER</a>
+        <a href="#presskit">PRESSKIT</a>
+        <a href="#videos">SETS</a>
+        <a href="#clinicas">CLÍNICAS</a>
+        <a href="#booking">BOOKING</a>
+      </nav>
+
+      <div class="header-actions">
+        <span id="local-time" class="local-time" aria-hidden="false" title="Hora local"></span>
+        <button class="menu-toggle" aria-controls="mobile-nav" aria-expanded="false" aria-label="Abrir menú móvil">
+          <span class="burger" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Nav móvil -->
+    <nav id="mobile-nav" class="mobile-nav" hidden aria-label="Menú móvil">
+      <a href="#inicio">INICIO</a>
+      <a href="#releases">RELEASES</a>
+      <a href="#story">STORYTELLER</a>
+      <a href="#presskit">PRESSKIT</a>
+      <a href="#videos">VIDEOS</a>
+      <a href="#clinicas">CLÍNICAS</a>
+      <a href="#booking">BOOKING</a>
+      <a href="mailto:booking@manupavez.com" class="mobile-book">BOOK NOW</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="inicio" class="hero" aria-labelledby="hero-title">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-wrap">
+      <h1 id="hero-title" class="hero-title">MANU PAVEZ</h1>
+      <p class="hero-lead">FREQUENCY STORYTELLER</p>
+      <p class="hero-sub">Progressive House · Buenos Aires · Sets llenos de narrativa</p>
+
+      <div class="hero-ctas">
+        <a class="mp-btn primary" href="#presskit">PRESSKIT</a>
+        <a class="mp-btn ghost" href="#story">LA HISTORIA</a>
+        <a class="mp-btn ghost" href="#releases">ESCÚCHAME</a>
+      </div>
+    </div>
+  </section>
+
+   <section id="releases" class="section releases" aria-labelledby="releases-title">
+    <h2 id="releases-title">TOUR DATES</h2>
+    <div class="embed-wrap">
+      <div class="songkick-widget-wrap">
+      <a href="https://www.songkick.com/artists/10195234" class="songkick-widget" data-theme="dark" data-track-button="off" data-detect-style="off" data-background-color="rgb(0,0,0,1)" data-font-color="rgb(255,255,255,1)" data-button-bg-color="rgb(255,255,255,1)" data-button-text-color="rgb(0,0,0,1)" data-locale="en" data-other-artists="on" data-share-button="on" data-country-filter="off" data-rsvp="off" data-request-show="off" data-past-events="off" data-past-events-offtour="off" data-remind-me="off" style="display: none;"></a><script src='//widget-app.songkick.com/injector/10195234'></script>    
+  </div>
+    </div>
+  </section>
+
+  <!-- RELEASES (Spotify embed) -->
+  <section id="releases" class="section releases" aria-labelledby="releases-title">
+    <h2 id="releases-title">Latest Releases</h2>
+    <div class="embed-wrap">
+      <!-- REEMPLAZAR TU_ARTIST_OR_PLAYLIST_ID abajo por tu ID -->
+      <!-- Ejemplo de artista: https://open.spotify.com/artist/<ID> -->
+     <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/1m15KTr2Qsf1JkdkBam27h?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  
+
+  <!-- PRESSKIT con slider -->
+  <section id="presskit" class="section presskit" aria-labelledby="presskit-title">
+    <h2 id="presskit-title">Presskit</h2>
+    <div class="press-content">
+      <div class="bio-text">
+        <p>
+          MANU PAVEZ es un DJ y productor argentino con años de trabajo minucioso en estudio, llevando su frequency storytelling al corazón del progressive house...
+        </p>
+        <p>
+          Su música cuenta con el aval de figuras como Hernán Cattáneo, Nick Warren y Mariano Mellino; compartió cabina y warm-ups con Graziano Raffa.
+        </p>
+      </div>
+      <div class="press-actions">
+        <a href="img/press.zip" class="mp-btn primary" download>DESCARGAR PRESSKIT</a>
+      </div>
+    </div>
+  </section>
+  
+
+  <!-- VIDEOS (YouTube Embeds) -->
+  <section id="videos" class="section videos" aria-labelledby="videos-title">
+    <h2 id="videos-title">SETS</h2>
+
+    <div class="video-grid">
+      <!-- Reemplazá TU_VIDEO_ID1 y TU_VIDEO_ID2 por IDs de YouTube -->
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/z5AnMupDxA4?si=H3t-z9pTwMwcLrRz&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/Yvha-kqron8?si=I0HrNYPcA0Aba1JY&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>    </div>
+     <h2 id="instagram-title">Instagram</h2>
+    <div class="ig-wrap">
+      <!-- LightWidget / otro servicio: reemplazá el src por tu widget -->
+      <!-- Instrucciones abajo para generar el widget y pegar aquí -->
+      <iframe class="lightwidget-widget" src="https://cdn.lightwidget.com/widgets/TU_LIGHTWIDGET_ID.html" scrolling="no" allowtransparency="true" loading="lazy" title="Instagram"></iframe>
+    </div>
+  </section>
+
+  <!-- CLÍNICAS -->
+  <section id="clinicas" class="section clinicas" aria-labelledby="clinicas-title">
+    <h2 id="clinicas-title">Clínicas</h2>
+    <p class="muted">Workshops prácticos: Frequency Storytelling (producción, performance, DJing). Formatos: grupal y 1:1.</p>
+    <a class="mp-btn green" href="#booking">VER PRÓXIMAS</a>
+  </section>
+
+  <!-- BOOKING -->
+  <section id="booking" class="section booking" aria-labelledby="booking-title">
+    <h2 id="booking-title">Booking</h2>
+    <p class="muted">Consultas y disponibilidad: escribime y te respondo en 48h.</p>
+    <a class="mp-btn primary" href="mailto:booking@manupavez.com">CONTACTAR</a>
+  </section>
+
+  <footer class="site-footer">
+  <div class="footer-inner">
+    <img src="logos/CUBO BLANCO MP.png" alt="Logo" class="footer-logo">
+
+    <div class="footer-social">
+      <a href="https://www.instagram.com/manupavez" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 2h9a5.5 5.5 0 0 1 5.5 5.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.75-.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>
+      </a>
+
+      <a href="https://soundcloud.com/manupavez" aria-label="SoundCloud">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.3 9.5c-.2 0-.4 0-.5.1a3.8 3.8 0 0 0-3.8-3.6 4 4 0 0 0-1.3.2 3.7 3.7 0 0 0-2.5 3.4c0 .2 0 .4.1.6h-1.2A3.2 3.2 0 0 0 5 16.1h12.3a2.6 2.6 0 0 0 0-5.1Z"/></svg>
+      </a>
+
+      <a href="https://open.spotify.com/artist" aria-label="Spotify">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2Zm4.4 14.6a.75.75 0 0 1-1 .3 8.3 8.3 0 0 0-8.8 0 .75.75 0 0 1-.8-1.3 9.8 9.8 0 0 1 10.4 0 .75.75 0 0 1 .2 1Zm1.3-2.7a.9.9 0 0 1-1.2.3 10.7 10.7 0 0 0-11.4 0 .9.9 0 1 1-.9-1.5 12.3 12.3 0 0 1 13.1 0 .9.9 0 0 1 .4 1.2Zm.2-2.8a1 1 0 0 1-1.3.4 13.4 13.4 0 0 0-13.8 0 1 1 0 0 1-.9-1.7 15.3 15.3 0 0 1 15.6 0 1 1 0 0 1 .4 1.3Z"/></svg>
+      </a>
+
+      <a href="https://youtube.com/@manupavez" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 8.2s-.2-1.5-.8-2.1a3.3 3.3 0 0 0-2.2-.8C16 5 12 5 12 5h0s-4 0-6.6.3a3.3 3.3 0 0 0-2.2.8c-.6.6-.8 2.1-.8 2.1S2 9.9 2 11.5v1c0 1.6.4 3.3.4 3.3s.2 1.5.8 2.1a3.3 3.3 0 0 0 2.2.8c1.6.1 6.6.3 6.6.3s4 0 6.6-.3a3.3 3.3 0 0 0 2.2-.8c.6-.6.8-2.1.8-2.1s.4-1.7.4-3.3v-1c0-1.6-.4-3.3-.4-3.3ZM9.8 14.7V9.3l5.4 2.7-5.4 2.7Z"/></svg>
+      </a>
+    </div>
+
+    <p>© 2025 MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+/* ============================
+   Variables (panel de control)
+   ============================ */
+:root{
+  --bg: #070707;
+  --bg-2: #0e0e10;
+  --text: #f8f8f8;
+  --muted: #b7b7b7;
+  --accent: #00e5ff;     /* cyan */
+  --accent-2: #a56bff;   /* violeta */
+  --green: #00e08a;
+  --radius: 14px;
+  --maxw: 1200px;
+  --float-speed: 40s;
+  --header-h: 72px;
+  scroll-behavior: smooth;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Reset */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none}
+
+/* UTIL */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+
+/* HEADER */
+.site-header.fixed{
+  position:fixed;inset:0 0 auto 0;height:var(--header-h);z-index:999;
+  background:linear-gradient(180deg, rgba(6,7,8,0.66), rgba(6,7,8,0.4));
+  backdrop-filter: blur(8px) saturate(120%);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.header-inner{max-width:var(--maxw);margin:0 auto;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.brand img{height:40px;display:block}
+.nav{display:flex;gap:20px;align-items:center}
+.nav a{font-weight:700;font-size:.88rem;letter-spacing:.09em;text-transform:uppercase;padding:8px 6px;border-radius:6px;transition:color .18s, background .18s}
+.nav a:hover{color:var(--accent)}
+.header-actions{display:flex;gap:12px;align-items:center}
+.local-time{font-weight:700;color:var(--accent);font-size:.9rem}
+.menu-toggle{display:none;background:transparent;border:1px solid rgba(255,255,255,.06);padding:8px;border-radius:8px;}
+
+/* Mobile header adjustments */
+@media(max-width:900px){
+  .nav{display:none}
+  .menu-toggle{display:block}
+  .header-inner{padding:0 12px}
+}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding-top:var(--header-h)}
+.hero-bg{position:absolute;inset:0;z-index:0;background:
+  radial-gradient(circle at 25% 30%, rgba(165,107,255,0.12) 0%, transparent 40%),
+  radial-gradient(circle at 75% 70%, rgba(0,229,255,0.10) 0%, transparent 40%);
+  animation: float var(--float-speed) linear infinite alternate;
+  filter: saturate(1.02) contrast(.98);
+}
+.hero-wrap{position:relative;z-index:2;text-align:center;padding:0 20px}
+.hero-title{font-size:clamp(2rem,8vw,4.2rem);letter-spacing:.18em;text-transform:uppercase;font-weight:900;margin-bottom:.2rem}
+.hero-lead{color:var(--accent-2);letter-spacing:.18em;font-weight:700;margin-bottom:.8rem}
+.hero-sub{color:var(--muted);max-width:70ch;margin:0 auto 1.2rem}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* Buttons */
+.mp-btn{display:inline-block;padding:.7rem 1.1rem;border-radius:999px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;cursor:pointer}
+.mp-btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#041018;border:0}
+.mp-btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.08);color:var(--text)}
+.mp-btn.green{background:linear-gradient(90deg,var(--green),#00ff9b);color:#041018}
+
+/* Sections */
+.section{padding:96px 0;max-width:var(--maxw);margin:0 auto;text-align:center}
+.section h2{text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:.6rem;font-size:1.6rem}
+.muted{color:var(--muted);margin-bottom:1rem}
+
+/* EMBED WRAP */
+.embed-wrap{max-width:980px;margin:0 auto;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.04)}
+
+/* Story accordion */
+.story-interactive .chapters{max-width:900px;margin:18px auto;display:grid;gap:12px;text-align:left}
+.chapter{background:rgba(255,255,255,0.02);border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+.chapter-btn{width:100%;text-align:left;padding:18px;font-weight:800;background:none;border:0;color:var(--accent);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:space-between}
+.chapter-btn:after{content:"+";font-weight:900;color:var(--muted)}
+.chapter.active .chapter-btn:after{content:"–";color:var(--muted)}
+.chapter-content{padding:0 18px 18px 18px;color:var(--muted);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .38s ease, padding .28s ease}
+.chapter.active .chapter-content{max-height:420px;padding-top:12px}
+
+/* PRESSKIT + SLIDER */
+.press-content{display:grid;grid-template-columns:1fr;gap:22px;align-items:start;max-width:1100px;margin:0 auto}
+@media(min-width:900px){ .press-content{grid-template-columns:1fr 520px} }
+
+.slider{position:relative;border-radius:10px;overflow:hidden}
+.slides img{width:100%;height:auto;position:absolute;left:0;top:0;opacity:0;transition:opacity 1.2s ease}
+.slides img.active{opacity:1;position:relative}
+.slider-dots{display:flex;gap:10px;justify-content:center;padding:12px}
+
+/* VIDEO GRID */
+.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.video-grid iframe{width:100%;aspect-ratio:16/9;border-radius:8px;border:0}
+@media(max-width:900px){ .video-grid{grid-template-columns:1fr} }
+
+/* INSTAGRAM placeholder */
+.ig-wrap{max-width:980px;margin:0 auto;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.03)}
+
+/* CLÍNICAS / BOOKING CTA */
+.clinicas .mp-btn.green{margin-top:12px}
+.booking .mp-btn.primary{margin-top:12px}
+
+/* FOOTER */
+.site-footer{border-top:1px solid rgba(255,255,255,0.04);padding:40px 20px;background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.04))}
+.footer-inner{max-width:var(--maxw);margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:12px}
+.footer-logo{width:90px;height:auto;opacity:.85}
+.footer-social{display:flex;gap:16px}
+.footer-social a{color:var(--text);opacity:.8;transition:opacity .2s,transform .18s}
+.footer-social a:hover{opacity:1;transform:scale(1.06)}
+.site-footer p{color:var(--muted);font-weight:600;letter-spacing:.06em}
+
+/* Animations & prefers-reduced-motion */
+@keyframes float {from{transform:translateY(0)}to{transform:translateY(-12px)}}
+.hero-bg{animation:float var(--float-speed) linear infinite alternate}
+@media (prefers-reduced-motion: reduce){
+  .hero-bg{animation:none}
+  .slides img{transition:none}
+  .chapter-content{transition:none}
+}
+
+/* Responsive tweaks */
+@media(max-width:900px){
+  .press-content{grid-template-columns:1fr}
+  .hero-title{font-size:2.2rem}
+  .header-inner{padding:0 12px}
+}
+/* === FOOTER EXTENDIDO PROFESIONAL === */
+.footer-social {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.footer-social a {
+  color: var(--text);
+  opacity: .7;
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+.footer-social a:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.footer-social svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+/* === HEADER FIJO === */
+.site-header.fixed {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  background: rgba(0,0,0,0.55);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.4s ease;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand img {
+  height: 40px;
+  width: auto;
+  opacity: .9;
+  transition: opacity .3s ease;
+}
+
+.brand img:hover { opacity: 1; }
+
+.nav {
+  display: flex;
+  gap: 28px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.9rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  transition: color .3s;
+}
+
+.nav a:hover {
+  color: var(--accent);
+}
+
+.cta-book {
+  background: transparent;
+  border: 1px solid var(--accent);
+  padding: 6px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: bold;
+  transition: all .3s ease;
+}
+
+.cta-book:hover {
+  background: var(--accent);
+  color: #000;
+}
+
+/* Mobile */
+@media (max-width: 780px) {
+  .nav { display: none; } /* se ocultará para mobile */
+}
+
