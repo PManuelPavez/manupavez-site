@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Manu Pavez | Frequency Storyteller</title>
+  <meta name="description" content="Manu Pavez — Frequency Storyteller. Uso la música para ordenar lo que siento y compartir el camino: música, laboratorio de procesos y noches en la pista." />
+
+  <!-- Tipografías PRO -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Scripts (defer) -->
+  <script defer src="js/slider.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+
+<body>
+  <!-- HEADER FIJO -->
+  <header class="site-header fixed" role="banner">
+    <div class="header-inner">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <img src="logos/CUBO BLANCO MP.png" alt="Manu Pavez" onerror="this.style.display='none'">
+      </a>
+
+      <!-- NAV DESKTOP (simplificado) -->
+      <nav class="nav" role="navigation" aria-label="Navegación principal">
+        <a href="#inicio">INICIO</a>
+        <a href="#musica">MÚSICA &amp; SELLOS</a>
+        <a href="#en-vivo">EN VIVO</a>
+        <a href="#lab">FREQUENCY LAB</a>
+        <a href="clinicas.html">CLÍNICAS</a>
+        <a href="bio.html">SOBRE MANU</a>
+      </nav>
+
+      <!-- LADO DERECHO: CTA BOOKING + hamburguesa -->
+      <div class="header-actions">
+        <a href="#presskit" class="header-cta">BOOKING</a>
+
+        <button class="menu-toggle" aria-controls="mobile-nav" aria-expanded="false" aria-label="Abrir menú móvil">
+          <span class="burger" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- NAV MÓVIL (menos ruido) -->
+    <nav id="mobile-nav" class="mobile-nav" hidden aria-label="Menú móvil">
+      <a href="#inicio">INICIO</a>
+      <a href="#musica">MÚSICA &amp; SELLOS</a>
+      <a href="#en-vivo">EN VIVO</a>
+      <a href="#lab">FREQUENCY LAB</a>
+      <a href="clinicas.html">CLÍNICAS</a>
+      <a href="bio.html">SOBRE MANU</a>
+      <a href="#presskit">BOOKING</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="inicio" class="hero" aria-labelledby="hero-title">
+    <div class="hero-bg" aria-hidden="true">
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="img/bg-1080.webm" type="video/webm">
+        <source src="img/bg-720.webm" type="video/webm">
+      </video>
+    </div>
+
+    <div class="hero-wrap">
+      <h1 id="hero-title" class="hero-title">MANU PAVEZ</h1>
+
+      <!-- Frequency Storyteller lleva a la bio -->
+      <p class="hero-lead hero-glint">
+        <a href="bio.html">FREQUENCY STORYTELLER</a>
+      </p>
+
+      <p class="hero-sub">
+        Uso la música para ordenar lo que siento y compartir ese camino. Procesos reales:
+        en estudio, en la pista y hacia adentro.
+      </p>
+
+      <!-- CTAs centradas -->
+      <div class="hero-ctas hero-ctas-main">
+        <a class="mp-btn primary" href="#presskit">
+          BOOKING
+        </a>
+        <a class="mp-btn ghost" href="#lab">
+          FREQUENCY LAB
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MÚSICA: PORTADAS + STORYTELLING -->
+  <section id="musica" class="section releases reveal" aria-labelledby="musica-title">
+    <div class="section-inner">
+      <header class="section-head">
+        <h2 id="musica-title" data-animate="heading">MÚSICA · DIARIOS</h2>
+        <p class="muted">
+          Algunos lanzamientos que ordenan etapas del camino. Portadas claras, pocas palabras
+          y links directos a donde tiene que sonar.
+        </p>
+      </header>
+
+      <div class="release-slider" aria-label="Lanzamientos destacados">
+        <button class="release-nav prev" type="button" aria-label="Lanzamiento anterior">‹</button>
+
+        <div class="release-slides">
+          <!-- SLIDE 1 -->
+          <article class="release-slide release-card active">
+            <div class="release-layout">
+              <div class="release-cover">
+                <img src="https://f4.bcbits.com/img/a1834251975_10.jpg" alt="Portada Yourself EP">
+              </div>
+              <div class="release-info">
+                <h3>YOURSELF</h3>
+                <p class="release-meta">ÁLBUM</p>
+                <p class="release-story">
+                  Un EP pensado para abrir el viaje sin apuro. Espacio, aire y melodías que
+                  preparan el cuerpo para lo que viene después en el set.
+                </p>
+                <div class="release-tags">
+                  <span>Arranque de la noche</span>
+                  <span>Texturas cálidas</span>
+                </div>
+                <div class="release-actions">
+                  <a class="mp-btn platform-btn spotify-btn" href="LINK_SPOTIFY" target="_blank" rel="noopener">
+                    <span class="platform-icon">
+                      <img src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/computer-devices/spotify-logo-rqo8dfv5kgaqvujj9y2kn.png/spotify-logo-244vs4l8z32qxnhdp6sd6e.png?_a=DATAg1AAZAA0" alt="Spotify">
+                    </span>
+                  </a>
+
+                  <a class="mp-btn platform-btn beatport-btn" href="LINK_BEATPORT" target="_blank" rel="noopener">
+                    <span class="platform-icon">
+                      <img src="https://www.svgrepo.com/show/330041/beatport.svg" alt="Beatport">
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 2 -->
+          <article class="release-slide release-card">
+            <div class="release-layout">
+              <div class="release-cover">
+                <img src="https://geo-media.beatport.com/image_size/1400x1400/a445a8b4-572d-4b4d-865e-881b8244a9b5.jpg" alt="Portada Noisy Silences EP">
+              </div>
+              <div class="release-info">
+                <h3>NOISY SILENCES</h3>
+                <p class="release-meta">MINI ÁLBUM</p>
+                <p class="release-story">
+                  Piezas largas para el centro del set. Detalle y tensión sostenida sin perder
+                  groove, pensadas para cuando la pista ya está entregada.
+                </p>
+                <div class="release-tags">
+                  <span>Centro del viaje</span>
+                  <span>Tensión amable</span>
+                </div>
+                <div class="release-actions">
+                  <a class="mp-btn platform-btn spotify-btn" href="LINK_SPOTIFY" target="_blank" rel="noopener">
+                    <span class="platform-icon">
+                      <img src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/computer-devices/spotify-logo-rqo8dfv5kgaqvujj9y2kn.png/spotify-logo-244vs4l8z32qxnhdp6sd6e.png?_a=DATAg1AAZAA0" alt="Spotify">
+                    </span>
+                  </a>
+
+                  <a class="mp-btn platform-btn beatport-btn" href="LINK_BEATPORT" target="_blank" rel="noopener">
+                    <span class="platform-icon">
+                      <img src="https://www.svgrepo.com/show/330041/beatport.svg" alt="Beatport">
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 3 -->
+          <article class="release-slide release-card">
+            <div class="release-layout">
+              <div class="release-cover">
+                <img src="https://geo-media.beatport.com/image_size/1400x1400/6228b451-a86f-4d28-8227-875d33ab350f.jpg" alt="Portada Twenty Two">
+              </div>
+              <div class="release-info">
+                <h3>TWENTY TWO</h3>
+                <p class="release-meta">ÁLBUM W/ SERVANDO</p>
+                <p class="release-story">
+                  “Twenty Two” es un trabajo largo pensado como un solo viaje. Nueve temas que
+                  se apoyan entre sí para contar una misma etapa desde distintos ángulos.
+                </p>
+                <div class="release-tags">
+                  <span>Viaje largo</span>
+                  <span>Melancolía en pista</span>
+                </div>
+                <div class="release-actions">
+                  <a class="mp-btn platform-btn spotify-btn" href="LINK_SPOTIFY" target="_blank" rel="noopener">
+                    <span class="platform-icon">
+                      <img src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/computer-devices/spotify-logo-rqo8dfv5kgaqvujj9y2kn.png/spotify-logo-244vs4l8z32qxnhdp6sd6e.png?_a=DATAg1AAZAA0" alt="Spotify">
+                    </span>
+                  </a>
+
+                  <a class="mp-btn platform-btn beatport-btn" href="LINK_BEATPORT" target="_blank" rel="noopener">
+                    <span class="platform-icon">
+                      <img src="https://www.svgrepo.com/show/330041/beatport.svg" alt="Beatport">
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <button class="release-nav next" type="button" aria-label="Lanzamiento siguiente">›</button>
+      </div>  
+    </div>
+  </section>
+
+  <!-- SELLOS / LABELS – CARRUSEL AUTOMÁTICO -->
+  <section id="sellos" class="section labels reveal section-centered" aria-labelledby="labels-title">
+    <h2 id="labels-title" data-animate="heading">SELLOS &amp; SUPPORT</h2>
+    <p class="muted">
+      Parte de este universo sonoro salió por sellos que cuidan la curaduría y el largo plazo.
+      Algunos de los espacios y artistas que acompañan el proyecto:
+    </p>
+
+    <div class="labels-marquee">
+      <div class="labels-track">
+        <!-- bloque 1 -->
+        <div class="label-pill">
+          <img src="img/labels/mango-alley.png" alt="Mango Alley">
+          <span>Mango Alley</span>
+        </div>
+        <div class="label-pill">
+          <img src="img/labels/sound-avenue.png" alt="Sound Avenue">
+          <span>Sound Avenue</span>
+        </div>
+        <div class="label-pill">
+          <img src="img/labels/label-3.png" alt="Otro sello">
+          <span>Label 3</span>
+        </div>
+        <div class="label-pill">
+          <img src="img/labels/label-4.png" alt="Otro sello">
+          <span>Label 4</span>
+        </div>
+        <div class="label-pill small-text">
+          <img src="img/labels/support.png" alt="DJ Support">
+          <span>Support: Hernán Cattáneo · Nick Warren · Mariano Mellino</span>
+        </div>
+
+        <!-- bloque 2 duplicado para loop infinito -->
+        <div class="label-pill">
+          <img src="img/labels/mango-alley.png" alt="Mango Alley">
+          <span>Mango Alley</span>
+        </div>
+        <div class="label-pill">
+          <img src="img/labels/sound-avenue.png" alt="Sound Avenue">
+          <span>Sound Avenue</span>
+        </div>
+        <div class="label-pill">
+          <img src="img/labels/label-3.png" alt="Otro sello">
+          <span>Label 3</span>
+        </div>
+        <div class="label-pill">
+          <img src="img/labels/label-4.png" alt="Otro sello">
+          <span>Label 4</span>
+        </div>
+        <div class="label-pill small-text">
+          <img src="img/labels/support.png" alt="DJ Support">
+          <span>Support: Hernán Cattáneo · Nick Warren · Mariano Mellino</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EN VIVO: FECHAS + SETS + MIXES -->
+  <section id="en-vivo" class="section releases reveal section-centered" aria-labelledby="envivo-title">
+    <h2 id="envivo-title" data-animate="heading">EN VIVO</h2>
+
+    <!-- FECHAS -->
+    <div class="embed-wrap">
+      <div class="songkick-widget-wrap">
+        <a href="https://www.songkick.com/artists/10195234" class="songkick-widget"
+           data-theme="dark"
+           data-track-button="off"
+           data-detect-style="off"
+           data-background-color="rgb(0,0,0,1)"
+           data-font-color="rgb(255,255,255,1)"
+           data-button-bg-color="rgb(255,255,255,1)"
+           data-button-text-color="rgb(0,0,0,1)"
+           data-locale="en"
+           data-other-artists="on"
+           data-share-button="on"
+           data-country-filter="off"
+           data-rsvp="off"
+           data-request-show="off"
+           data-past-events="off"
+           data-past-events-offtour="off"
+           data-remind-me="off"
+           style="display:none;"></a>
+        <script src="//widget-app.songkick.com/injector/10195234"></script>
+      </div>
+    </div>
+
+    <!-- SETS EN VIDEO -->
+    <h3 class="subsection-title">Sets en video</h3>
+    <p class="muted">
+      Fragmentos de fechas donde se ve cómo se traduce todo con gente adelante.
+    </p>
+
+    <div class="media-slider" data-slider="videos">
+      <button class="media-nav prev" type="button" aria-label="Video anterior">‹</button>
+
+      <div class="media-track">
+        <article class="media-slide is-active">
+          <div class="media-embed">
+            <iframe width="560" height="315"
+              src="https://www.youtube.com/embed/z5AnMupDxA4?si=H3t-z9pTwMwcLrRz&amp;controls=0"
+              title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <div class="media-caption">
+            <h4>CLUB 74 - ALL NIGHT LONG</h4>
+            <p>Fragmento de nuestro all night long con Gaspar Aguilera en Pergamino.</p>
+          </div>
+        </article>
+
+        <article class="media-slide">
+          <div class="media-embed">
+            <iframe width="560" height="315"
+              src="https://www.youtube.com/embed/Yvha-kqron8?si=I0HrNYPcA0Aba1JY&amp;controls=0"
+              title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <div class="media-caption">
+            <h4>CLUB 74 - ALL NIGHT LONG 2</h4>
+            <p>1 hora de mi presentación en solitario.</p>
+          </div>
+        </article>
+      </div>
+
+      <button class="media-nav next" type="button" aria-label="Video siguiente">›</button>
+    </div>
+
+    <!-- MIXES SoundCloud -->
+    <h3 class="subsection-title">Mixes seleccionados</h3>
+
+    <div class="media-slider" data-slider="mixes">
+      <button class="media-nav prev" type="button" aria-label="Mix anterior">‹</button>
+
+      <div class="media-track">
+        <article class="media-slide is-active">
+          <div class="media-embed mix">
+            <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2079106359&color=%23e400ff&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/manupavez" title="Manu Pavez" target="_blank" style="color: #cccccc; text-decoration: none;">Manu Pavez</a> · <a href="https://soundcloud.com/manupavez/sets/genesis" title="GENESIS · Storytelling" target="_blank" style="color: #cccccc; text-decoration: none;">GENESIS · Storytelling</a></div>
+              
+          </div>
+          <div class="media-caption">
+            <h4>GENESIS</h4>
+            <p>Serie mensual de mixes pensada desde el nacimiento.</p>
+          </div>
+        </article>
+
+        <article class="media-slide">
+          <div class="media-embed mix">
+<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A1876705190&color=%231c1d31&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/manupavez" title="Manu Pavez" target="_blank" style="color: #cccccc; text-decoration: none;">Manu Pavez</a> · <a href="https://soundcloud.com/manupavez/sets/mixes-binarios" title="MIXES BINARIOS · Full Album" target="_blank" style="color: #cccccc; text-decoration: none;">MIXES BINARIOS · Full Album</a></div>
+          </div>
+          <div class="media-caption">
+            <h4>MIXES BINARIOS</h4>
+            <p>Álbum de DJ sets haciendo honor a la digitalización.</p>
+          </div>
+        </article>
+      </div>
+
+      <button class="media-nav next" type="button" aria-label="Mix siguiente">›</button>
+    </div>
+
+  </section>
+
+  <!-- LABORATORIO -->
+  <section id="lab" class="section reveal section-centered" aria-labelledby="lab-title">
+    <h2 id="lab-title" data-animate="heading">FREQUENCY LAB</h2>
+    <p class="muted">
+      Frequency Lab es el espacio donde documento decisiones, procesos
+      y herramientas detrás de la música y los sets.
+    </p>
+    <p class="muted">
+      Pensado para productores y DJs que quieren ir más allá de la técnica básica y trabajar
+      narrativa, criterio y forma de escuchar.
+    </p>
+
+    <h3 class="subsection-title" id="clinicas-title">¿DE QUÉ SE TRATA?</h3>
+    <p class="muted">
+      No enseño a mezclar hits. Trabajo cómo decidís qué merece tiempo,
+      cuánto dura una idea y qué nunca debería sonar en tu pista.
+    </p>
+    <p class="muted">
+      Clínicas 1:1 y grupales para gente que ya está en movimiento y quiere
+      ordenar su propia forma de contar historias con sonido.
+    </p>
+    <a class="mp-btn green" href="#booking">QUIERO HABLAR DEL LAB</a>
+  </section>
+
+  <!-- PRESSKIT -->
+  <section id="presskit" class="section reveal section-centered" aria-labelledby="presskit-title">
+    <h2 id="presskit-title" data-animate="heading">PRESSKIT</h2>
+
+    <div class="press-shell">
+      <div class="press-copy">
+        <a href="img/press.zip" class="mp-btn primary">
+          DESCARGAR PRESSKIT
+        </a>
+      </div>
+
+      <div class="press-preview">
+        <!-- Después reemplazás estos fondos por tus fotos -->
+        <div class="press-layer press-img-1"></div>
+        <div class="press-layer press-img-2"></div>
+        <div class="press-layer press-img-3"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section id="booking" class="section booking reveal section-centered" aria-labelledby="booking-title">
+    <h2 id="booking-title" data-animate="heading">BOOKING</h2>
+
+    <form id="contact-form" class="contact-form">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="cf-name">Nombre completo*</label>
+          <input
+            type="text"
+            id="cf-name"
+            name="name"
+            required
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="cf-email">Correo electrónico*</label>
+          <input
+            type="email"
+            id="cf-email"
+            name="email"
+            required
+            placeholder="Tu mail de contacto"
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="cf-type">Tipo de evento*</label>
+          <select id="cf-type" name="type" required>
+            <option value="" disabled selected>Seleccioná una opción</option>
+            <option value="club">Club nocturno</option>
+            <option value="festival">Festival</option>
+            <option value="fiesta-privada">Fiesta privada</option>
+            <option value="open-air">Evento al aire libre</option>
+            <option value="after">After party</option>
+            <option value="clinica">Clínica / Mentoría</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-field form-field-full">
+          <label for="cf-message">Mensaje*</label>
+          <textarea
+            id="cf-message"
+            name="message"
+            rows="5"
+            required
+            placeholder="Fecha aproximada, ciudad, formato del evento o qué te gustaría trabajar en el lab."
+          ></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="mp-btn primary form-submit">ENVIAR</button>
+
+      <p class="form-hint">
+        Si preferís, podés escribir directo a
+        <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>
+      </p>
+    </form>
+  </section>
+
+  <!-- INSTAGRAM (al final) -->
+  <section id="instagram" class="section reveal section-centered" aria-labelledby="instagram-title">
+    <h2 id="instagram-title" data-animate="heading">INSTAGRAM</h2>
+
+    <p class="muted" style="text-align:center;margin-inline:auto;margin-bottom:1.5rem;max-width:520px;">
+      Clips cortos, work in progress y fragmentos del día a día alrededor de la música.
+    </p>
+
+    <div class="ig-wrap ig-card">
+      <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
+      <iframe src="//lightwidget.com/widgets/d4159941fe3b5f3f8260daff5de5ba95.html"
+              scrolling="no" allowtransparency="true"
+              class="lightwidget-widget"
+              style="width:100%;border:0;overflow:hidden;"></iframe>
+    </div>
+  </section>
+
+  <!-- BOTÓN FLOTANTE VOLVER ARRIBA -->
+  <button class="scroll-top" type="button" aria-label="Volver arriba">
+    ↑
+  </button>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <img src="logos/CUBO BLANCO MP.png" alt="Logo Manu Pavez" class="footer-logo">
+
+      <div class="footer-social">
+        <a href="https://www.instagram.com/manupavez_" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 2h9a5.5 5.5 0 0 1 5.5 5.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.75-.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>
+        </a>
+
+        <a href="https://soundcloud.com/manupavez" aria-label="SoundCloud">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.3 9.5c-.2 0-.4 0-.5.1a3.8 3.8 0 0 0-3.8-3.6 4 4 0 0 0-1.3.2 3.7 3.7 0 0 0-2.5 3.4c0 .2 0 .4.1.6h-1.2A3.2 3.2 0 0 0 5 16.1h12.3a2.6 2.6 0 0 0 0-5.1Z"/></svg>
+        </a>
+
+        <a href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h" aria-label="Spotify">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2Zm4.4 14.6a.75.75 0 0 1-1 .3 8.3 8.3 0 0 0-8.8 0 .75.75 0 0 1-.8-1.3 9.8 9.8 0 0 1 10.4 0 .75.75 0 0 1 .2 1Zm1.3-2.7a.9.9 0 0 1-1.2.3 10.7 10.7 0 0 0-11.4 0 .9.9 0 1 1-.9-1.5 12.3 12.3 0 0 1 13.1 0 .9.9 0 0 1 .4 1.2Zm.2-2.8a1 1 0 0 1-1.3.4 13.4 13.4 0 0 0-13.8 0 1 1 0 0 1-.9-1.7 15.3 15.3 0 0 1 15.6 0 1 1 0 0 1 .4 1.3Z"/></svg>
+        </a>
+
+        <a href="https://youtube.com/@manupavez" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 8.2s-.2-1.5-.8-2.1a3.3 3.3 0 0 0-2.2-.8C16 5 12 5 12 5h0s-4 0-6.6.3a3.3 3.3 0 0 0-2.2.8c-.6.6-.8 2.1-.8 2.1S2 9.9 2 11.5v1c0 1.6.4 3.3.4 3.3s.2 1.5.8 2.1a3.3 3.3 0 0 0 2.2.8c1.6.1 6.6.3 6.6.3s4 0 6.6-.3a3.3 3.3 0 0 0 2.2-.8c.6-.6.8-2.1.8-2.1s.4-1.7.4-3.3v-1c0-1.6-.4-3.3-.4-3.3ZM9.8 14.7V9.3l5.4 2.7-5.4 2.7Z"/></svg>
+        </a>
+      </div>
+
+      <p>© 2025 MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
+    </div>
+  </footer>
+</body>
+</html>
