@@ -1450,3 +1450,130 @@ strong {
     font-size: 0.86rem;
   }
 }
+<div class="press-preview">
+  <div class="press-layer press-img-1"></div>
+  <div class="press-layer press-img-2"></div>
+  <div class="press-layer press-img-3"></div>
+</div>
+/* =================== MEDIA SLIDERS (VIDEO + MIXES) – FIX =================== */
+
+.media-slider {
+  position: relative;
+  margin-top: 18px;
+  border-radius: var(--radius-lg);
+  background: rgba(5, 7, 17, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 18px 18px 20px;
+  overflow: hidden;
+}
+
+/* Track horizontal que se mueve con translateX (lo maneja slider.js) */
+.media-track {
+  display: flex;
+  align-items: stretch;
+  transition: transform 0.45s ease;
+}
+
+/* Cada slide ocupa el 100% del ancho visible */
+.media-slide {
+  min-width: 100%;
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+  gap: 18px;
+  align-items: center;
+}
+
+/* Embeds responsivos */
+.media-embed iframe {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+}
+
+/* Caption debajo del video / player */
+.media-caption {
+  align-self: center;
+  text-align: left;
+}
+
+.media-caption h4 {
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  margin-bottom: 6px;
+}
+
+.media-caption p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+/* Flechas */
+.media-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(5, 5, 9, 0.95);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.media-nav.prev { left: 10px; }
+.media-nav.next { right: 10px; }
+
+.media-nav:hover {
+  transform: translateY(-50%) translateY(-1px);
+  background: #ffffff;
+  color: #050509;
+  border-color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .media-slide {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .media-slider {
+    padding: 14px 12px 16px;
+  }
+
+  .media-slide {
+    gap: 12px;
+  }
+
+  .media-caption {
+    text-align: left;
+  }
+
+  .media-caption h4 {
+    font-size: 0.98rem;
+  }
+
+  .media-caption p {
+    font-size: 0.86rem;
+  }
+
+  .media-nav {
+    width: 30px;
+    height: 30px;
+    font-size: 1.1rem;
+  }
+
+  .media-nav.prev { left: 4px; }
+  .media-nav.next { right: 4px; }
+}
