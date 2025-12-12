@@ -1503,4 +1503,95 @@ p, span, a, li, strong {
   transform: translate3d(0, -4px, 0) scale(1.02);
 }
 /* ============ PRESSKIT NIVEL 2 – LIMPIO ============ */
+/* === FIX PRESSKIT: RUTAS REALES Y SLIDESHOW === */
+.press-shell {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+  gap: 26px;
+  padding: 22px 22px 24px;
+  border-radius: 24px;
+  background: radial-gradient(circle at top left, rgba(89,198,186,0.08), transparent 55%),
+              rgba(5, 7, 17, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.press-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: center;
+}
+
+.press-copy p {
+  text-align: left;
+  max-width: 480px;
+  margin-inline: auto 0;
+}
+
+/* PREVIEW: stack de 3 fotos que se van ciclando */
+.press-preview {
+  position: relative;
+  height: 260px;
+  max-width: 460px;
+  margin-inline: auto;
+  perspective: 1000px;
+}
+
+.press-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 26px 50px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  transform: translate3d(0, 20px, 0) scale(0.96);
+  animation: press-cycle 18s infinite;
+}
+
+/* OJO: acá van tus archivos reales en /img/press/ */
+.press-img-1 {
+  background-image: url("/img/press/press1.jpg");
+  animation-delay: 0s;
+}
+.press-img-2 {
+  background-image: url("/img/press/press2.jpg");
+  animation-delay: 6s;
+}
+.press-img-3 {
+  background-image: url("/img/press/press3.jpg");
+  animation-delay: 12s;
+}
+
+@keyframes press-cycle {
+  0%   { opacity: 0; transform: translate3d(0, 20px, 0) scale(0.94); }
+  8%   { opacity: 1; transform: translate3d(0, 0, 0)   scale(1); }
+  25%  { opacity: 1; transform: translate3d(0, 0, 0)   scale(1); }
+  33%  { opacity: 0; transform: translate3d(0,-12px,0) scale(0.97); }
+  100% { opacity: 0; transform: translate3d(0, 20px, 0) scale(0.94); }
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .press-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .press-copy p {
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .press-copy .mp-btn {
+    align-self: center;
+  }
+
+  .press-preview {
+    height: 220px;
+    margin-top: 8px;
+  }
+}
 
