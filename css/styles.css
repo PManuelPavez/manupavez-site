@@ -1480,3 +1480,12 @@ p, span, a, li, strong {
     padding-top: 52px;
   }
 }
+/* Hover suave en el stack del presskit */
+.press-preview:hover .press-layer {
+  box-shadow: 0 30px 60px rgba(0,0,0,0.95);
+}
+
+/* La carta que esté al frente respira un poco más */
+.press-preview:hover .press-img-2 {
+  transform: translate3d(0, -4px, 0) scale(1.02);
+}
