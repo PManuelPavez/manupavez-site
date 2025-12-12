@@ -27,19 +27,22 @@
         <img src="logos/CUBO BLANCO MP.png" alt="Manu Pavez" onerror="this.style.display='none'">
       </a>
 
-      <!-- NAV DESKTOP (simplificado) -->
+      <!-- NAV DESKTOP -->
       <nav class="nav" role="navigation" aria-label="Navegación principal">
         <a href="#inicio">INICIO</a>
-        <a href="#musica">MÚSICA &amp; SELLOS</a>
+        <a href="#musica">MÚSICA</a>
+        <a href="#sellos">SELLOS</a>
         <a href="#en-vivo">EN VIVO</a>
         <a href="#lab">FREQUENCY LAB</a>
         <a href="clinicas.html">CLÍNICAS</a>
         <a href="bio.html">SOBRE MANU</a>
+        <a href="#presskit">PRESSKIT</a>
+        <a href="#booking" class="cta-book">BOOKING</a>
       </nav>
 
       <!-- LADO DERECHO: CTA BOOKING + hamburguesa -->
       <div class="header-actions">
-        <a href="#presskit" class="header-cta">BOOKING</a>
+        <a href="#booking" class="header-cta">BOOKING</a>
 
         <button class="menu-toggle" aria-controls="mobile-nav" aria-expanded="false" aria-label="Abrir menú móvil">
           <span class="burger" aria-hidden="true"></span>
@@ -47,15 +50,20 @@
       </div>
     </div>
 
-    <!-- NAV MÓVIL (menos ruido) -->
+    <!-- NAV MÓVIL -->
     <nav id="mobile-nav" class="mobile-nav" hidden aria-label="Menú móvil">
       <a href="#inicio">INICIO</a>
-      <a href="#musica">MÚSICA &amp; SELLOS</a>
+      <a href="#musica">MÚSICA</a>
+      <a href="#sellos">SELLOS</a>
       <a href="#en-vivo">EN VIVO</a>
       <a href="#lab">FREQUENCY LAB</a>
       <a href="clinicas.html">CLÍNICAS</a>
       <a href="bio.html">SOBRE MANU</a>
-      <a href="#presskit">BOOKING</a>
+      <a href="#presskit">PRESSKIT</a>
+      <a href="#booking">BOOKING</a>
+      <a href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Contacto/Booking" class="mobile-book">
+        MAIL DIRECTO
+      </a>
     </nav>
   </header>
 
@@ -71,7 +79,7 @@
     <div class="hero-wrap">
       <h1 id="hero-title" class="hero-title">MANU PAVEZ</h1>
 
-      <!-- Frequency Storyteller lleva a la bio -->
+      <!-- FREQUENCY STORYTELLER lleva a la bio -->
       <p class="hero-lead hero-glint">
         <a href="bio.html">FREQUENCY STORYTELLER</a>
       </p>
@@ -81,9 +89,8 @@
         en estudio, en la pista y hacia adentro.
       </p>
 
-      <!-- CTAs centradas -->
       <div class="hero-ctas hero-ctas-main">
-        <a class="mp-btn primary" href="#presskit">
+        <a class="mp-btn primary" href="#booking">
           BOOKING
         </a>
         <a class="mp-btn ghost" href="#lab">
@@ -108,7 +115,7 @@
         <button class="release-nav prev" type="button" aria-label="Lanzamiento anterior">‹</button>
 
         <div class="release-slides">
-          <!-- SLIDE 1 -->
+          <!-- SLIDE 1 – YOURSELF EP -->
           <article class="release-slide release-card active">
             <div class="release-layout">
               <div class="release-cover">
@@ -116,7 +123,7 @@
               </div>
               <div class="release-info">
                 <h3>YOURSELF</h3>
-                <p class="release-meta">ÁLBUM</p>
+                <p class="release-meta">EP</p>
                 <p class="release-story">
                   Un EP pensado para abrir el viaje sin apuro. Espacio, aire y melodías que
                   preparan el cuerpo para lo que viene después en el set.
@@ -126,15 +133,21 @@
                   <span>Texturas cálidas</span>
                 </div>
                 <div class="release-actions">
-                  <a class="mp-btn platform-btn spotify-btn" href="LINK_SPOTIFY" target="_blank" rel="noopener">
+                  <!-- Spotify: por ahora va al perfil (release nuevo todavía difícil de indexar) -->
+                  <a class="mp-btn platform-btn spotify-btn"
+                     href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h"
+                     target="_blank" rel="noopener">
                     <span class="platform-icon">
-                      <img src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/computer-devices/spotify-logo-rqo8dfv5kgaqvujj9y2kn.png/spotify-logo-244vs4l8z32qxnhdp6sd6e.png?_a=DATAg1AAZAA0" alt="Spotify">
+                      <img src="img/icons/spotify.svg" alt="Spotify">
                     </span>
                   </a>
 
-                  <a class="mp-btn platform-btn beatport-btn" href="LINK_BEATPORT" target="_blank" rel="noopener">
+                  <!-- Beatport: release YOURSELF -->
+                  <a class="mp-btn platform-btn beatport-btn"
+                     href="https://www.beatport.com/release/yourself/5181048"
+                     target="_blank" rel="noopener">
                     <span class="platform-icon">
-                      <img src="https://www.svgrepo.com/show/330041/beatport.svg" alt="Beatport">
+                      <img src="img/icons/beatport.svg" alt="Beatport">
                     </span>
                   </a>
                 </div>
@@ -142,7 +155,7 @@
             </div>
           </article>
 
-          <!-- SLIDE 2 -->
+          <!-- SLIDE 2 – NOISY SILENCES -->
           <article class="release-slide release-card">
             <div class="release-layout">
               <div class="release-cover">
@@ -150,7 +163,7 @@
               </div>
               <div class="release-info">
                 <h3>NOISY SILENCES</h3>
-                <p class="release-meta">MINI ÁLBUM</p>
+                <p class="release-meta">EP</p>
                 <p class="release-story">
                   Piezas largas para el centro del set. Detalle y tensión sostenida sin perder
                   groove, pensadas para cuando la pista ya está entregada.
@@ -160,15 +173,21 @@
                   <span>Tensión amable</span>
                 </div>
                 <div class="release-actions">
-                  <a class="mp-btn platform-btn spotify-btn" href="LINK_SPOTIFY" target="_blank" rel="noopener">
+                  <!-- Spotify: álbum de Noisy Silences -->
+                  <a class="mp-btn platform-btn spotify-btn"
+                     href="https://open.spotify.com/album/3L8bekE25CotMtPbt6v08E"
+                     target="_blank" rel="noopener">
                     <span class="platform-icon">
-                      <img src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/computer-devices/spotify-logo-rqo8dfv5kgaqvujj9y2kn.png/spotify-logo-244vs4l8z32qxnhdp6sd6e.png?_a=DATAg1AAZAA0" alt="Spotify">
+                      <img src="img/icons/spotify.svg" alt="Spotify">
                     </span>
                   </a>
 
-                  <a class="mp-btn platform-btn beatport-btn" href="LINK_BEATPORT" target="_blank" rel="noopener">
+                  <!-- Beatport: release Noisy Silences -->
+                  <a class="mp-btn platform-btn beatport-btn"
+                     href="https://www.beatport.com/release/noisy-silences/5036573"
+                     target="_blank" rel="noopener">
                     <span class="platform-icon">
-                      <img src="https://www.svgrepo.com/show/330041/beatport.svg" alt="Beatport">
+                      <img src="img/icons/beatport.svg" alt="Beatport">
                     </span>
                   </a>
                 </div>
@@ -176,7 +195,7 @@
             </div>
           </article>
 
-          <!-- SLIDE 3 -->
+          <!-- SLIDE 3 – TWENTY TWO -->
           <article class="release-slide release-card">
             <div class="release-layout">
               <div class="release-cover">
@@ -194,15 +213,21 @@
                   <span>Melancolía en pista</span>
                 </div>
                 <div class="release-actions">
-                  <a class="mp-btn platform-btn spotify-btn" href="LINK_SPOTIFY" target="_blank" rel="noopener">
+                  <!-- Spotify: por ahora al perfil (álbum está en su discografía de artista) -->
+                  <a class="mp-btn platform-btn spotify-btn"
+                     href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h"
+                     target="_blank" rel="noopener">
                     <span class="platform-icon">
-                      <img src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/computer-devices/spotify-logo-rqo8dfv5kgaqvujj9y2kn.png/spotify-logo-244vs4l8z32qxnhdp6sd6e.png?_a=DATAg1AAZAA0" alt="Spotify">
+                      <img src="img/icons/spotify.svg" alt="Spotify">
                     </span>
                   </a>
 
-                  <a class="mp-btn platform-btn beatport-btn" href="LINK_BEATPORT" target="_blank" rel="noopener">
+                  <!-- Beatport: búsqueda directa del álbum -->
+                  <a class="mp-btn platform-btn beatport-btn"
+                     href="https://www.beatport.com/search?q=Twenty%20Two%20Servando%20Manu%20Pavez"
+                     target="_blank" rel="noopener">
                     <span class="platform-icon">
-                      <img src="https://www.svgrepo.com/show/330041/beatport.svg" alt="Beatport">
+                      <img src="img/icons/beatport.svg" alt="Beatport">
                     </span>
                   </a>
                 </div>
@@ -212,7 +237,7 @@
         </div>
 
         <button class="release-nav next" type="button" aria-label="Lanzamiento siguiente">›</button>
-      </div>  
+      </div>
     </div>
   </section>
 
@@ -312,11 +337,12 @@
       <button class="media-nav prev" type="button" aria-label="Video anterior">‹</button>
 
       <div class="media-track">
-        <article class="media-slide is-active">
+        <article class="media-slide active">
           <div class="media-embed">
             <iframe width="560" height="315"
-              src="https://www.youtube.com/embed/z5AnMupDxA4?si=H3t-z9pTwMwcLrRz&amp;controls=0"
-              title="YouTube video player" frameborder="0"
+              src="https://www.youtube.com/embed/z5AnMupDxA4?controls=0"
+              title="CLUB 74 - All Night Long"
+              frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
@@ -329,14 +355,15 @@
         <article class="media-slide">
           <div class="media-embed">
             <iframe width="560" height="315"
-              src="https://www.youtube.com/embed/Yvha-kqron8?si=I0HrNYPcA0Aba1JY&amp;controls=0"
-              title="YouTube video player" frameborder="0"
+              src="https://www.youtube.com/embed/Yvha-kqron8?controls=0"
+              title="CLUB 74 - All Night Long 2"
+              frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div class="media-caption">
             <h4>CLUB 74 - ALL NIGHT LONG 2</h4>
-            <p>1 hora de mi presentación en solitario.</p>
+            <p>Una hora de mi presentación en solitario.</p>
           </div>
         </article>
       </div>
@@ -344,27 +371,42 @@
       <button class="media-nav next" type="button" aria-label="Video siguiente">›</button>
     </div>
 
-    <!-- MIXES SoundCloud -->
+    <!-- MIXES SOUNDcloud -->
     <h3 class="subsection-title">Mixes seleccionados</h3>
 
     <div class="media-slider" data-slider="mixes">
       <button class="media-nav prev" type="button" aria-label="Mix anterior">‹</button>
 
       <div class="media-track">
-        <article class="media-slide is-active">
+        <!-- GENESIS -->
+        <article class="media-slide active">
           <div class="media-embed mix">
-            <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2079106359&color=%23e400ff&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/manupavez" title="Manu Pavez" target="_blank" style="color: #cccccc; text-decoration: none;">Manu Pavez</a> · <a href="https://soundcloud.com/manupavez/sets/genesis" title="GENESIS · Storytelling" target="_blank" style="color: #cccccc; text-decoration: none;">GENESIS · Storytelling</a></div>
-              
+            <iframe
+              width="100%"
+              height="166"
+              scrolling="no"
+              frameborder="no"
+              allow="autoplay"
+              src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/manupavez/genesis-0003&color=%23101010&inverse=false&auto_play=false&show_user=true">
+            </iframe>
           </div>
           <div class="media-caption">
             <h4>GENESIS</h4>
-            <p>Serie mensual de mixes pensada desde el nacimiento.</p>
+            <p>Serie de mixes que trabajan el inicio del viaje.</p>
           </div>
         </article>
 
+        <!-- MIXES BINARIOS -->
         <article class="media-slide">
           <div class="media-embed mix">
-<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A1876705190&color=%231c1d31&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/manupavez" title="Manu Pavez" target="_blank" style="color: #cccccc; text-decoration: none;">Manu Pavez</a> · <a href="https://soundcloud.com/manupavez/sets/mixes-binarios" title="MIXES BINARIOS · Full Album" target="_blank" style="color: #cccccc; text-decoration: none;">MIXES BINARIOS · Full Album</a></div>
+            <iframe
+              width="100%"
+              height="166"
+              scrolling="no"
+              frameborder="no"
+              allow="autoplay"
+              src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/manupavez/0101-mixes-binarios&color=%23101010&inverse=false&auto_play=false&show_user=true">
+            </iframe>
           </div>
           <div class="media-caption">
             <h4>MIXES BINARIOS</h4>
@@ -375,7 +417,6 @@
 
       <button class="media-nav next" type="button" aria-label="Mix siguiente">›</button>
     </div>
-
   </section>
 
   <!-- LABORATORIO -->
@@ -408,13 +449,20 @@
 
     <div class="press-shell">
       <div class="press-copy">
+        <p>
+          Para medios, promoters y clubes que necesiten información puntual, fotos y ficha técnica,
+          podés descargar el presskit completo. Incluye biografía corta, ficha técnica y selección
+          de fotos para prensa.
+        </p>
+
         <a href="img/press.zip" class="mp-btn primary">
           DESCARGAR PRESSKIT
         </a>
       </div>
 
       <div class="press-preview">
-        <!-- Después reemplazás estos fondos por tus fotos -->
+        <!-- Acá después reemplazás los fondos por tus fotos:
+             img/press/press1.jpg, press2.jpg, press3.jpg -->
         <div class="press-layer press-img-1"></div>
         <div class="press-layer press-img-2"></div>
         <div class="press-layer press-img-3"></div>
@@ -422,7 +470,7 @@
     </div>
   </section>
 
-  <!-- BOOKING -->
+  <!-- BOOKING / CONTACTO -->
   <section id="booking" class="section booking reveal section-centered" aria-labelledby="booking-title">
     <h2 id="booking-title" data-animate="heading">BOOKING</h2>
 
@@ -488,7 +536,7 @@
   <section id="instagram" class="section reveal section-centered" aria-labelledby="instagram-title">
     <h2 id="instagram-title" data-animate="heading">INSTAGRAM</h2>
 
-    <p class="muted" style="text-align:center;margin-inline:auto;margin-bottom:1.5rem;max-width:520px;">
+    <p class="muted">
       Clips cortos, work in progress y fragmentos del día a día alrededor de la música.
     </p>
 
@@ -500,11 +548,6 @@
               style="width:100%;border:0;overflow:hidden;"></iframe>
     </div>
   </section>
-
-  <!-- BOTÓN FLOTANTE VOLVER ARRIBA -->
-  <button class="scroll-top" type="button" aria-label="Volver arriba">
-    ↑
-  </button>
 
   <!-- FOOTER -->
   <footer class="site-footer">
@@ -532,5 +575,8 @@
       <p>© 2025 MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
     </div>
   </footer>
+
+  <!-- BOTÓN FLOTANTE VOLVER ARRIBA -->
+  <button class="scroll-top" aria-label="Volver arriba">↑</button>
 </body>
 </html>
