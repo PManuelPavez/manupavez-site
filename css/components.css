@@ -737,3 +737,27 @@
 
 /* contenido arriba de pseudos */
 :where(main > .section > *){ position: relative; z-index: 1; }
+/* =========================
+   FIX headings: no depender de .is-animated
+   (si la sección está visible, el H2 también)
+   ========================= */
+
+.reveal.is-visible h2[data-animate="heading"]{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal.is-visible h2[data-animate="heading"]::after{
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* Fallback extra: si hay reduced motion, que nunca se escondan */
+@media (prefers-reduced-motion: reduce){
+  .section h2[data-animate="heading"]{
+    opacity: 1;
+    transform: none;
+  }
+  .section h2[data-animate="heading"]::after{
+    transform: translateX(-50%) scaleX(1);
+  }
+}
