@@ -1,0 +1,17 @@
+/* =================== LAB =================== */
+
+#lab {
+  text-align: center;
+}
+
+#lab .muted {
+  margin-inline: auto;
+}
+
+#lab .mp-btn.green {
+  display: inline-flex;
+  margin-top: 18px;
+  margin-inline: auto;
+}
+
+
