@@ -7,54 +7,128 @@ export function escapeHtml(s = "") {
     .replace(/'/g, "&#39;");
 }
 
-export function renderReleases(root, releases = []) {
+export function renderReleases(root, releases = [], opts = {}) {
   if (!root) return;
-  if (!releases.length) return;
+  if (!releases.length) {
+    root.innerHTML = "";
+    return;
+  }
 
-  root.innerHTML = releases
-    .map((r, idx) => {
-      const tags = Array.isArray(r.tags)
-        ? r.tags
-        : (r.tags ? String(r.tags).split(",") : []);
+  const mode = opts.mode || "replace";
+  if (mode === "replace") root.innerHTML = "";
 
-      const actions = [
-        r.spotify_url
-          ? `<a class="mp-btn platform-btn spotify-btn" href="${escapeHtml(r.spotify_url)}" target="_blank" rel="noopener">
-              <span class="platform-icon"><img src="img/icons/spotify.svg" alt="Spotify"></span>
-            </a>`
-          : "",
-        r.beatport_url
-          ? `<a class="mp-btn platform-btn beatport-btn" href="${escapeHtml(r.beatport_url)}" target="_blank" rel="noopener">
-              <span class="platform-icon"><img src="img/icons/beatport.svg" alt="Beatport"></span>
-            </a>`
-          : "",
-        r.soundcloud_url
-          ? `<a class="mp-btn platform-btn" href="${escapeHtml(r.soundcloud_url)}" target="_blank" rel="noopener">
-              <span class="platform-icon"><img src="img/icons/soundcloud.svg" alt="SoundCloud"></span>
-            </a>`
-          : "",
-      ].join("");
+  const tpl = document.getElementById("tpl-release");
+  if (!(tpl instanceof HTMLTemplateElement)) {
+    // Fallback: si no hay template, degradamos al render viejo (simple)
+    root.innerHTML = releases
+      .map((r) => {
+        const img = escapeHtml(r.cover_url || "");
+        const title = escapeHtml(r.title || "Release");
+        const href = escapeHtml(pickPrimaryUrl(r) || "#");
+        const id = escapeHtml(String(r.__mp_id ?? r.id ?? ""));
+        return `
+          <article class="release-slide" data-release-id="${id}">
+            <a class="release-link" href="${href}" data-release-id="${id}">
+              <img src="${img}" alt="Portada ${title}" loading="lazy" decoding="async">
+            </a>
+          </article>
+        `;
+      })
+      .join("");
+    return;
+  }
 
-      return `
-        <article class="release-slide release-card ${idx === 0 ? "active" : ""}">
-          <div class="release-layout">
-            <div class="release-cover">
-              <img src="${escapeHtml(r.cover_url || "")}" alt="Portada ${escapeHtml(r.title)}" loading="lazy" decoding="async">
-            </div>
-            <div class="release-info">
-              <h3>${escapeHtml(r.title)}</h3>
-              <p class="release-meta">${escapeHtml(r.type || "")}</p>
-              <p class="release-story">${escapeHtml(r.story || "")}</p>
-              <div class="release-tags">
-                ${tags.filter(Boolean).slice(0, 6).map((t) => `<span>${escapeHtml(String(t).trim())}</span>`).join("")}
-              </div>
-              <div class="release-actions">${actions}</div>
-            </div>
-          </div>
-        </article>
-      `;
-    })
-    .join("");
+  const frag = document.createDocumentFragment();
+
+  releases.forEach((r, idx) => {
+    const id = String(r.__mp_id ?? r.id ?? idx);
+    const nodeFrag = tpl.content.cloneNode(true);
+    const el = nodeFrag.firstElementChild || nodeFrag.querySelector?.("*");
+
+    // Relleno “robusto” (no depende de un único selector)
+    const coverImg =
+      nodeFrag.querySelector?.(".release-cover img") ||
+      nodeFrag.querySelector?.("img");
+
+    if (coverImg) {
+      coverImg.src = r.cover_url || r.cover || r.image_url || "";
+      coverImg.alt = (r.title || r.name) ? `Portada ${r.title || r.name}` : "Portada";
+      coverImg.loading = "lazy";
+      coverImg.decoding = "async";
+    }
+
+    const titleEl =
+      nodeFrag.querySelector?.(".release-title") ||
+      nodeFrag.querySelector?.(".release-info h3") ||
+      nodeFrag.querySelector?.("h3");
+
+    if (titleEl) titleEl.textContent = r.title || r.name || "";
+
+    const subEl =
+      nodeFrag.querySelector?.(".release-meta") ||
+      nodeFrag.querySelector?.("[data-release-subtitle]");
+
+    if (subEl) subEl.textContent = r.subtitle || r.type || "";
+
+    const storyEl =
+      nodeFrag.querySelector?.(".release-story") ||
+      nodeFrag.querySelector?.("[data-release-story]");
+
+    if (storyEl) storyEl.textContent = r.story || r.description || "";
+
+    // Link principal (para Ctrl/⌘ click)
+    const a =
+      nodeFrag.querySelector?.(".release-link") ||
+      nodeFrag.querySelector?.("a[href]");
+
+    const href = pickPrimaryUrl(r) || "#";
+
+    if (a) {
+      a.href = href;
+      a.setAttribute("data-release-id", id);
+    }
+
+    // Set id en el root del ítem
+    if (el) el.setAttribute("data-release-id", id);
+
+    frag.appendChild(nodeFrag);
+  });
+
+  root.appendChild(frag);
+}
+
+function pickPrimaryUrl(release) {
+  const links = extractPlatformLinks(release);
+  return links[0]?.url || "";
+}
+
+function extractPlatformLinks(release) {
+  const out = [];
+  const add = (label, url) => {
+    if (!url) return;
+    const u = String(url).trim();
+    if (!/^https?:\/\//i.test(u)) return;
+    if (out.some((x) => x.url === u)) return;
+    out.push({ label, url: u });
+  };
+
+  let pu = release.platform_urls;
+  if (typeof pu === "string") {
+    try { pu = JSON.parse(pu); } catch { pu = null; }
+  }
+  if (Array.isArray(pu)) {
+    for (const it of pu) add(it.label || it.platform || "Link", it.url);
+  } else if (pu && typeof pu === "object") {
+    for (const [k, v] of Object.entries(pu)) add(String(k), v);
+  }
+
+  add("Spotify", release.spotify_url || release.spotify);
+  add("Beatport", release.beatport_url || release.beatport);
+  add("SoundCloud", release.soundcloud_url || release.soundcloud);
+  add("YouTube", release.youtube_url || release.youtube);
+  add("Bandcamp", release.bandcamp_url || release.bandcamp);
+
+  return out;
 }
 
 export function renderLabels(track, items = []) {
