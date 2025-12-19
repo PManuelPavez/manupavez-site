@@ -627,3 +627,59 @@
   background: var(--mp-grad-accent);
 }
 
+/* =========================
+   Sections: rhythm + dividers
+   ========================= */
+:where(.section){
+  max-width: var(--mp-container);
+  padding-inline: var(--mp-gutter);
+  padding-block: var(--mp-section-y);
+}
+
+/* anchors con header fijo: que no te coma títulos */
+:where(main > .section){
+  scroll-margin-top: calc(var(--header-height) + 18px);
+}
+
+/* divider full-bleed entre secciones (visual “pro”) */
+:where(main > .section)::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  height: 1px;
+  background: var(--mp-divider-grad);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* ambient suave por sección (full-bleed) */
+:where(main > .section)::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  background: var(--mp-section-ambient);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* contenido arriba de los pseudos */
+:where(.section > *){ position: relative; z-index: 1; }
+
+/* la primera sección (MÚSICA) no necesita “corte” arriba */
+:where(main > .section:first-of-type)::before{ opacity: 0; }
+
+/* section-head más consistente (menos “saltos” de spacing) */
+:where(.section-head){
+  max-width: 760px;
+  margin: 0 auto var(--mp-section-stack);
+  text-align: center;
+}
+:where(.section-head .muted){
+  max-width: 820px;
+  margin-inline: auto;
+}

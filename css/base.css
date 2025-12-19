@@ -211,3 +211,29 @@ body{
   transition: transform calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-out);
 }
 .skip-link:focus-visible{ transform: translateY(0); box-shadow: var(--mp-ring-strong); }
+/* =========================
+   Layout tokens (sections)
+   ========================= */
+:root{
+  --mp-container: 1120px;
+  --mp-gutter: clamp(16px, 4vw, 22px);
+
+  --mp-section-y: clamp(72px, 8vw, 112px);
+  --mp-section-stack: clamp(18px, 2.2vw, 28px);
+
+  /* Divider full-bleed (se siente “diseñado”, no “cortes” brutos) */
+  --mp-divider-grad: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--mp-accent-2) 26%, transparent),
+    color-mix(in oklab, var(--mp-accent) 22%, transparent),
+    transparent
+  );
+
+  /* Ambient por sección (bajito: si lo notás demasiado, está mal) */
+  --mp-section-ambient: radial-gradient(
+    circle at 30% -20%,
+    color-mix(in oklab, var(--mp-accent-2) 10%, transparent),
+    transparent 55%
+  );
+}

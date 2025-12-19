@@ -172,4 +172,149 @@
   border-color: #ffffff;
 }
 
+/* =========================
+   Releases v2 — scroll-snap carousel (CSS-only)
+   ========================= */
+
+#musica .release-slider{
+  max-width: 980px;
+  margin-inline: auto;
+}
+
+/* panel del carrusel */
+#musica .release-slides{
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background:
+    radial-gradient(circle at 0 0, rgba(89, 198, 186, 0.08), transparent 60%),
+    rgba(5, 7, 17, 0.96);
+  box-shadow: var(--mp-shadow-1);
+  overflow: hidden;
+  position: relative;
+
+  /* fade edges */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* track real: el contenedor donde Supabase renderiza cards */
+#musica .release-slides [data-sb="releases"]{
+  display: flex;
+  gap: 18px;
+  padding: 18px;
+  align-items: stretch;
+
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 18px;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+
+/* scrollbar discreta */
+#musica .release-slides [data-sb="releases"]::-webkit-scrollbar{ height: 10px; }
+#musica .release-slides [data-sb="releases"]::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.16);
+  border-radius: 999px;
+}
+#musica .release-slides [data-sb="releases"]::-webkit-scrollbar-track{
+  background: transparent;
+}
+
+/* card nueva: compacta, repetible, “pro” */
+#musica .release-card{
+  flex: 0 0 clamp(220px, 34vw, 320px);
+  scroll-snap-align: start;
+
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), transparent 55%),
+    rgba(5, 5, 9, 0.92);
+  box-shadow: var(--mp-shadow-1);
+  overflow: hidden;
+}
+
+#musica .release-link{
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* tu template usa <img class="release-cover"> (no wrapper). Lo estilamos bien. */
+#musica img.release-cover{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 14px;
+  background: #000;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.55);
+}
+
+/* tipografía más editorial, menos grito */
+#musica .release-title{
+  font-family: var(--font-primary);
+  font-size: 0.98rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+
+#musica .release-meta{
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+/* hover premium (solo en mouse real) */
+@media (hover:hover) and (pointer:fine){
+  #musica .release-card{
+    transition:
+      transform calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-groove),
+      box-shadow calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-out),
+      border-color calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-out);
+  }
+  #musica .release-card:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--mp-shadow-2);
+    border-color: color-mix(in oklab, var(--mp-accent-2) 18%, rgba(255,255,255,0.12));
+  }
+}
+
+/* En touch, las flechas suelen ser decorativas si no hay JS: las bajamos */
+@media (pointer:coarse){
+  #musica .release-nav{ display: none; }
+}
+
+/* =========================
+   Modo “infinite” opcional (requiere track duplicado como labels)
+   Activación sugerida: <div class="release-slider" data-marquee="true">
+   ========================= */
+@keyframes mp-releases-marquee{
+  to{ transform: translateX(-50%); }
+}
+
+.release-slider[data-marquee="true"] .release-slides [data-sb="releases"]{
+  overflow: visible;
+  width: max-content;
+  scroll-snap-type: none;
+  animation: mp-releases-marquee 34s linear infinite;
+  will-change: transform;
+}
+
+@media (hover:hover) and (pointer:fine){
+  .release-slider[data-marquee="true"] .release-slides:hover [data-sb="releases"]{
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .release-slider[data-marquee="true"] .release-slides [data-sb="releases"]{
+    animation: none !important;
+    transform: none !important;
+  }
+}
 
