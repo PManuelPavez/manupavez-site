@@ -1,350 +1,368 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-AR">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Manu Pavez | Frequency Storyteller</title>
-  <meta name="description" content="Manu Pavez — Frequency Storyteller. Uso la música para ordenar lo que siento y compartir el camino: música, laboratorio de procesos y noches en la pista." />
 
-  <!-- Tipografías PRO -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>Manu Pavez | Frequency Storyteller</title>
+  <meta name="description" content="Manu Pavez — Frequency Storyteller. Música, laboratorio de procesos y noches en la pista." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#050711" />
+  <meta name="author" content="Manu Pavez" />
+
+  <link rel="canonical" href="https://manupavez.com/" />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Manu Pavez" />
+  <meta property="og:title" content="Manu Pavez | Frequency Storyteller" />
+  <meta property="og:description" content="Música, laboratorio de procesos y noches en la pista." />
+  <meta property="og:url" content="https://manupavez.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:image" content="https://manupavez.com/logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Manu Pavez | Frequency Storyteller" />
+  <meta name="twitter:description" content="Música, laboratorio de procesos y noches en la pista." />
+  <meta name="twitter:image" content="https://manupavez.com/logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages/home.css">
-  <link rel="stylesheet" href="css/responsive.css">
-  <!-- Scripts (defer) -->
-  <script defer src="js/supabase-config.js"></script>
-  <script type="module" src="js/main.js"></script>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages/home.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+
+  <!-- Scripts -->
+  <script defer src="js/slider.js"></script>
+  <script defer src="js/main.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script type="module" src="js/app.js"></script>
 </head>
 
-<body data-page="home">
-  <!-- HEADER FIJO -->
-  <header class="site-header fixed" role="banner">
+<body>
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+  <header class="site-header fixed">
     <div class="header-inner">
-      <a class="brand" href="#inicio" aria-label="Ir al inicio">
-        <img src="logos/CUBO BLANCO MP.png" alt="Manu Pavez" onerror="this.style.display='none'">
+      <a class="brand" href="index.html#inicio" aria-label="Ir al inicio">
+        <img src="logos/CUBO BLANCO MP.png" alt="Logo de Manu Pavez" />
       </a>
 
-      <!-- NAV DESKTOP -->
-      <nav class="nav" role="navigation" aria-label="Navegación principal">
-        <a href="#inicio">INICIO</a>
-        <a href="#musica">MÚSICA</a>
-        <a href="#sellos">SELLOS</a>
-        <a href="#en-vivo">EN VIVO</a>
-        <a href="#lab">FREQUENCY LAB</a>
-        <a href="clinicas.html">CLÍNICAS</a>
-        <a href="bio.html">SOBRE MANU</a>
-        <a href="#presskit">PRESSKIT</a>
-        <a href="#booking" class="cta-book">BOOKING</a>
+      <nav class="nav" aria-label="Navegación principal">
+        <ul class="nav-list">
+          <li><a href="index.html#inicio" aria-current="page">INICIO</a></li>
+          <li><a href="index.html#musica">MÚSICA</a></li>
+          <li><a href="index.html#sellos">SELLOS</a></li>
+          <li><a href="index.html#en-vivo">EN VIVO</a></li>
+          <li><a href="index.html#lab">FREQUENCY LAB</a></li>
+          <li><a href="clinicas.html">CLÍNICAS</a></li>
+          <li><a href="bio.html">SOBRE MANU</a></li>
+          <li><a href="presskit.html">PRESSKIT</a></li>
+          <li><a href="index.html#booking" class="cta-book">BOOKING</a></li>
+        </ul>
       </nav>
 
-      <!-- LADO DERECHO: CTA BOOKING + hamburguesa -->
       <div class="header-actions">
-        <a href="#booking" class="header-cta">BOOKING</a>
+        <a href="index.html#booking" class="header-cta">BOOKING</a>
 
-        <button class="menu-toggle" data-nav-toggle aria-controls="mobile-nav" aria-expanded="false" aria-label="Abrir menú móvil">
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-controls="mobile-nav"
+          aria-expanded="false"
+          aria-label="Abrir menú móvil"
+          data-nav-toggle
+        >
           <span class="burger" aria-hidden="true"></span>
         </button>
       </div>
     </div>
 
-    <!-- NAV MÓVIL -->
-    <nav id="mobile-nav" class="mobile-nav" data-nav-panel hidden aria-label="Menú móvil">
-      <a href="#inicio">INICIO</a>
-      <a href="#musica">MÚSICA</a>
-      <a href="#sellos">SELLOS</a>
-      <a href="#en-vivo">EN VIVO</a>
-      <a href="#lab">FREQUENCY LAB</a>
-      <a href="clinicas.html">CLÍNICAS</a>
-      <a href="bio.html">SOBRE MANU</a>
-      <a href="#presskit">PRESSKIT</a>
-      <a href="#booking">BOOKING</a>
-      <a href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Contacto/Booking" class="mobile-book">
-        MAIL DIRECTO
-      </a>
+    <!-- Menú móvil (controlado por JS) -->
+    <nav id="mobile-nav" class="mobile-nav" hidden aria-label="Menú móvil" data-nav-panel>
+      <ul class="mobile-nav-list">
+        <li><a href="index.html#inicio">INICIO</a></li>
+        <li><a href="index.html#musica">MÚSICA</a></li>
+        <li><a href="index.html#sellos">SELLOS</a></li>
+        <li><a href="index.html#en-vivo">EN VIVO</a></li>
+        <li><a href="index.html#lab">FREQUENCY LAB</a></li>
+        <li><a href="clinicas.html">CLÍNICAS</a></li>
+        <li><a href="bio.html">SOBRE MANU</a></li>
+        <li><a href="presskit.html">PRESSKIT</a></li>
+        <li><a href="index.html#booking">BOOKING</a></li>
+        <li>
+          <a href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Contacto/Booking" class="mobile-book">
+            MAIL DIRECTO
+          </a>
+        </li>
+      </ul>
     </nav>
+
+    <!-- Fallback sin JS: en mobile no te quedás “sin menú” -->
+    <noscript>
+      <nav class="mobile-nav" aria-label="Menú (sin JavaScript)">
+        <ul class="mobile-nav-list">
+          <li><a href="index.html#inicio">INICIO</a></li>
+          <li><a href="index.html#musica">MÚSICA</a></li>
+          <li><a href="index.html#sellos">SELLOS</a></li>
+          <li><a href="index.html#en-vivo">EN VIVO</a></li>
+          <li><a href="index.html#lab">FREQUENCY LAB</a></li>
+          <li><a href="clinicas.html">CLÍNICAS</a></li>
+          <li><a href="bio.html">SOBRE MANU</a></li>
+          <li><a href="presskit.html">PRESSKIT</a></li>
+          <li><a href="index.html#booking">BOOKING</a></li>
+        </ul>
+      </nav>
+    </noscript>
   </header>
 
-  <!-- HERO -->
-  <section id="inicio" class="hero" aria-labelledby="hero-title">
-    <div class="hero-bg" aria-hidden="true">
-      <video class="hero-video" autoplay muted loop playsinline>
-        <source src="img/bg-1080.webm" type="video/webm">
-        <source src="img/bg-720.webm" type="video/webm">
-      </video>
-    </div>
-
-    <div class="hero-wrap">
-      <h1 id="hero-title" class="hero-title">MANU PAVEZ</h1>
-
-      <!-- FREQUENCY STORYTELLER lleva a la bio -->
-      <p class="hero-lead hero-glint">
-        <a href="bio.html">FREQUENCY STORYTELLER</a>
-      </p>
-
-      <p class="hero-sub">
-        Uso la música para ordenar lo que siento y compartir ese camino. Procesos reales:
-        en estudio, en la pista y hacia adentro.
-      </p>
-
-      <div class="hero-ctas hero-ctas-main">
-        <a class="mp-btn primary" href="#booking">
-          BOOKING
-        </a>
-        <a class="mp-btn ghost" href="#lab">
-          FREQUENCY LAB
-        </a>
+  <main id="main-content" tabindex="-1">
+    <section id="inicio" class="hero" aria-labelledby="hero-title">
+      <div class="hero-bg" aria-hidden="true">
+        <video class="hero-video" autoplay muted loop playsinline>
+          <source src="img/bg-1080.webm" type="video/webm" />
+          <source src="img/bg-720.webm" type="video/webm" />
+        </video>
       </div>
-    </div>
-  </section>
 
-  <!-- MÚSICA: PORTADAS + STORYTELLING -->
-  <section id="musica" class="section releases reveal" aria-labelledby="musica-title">
-    <div class="section-inner">
-      <header class="section-head">
-        <h2 id="musica-title" data-animate="heading">MÚSICA · DIARIOS</h2>
-        <p class="muted">
-          Algunos lanzamientos que ordenan etapas del camino. Portadas claras, pocas palabras
-          y links directos a donde tiene que sonar.
+      <div class="hero-wrap">
+        <h1 id="hero-title" class="hero-title">MANU PAVEZ</h1>
+
+        <p class="hero-lead hero-glint">
+          <a href="bio.html">FREQUENCY STORYTELLER</a>
         </p>
-      </header>
 
-      <div class="release-slider" data-slider="release" aria-label="Lanzamientos destacados">
-        <button class="release-nav prev" data-slider-prev type="button" aria-label="Lanzamiento anterior">‹</button>
+        <p class="hero-sub">
+          Uso la música para ordenar lo que siento y compartir ese camino. Procesos reales:
+          en estudio, en la pista y hacia adentro.
+        </p>
 
-        <div class="release-slides">
-          <!-- contenido dinámico desde Supabase -->
-          <div class="supabase-banner" data-supabase-banner hidden>
-            Configurá <code>js/supabase-config.js</code> (url + anonKey) para cargar releases desde Supabase.
+        <div class="hero-ctas hero-ctas-main">
+          <a class="mp-btn primary" href="index.html#booking">BOOKING</a>
+          <a class="mp-btn ghost" href="index.html#lab">FREQUENCY LAB</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="musica" class="section releases reveal" aria-labelledby="musica-title">
+      <div class="section-inner">
+        <header class="section-head">
+          <h2 id="musica-title" data-animate="heading">MÚSICA · DIARIOS</h2>
+          <p class="muted">
+            Algunos lanzamientos que ordenan etapas del camino. Portadas claras, pocas palabras
+            y links directos a donde tiene que sonar.
+          </p>
+        </header>
+
+        <div class="release-slider" aria-label="Lanzamientos destacados">
+          <button class="release-nav prev" type="button" aria-label="Lanzamiento anterior">‹</button>
+
+          <div class="release-slides">
+            <div class="supabase-banner" data-supabase-banner hidden>
+              Configurá <code>js/supabase-config.js</code> (url + anonKey) para cargar releases desde Supabase.
+            </div>
+
+            <!-- Render dinámico -->
+            <div data-sb="releases" aria-label="Listado de lanzamientos"></div>
+
+            <!-- Plantilla opcional para render -->
+            <template id="tpl-release">
+              <article class="release-card">
+                <a class="release-link" href="">
+                  <img class="release-cover" src="" alt="" loading="lazy" />
+                  <h3 class="release-title"></h3>
+                  <p class="release-meta"></p>
+                </a>
+              </article>
+            </template>
           </div>
-          <div data-sb="releases"></div>
-        </div>
 
-        <button class="release-nav next" data-slider-next type="button" aria-label="Lanzamiento siguiente">›</button>
+          <button class="release-nav next" type="button" aria-label="Lanzamiento siguiente">›</button>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SELLOS / LABELS – CARRUSEL AUTOMÁTICO -->
-  <section id="sellos" class="section labels reveal section-centered" aria-labelledby="labels-title">
-    <h2 id="labels-title" data-animate="heading">SELLOS &amp; SUPPORT</h2>
-    <p class="muted">
-      Parte de este universo sonoro salió por sellos que cuidan la curaduría y el largo plazo.
-      Algunos de los espacios y artistas que acompañan el proyecto:
-    </p>
-
-    <div class="supabase-banner" data-supabase-banner hidden>
-      Configurá Supabase para cargar sellos/support.
-    </div>
-
-    <div class="labels-marquee">
-      <div class="labels-track" data-sb="labels-track"></div>
-    </div>
-  </section>
-
-  <!-- EN VIVO: FECHAS + SETS + MIXES -->
-  <section id="en-vivo" class="section releases reveal section-centered" aria-labelledby="envivo-title">
-    <h2 id="envivo-title" data-animate="heading">EN VIVO</h2>
-
-    <!-- FECHAS -->
-    <div class="embed-wrap">
-      <div class="songkick-widget-wrap">
-        <a href="https://www.songkick.com/artists/10195234" class="songkick-widget"
-           data-theme="dark"
-           data-track-button="off"
-           data-detect-style="off"
-           data-background-color="rgb(0,0,0,1)"
-           data-font-color="rgb(255,255,255,1)"
-           data-button-bg-color="rgb(255,255,255,1)"
-           data-button-text-color="rgb(0,0,0,1)"
-           data-locale="en"
-           data-other-artists="on"
-           data-share-button="on"
-           data-country-filter="off"
-           data-rsvp="off"
-           data-request-show="off"
-           data-past-events="off"
-           data-past-events-offtour="off"
-           data-remind-me="off"
-           style="display:none;"></a>
-        <script src="//widget-app.songkick.com/injector/10195234"></script>
-      </div>
-    </div>
-
-    <!-- SETS EN VIDEO -->
-    <h3 class="subsection-title">Sets en video</h3>
-    <p class="muted">
-      Fragmentos de fechas donde se ve cómo se traduce todo con gente adelante.
-    </p>
-
-    <div class="media-slider" data-slider="media">
-      <button class="media-nav prev" data-slider-prev type="button" aria-label="Video anterior">‹</button>
-
-      <div class="supabase-banner" data-supabase-banner hidden>
-          Configurá Supabase para cargar videos/sets.
-        </div>
-
-      <div class="media-track" data-slider-track data-sb="media-video"></div>
-
-      <button class="media-nav next" data-slider-next type="button" aria-label="Video siguiente">›</button>
-    </div>
-
-    <!-- MIXES SOUNDcloud -->
-    <h3 class="subsection-title">Mixes seleccionados</h3>
-
-    <div class="media-slider" data-slider="media">
-      <button class="media-nav prev" data-slider-prev type="button" aria-label="Mix anterior">‹</button>
-
-      <div class="supabase-banner" data-supabase-banner hidden>
-          Configurá Supabase para cargar mixes.
-        </div>
-
-      <div class="media-track" data-slider-track data-sb="media-mix"></div>
-
-      <button class="media-nav next" data-slider-next type="button" aria-label="Mix siguiente">›</button>
-    </div>
-  </section>
-
-  <!-- LABORATORIO -->
-  <section id="lab" class="section reveal section-centered" aria-labelledby="lab-title">
-    <h2 id="lab-title" data-animate="heading">FREQUENCY LAB</h2>
-    <p class="muted">
-      Frequency Lab es el espacio donde documento decisiones, procesos
-      y herramientas detrás de la música y los sets.
-    </p>
-    <p class="muted">
-      Pensado para productores y DJs que quieren ir más allá de la técnica básica y trabajar
-      narrativa, criterio y forma de escuchar.
-    </p>
-
-    <h3 class="subsection-title" id="clinicas-title">¿DE QUÉ SE TRATA?</h3>
-    <p class="muted">
-      No enseño a mezclar hits. Trabajo cómo decidís qué merece tiempo,
-      cuánto dura una idea y qué nunca debería sonar en tu pista.
-    </p>
-    <p class="muted">
-      Clínicas 1:1 y grupales para gente que ya está en movimiento y quiere
-      ordenar su propia forma de contar historias con sonido.
-    </p>
-    <a class="mp-btn green" href="#booking">QUIERO HABLAR DEL LAB</a>
-  </section>
-
-  <!-- PRESSKIT -->
-<section id="presskit" class="section reveal section-centered" aria-labelledby="presskit-title">
-  <h2 id="presskit-title" data-animate="heading">PRESSKIT</h2>
-
-  <div class="press-shell">
-    <div class="press-copy">
-      <p>
-        Para medios, promoters y clubes que necesiten información puntual, fotos y ficha técnica,
-        podés descargar el presskit completo. Incluye biografía corta, ficha técnica y selección
-        de fotos para prensa.
+    <section id="sellos" class="section labels reveal section-centered" aria-labelledby="labels-title">
+      <h2 id="labels-title" data-animate="heading">SELLOS &amp; SUPPORT</h2>
+      <p class="muted">
+        Parte de este universo sonoro salió por sellos que cuidan la curaduría y el largo plazo.
+        Algunos de los espacios y artistas que acompañan el proyecto:
       </p>
 
-      <a href="img/press.zip" class="mp-btn primary">
-        DESCARGAR PRESSKIT
-      </a>
-    </div>
+      <div class="supabase-banner" data-supabase-banner hidden>
+        Configurá Supabase para cargar sellos/support.
+      </div>
 
-    <div class="press-preview">
-      <div class="press-layer press-img-1"></div>
-      <div class="press-layer press-img-2"></div>
-      <div class="press-layer press-img-3"></div>
-    </div>
-  </div>
-</section>
+      <div class="labels-marquee" aria-label="Marquesina de sellos y supports">
+        <div class="labels-track" data-sb="labels-track"></div>
+      </div>
+    </section>
 
+    <section id="en-vivo" class="section releases reveal section-centered" aria-labelledby="envivo-title">
+      <h2 id="envivo-title" data-animate="heading">EN VIVO</h2>
 
-  <!-- BOOKING / CONTACTO -->
-  <section id="booking" class="section booking reveal section-centered" aria-labelledby="booking-title">
-    <h2 id="booking-title" data-animate="heading">BOOKING</h2>
-
-    <form id="contact-form" class="contact-form">
-      <div class="form-grid">
-        <div class="form-field">
-          <label for="cf-name">Nombre completo*</label>
-          <input
-            type="text"
-            id="cf-name"
-            name="name"
-            required
+      <h3 class="subsection-title">Fechas</h3>
+      <div class="embed-wrap" aria-label="Fechas (Songkick)">
+        <div class="songkick-widget-wrap">
+          <a
+            href="https://www.songkick.com/artists/10195234"
+            class="songkick-widget"
+            data-theme="dark"
+            data-track-button="off"
+            data-detect-style="off"
+            data-background-color="rgb(0,0,0,1)"
+            data-font-color="rgb(255,255,255,1)"
+            data-button-bg-color="rgb(255,255,255,1)"
+            data-button-text-color="rgb(0,0,0,1)"
+            data-locale="en"
+            data-other-artists="on"
+            data-share-button="on"
+            data-country-filter="off"
+            data-rsvp="off"
+            data-request-show="off"
+            data-past-events="off"
+            data-past-events-offtour="off"
+            data-remind-me="off"
+            hidden
           >
-        </div>
-
-        <div class="form-field">
-          <label for="cf-email">Correo electrónico*</label>
-          <input
-            type="email"
-            id="cf-email"
-            name="email"
-            required
-            placeholder="Tu mail de contacto"
-          >
-        </div>
-
-        <div class="form-field">
-          <label for="cf-type">Tipo de evento*</label>
-          <select id="cf-type" name="type" required>
-            <option value="" disabled selected>Seleccioná una opción</option>
-            <option value="club">Club nocturno</option>
-            <option value="festival">Festival</option>
-            <option value="fiesta-privada">Fiesta privada</option>
-            <option value="open-air">Evento al aire libre</option>
-            <option value="after">After party</option>
-            <option value="clinica">Clínica / Mentoría</option>
-            <option value="otro">Otro</option>
-          </select>
-        </div>
-
-        <div class="form-field form-field-full">
-          <label for="cf-message">Mensaje*</label>
-          <textarea
-            id="cf-message"
-            name="message"
-            rows="5"
-            required
-            placeholder="Fecha aproximada, ciudad, formato del evento o qué te gustaría trabajar en el lab."
-          ></textarea>
+            Ver fechas en Songkick
+          </a>
+          <script src="https://widget-app.songkick.com/injector/10195234"></script>
         </div>
       </div>
 
-      <button type="submit" class="mp-btn primary form-submit">ENVIAR</button>
+      <h3 class="subsection-title">Sets en video</h3>
+      <p class="muted">Fragmentos de fechas donde se ve cómo se traduce todo con gente adelante.</p>
 
-      <p class="form-hint">
-        Si preferís, podés escribir directo a
-        <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>
+      <div class="media-slider" data-slider="videos" aria-label="Carrusel de videos">
+        <button class="media-nav prev" type="button" aria-label="Video anterior">‹</button>
+
+        <div class="supabase-banner" data-supabase-banner hidden>Configurá Supabase para cargar videos/sets.</div>
+        <div class="media-track" data-sb="media-video"></div>
+
+        <button class="media-nav next" type="button" aria-label="Video siguiente">›</button>
+      </div>
+
+      <h3 class="subsection-title">Mixes seleccionados</h3>
+      <div class="media-slider" data-slider="mixes" aria-label="Carrusel de mixes">
+        <button class="media-nav prev" type="button" aria-label="Mix anterior">‹</button>
+
+        <div class="supabase-banner" data-supabase-banner hidden>Configurá Supabase para cargar mixes.</div>
+        <div class="media-track" data-sb="media-mix"></div>
+
+        <button class="media-nav next" type="button" aria-label="Mix siguiente">›</button>
+      </div>
+    </section>
+
+    <section id="lab" class="section reveal section-centered" aria-labelledby="lab-title">
+      <h2 id="lab-title" data-animate="heading">FREQUENCY LAB</h2>
+      <p class="muted">
+        Frequency Lab es el espacio donde documento decisiones, procesos y herramientas detrás de la música y los sets.
       </p>
-    </form>
-  </section>
+      <p class="muted">
+        Pensado para productores y DJs que quieren ir más allá de la técnica básica y trabajar narrativa, criterio y forma de escuchar.
+      </p>
 
-  <!-- INSTAGRAM (al final) -->
-  <section id="instagram" class="section reveal section-centered" aria-labelledby="instagram-title">
-    <h2 id="instagram-title" data-animate="heading">INSTAGRAM</h2>
+      <h3 class="subsection-title">¿DE QUÉ SE TRATA?</h3>
+      <p class="muted">
+        No enseño a mezclar hits. Trabajo cómo decidís qué merece tiempo, cuánto dura una idea y qué nunca debería sonar en tu pista.
+      </p>
+      <p class="muted">
+        Clínicas 1:1 y grupales para gente que ya está en movimiento y quiere ordenar su propia forma de contar historias con sonido.
+      </p>
 
-    <p class="muted">
-      Clips cortos, work in progress y fragmentos del día a día alrededor de la música.
-    </p>
+      <a class="mp-btn green" href="index.html#booking">QUIERO HABLAR DEL LAB</a>
+    </section>
 
-    <div class="ig-wrap ig-card">
-      <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
-      <iframe src="//lightwidget.com/widgets/d4159941fe3b5f3f8260daff5de5ba95.html"
-              scrolling="no" allowtransparency="true"
-              class="lightwidget-widget"
-              style="width:100%;border:0;overflow:hidden;"></iframe>
-    </div>
-  </section>
+    <!-- En home ya NO ofrecemos “descargar zip” roto; mandamos a la página canonical -->
+    <section class="section reveal section-centered" aria-labelledby="presskit-title">
+      <h2 id="presskit-title" data-animate="heading">PRESSKIT</h2>
+      <p class="muted">
+        Bio pro, fotos, logos y assets para medios, promoters y clubes.
+      </p>
+      <a class="mp-btn primary" href="presskit.html">VER PRESSKIT</a>
+    </section>
 
-  <!-- FOOTER -->
+    <section id="booking" class="section booking reveal section-centered" aria-labelledby="booking-title">
+      <h2 id="booking-title" data-animate="heading">BOOKING</h2>
+
+      <form id="contact-form" class="contact-form" action="#" method="post">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="cf-name">Nombre completo*</label>
+            <input type="text" id="cf-name" name="name" required autocomplete="name" />
+          </div>
+
+          <div class="form-field">
+            <label for="cf-email">Correo electrónico*</label>
+            <input type="email" id="cf-email" name="email" required autocomplete="email" placeholder="Tu mail de contacto" />
+          </div>
+
+          <div class="form-field">
+            <label for="cf-type">Tipo de evento*</label>
+            <select id="cf-type" name="type" required>
+              <option value="" disabled selected>Seleccioná una opción</option>
+              <option value="club">Club nocturno</option>
+              <option value="festival">Festival</option>
+              <option value="fiesta-privada">Fiesta privada</option>
+              <option value="open-air">Evento al aire libre</option>
+              <option value="after">After party</option>
+              <option value="clinica">Clínica / Mentoría</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="form-field form-field-full">
+            <label for="cf-message">Mensaje*</label>
+            <textarea
+              id="cf-message"
+              name="message"
+              rows="5"
+              required
+              placeholder="Fecha aproximada, ciudad, formato del evento o qué te gustaría trabajar en el lab."
+            ></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="mp-btn primary form-submit">ENVIAR</button>
+
+        <p class="form-hint" id="booking-hint">
+          Si preferís, podés escribir directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>
+        </p>
+      </form>
+    </section>
+
+    <section id="instagram" class="section reveal section-centered" aria-labelledby="instagram-title">
+      <h2 id="instagram-title" data-animate="heading">INSTAGRAM</h2>
+      <p class="muted">Clips cortos, work in progress y fragmentos del día a día alrededor de la música.</p>
+
+      <div class="ig-wrap ig-card">
+        <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
+        <iframe
+          src="https://lightwidget.com/widgets/d4159941fe3b5f3f8260daff5de5ba95.html"
+          scrolling="no"
+          allowtransparency="true"
+          class="lightwidget-widget"
+          title="Instagram de Manu Pavez"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </section>
+  </main>
+
   <footer class="site-footer">
     <div class="footer-inner">
-      <img src="logos/CUBO BLANCO MP.png" alt="Logo Manu Pavez" class="footer-logo">
+      <img src="logos/CUBO BLANCO MP.png" alt="Logo de Manu Pavez" class="footer-logo" />
 
-      <div class="footer-social">
+      <div class="footer-social" aria-label="Redes sociales">
         <a href="https://www.instagram.com/manupavez_" aria-label="Instagram">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 2h9a5.5 5.5 0 0 1 5.5 5.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.75-.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>
         </a>
@@ -362,11 +380,10 @@
         </a>
       </div>
 
-      <p>© 2025 MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
+      <p>© <time datetime="2025">2025</time> MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
     </div>
   </footer>
 
-  <!-- BOTÓN FLOTANTE VOLVER ARRIBA -->
-  <button class="scroll-top" data-scroll-top aria-label="Volver arriba">↑</button>
+  <button class="scroll-top" aria-label="Volver arriba">↑</button>
 </body>
 </html>
