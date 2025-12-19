@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Beatport">
+  <title>Beatport</title>
+  <path d="M27 18h10c7 0 12 5 12 12s-5 12-12 12H27V18z" fill="#fff" opacity="0.95"/>
+  <path d="M23 18h6v28h-6z" fill="#fff" opacity="0.95"/>
+</svg>

@@ -12,14 +12,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="css/styles.css">
-
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/home.css">
+  <link rel="stylesheet" href="css/responsive.css">
   <!-- Scripts (defer) -->
-  <script defer src="js/slider.js"></script>
-  <script defer src="js/main.js"></script>
+  <script defer src="js/supabase-config.js"></script>
+  <script type="module" src="js/main.js"></script>
 </head>
 
-<body>
+<body data-page="home">
   <!-- HEADER FIJO -->
   <header class="site-header fixed" role="banner">
     <div class="header-inner">
@@ -44,14 +47,14 @@
       <div class="header-actions">
         <a href="#booking" class="header-cta">BOOKING</a>
 
-        <button class="menu-toggle" aria-controls="mobile-nav" aria-expanded="false" aria-label="Abrir menú móvil">
+        <button class="menu-toggle" data-nav-toggle aria-controls="mobile-nav" aria-expanded="false" aria-label="Abrir menú móvil">
           <span class="burger" aria-hidden="true"></span>
         </button>
       </div>
     </div>
 
     <!-- NAV MÓVIL -->
-    <nav id="mobile-nav" class="mobile-nav" hidden aria-label="Menú móvil">
+    <nav id="mobile-nav" class="mobile-nav" data-nav-panel hidden aria-label="Menú móvil">
       <a href="#inicio">INICIO</a>
       <a href="#musica">MÚSICA</a>
       <a href="#sellos">SELLOS</a>
@@ -111,132 +114,18 @@
         </p>
       </header>
 
-      <div class="release-slider" aria-label="Lanzamientos destacados">
-        <button class="release-nav prev" type="button" aria-label="Lanzamiento anterior">‹</button>
+      <div class="release-slider" data-slider="release" aria-label="Lanzamientos destacados">
+        <button class="release-nav prev" data-slider-prev type="button" aria-label="Lanzamiento anterior">‹</button>
 
         <div class="release-slides">
-          <!-- SLIDE 1 – YOURSELF EP -->
-          <article class="release-slide release-card active">
-            <div class="release-layout">
-              <div class="release-cover">
-                <img src="https://f4.bcbits.com/img/a1834251975_10.jpg" alt="Portada Yourself EP">
-              </div>
-              <div class="release-info">
-                <h3>YOURSELF</h3>
-                <p class="release-meta">EP</p>
-                <p class="release-story">
-                  Un EP pensado para abrir el viaje sin apuro. Espacio, aire y melodías que
-                  preparan el cuerpo para lo que viene después en el set.
-                </p>
-                <div class="release-tags">
-                  <span>Arranque de la noche</span>
-                  <span>Texturas cálidas</span>
-                </div>
-                <div class="release-actions">
-                  <!-- Spotify: por ahora va al perfil (release nuevo todavía difícil de indexar) -->
-                  <a class="mp-btn platform-btn spotify-btn"
-                     href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h"
-                     target="_blank" rel="noopener">
-                    <span class="platform-icon">
-                      <img src="img/icons/spotify.svg" alt="Spotify">
-                    </span>
-                  </a>
-
-                  <!-- Beatport: release YOURSELF -->
-                  <a class="mp-btn platform-btn beatport-btn"
-                     href="https://www.beatport.com/release/yourself/5181048"
-                     target="_blank" rel="noopener">
-                    <span class="platform-icon">
-                      <img src="img/icons/beatport.svg" alt="Beatport">
-                    </span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- SLIDE 2 – NOISY SILENCES -->
-          <article class="release-slide release-card">
-            <div class="release-layout">
-              <div class="release-cover">
-                <img src="https://geo-media.beatport.com/image_size/1400x1400/a445a8b4-572d-4b4d-865e-881b8244a9b5.jpg" alt="Portada Noisy Silences EP">
-              </div>
-              <div class="release-info">
-                <h3>NOISY SILENCES</h3>
-                <p class="release-meta">EP</p>
-                <p class="release-story">
-                  Piezas largas para el centro del set. Detalle y tensión sostenida sin perder
-                  groove, pensadas para cuando la pista ya está entregada.
-                </p>
-                <div class="release-tags">
-                  <span>Centro del viaje</span>
-                  <span>Tensión amable</span>
-                </div>
-                <div class="release-actions">
-                  <!-- Spotify: álbum de Noisy Silences -->
-                  <a class="mp-btn platform-btn spotify-btn"
-                     href="https://open.spotify.com/album/3L8bekE25CotMtPbt6v08E"
-                     target="_blank" rel="noopener">
-                    <span class="platform-icon">
-                      <img src="img/icons/spotify.svg" alt="Spotify">
-                    </span>
-                  </a>
-
-                  <!-- Beatport: release Noisy Silences -->
-                  <a class="mp-btn platform-btn beatport-btn"
-                     href="https://www.beatport.com/release/noisy-silences/5036573"
-                     target="_blank" rel="noopener">
-                    <span class="platform-icon">
-                      <img src="img/icons/beatport.svg" alt="Beatport">
-                    </span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- SLIDE 3 – TWENTY TWO -->
-          <article class="release-slide release-card">
-            <div class="release-layout">
-              <div class="release-cover">
-                <img src="https://geo-media.beatport.com/image_size/1400x1400/6228b451-a86f-4d28-8227-875d33ab350f.jpg" alt="Portada Twenty Two">
-              </div>
-              <div class="release-info">
-                <h3>TWENTY TWO</h3>
-                <p class="release-meta">ÁLBUM W/ SERVANDO</p>
-                <p class="release-story">
-                  “Twenty Two” es un trabajo largo pensado como un solo viaje. Nueve temas que
-                  se apoyan entre sí para contar una misma etapa desde distintos ángulos.
-                </p>
-                <div class="release-tags">
-                  <span>Viaje largo</span>
-                  <span>Melancolía en pista</span>
-                </div>
-                <div class="release-actions">
-                  <!-- Spotify: por ahora al perfil (álbum está en su discografía de artista) -->
-                  <a class="mp-btn platform-btn spotify-btn"
-                     href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h"
-                     target="_blank" rel="noopener">
-                    <span class="platform-icon">
-                      <img src="img/icons/spotify.svg" alt="Spotify">
-                    </span>
-                  </a>
-
-                  <!-- Beatport: búsqueda directa del álbum -->
-                  <a class="mp-btn platform-btn beatport-btn"
-                     href="https://www.beatport.com/search?q=Twenty%20Two%20Servando%20Manu%20Pavez"
-                     target="_blank" rel="noopener">
-                    <span class="platform-icon">
-                      <img src="img/icons/beatport.svg" alt="Beatport">
-                    </span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </article>
+          <!-- contenido dinámico desde Supabase -->
+          <div class="supabase-banner" data-supabase-banner hidden>
+            Configurá <code>js/supabase-config.js</code> (url + anonKey) para cargar releases desde Supabase.
+          </div>
+          <div data-sb="releases"></div>
         </div>
 
-        <button class="release-nav next" type="button" aria-label="Lanzamiento siguiente">›</button>
+        <button class="release-nav next" data-slider-next type="button" aria-label="Lanzamiento siguiente">›</button>
       </div>
     </div>
   </section>
@@ -249,52 +138,12 @@
       Algunos de los espacios y artistas que acompañan el proyecto:
     </p>
 
-    <div class="labels-marquee">
-      <div class="labels-track">
-        <!-- bloque 1 -->
-        <div class="label-pill">
-          <img src="img/labels/mango-alley.png" alt="Mango Alley">
-          <span>Mango Alley</span>
-        </div>
-        <div class="label-pill">
-          <img src="img/labels/sound-avenue.png" alt="Sound Avenue">
-          <span>Sound Avenue</span>
-        </div>
-        <div class="label-pill">
-          <img src="img/labels/label-3.png" alt="Otro sello">
-          <span>Label 3</span>
-        </div>
-        <div class="label-pill">
-          <img src="img/labels/label-4.png" alt="Otro sello">
-          <span>Label 4</span>
-        </div>
-        <div class="label-pill small-text">
-          <img src="img/labels/support.png" alt="DJ Support">
-          <span>Support: Hernán Cattáneo · Nick Warren · Mariano Mellino</span>
-        </div>
+    <div class="supabase-banner" data-supabase-banner hidden>
+      Configurá Supabase para cargar sellos/support.
+    </div>
 
-        <!-- bloque 2 duplicado para loop infinito -->
-        <div class="label-pill">
-          <img src="img/labels/mango-alley.png" alt="Mango Alley">
-          <span>Mango Alley</span>
-        </div>
-        <div class="label-pill">
-          <img src="img/labels/sound-avenue.png" alt="Sound Avenue">
-          <span>Sound Avenue</span>
-        </div>
-        <div class="label-pill">
-          <img src="img/labels/label-3.png" alt="Otro sello">
-          <span>Label 3</span>
-        </div>
-        <div class="label-pill">
-          <img src="img/labels/label-4.png" alt="Otro sello">
-          <span>Label 4</span>
-        </div>
-        <div class="label-pill small-text">
-          <img src="img/labels/support.png" alt="DJ Support">
-          <span>Support: Hernán Cattáneo · Nick Warren · Mariano Mellino</span>
-        </div>
-      </div>
+    <div class="labels-marquee">
+      <div class="labels-track" data-sb="labels-track"></div>
     </div>
   </section>
 
@@ -333,89 +182,31 @@
       Fragmentos de fechas donde se ve cómo se traduce todo con gente adelante.
     </p>
 
-    <div class="media-slider" data-slider="videos">
-      <button class="media-nav prev" type="button" aria-label="Video anterior">‹</button>
+    <div class="media-slider" data-slider="media">
+      <button class="media-nav prev" data-slider-prev type="button" aria-label="Video anterior">‹</button>
 
-      <div class="media-track">
-        <article class="media-slide active">
-          <div class="media-embed">
-            <iframe width="560" height="315"
-              src="https://www.youtube.com/embed/z5AnMupDxA4?controls=0"
-              title="CLUB 74 - All Night Long"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-          <div class="media-caption">
-            <h4>CLUB 74 - ALL NIGHT LONG</h4>
-            <p>Fragmento de nuestro all night long con Gaspar Aguilera en Pergamino.</p>
-          </div>
-        </article>
+      <div class="supabase-banner" data-supabase-banner hidden>
+          Configurá Supabase para cargar videos/sets.
+        </div>
 
-        <article class="media-slide">
-          <div class="media-embed">
-            <iframe width="560" height="315"
-              src="https://www.youtube.com/embed/Yvha-kqron8?controls=0"
-              title="CLUB 74 - All Night Long 2"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-          <div class="media-caption">
-            <h4>CLUB 74 - ALL NIGHT LONG 2</h4>
-            <p>Una hora de mi presentación en solitario.</p>
-          </div>
-        </article>
-      </div>
+      <div class="media-track" data-slider-track data-sb="media-video"></div>
 
-      <button class="media-nav next" type="button" aria-label="Video siguiente">›</button>
+      <button class="media-nav next" data-slider-next type="button" aria-label="Video siguiente">›</button>
     </div>
 
     <!-- MIXES SOUNDcloud -->
     <h3 class="subsection-title">Mixes seleccionados</h3>
 
-    <div class="media-slider" data-slider="mixes">
-      <button class="media-nav prev" type="button" aria-label="Mix anterior">‹</button>
+    <div class="media-slider" data-slider="media">
+      <button class="media-nav prev" data-slider-prev type="button" aria-label="Mix anterior">‹</button>
 
-      <div class="media-track">
-        <!-- GENESIS -->
-        <article class="media-slide active">
-          <div class="media-embed mix">
-            <iframe
-              width="100%"
-              height="166"
-              scrolling="no"
-              frameborder="no"
-              allow="autoplay"
-              src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/manupavez/genesis-0003&color=%23101010&inverse=false&auto_play=false&show_user=true">
-            </iframe>
-          </div>
-          <div class="media-caption">
-            <h4>GENESIS</h4>
-            <p>Serie de mixes que trabajan el inicio del viaje.</p>
-          </div>
-        </article>
+      <div class="supabase-banner" data-supabase-banner hidden>
+          Configurá Supabase para cargar mixes.
+        </div>
 
-        <!-- MIXES BINARIOS -->
-        <article class="media-slide">
-          <div class="media-embed mix">
-            <iframe
-              width="100%"
-              height="166"
-              scrolling="no"
-              frameborder="no"
-              allow="autoplay"
-              src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/manupavez/0101-mixes-binarios&color=%23101010&inverse=false&auto_play=false&show_user=true">
-            </iframe>
-          </div>
-          <div class="media-caption">
-            <h4>MIXES BINARIOS</h4>
-            <p>Álbum de DJ sets haciendo honor a la digitalización.</p>
-          </div>
-        </article>
-      </div>
+      <div class="media-track" data-slider-track data-sb="media-mix"></div>
 
-      <button class="media-nav next" type="button" aria-label="Mix siguiente">›</button>
+      <button class="media-nav next" data-slider-next type="button" aria-label="Mix siguiente">›</button>
     </div>
   </section>
 
@@ -576,6 +367,6 @@
   </footer>
 
   <!-- BOTÓN FLOTANTE VOLVER ARRIBA -->
-  <button class="scroll-top" aria-label="Volver arriba">↑</button>
+  <button class="scroll-top" data-scroll-top aria-label="Volver arriba">↑</button>
 </body>
 </html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clínicas — Manu Pavez</title>
+  <meta name="description" content="Clínicas y mentorías: Ableton, producción, mix, y flujo de trabajo." />
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/clinicas.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <script defer src="js/supabase-config.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+
+<body data-page="clinicas">
+  <header class="site-header fixed" role="banner">
+    <div class="header-inner">
+      <a class="brand" href="index.html#inicio" aria-label="Ir al inicio">
+        <img src="logos/CUBO BLANCO MP.png" alt="Manu Pavez" onerror="this.style.display='none'" />
+      </a>
+
+      <nav class="nav" role="navigation" aria-label="Navegación principal">
+        <a href="index.html#inicio">INICIO</a>
+        <a href="index.html#musica">MÚSICA</a>
+        <a href="index.html#sellos">SELLOS</a>
+        <a href="index.html#en-vivo">EN VIVO</a>
+        <a href="index.html#lab">FREQUENCY LAB</a>
+        <a href="clinicas.html" class="is-active">CLÍNICAS</a>
+        <a href="bio.html">SOBRE MANU</a>
+        <a href="presskit.html">PRESSKIT</a>
+        <a href="index.html#booking" class="cta-book">BOOKING</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="index.html#booking" class="header-cta">BOOKING</a>
+        <button class="menu-toggle" data-nav-toggle aria-controls="mobile-nav" aria-expanded="false" aria-label="Abrir menú móvil" type="button">
+          <span class="burger" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <nav id="mobile-nav" class="mobile-nav" data-nav-panel hidden aria-label="Menú móvil">
+      <a href="index.html#inicio">INICIO</a>
+      <a href="index.html#musica">MÚSICA</a>
+      <a href="index.html#sellos">SELLOS</a>
+      <a href="index.html#en-vivo">EN VIVO</a>
+      <a href="index.html#lab">FREQUENCY LAB</a>
+      <a href="clinicas.html">CLÍNICAS</a>
+      <a href="bio.html">SOBRE MANU</a>
+      <a href="presskit.html">PRESSKIT</a>
+      <a href="index.html#booking">BOOKING</a>
+      <a href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Clínicas" class="mobile-book">MAIL DIRECTO</a>
+    </nav>
+  </header>
+
+  <main class="section section-centered reveal" style="padding-top: 120px;">
+    <div class="section-inner" style="max-width: 980px; margin: 0 auto;">
+      <header class="section-head">
+        <h1 data-animate="heading">CLÍNICAS</h1>
+        <p class="muted">Contenido gestionado desde Supabase: paquetes, temario, precios, links y CTA.</p>
+      </header>
+
+      <div class="supabase-banner" data-supabase-banner hidden>
+        Configurá <code>js/supabase-config.js</code> (url + anonKey) para cargar clínicas desde Supabase.
+      </div>
+
+      <section class="clinics-grid" data-sb="clinics"></section>
+
+      <div class="hero-ctas" style="margin-top: 20px;">
+        <a class="mp-btn primary" href="index.html#booking">Consultar por una clínica</a>
+        <a class="mp-btn ghost" href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Clínicas">Mail directo</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <img src="logos/CUBO BLANCO MP.png" alt="Logo" class="footer-logo" />
+      <p>© 2025 MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
+    </div>
+  </footer>
+</body>
+</html>
