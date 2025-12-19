@@ -2,13 +2,15 @@ import { $$ } from "../core/dom.js";
 import { makeIO } from "../core/observers.js";
 
 export function initActiveNav() {
-  // Solo links del nav principal con hash interno
-  const links = $$('header .nav a[href^="#"], header #mobile-nav a[href^="#"]');
+  // Links del nav con hash (soporta "#id" y "index.html#id")
+  const links = $$('header .nav a[href*="#"], header #mobile-nav a[href*="#"]');
   if (!links.length) return;
 
   const map = new Map();
   for (const a of links) {
-    const id = a.getAttribute("href")?.slice(1);
+    const href = a.getAttribute("href") || "";
+    const hash = href.includes("#") ? href.split("#").pop() : "";
+    const id = hash ? decodeURIComponent(hash) : "";
     if (!id) continue;
     const section = document.getElementById(id);
     if (section) map.set(section, a);

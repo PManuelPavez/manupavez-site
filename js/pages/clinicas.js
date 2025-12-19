@@ -3,29 +3,21 @@ import { hasSupabase } from "../data/supabaseClient.js";
 import { getClinics } from "../data/content.js";
 import { renderClinics } from "../ui/renderers.js";
 import { initReveal } from "../features/reveal.js";
-import { pageName, showSupabaseBanners } from "./_common.js";
 
 export function initClinicas() {
-  if (pageName() !== "clinicas") return;
+  const root = $("[data-sb='clinics']");
+  if (!root) return;
 
-  if (!hasSupabase()) {
-    showSupabaseBanners();
-    return;
-  }
-
-  hydrate();
+  if (!hasSupabase()) return;
+  hydrate(root);
 }
 
-async function hydrate() {
+async function hydrate(root) {
   try {
-    const root = $("[data-sb='clinics']");
-    if (!root) return;
-
     const items = await getClinics();
     renderClinics(root, items);
     initReveal();
   } catch (e) {
     console.warn("[clinicas] Supabase hydrate error:", e);
-    showSupabaseBanners();
   }
 }

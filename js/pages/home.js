@@ -3,50 +3,63 @@ import { hasSupabase } from "../data/supabaseClient.js";
 import { getReleases, getLabels, getMedia } from "../data/content.js";
 import { renderReleases, renderLabels, renderMedia } from "../ui/renderers.js";
 import { initReleaseSlider, initMediaSliders } from "../features/slider.js";
-import { pageName, showSupabaseBanners } from "./_common.js";
 
 export function initHome() {
-  if (pageName() !== "home") return;
+  const releasesRoot = $("[data-sb='releases']") || $("[data-sb-releases]");
+  const labelsTrack = $("[data-sb='labels-track']");
+  const videoRoot = $("[data-sb='media-video']");
+  const mixRoot = $("[data-sb='media-mix']");
+
+  // Si no hay nada de lo que hidratamos, salimos.
+  if (!releasesRoot && !labelsTrack && !videoRoot && !mixRoot) return;
 
   if (!hasSupabase()) {
-    showSupabaseBanners();
+    console.warn("[home] Supabase no configurado: usando contenido estático.");
     return;
   }
 
-  hydrate();
+  if (releasesRoot) hydrateReleases(releasesRoot);
+  if (labelsTrack) hydrateLabels(labelsTrack);
+  if (videoRoot) hydrateMedia(videoRoot, "videos");
+  if (mixRoot) hydrateMedia(mixRoot, "mixes");
 }
 
-async function hydrate() {
+async function hydrateReleases(root) {
   try {
-    const [releases, labels, videos, mixes] = await Promise.all([
-      getReleases(),
-      getLabels(),
-      getMedia("video"),
-      getMedia("mix"),
-    ]);
-
-    const releasesRoot = $("[data-sb='releases']");
-    if (releasesRoot) {
-      renderReleases(releasesRoot, releases);
-      initReleaseSlider();
-    }
-
-    const labelsTrack = $("[data-sb='labels-track']");
-    if (labelsTrack) renderLabels(labelsTrack, labels);
-
-    const videoRoot = $("[data-sb='media-video']");
-    if (videoRoot) {
-      renderMedia(videoRoot, videos, "video");
-      initMediaSliders();
-    }
-
-    const mixRoot = $("[data-sb='media-mix']");
-    if (mixRoot) {
-      renderMedia(mixRoot, mixes, "mix");
-      initMediaSliders();
-    }
+    root.setAttribute("data-loading", "true");
+    const releases = await getReleases();
+    renderReleases(root, releases);
+    // Re-init del slider una vez que existen .release-slide
+    initReleaseSlider();
   } catch (e) {
-    console.warn("[home] Supabase hydrate error:", e);
-    showSupabaseBanners();
+    console.error("[home] releases hydrate error:", e);
+  } finally {
+    root.removeAttribute("data-loading");
+  }
+}
+
+async function hydrateLabels(track) {
+  try {
+    track.setAttribute("data-loading", "true");
+    const labels = await getLabels();
+    renderLabels(track, labels);
+  } catch (e) {
+    console.error("[home] labels hydrate error:", e);
+  } finally {
+    track.removeAttribute("data-loading");
+  }
+}
+
+async function hydrateMedia(root, kind) {
+  try {
+    root.setAttribute("data-loading", "true");
+    const items = await getMedia(kind);
+    renderMedia(root, items, kind === "mixes" ? "mix" : "video");
+    // Re-init sliders cuando entran embeds
+    initMediaSliders();
+  } catch (e) {
+    console.error("[home] media hydrate error:", kind, e);
+  } finally {
+    root.removeAttribute("data-loading");
   }
 }

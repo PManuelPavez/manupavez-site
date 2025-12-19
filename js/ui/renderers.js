@@ -108,6 +108,54 @@ export function renderPresskitGallery(slidesRoot, assets = []) {
     .join("");
 }
 
+// Alias compatible con pages/presskit.js (y con el pedido de "fotos que cambian")
+// Render simple: imágenes dentro del track del slider.
+export function renderPresskitPhotos(container, photos = [], { mode = "replace" } = {}) {
+  if (!container) return;
+  if (!photos.length) return;
+
+  const track = container.getAttribute("data-sb") === "presskit-slides"
+    ? container
+    : (container.querySelector("[data-sb='presskit-slides']") || container);
+
+  if (mode === "replace") track.innerHTML = "";
+
+  track.innerHTML = photos
+    .map((img, idx) =>
+      `<img src="${escapeHtml(img.url)}" alt="${escapeHtml(img.alt || img.title || 'Manu Pavez')}" class="${idx === 0 ? 'active' : ''}" loading="lazy" decoding="async">`
+    )
+    .join("");
+}
+
+export function renderNavList(root, items = []) {
+  if (!root) return;
+  if (!items.length) return;
+
+  root.innerHTML = items
+    .map((it) => {
+      const href = escapeHtml(it.href || it.url || "#");
+      const label = escapeHtml(it.label || it.title || it.text || "Link");
+      const cls = it.is_cta ? "cta-book" : "";
+      return `<li><a href="${href}" class="${cls}">${label}</a></li>`;
+    })
+    .join("");
+}
+
+export function renderSiteLinks(root, links = []) {
+  if (!root) return;
+  if (!links.length) return;
+
+  // Si la tabla ya trae svg/html, preferimos no inyectar HTML crudo por seguridad.
+  // Render básico: texto + aria-label.
+  root.innerHTML = links
+    .map((l) => {
+      const href = escapeHtml(l.href || l.url || "#");
+      const label = escapeHtml(l.label || l.name || "Link");
+      return `<a href="${href}" aria-label="${label}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+    })
+    .join("");
+}
+
 export function renderClinics(root, items = []) {
   if (!root) return;
   if (!items.length) return;
