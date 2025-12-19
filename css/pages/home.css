@@ -1,7 +1,0 @@
-/* Home page stylesheet (aggregator). Edit section files in /css/pages/home/ */
-@import url('./home/hero.css');
-@import url('./home/music.css');
-@import url('./home/labels.css');
-@import url('./home/live.css');
-@import url('./home/lab.css');
-@import url('./home/instagram.css');
