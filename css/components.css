@@ -683,3 +683,57 @@
   max-width: 820px;
   margin-inline: auto;
 }
+/* =========================
+   Sections — separators pro
+   ========================= */
+
+:root{
+  --mp-section-y: clamp(64px, 7vw, 108px);
+  --mp-gutter: clamp(16px, 4vw, 22px);
+  --mp-divider-grad: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--mp-accent-2) 26%, transparent),
+    color-mix(in oklab, var(--mp-accent) 22%, transparent),
+    transparent
+  );
+  --mp-section-ambient: radial-gradient(
+    circle at 30% -20%,
+    color-mix(in oklab, var(--mp-accent-2) 10%, transparent),
+    transparent 55%
+  );
+}
+
+:where(main > .section){
+  padding-inline: var(--mp-gutter);
+  padding-block: var(--mp-section-y);
+}
+
+/* divisor arriba de cada sección */
+:where(main > .section)::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  height: 1px;
+  background: var(--mp-divider-grad);
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+/* ambient sutil (si lo ves “mucho”, está mal; bajamos opacidad) */
+:where(main > .section)::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  background: var(--mp-section-ambient);
+  opacity: 0.50;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* contenido arriba de pseudos */
+:where(main > .section > *){ position: relative; z-index: 1; }
