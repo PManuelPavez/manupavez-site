@@ -190,3 +190,24 @@ body{
     transition-duration: 1ms !important;
   }
 }
+/* --- Fix crítico: hidden debe ganar SIEMPRE --- */
+:where([hidden]){ display: none !important; }
+
+/* --- Lists: sin bullets por defecto (reset seguro) --- */
+:where(ul, ol){ list-style: none; }
+
+/* --- Skip link usable (accesibilidad real, no adorno) --- */
+.skip-link{
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 9999;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(5, 7, 17, 0.92);
+  border: 1px solid color-mix(in oklab, var(--mp-border) 75%, white 10%);
+  color: var(--mp-text);
+  transform: translateY(-140%);
+  transition: transform calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-out);
+}
+.skip-link:focus-visible{ transform: translateY(0); box-shadow: var(--mp-ring-strong); }
