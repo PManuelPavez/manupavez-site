@@ -1,66 +1,118 @@
 import { $ } from "../core/dom.js";
 import { prefersReducedMotion } from "../core/motion.js";
 import { hasSupabase } from "../data/supabaseClient.js";
-import { getReleases } from "../data/content.js";
-import { renderReleases } from "../ui/renderers.js";
+import { getReleases, getLabels, getMedia } from "../data/content.js";
+import { renderReleases, renderLabels, renderMedia } from "../ui/renderers.js";
+import { getMedia } from "../data/content.js";
+import { renderMedia } from "../ui/renderers.js";
+import { initSliders } from "../features/slider.js";
+import { initReveal } from "../features/reveal.js";
+import { initSliders } from "../features/slider.js";
 import { bindReleaseModal } from "../features/releaseModal.js";
 
 export function initHome() {
-  // Soporta ambos: el nuevo pedido y el selector viejo
-  const container = document.querySelector('[data-sb="releases"]') || $("[data-sb-releases]");
-  if (!container) return;
+  // DOM-driven: si hay hooks, es home (o al menos tiene secciones home).
+  const releasesRoot = document.querySelector('[data-sb="releases"]') || $("[data-sb-releases]");
+  const labelsTrack = document.querySelector('[data-sb="labels-track"]') || $("[data-sb-labels-track]");
+  const mixesRoot =
+    document.querySelector('[data-sb="media-mix"]') ||
+    document.querySelector('[data-sb="media-mixes"]') ||
+    $("[data-sb-media-mix]");
+  const videosRoot =
+    document.querySelector('[data-sb="media-video"]') ||
+    document.querySelector('[data-sb="media-videos"]') ||
+    $("[data-sb-media-video]");
+
+  if (!releasesRoot && !labelsTrack && !mixesRoot && !videosRoot) return;
 
   if (!hasSupabase()) {
     console.warn("[home] Supabase no configurado: usando contenido estático.");
     return;
   }
 
-  hydrate(container);
+  hydrate({ releasesRoot, labelsTrack, mixesRoot, videosRoot });
 }
 
-async function hydrate(container) {
-  try {
-    container.setAttribute("data-loading", "true");
+async function hydrate({ releasesRoot, labelsTrack, mixesRoot, videosRoot }) {
+  const jobs = [];
 
-    const releasesRaw = await getReleases();
+  // Releases + modal + marquee
+  if (releasesRoot) {
+    jobs.push(
+      (async () => {
+        const releasesRaw = await getReleases();
 
-    // Normalizamos id estable para modal + dataset
-    const releases = releasesRaw.map((r, idx) => ({
-      ...r,
-      __mp_id: String(r.id ?? r.slug ?? r.key ?? idx),
-    }));
+        // id estable para modal
+        const releases = releasesRaw.map((r, idx) => ({
+          ...r,
+          __mp_id: String(r.id ?? r.slug ?? r.key ?? idx),
+        }));
 
-    // Render (con #tpl-release)
-    renderReleases(container, releases, { mode: container.getAttribute("data-sb-mode") || "replace" });
+        renderReleases(releasesRoot, releases, {
+          mode: releasesRoot.getAttribute("data-sb-mode") || "replace",
+        });
 
-    // Bind modal (delegado)
-    const byId = new Map(releases.map((r) => [String(r.__mp_id), r]));
-    bindReleaseModal(container, (id) => byId.get(String(id)));
+        const byId = new Map(releases.map((r) => [String(r.__mp_id), r]));
+        bindReleaseModal(releasesRoot, (id) => byId.get(String(id)));
 
-    // Marquee infinito “real”
-    enableReleaseMarquee(container);
-
-  } catch (e) {
-    console.error("[home] Supabase hydrate error:", e);
-    container.textContent = "No se pudo cargar contenido (mirá consola).";
-  } finally {
-    container.removeAttribute("data-loading");
+        enableReleaseMarquee(releasesRoot);
+      })()
+    );
   }
+
+  // Labels (marquee tipo “real” ya lo hace renderLabels duplicando)
+  if (labelsTrack) {
+    jobs.push(
+      (async () => {
+        const labels = await getLabels();
+        renderLabels(labelsTrack, labels);
+      })()
+    );
+  }
+
+  // Media mixes
+  if (mixesRoot) {
+    jobs.push(
+      (async () => {
+        const mixes = await getMedia("mix");
+        renderMedia(mixesRoot, mixes, "mix");
+      })()
+    );
+  }
+
+  // Media videos
+  if (videosRoot) {
+    jobs.push(
+      (async () => {
+        const videos = await getMedia("video");
+        renderMedia(videosRoot, videos, "video");
+      })()
+    );
+  }
+
+  const results = await Promise.allSettled(jobs);
+
+  // Logueo útil (no “silencioso”)
+  results.forEach((r) => {
+    if (r.status === "rejected") console.warn("[home] hydrate section error:", r.reason);
+  });
+
+  // Re-init de reveals + sliders (porque ahora sí hay contenido)
+  initReveal();
+  initSliders();
 }
 
-function enableReleaseMarquee(container) {
+function enableReleaseMarquee(releasesRoot) {
   if (prefersReducedMotion()) return;
 
-  const slider = container.closest(".release-slider") || document.querySelector(".release-slider");
+  const slider = releasesRoot.closest(".release-slider") || document.querySelector(".release-slider");
   if (!slider) return;
 
-  // Track: intenta encontrar el track real; si no, usa container como track
   const track =
     slider.querySelector("[data-slider-track]") ||
     slider.querySelector(".release-track") ||
-    container;
+    releasesRoot;
 
-  // Evitar duplicación múltiple
   if (slider.dataset.marqueeReady === "true") return;
 
   const children = Array.from(track.children);
@@ -71,9 +123,9 @@ function enableReleaseMarquee(container) {
   children.forEach((child) => {
     const clone = child.cloneNode(true);
 
-    // A11y: evitar duplicar tab stops / screen reader spam
+    // Evitar spam de foco/screen reader en clones
     clone.setAttribute("aria-hidden", "true");
-    clone.querySelectorAll("a, button, input, select, textarea, [tabindex]").forEach((el) => {
+    clone.querySelectorAll("a,button,input,select,textarea,[tabindex]").forEach((el) => {
       el.setAttribute("tabindex", "-1");
     });
 

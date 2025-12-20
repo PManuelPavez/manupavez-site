@@ -1,55 +1,29 @@
-import { $, $$ } from "../core/dom.js";
+import { $ } from "../core/dom.js";
 import { hasSupabase } from "../data/supabaseClient.js";
-import { getPresskitPhotos, getPresskitDownload, getBlocks } from "../data/content.js";
-import { renderPresskitPhotos, renderTextBlocks } from "../ui/renderers.js";
-import { initPresskitPhotoSlider } from "../features/slider.js";
+import { getPresskitPhotos } from "../data/content.js";
+import { renderPresskitPhotos } from "../ui/renderers.js";
 
 export function initPresskit() {
-  // Hooks reales en presskit.html
-  const slides = $("[data-sb='presskit-slides']") || $("[data-sb-presskit-photos]");
-  const download = $("[data-sb='presskit-download']");
-  const blockNodes = $$("[data-sb-block]");
-
-  if (!slides && !download && !blockNodes.length) return;
+  const container = $("[data-sb-presskit-photos]");
+  if (!container) return; // DOM-driven
 
   if (!hasSupabase()) {
     console.warn("[presskit] Supabase no configurado: usando contenido estático.");
     return;
   }
 
-  if (slides) hydratePhotos(slides);
-  if (download) hydrateDownload(download);
-  if (blockNodes.length) hydrateBlocks(blockNodes);
+  hydrate(container);
 }
 
-async function hydratePhotos(slides) {
+async function hydrate(container) {
   try {
-    slides.setAttribute("data-loading", "true");
+    container.setAttribute("data-loading", "true");
     const photos = await getPresskitPhotos();
-    renderPresskitPhotos(slides, photos, { mode: "replace" });
-    initPresskitPhotoSlider();
+    renderPresskitPhotos(container, photos, { mode: container.getAttribute("data-sb-mode") || "replace" });
   } catch (e) {
-    console.error("[presskit] photos hydrate error:", e);
+    console.error("[presskit] Supabase hydrate error:", e);
+    container.textContent = "No se pudo cargar contenido (mirá consola).";
   } finally {
-    slides.removeAttribute("data-loading");
-  }
-}
-
-async function hydrateDownload(a) {
-  try {
-    const url = await getPresskitDownload();
-    if (url) a.setAttribute("href", url);
-  } catch (e) {
-    console.error("[presskit] download hydrate error:", e);
-  }
-}
-
-async function hydrateBlocks(nodes) {
-  try {
-    const keys = nodes.map((n) => n.getAttribute("data-sb-block")).filter(Boolean);
-    const map = await getBlocks(keys);
-    renderTextBlocks(nodes, map);
-  } catch (e) {
-    console.error("[presskit] blocks hydrate error:", e);
+    container.removeAttribute("data-loading");
   }
 }
