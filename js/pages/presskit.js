@@ -1,5 +1,5 @@
 import { $ } from "../core/dom.js";
-import { hasSupabase } from "../data/supabaseClient.js";
+import { hasSupabase, waitForSupabase } from "../data/supabaseClient.js";
 import { getPresskitPhotos } from "../data/content.js";
 import { renderPresskitPhotos } from "../ui/renderers.js";
 
@@ -8,7 +8,10 @@ export function initPresskit() {
   if (!container) return; // DOM-driven
 
   if (!hasSupabase()) {
-    console.warn("[presskit] Supabase no configurado: usando contenido estático.");
+    waitForSupabase().then((sb) => {
+      if (!sb) return;
+      hydrate(container);
+    });
     return;
   }
 

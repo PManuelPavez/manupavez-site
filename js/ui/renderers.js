@@ -7,54 +7,84 @@ export function escapeHtml(s = "") {
     .replace(/'/g, "&#39;");
 }
 
-export function renderReleases(root, releases = []) {
+export function renderReleases(root, releases = [], { mode = "replace" } = {}) {
   if (!root) return;
+
+  if (mode === "replace") root.innerHTML = "";
   if (!releases.length) return;
 
-  root.innerHTML = releases
-    .map((r, idx) => {
-      const tags = Array.isArray(r.tags)
-        ? r.tags
-        : (r.tags ? String(r.tags).split(",") : []);
+  const tpl = document.getElementById("tpl-release");
+  const frag = document.createDocumentFragment();
 
-      const actions = [
-        r.spotify_url
-          ? `<a class="mp-btn platform-btn spotify-btn" href="${escapeHtml(r.spotify_url)}" target="_blank" rel="noopener">
-              <span class="platform-icon"><img src="img/icons/spotify.svg" alt="Spotify"></span>
-            </a>`
-          : "",
-        r.beatport_url
-          ? `<a class="mp-btn platform-btn beatport-btn" href="${escapeHtml(r.beatport_url)}" target="_blank" rel="noopener">
-              <span class="platform-icon"><img src="img/icons/beatport.svg" alt="Beatport"></span>
-            </a>`
-          : "",
-        r.soundcloud_url
-          ? `<a class="mp-btn platform-btn" href="${escapeHtml(r.soundcloud_url)}" target="_blank" rel="noopener">
-              <span class="platform-icon"><img src="img/icons/soundcloud.svg" alt="SoundCloud"></span>
-            </a>`
-          : "",
-      ].join("");
+  releases.forEach((r, idx) => {
+    const id = String(r.__mp_id ?? r.id ?? r.slug ?? idx);
+    const primaryHref = pickPrimaryUrl(r) || "#";
 
-      return `
-        <article class="release-slide release-card ${idx === 0 ? "active" : ""}">
-          <div class="release-layout">
-            <div class="release-cover">
-              <img src="${escapeHtml(r.cover_url || "")}" alt="Portada ${escapeHtml(r.title)}" loading="lazy" decoding="async">
-            </div>
-            <div class="release-info">
-              <h3>${escapeHtml(r.title)}</h3>
-              <p class="release-meta">${escapeHtml(r.type || "")}</p>
-              <p class="release-story">${escapeHtml(r.story || "")}</p>
-              <div class="release-tags">
-                ${tags.filter(Boolean).slice(0, 6).map((t) => `<span>${escapeHtml(String(t).trim())}</span>`).join("")}
-              </div>
-              <div class="release-actions">${actions}</div>
-            </div>
-          </div>
-        </article>
-      `;
-    })
-    .join("");
+    if (tpl instanceof HTMLTemplateElement) {
+      const node = tpl.content.cloneNode(true);
+      const rootEl = node.firstElementChild || node.querySelector?.("*");
+
+      if (rootEl) {
+        rootEl.classList.add("release-slide");
+        if (idx === 0) rootEl.classList.add("active");
+      }
+
+      // Imagen / cover
+      const img = node.querySelector?.(".release-cover img") || node.querySelector?.("img");
+      if (img) {
+        img.src = r.cover_url || r.cover || r.image_url || "";
+        img.alt = (r.title || r.name) ? `Portada ${r.title || r.name}` : "Portada";
+        img.loading = "lazy";
+        img.decoding = "async";
+      }
+
+      // Texto (aunque el CSS lo oculte, queda para SEO/a11y)
+      const titleEl = node.querySelector?.(".release-title") || node.querySelector?.(".release-info h3") || node.querySelector?.("h3");
+      if (titleEl) titleEl.textContent = r.title || r.name || "";
+
+      const metaEl = node.querySelector?.(".release-meta") || node.querySelector?.("[data-release-subtitle]");
+      if (metaEl) metaEl.textContent = r.subtitle || r.type || "";
+
+      const storyEl = node.querySelector?.(".release-story") || node.querySelector?.("[data-release-story]");
+      if (storyEl) storyEl.textContent = r.story || r.description || "";
+
+      // Link principal (para Ctrl/⌘ click)
+      let a = node.querySelector?.(".release-link") || node.querySelector?.("a[href]");
+      if (!a) {
+        // Si el template no trae <a>, envolvemos el cover
+        const cover = node.querySelector?.(".release-cover") || img?.parentElement;
+        if (cover) {
+          a = document.createElement("a");
+          a.className = "release-link";
+          a.href = primaryHref;
+          a.appendChild(cover.cloneNode(true));
+          cover.replaceWith(a);
+        }
+      }
+      if (a) {
+        a.classList.add("release-link");
+        a.href = primaryHref;
+        a.setAttribute("data-release-id", id);
+      }
+
+      if (rootEl) rootEl.setAttribute("data-release-id", id);
+      frag.appendChild(node);
+      return;
+    }
+
+    // Fallback sin template: cover-only
+    const article = document.createElement("article");
+    article.className = `release-slide ${idx === 0 ? "active" : ""}`;
+    article.setAttribute("data-release-id", id);
+    article.innerHTML = `
+      <a class="release-link" href="${escapeHtml(primaryHref)}" data-release-id="${escapeHtml(id)}">
+        <img src="${escapeHtml(r.cover_url || "")}" alt="${escapeHtml((r.title || r.name) ? `Portada ${r.title || r.name}` : "Portada")}" loading="lazy" decoding="async">
+      </a>
+    `;
+    frag.appendChild(article);
+  });
+
+  root.appendChild(frag);
 }
 
 export function renderLabels(track, items = []) {
@@ -75,26 +105,77 @@ export function renderLabels(track, items = []) {
 
 export function renderMedia(root, items = [], kind) {
   if (!root) return;
+
+  const target = root.querySelector?.("[data-slider-track]") || root;
+  target.innerHTML = "";
   if (!items.length) return;
 
-  root.innerHTML = items
+  const k0 = String(kind || "").toLowerCase();
+  const isMix = k0 === "mix" || k0 === "mixes";
+
+  target.innerHTML = items
     .map((m, idx) => {
-      const isMix = kind === "mix";
-      const iframe = isMix
-        ? `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${escapeHtml(m.embed_url)}"></iframe>`
-        : `<iframe width="560" height="315" src="${escapeHtml(m.embed_url)}" title="${escapeHtml(m.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+      const title = m.title || "";
+      const desc = m.description || "";
+
+      // Preferimos embed_html si viene sanitizado desde Supabase (view).
+      const html = m.embed_html && String(m.embed_html).includes("<iframe")
+        ? String(m.embed_html)
+        : null;
+
+      const url = String(m.embed_url || m.url || "");
+
+      const iframe = html
+        ? html
+        : isMix
+          ? `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${escapeHtml(url)}"></iframe>`
+          : `<iframe width="560" height="315" src="${escapeHtml(url)}" title="${escapeHtml(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
 
       return `
         <article class="media-slide ${idx === 0 ? "active" : ""}">
           <div class="media-embed ${isMix ? "mix" : ""}">${iframe}</div>
           <div class="media-caption">
-            <h4>${escapeHtml(m.title)}</h4>
-            <p>${escapeHtml(m.description || "")}</p>
+            <h4>${escapeHtml(title)}</h4>
+            <p>${escapeHtml(desc)}</p>
           </div>
         </article>
       `;
     })
     .join("");
+}
+
+function pickPrimaryUrl(release) {
+  const links = extractPlatformLinks(release);
+  return links[0]?.url || "";
+}
+
+function extractPlatformLinks(release) {
+  const out = [];
+  const add = (label, url) => {
+    if (!url) return;
+    const u = String(url).trim();
+    if (!/^https?:\/\//i.test(u)) return;
+    if (out.some((x) => x.url === u)) return;
+    out.push({ label, url: u });
+  };
+
+  let pu = release?.platform_urls;
+  if (typeof pu === "string") {
+    try { pu = JSON.parse(pu); } catch { pu = null; }
+  }
+  if (Array.isArray(pu)) {
+    for (const it of pu) add(it.label || it.platform || "Link", it.url);
+  } else if (pu && typeof pu === "object") {
+    for (const [k, v] of Object.entries(pu)) add(String(k), v);
+  }
+
+  add("Spotify", release.spotify_url || release.spotify);
+  add("Beatport", release.beatport_url || release.beatport);
+  add("SoundCloud", release.soundcloud_url || release.soundcloud);
+  add("YouTube", release.youtube_url || release.youtube);
+  add("Bandcamp", release.bandcamp_url || release.bandcamp);
+
+  return out;
 }
 
 export function renderPresskitGallery(slidesRoot, assets = []) {

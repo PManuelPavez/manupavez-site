@@ -12,6 +12,9 @@ export function initReleaseSlider() {
   const slider = $("[data-slider='release']") || $(".release-slider");
   if (!slider) return;
 
+  // Modo marquee infinito (se activa desde pages/home.js)
+  if (slider.getAttribute("data-marquee") === "true") return;
+
   const slides = Array.from(slider.querySelectorAll(".release-slide"));
   const prevBtn = $("[data-slider-prev]", slider) || slider.querySelector(".release-nav.prev");
   const nextBtn = $("[data-slider-next]", slider) || slider.querySelector(".release-nav.next");
