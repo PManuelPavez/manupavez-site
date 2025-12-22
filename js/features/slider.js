@@ -7,32 +7,63 @@ export function initSliders() {
   initPresskitPhotoSlider();
 }
 
-// --- Releases (Home)
+// --- Releases (Home) — autoplay + loop en el SCROLLER correcto
 export function initReleaseSlider() {
   const slider = $("[data-slider='release']") || $(".release-slider");
   if (!slider) return;
 
-  const track = slider.querySelector("[data-sb='releases']") || slider.querySelector(".release-track");
+  // LIST: donde se renderizan las cards reales
+  const list = slider.querySelector("[data-sb='releases']") || slider.querySelector(".release-track");
+  if (!list) return;
+
+  // SCROLLER: el que realmente debería moverse (wrapper)
+  const scroller =
+    $("[data-slider-track]", slider) ||
+    slider.querySelector(".release-slides") ||
+    list;
+
   const prevBtn = $("[data-slider-prev]", slider) || slider.querySelector(".release-nav.prev");
   const nextBtn = $("[data-slider-next]", slider) || slider.querySelector(".release-nav.next");
-  if (!track) return;
 
-  const items = () => Array.from(track.children).filter((el) => el && el.nodeType === 1);
+  const items = () =>
+    Array.from(list.children).filter(
+      (el) => el && el.nodeType === 1 && el.getAttribute("data-clone") !== "1"
+    );
+
   const initialCount = items().length;
-  // Si todavía no hay contenido (Supabase), no bindeamos ni deshabilitamos (se re-intenta luego).
-  if (initialCount === 0) return;
-  // Si hay 1 solo item, deshabilitamos.
+
+  // Si todavía no hay contenido (Supabase renderiza después), esperamos y reintentamos
+  if (initialCount === 0) {
+    if (slider.dataset.waiting === "1") return;
+    slider.dataset.waiting = "1";
+
+    const mo = new MutationObserver(() => {
+      if (items().length > 0) {
+        mo.disconnect();
+        slider.dataset.waiting = "0";
+        slider.dataset.bound = "0"; // permitir bind real al reintentar
+        initReleaseSlider();
+      }
+    });
+
+    mo.observe(list, { childList: true });
+    return;
+  }
+
+  // Si hay 1 solo item, deshabilitamos y salimos
   if (initialCount === 1) {
     prevBtn && (prevBtn.disabled = true);
     nextBtn && (nextBtn.disabled = true);
     return;
   }
 
-  // Evitar doble binding (pero dejamos que el loop se regenere si cambió el contenido)
+  // Evitar doble binding
   if (slider.dataset.bound === "1") return;
   slider.dataset.bound = "1";
 
   let autoTimer = null;
+
+  // Respeta reduced motion (autoplay OFF si reduce)
   const AUTO_DELAY = prefersReducedMotion() ? 0 : 4800;
 
   const getStep = () => {
@@ -41,77 +72,87 @@ export function initReleaseSlider() {
     const a = els[0].getBoundingClientRect();
     const b = els[1].getBoundingClientRect();
     const gap = Math.max(0, Math.round(b.left - a.right));
-    return Math.round(a.width + gap);
+    const step = Math.round(a.width + gap);
+    return step > 0 ? step : Math.max(240, slider.clientWidth * 0.65);
   };
 
   const setupLoop = () => {
-    if (track.dataset.looped === "1") return;
+    if (list.dataset.looped === "1") return;
+
     const els = items();
-    if (els.length < 3) return;
+    if (els.length < 2) return;
 
-    const cloneCount = Math.min(4, els.length);
-    const head = els.slice(0, cloneCount);
-    const tail = els.slice(-cloneCount);
+    // Con pocos items (ej: 3), clonamos sets completos para que el loop sea real
+    const base = els.slice();
 
-    // Prepend tail clones
-    tail.forEach((el) => {
-      const c = el.cloneNode(true);
+    const cloneBlock = (node) => {
+      const c = node.cloneNode(true);
       c.setAttribute("data-clone", "1");
       c.setAttribute("aria-hidden", "true");
-      // clones no deben ser focusables
-      c.tabIndex = -1;
-      c.querySelectorAll?.("a,button,[tabindex]")?.forEach?.((n) => {
+      c.querySelectorAll?.("a,button,input,select,textarea,[tabindex]")?.forEach?.((n) => {
         try { n.setAttribute("tabindex", "-1"); } catch {}
       });
-      track.insertBefore(c, track.firstChild);
-    });
-    // Append head clones
-    head.forEach((el) => {
-      const c = el.cloneNode(true);
-      c.setAttribute("data-clone", "1");
-      c.setAttribute("aria-hidden", "true");
-      c.tabIndex = -1;
-      c.querySelectorAll?.("a,button,[tabindex]")?.forEach?.((n) => {
-        try { n.setAttribute("tabindex", "-1"); } catch {}
-      });
-      track.appendChild(c);
+      return c;
+    };
+
+    // Prepend 1 set completo (reverso)
+    base.slice().reverse().forEach((el) => {
+      list.insertBefore(cloneBlock(el), list.firstChild);
     });
 
-    track.dataset.looped = "1";
+    // Append 1 set completo
+    base.forEach((el) => {
+      list.appendChild(cloneBlock(el));
+    });
 
-    // Jump to first real item (after the prepended clones)
+    // Si todavía queda corto visualmente, agregamos sets extra al final (máximo 4)
+    let safety = 0;
+    while (scroller.scrollWidth < slider.clientWidth * 2.2 && safety < 4) {
+      base.forEach((el) => list.appendChild(cloneBlock(el)));
+      safety++;
+    }
+
+    list.dataset.looped = "1";
+
+    // Jump al primer item real (después de 1 set prepended)
     requestAnimationFrame(() => {
       const step = getStep();
-      track.scrollLeft = step * cloneCount;
+      scroller.scrollLeft = step * base.length;
     });
 
-    // Keep loop illusion on scroll
+    // Wrap infinito (sobre el scroller real)
     const onScroll = () => {
       const step = getStep();
-      const totalReal = els.length;
-      const cloneW = step * cloneCount;
-      const startReal = cloneW;
-      const endReal = cloneW + step * totalReal;
+      const totalReal = base.length;
 
-      // If we reach the cloned regions, reset without animation
-      if (track.scrollLeft <= startReal - step * 0.6) {
-        track.scrollLeft += step * totalReal;
-      } else if (track.scrollLeft >= endReal + step * 0.6) {
-        track.scrollLeft -= step * totalReal;
+      const startReal = step * totalReal;
+      const endReal = startReal + step * totalReal;
+
+      if (scroller.scrollLeft <= startReal - step * 0.6) {
+        scroller.scrollLeft += step * totalReal;
+      } else if (scroller.scrollLeft >= endReal + step * 0.6) {
+        scroller.scrollLeft -= step * totalReal;
       }
     };
 
-    track.addEventListener("scroll", onScroll, { passive: true });
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+
     window.addEventListener("resize", () => {
       const step = getStep();
-      track.scrollLeft = step * cloneCount;
+      scroller.scrollLeft = step * base.length;
     }, { passive: true });
   };
 
   const goBy = (dir) => {
     const step = getStep();
-    track.scrollBy({ left: dir * step, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+    scroller.scrollBy({
+      left: dir * step,
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
   };
+
+  // ✅ Autoplay robusto: solo avanza cuando hay overflow real
+  const hasOverflow = () => scroller.scrollWidth > scroller.clientWidth + 4;
 
   const stopAuto = () => {
     if (autoTimer) {
@@ -119,10 +160,37 @@ export function initReleaseSlider() {
       autoTimer = null;
     }
   };
+
+  const tick = () => {
+    // Si el CSS aún no armó overflow horizontal, no hay “movimiento visible”
+    if (!hasOverflow()) return;
+    goBy(1);
+  };
+
   const startAuto = () => {
     stopAuto();
+    if (AUTO_DELAY <= 0) return; // respeta reduced motion
+    autoTimer = setInterval(tick, AUTO_DELAY);
+  };
+
+  const ensureOverflowThenStart = () => {
     if (AUTO_DELAY <= 0) return;
-    autoTimer = setInterval(() => goBy(1), AUTO_DELAY);
+    if (hasOverflow()) {
+      startAuto();
+      return;
+    }
+    // Espera hasta que el layout cree overflow (CSS)
+    let tries = 0;
+    const maxTries = 180; // ~3s aprox
+    const rafCheck = () => {
+      tries++;
+      if (hasOverflow()) {
+        startAuto();
+        return;
+      }
+      if (tries < maxTries) requestAnimationFrame(rafCheck);
+    };
+    requestAnimationFrame(rafCheck);
   };
 
   prevBtn?.addEventListener("click", (e) => {
@@ -137,7 +205,7 @@ export function initReleaseSlider() {
     startAuto();
   });
 
-  // Que se mueva siempre: pausamos solo si el usuario interactúa (drag/click) o focus.
+  // Se mueve siempre: pausamos solo si el usuario interactúa de verdad
   slider.addEventListener("pointerdown", stopAuto);
   slider.addEventListener("pointerup", startAuto);
   slider.addEventListener("pointercancel", startAuto);
@@ -156,10 +224,9 @@ export function initReleaseSlider() {
     }
   });
 
-  // Inicialización diferida (por si Supabase renderiza un toque después)
   requestAnimationFrame(() => {
     setupLoop();
-    startAuto();
+    ensureOverflowThenStart(); // ✅ antes era startAuto()
   });
 }
 

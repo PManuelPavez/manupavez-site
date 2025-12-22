@@ -205,3 +205,75 @@
 }
 
 
+/* Pausa en hover (desktop) */
+@media (hover:hover) and (pointer:fine){
+  #musica .release-slider[data-marquee="true"] .release-slides[data-slider-track]:hover > [data-sb="releases"]{
+    animation-play-state: paused;
+  }
+}
+
+/* Reduced motion: no marquee */
+@media (prefers-reduced-motion: reduce){
+  #musica .release-slider[data-marquee="true"] .release-slides[data-slider-track] > [data-sb="releases"]{
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* =========================
+   FIX PRO: overflow real sin romper el slider JS
+   Scope: SOLO #musica
+   ========================= */
+
+/* Asegurá fila horizontal + scroll (sin !important agresivos) */
+#musica .release-slides > [data-sb="releases"]{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+#musica .release-slides > [data-sb="releases"]::-webkit-scrollbar{ display: none; }
+
+/* CLAVE: forzar overflow sin agrandar feo las cards:
+   reducimos el “área útil” del track (padding inline) en desktop */
+@media (min-width: 900px){
+  #musica .release-slides > [data-sb="releases"]{
+    padding-inline: 72px;         /* antes 18px: ahora 3 cards ya no entran “justo” */
+    scroll-padding-inline: 72px;
+  }
+
+  /* Metemos flechas adentro del panel (evita que se corten) */
+  #musica .release-nav.prev{ left: 12px; }
+  #musica .release-nav.next{ right: 12px; }
+}
+
+/* Mobile: swipe manda */
+@media (max-width: 640px){
+  #musica .release-slides > [data-sb="releases"]{
+    padding-inline: 14px;
+    scroll-padding-inline: 14px;
+  }
+}
+
+/* Item: asegurá que NO se achique (si se achica, no hay carrusel) */
+#musica .release-item{
+  flex: 0 0 clamp(220px, 28vw, 320px);
+}
+
+/* Focus visible accesible (tu CSS tiene outline:none, lo compensamos) */
+#musica .release-item:focus-within{
+  box-shadow: var(--mp-ring-strong);
+  border-color: color-mix(in oklab, var(--mp-accent-2) 18%, rgba(255,255,255,0.12));
+}
+
+/* Por si el link es el elemento focuseable */
+#musica .release-item a:focus-visible{
+  outline: none;
+}
