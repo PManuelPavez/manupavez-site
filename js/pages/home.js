@@ -1,143 +1,72 @@
 import { $ } from "../core/dom.js";
-import { prefersReducedMotion } from "../core/motion.js";
-import { hasSupabase, waitForSupabase } from "../data/supabaseClient.js";
+import { hasSupabase } from "../data/supabaseClient.js";
 import { getReleases, getLabels, getMedia } from "../data/content.js";
 import { renderReleases, renderLabels, renderMedia } from "../ui/renderers.js";
-import { initSliders } from "../features/slider.js";
-import { initReveal } from "../features/reveal.js";
+import { initReleaseSlider, initMediaSliders } from "../features/slider.js";
 import { bindReleaseModal } from "../features/releaseModal.js";
 
 export function initHome() {
-  // Hooks (DOM-driven)
-  const releasesRoot = document.querySelector('[data-sb="releases"]') || $("[data-sb-releases]");
-  const labelsTrack = document.querySelector('[data-sb="labels-track"]') || $("[data-sb-labels-track]");
+  const releasesRoot = $("[data-sb='releases']") || $("[data-sb-releases]");
+  const labelsTrack = $("[data-sb='labels-track']");
+  const videoRoot = $("[data-sb='media-video']");
+  const mixRoot = $("[data-sb='media-mix']");
 
-  // Estos suelen ser sliders con track adentro
-  const mixesRoot =
-    document.querySelector('[data-sb="media-mixes"]') ||
-    document.querySelector('[data-sb="media-mix"]') ||
-    $("[data-sb-media-mix]");
-
-  const videosRoot =
-    document.querySelector('[data-sb="media-videos"]') ||
-    document.querySelector('[data-sb="media-video"]') ||
-    $("[data-sb-media-video]");
-
-  if (!releasesRoot && !labelsTrack && !mixesRoot && !videosRoot) return;
+  // Si no hay nada de lo que hidratamos, salimos.
+  if (!releasesRoot && !labelsTrack && !videoRoot && !mixRoot) return;
 
   if (!hasSupabase()) {
-    // Por si el config se carga después (orden raro en el HTML)
-    waitForSupabase().then((sb) => {
-      if (!sb) return;
-      hydrate({ releasesRoot, labelsTrack, mixesRoot, videosRoot });
-    });
+    console.warn("[home] Supabase no configurado: usando contenido estático.");
     return;
   }
 
-  hydrate({ releasesRoot, labelsTrack, mixesRoot, videosRoot });
+  if (releasesRoot) hydrateReleases(releasesRoot);
+  if (labelsTrack) hydrateLabels(labelsTrack);
+  if (videoRoot) hydrateMedia(videoRoot, "videos");
+  if (mixRoot) hydrateMedia(mixRoot, "mixes");
 }
 
-async function hydrate({ releasesRoot, labelsTrack, mixesRoot, videosRoot }) {
-  const jobs = [];
+async function hydrateReleases(root) {
+  try {
+    root.setAttribute("data-loading", "true");
+    const releases = await getReleases();
+    renderReleases(root, releases);
 
-  // Releases (covers only + modal + marquee)
-  if (releasesRoot) {
-    jobs.push(
-      (async () => {
-        const raw = await getReleases();
-        const releases = (raw || []).map((r, idx) => ({
-          ...r,
-          __mp_id: String(r.id ?? r.slug ?? r.key ?? idx),
-        }));
+    // Modal de detalle (portada + links)
+    const byId = new Map();
+    releases.forEach((r, idx) => byId.set(String(r.id ?? r.slug ?? idx), r));
+    bindReleaseModal(root, (id) => byId.get(String(id)));
 
-        renderReleases(releasesRoot, releases, {
-          mode: releasesRoot.getAttribute("data-sb-mode") || "replace",
-        });
-
-        const byId = new Map(releases.map((r) => [String(r.__mp_id), r]));
-        bindReleaseModal(releasesRoot, (id) => byId.get(String(id)));
-
-        enableReleaseMarquee(releasesRoot);
-        const track = slider.querySelector("[data-sb='releases']") || slider.querySelector("[data-slider-track]");
-
-      })()
-    );
+    // Re-init del slider una vez que existen .release-slide
+    initReleaseSlider();
+  } catch (e) {
+    console.error("[home] releases hydrate error:", e);
+  } finally {
+    root.removeAttribute("data-loading");
   }
-
-  // Labels
-  if (labelsTrack) {
-    jobs.push(
-      (async () => {
-        const labels = await getLabels();
-        renderLabels(labelsTrack, labels || []);
-      })()
-    );
-  }
-
-  // Mixes
-  if (mixesRoot) {
-    jobs.push(
-      (async () => {
-        const mixes = await getMedia("mix");
-        renderMedia(mixesRoot, mixes || [], "mix");
-      })()
-    );
-  }
-
-  // Videos
-  if (videosRoot) {
-    jobs.push(
-      (async () => {
-        const videos = await getMedia("video");
-        renderMedia(videosRoot, videos || [], "video");
-      })()
-    );
-  }
-
-  const results = await Promise.allSettled(jobs);
-  results.forEach((r) => {
-    if (r.status === "rejected") console.warn("[home] hydrate section error:", r.reason);
-  });
-
-  // Re-init: ahora que hay DOM nuevo
-  initReveal();
-  initSliders();
 }
 
-function enableReleaseMarquee(releasesRoot) {
-  // Reduced motion => no marquee
-  if (prefersReducedMotion()) return;
+async function hydrateLabels(track) {
+  try {
+    track.setAttribute("data-loading", "true");
+    const labels = await getLabels();
+    renderLabels(track, labels);
+  } catch (e) {
+    console.error("[home] labels hydrate error:", e);
+  } finally {
+    track.removeAttribute("data-loading");
+  }
+}
 
-  const slider = releasesRoot.closest(".release-slider") || document.querySelector(".release-slider");
-  if (!slider) return;
-
-  // Track: si tenés un track explícito, mejor.
-  const track =
-    slider.querySelector("[data-slider-track]") ||
-    slider.querySelector(".release-track") ||
-    releasesRoot;
-
-  if (slider.dataset.marqueeReady === "true") return;
-
-  const children = Array.from(track.children);
-  if (children.length < 2) return;
-
-  const frag = document.createDocumentFragment();
-
-  children.forEach((child) => {
-    const clone = child.cloneNode(true);
-
-    // A11y: clones no deberían ser focusables ni “leídos”
-    clone.setAttribute("aria-hidden", "true");
-    clone.querySelectorAll("a,button,input,select,textarea,[tabindex]").forEach((el) => {
-      el.setAttribute("tabindex", "-1");
-    });
-
-    frag.appendChild(clone);
-  });
-
-  track.appendChild(frag);
-
-  slider.setAttribute("data-marquee", "true");
-  slider.dataset.marqueeReady = "true";
+async function hydrateMedia(root, kind) {
+  try {
+    root.setAttribute("data-loading", "true");
+    const items = await getMedia(kind);
+    renderMedia(root, items, kind === "mixes" ? "mix" : "video");
+    // Re-init sliders cuando entran embeds
+    initMediaSliders();
+  } catch (e) {
+    console.error("[home] media hydrate error:", kind, e);
+  } finally {
+    root.removeAttribute("data-loading");
+  }
 }

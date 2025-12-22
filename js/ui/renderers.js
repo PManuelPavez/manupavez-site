@@ -7,84 +7,53 @@ export function escapeHtml(s = "") {
     .replace(/'/g, "&#39;");
 }
 
-export function renderReleases(root, releases = [], { mode = "replace" } = {}) {
+export function renderReleases(root, releases = []) {
   if (!root) return;
-
-  if (mode === "replace") root.innerHTML = "";
   if (!releases.length) return;
 
-  const tpl = document.getElementById("tpl-release");
-  const frag = document.createDocumentFragment();
+  const primaryUrl = (r) => {
+    const direct = r.spotify_url || r.beatport_url || r.soundcloud_url;
+    if (direct) return String(direct);
 
-  releases.forEach((r, idx) => {
-    const id = String(r.__mp_id ?? r.id ?? r.slug ?? idx);
-    const primaryHref = pickPrimaryUrl(r) || "#";
-
-    if (tpl instanceof HTMLTemplateElement) {
-      const node = tpl.content.cloneNode(true);
-      const rootEl = node.firstElementChild || node.querySelector?.("*");
-
-      if (rootEl) {
-        rootEl.classList.add("release-slide");
-        if (idx === 0) rootEl.classList.add("active");
-      }
-
-      // Imagen / cover
-      const img = node.querySelector?.(".release-cover img") || node.querySelector?.("img");
-      if (img) {
-        img.src = r.cover_url || r.cover || r.image_url || "";
-        img.alt = (r.title || r.name) ? `Portada ${r.title || r.name}` : "Portada";
-        img.loading = "lazy";
-        img.decoding = "async";
-      }
-
-      // Texto (aunque el CSS lo oculte, queda para SEO/a11y)
-      const titleEl = node.querySelector?.(".release-title") || node.querySelector?.(".release-info h3") || node.querySelector?.("h3");
-      if (titleEl) titleEl.textContent = r.title || r.name || "";
-
-      const metaEl = node.querySelector?.(".release-meta") || node.querySelector?.("[data-release-subtitle]");
-      if (metaEl) metaEl.textContent = r.subtitle || r.type || "";
-
-      const storyEl = node.querySelector?.(".release-story") || node.querySelector?.("[data-release-story]");
-      if (storyEl) storyEl.textContent = r.story || r.description || "";
-
-      // Link principal (para Ctrl/⌘ click)
-      let a = node.querySelector?.(".release-link") || node.querySelector?.("a[href]");
-      if (!a) {
-        // Si el template no trae <a>, envolvemos el cover
-        const cover = node.querySelector?.(".release-cover") || img?.parentElement;
-        if (cover) {
-          a = document.createElement("a");
-          a.className = "release-link";
-          a.href = primaryHref;
-          a.appendChild(cover.cloneNode(true));
-          cover.replaceWith(a);
-        }
-      }
-      if (a) {
-        a.classList.add("release-link");
-        a.href = primaryHref;
-        a.setAttribute("data-release-id", id);
-      }
-
-      if (rootEl) rootEl.setAttribute("data-release-id", id);
-      frag.appendChild(node);
-      return;
+    let pu = r.platform_urls;
+    if (typeof pu === "string") {
+      try { pu = JSON.parse(pu); } catch { pu = null; }
     }
 
-    // Fallback sin template: cover-only
-    const article = document.createElement("article");
-    article.className = `release-slide ${idx === 0 ? "active" : ""}`;
-    article.setAttribute("data-release-id", id);
-    article.innerHTML = `
-      <a class="release-link" href="${escapeHtml(primaryHref)}" data-release-id="${escapeHtml(id)}">
-        <img src="${escapeHtml(r.cover_url || "")}" alt="${escapeHtml((r.title || r.name) ? `Portada ${r.title || r.name}` : "Portada")}" loading="lazy" decoding="async">
-      </a>
-    `;
-    frag.appendChild(article);
-  });
+    if (Array.isArray(pu)) return String(pu[0]?.url || "");
+    if (pu && typeof pu === "object") return String(Object.values(pu)[0] || "");
+    return "";
+  };
 
-  root.appendChild(frag);
+  root.innerHTML = releases
+    .map((r, idx) => {
+      const id = String(r.id ?? r.slug ?? idx);
+
+      const safeCover = escapeHtml(r.cover_url || "");
+      const title = escapeHtml(r.title || "Release");
+      const meta = escapeHtml(r.type || "");
+      const story = escapeHtml(r.story || "");
+
+      const href = escapeHtml(primaryUrl(r)) || "#";
+
+      // Nota: dejamos el body en DOM (para SEO/lectores), pero en home se puede ocultar por CSS.
+      return `
+        <article class="release-item mp-card" data-release-id="${id}" tabindex="0">
+          <a class="release-link" data-release-id="${id}" href="${href}" ${href === "#" ? 'aria-label="Abrir detalles del release"' : 'aria-label="Abrir detalles del release (Ctrl/⌘ click abre el link directo)"'}>
+            <div class="release-thumb">
+              ${safeCover ? `<img src="${safeCover}" alt="Portada ${title}" loading="lazy" decoding="async" draggable="false">` : ""}
+            </div>
+          </a>
+
+          <div class="release-body">
+            <h3 class="release-title">${title}</h3>
+            ${meta ? `<p class="release-meta">${meta}</p>` : ""}
+            ${story ? `<p class="release-story">${story}</p>` : ""}
+          </div>
+        </article>
+      `;
+    })
+    .join("");
 }
 
 export function renderLabels(track, items = []) {
@@ -105,77 +74,26 @@ export function renderLabels(track, items = []) {
 
 export function renderMedia(root, items = [], kind) {
   if (!root) return;
-
-  const target = root.querySelector?.("[data-slider-track]") || root;
-  target.innerHTML = "";
   if (!items.length) return;
 
-  const k0 = String(kind || "").toLowerCase();
-  const isMix = k0 === "mix" || k0 === "mixes";
-
-  target.innerHTML = items
+  root.innerHTML = items
     .map((m, idx) => {
-      const title = m.title || "";
-      const desc = m.description || "";
-
-      // Preferimos embed_html si viene sanitizado desde Supabase (view).
-      const html = m.embed_html && String(m.embed_html).includes("<iframe")
-        ? String(m.embed_html)
-        : null;
-
-      const url = String(m.embed_url || m.url || "");
-
-      const iframe = html
-        ? html
-        : isMix
-          ? `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${escapeHtml(url)}"></iframe>`
-          : `<iframe width="560" height="315" src="${escapeHtml(url)}" title="${escapeHtml(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+      const isMix = kind === "mix";
+      const iframe = isMix
+        ? `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${escapeHtml(m.embed_url)}"></iframe>`
+        : `<iframe width="560" height="315" src="${escapeHtml(m.embed_url)}" title="${escapeHtml(m.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
 
       return `
         <article class="media-slide ${idx === 0 ? "active" : ""}">
           <div class="media-embed ${isMix ? "mix" : ""}">${iframe}</div>
           <div class="media-caption">
-            <h4>${escapeHtml(title)}</h4>
-            <p>${escapeHtml(desc)}</p>
+            <h4>${escapeHtml(m.title)}</h4>
+            <p>${escapeHtml(m.description || "")}</p>
           </div>
         </article>
       `;
     })
     .join("");
-}
-
-function pickPrimaryUrl(release) {
-  const links = extractPlatformLinks(release);
-  return links[0]?.url || "";
-}
-
-function extractPlatformLinks(release) {
-  const out = [];
-  const add = (label, url) => {
-    if (!url) return;
-    const u = String(url).trim();
-    if (!/^https?:\/\//i.test(u)) return;
-    if (out.some((x) => x.url === u)) return;
-    out.push({ label, url: u });
-  };
-
-  let pu = release?.platform_urls;
-  if (typeof pu === "string") {
-    try { pu = JSON.parse(pu); } catch { pu = null; }
-  }
-  if (Array.isArray(pu)) {
-    for (const it of pu) add(it.label || it.platform || "Link", it.url);
-  } else if (pu && typeof pu === "object") {
-    for (const [k, v] of Object.entries(pu)) add(String(k), v);
-  }
-
-  add("Spotify", release.spotify_url || release.spotify);
-  add("Beatport", release.beatport_url || release.beatport);
-  add("SoundCloud", release.soundcloud_url || release.soundcloud);
-  add("YouTube", release.youtube_url || release.youtube);
-  add("Bandcamp", release.bandcamp_url || release.bandcamp);
-
-  return out;
 }
 
 export function renderPresskitGallery(slidesRoot, assets = []) {

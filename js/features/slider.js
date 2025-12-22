@@ -12,29 +12,106 @@ export function initReleaseSlider() {
   const slider = $("[data-slider='release']") || $(".release-slider");
   if (!slider) return;
 
-  // Modo marquee infinito (se activa desde pages/home.js)
-  if (slider.getAttribute("data-marquee") === "true") return;
-
-  const slides = Array.from(slider.querySelectorAll(".release-slide"));
+  const track = slider.querySelector("[data-sb='releases']") || slider.querySelector(".release-track");
   const prevBtn = $("[data-slider-prev]", slider) || slider.querySelector(".release-nav.prev");
   const nextBtn = $("[data-slider-next]", slider) || slider.querySelector(".release-nav.next");
+  if (!track) return;
 
-  if (slides.length < 2) {
-    slides[0]?.classList.add("active");
+  const items = () => Array.from(track.children).filter((el) => el && el.nodeType === 1);
+  const initialCount = items().length;
+  // Si todavía no hay contenido (Supabase), no bindeamos ni deshabilitamos (se re-intenta luego).
+  if (initialCount === 0) return;
+  // Si hay 1 solo item, deshabilitamos.
+  if (initialCount === 1) {
+    prevBtn && (prevBtn.disabled = true);
+    nextBtn && (nextBtn.disabled = true);
     return;
   }
 
-  let current = Math.max(0, slides.findIndex((s) => s.classList.contains("active")));
-  let autoTimer = null;
-  const AUTO_DELAY = prefersReducedMotion() ? 0 : 9000;
+  // Evitar doble binding (pero dejamos que el loop se regenere si cambió el contenido)
+  if (slider.dataset.bound === "1") return;
+  slider.dataset.bound = "1";
 
-  const showSlide = (index) => {
-    slides.forEach((s, i) => s.classList.toggle("active", i === index));
-    current = index;
+  let autoTimer = null;
+  const AUTO_DELAY = prefersReducedMotion() ? 0 : 4800;
+
+  const getStep = () => {
+    const els = items();
+    if (els.length < 2) return Math.max(240, slider.clientWidth * 0.65);
+    const a = els[0].getBoundingClientRect();
+    const b = els[1].getBoundingClientRect();
+    const gap = Math.max(0, Math.round(b.left - a.right));
+    return Math.round(a.width + gap);
   };
 
-  const goNext = () => showSlide((current + 1) % slides.length);
-  const goPrev = () => showSlide((current - 1 + slides.length) % slides.length);
+  const setupLoop = () => {
+    if (track.dataset.looped === "1") return;
+    const els = items();
+    if (els.length < 3) return;
+
+    const cloneCount = Math.min(4, els.length);
+    const head = els.slice(0, cloneCount);
+    const tail = els.slice(-cloneCount);
+
+    // Prepend tail clones
+    tail.forEach((el) => {
+      const c = el.cloneNode(true);
+      c.setAttribute("data-clone", "1");
+      c.setAttribute("aria-hidden", "true");
+      // clones no deben ser focusables
+      c.tabIndex = -1;
+      c.querySelectorAll?.("a,button,[tabindex]")?.forEach?.((n) => {
+        try { n.setAttribute("tabindex", "-1"); } catch {}
+      });
+      track.insertBefore(c, track.firstChild);
+    });
+    // Append head clones
+    head.forEach((el) => {
+      const c = el.cloneNode(true);
+      c.setAttribute("data-clone", "1");
+      c.setAttribute("aria-hidden", "true");
+      c.tabIndex = -1;
+      c.querySelectorAll?.("a,button,[tabindex]")?.forEach?.((n) => {
+        try { n.setAttribute("tabindex", "-1"); } catch {}
+      });
+      track.appendChild(c);
+    });
+
+    track.dataset.looped = "1";
+
+    // Jump to first real item (after the prepended clones)
+    requestAnimationFrame(() => {
+      const step = getStep();
+      track.scrollLeft = step * cloneCount;
+    });
+
+    // Keep loop illusion on scroll
+    const onScroll = () => {
+      const step = getStep();
+      const totalReal = els.length;
+      const cloneW = step * cloneCount;
+      const startReal = cloneW;
+      const endReal = cloneW + step * totalReal;
+
+      // If we reach the cloned regions, reset without animation
+      if (track.scrollLeft <= startReal - step * 0.6) {
+        track.scrollLeft += step * totalReal;
+      } else if (track.scrollLeft >= endReal + step * 0.6) {
+        track.scrollLeft -= step * totalReal;
+      }
+    };
+
+    track.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => {
+      const step = getStep();
+      track.scrollLeft = step * cloneCount;
+    }, { passive: true });
+  };
+
+  const goBy = (dir) => {
+    const step = getStep();
+    track.scrollBy({ left: dir * step, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  };
 
   const stopAuto = () => {
     if (autoTimer) {
@@ -42,42 +119,48 @@ export function initReleaseSlider() {
       autoTimer = null;
     }
   };
-
   const startAuto = () => {
     stopAuto();
     if (AUTO_DELAY <= 0) return;
-    autoTimer = setInterval(goNext, AUTO_DELAY);
+    autoTimer = setInterval(() => goBy(1), AUTO_DELAY);
   };
-
-  nextBtn?.addEventListener("click", (e) => {
-    e.preventDefault();
-    goNext();
-    startAuto();
-  });
 
   prevBtn?.addEventListener("click", (e) => {
     e.preventDefault();
-    goPrev();
+    goBy(-1);
     startAuto();
   });
 
-  slider.addEventListener("mouseenter", stopAuto);
-  slider.addEventListener("mouseleave", startAuto);
+  nextBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    goBy(1);
+    startAuto();
+  });
+
+  // Que se mueva siempre: pausamos solo si el usuario interactúa (drag/click) o focus.
+  slider.addEventListener("pointerdown", stopAuto);
+  slider.addEventListener("pointerup", startAuto);
+  slider.addEventListener("pointercancel", startAuto);
+  slider.addEventListener("focusin", stopAuto);
+  slider.addEventListener("focusout", startAuto);
 
   slider.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") {
       e.preventDefault();
-      goNext();
+      goBy(1);
       startAuto();
     } else if (e.key === "ArrowLeft") {
       e.preventDefault();
-      goPrev();
+      goBy(-1);
       startAuto();
     }
   });
 
-  showSlide(current);
-  startAuto();
+  // Inicialización diferida (por si Supabase renderiza un toque después)
+  requestAnimationFrame(() => {
+    setupLoop();
+    startAuto();
+  });
 }
 
 // --- Media sliders (Video + Mixes)

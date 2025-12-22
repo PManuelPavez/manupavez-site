@@ -1,13 +1,13 @@
 import { getFocusable } from "../core/dom.js";
 
 /**
- * Bindea clicks en .release-link dentro de `root` y abre un <dialog> con data del release.
- * - Ctrl/⌘ click: deja que el link abra normal (nueva pestaña si corresponde).
- * - Accesible: ESC, click afuera, botón cerrar, focus restore.
+ * Bindea modal de releases dentro de `root`.
+ * Requiere anchors con clase `.release-link` y `data-release-id`.
  */
 export function bindReleaseModal(root, getReleaseById) {
-  if (!root || root.dataset.releaseModalBound === "true") return;
-  root.dataset.releaseModalBound = "true";
+  if (!root) return;
+  if (root.dataset.releaseModalBound === "1") return;
+  root.dataset.releaseModalBound = "1";
 
   const dialogApi = ensureReleaseDialog();
 
@@ -15,15 +15,37 @@ export function bindReleaseModal(root, getReleaseById) {
     const a = e.target.closest(".release-link");
     if (!a || !root.contains(a)) return;
 
-    // No seas policía: si quieren Ctrl/⌘ click, que vuelen libres 🕊️
+    // Ctrl/⌘/Shift/Alt click = no seas policía
     if (isModifiedClick(e)) return;
 
-    const id = a.getAttribute("data-release-id") || a.closest("[data-release-id]")?.getAttribute("data-release-id");
-    const release = id ? getReleaseById(String(id)) : null;
+    const id =
+      a.getAttribute("data-release-id") ||
+      a.closest("[data-release-id]")?.getAttribute("data-release-id");
+
+    if (!id) return;
+    const release = getReleaseById?.(String(id));
     if (!release) return;
 
     e.preventDefault();
     dialogApi.open(release, a);
+  });
+
+  // Accesibilidad: Enter/Espacio sobre la card abre modal
+  root.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+
+    // Si estás parado en un control, dejalo vivir
+    if (e.target?.matches?.("a,button,input,select,textarea")) return;
+
+    const card = e.target.closest("[data-release-id]");
+    if (!card || !root.contains(card)) return;
+
+    const id = card.getAttribute("data-release-id");
+    const release = getReleaseById?.(String(id));
+    if (!release) return;
+
+    e.preventDefault();
+    dialogApi.open(release, card.querySelector(".release-link") || card);
   });
 }
 
@@ -33,105 +55,128 @@ function isModifiedClick(e) {
 
 function ensureReleaseDialog() {
   let dialog = document.querySelector("dialog[data-release-dialog]");
-  if (dialog) return makeApi(dialog);
+  if (!dialog) {
+    injectDialogStyles();
+    dialog = document.createElement("dialog");
+    dialog.setAttribute("data-release-dialog", "1");
+    dialog.className = "release-dialog";
+    dialog.innerHTML = `
+      <div class="release-dialog__panel" role="document">
+        <button type="button" class="release-dialog__close" data-release-close aria-label="Cerrar">✕</button>
 
-  dialog = document.createElement("dialog");
-  dialog.setAttribute("data-release-dialog", "true");
-  dialog.className = "release-dialog";
+        <div class="release-dialog__grid">
+          <figure class="release-dialog__cover">
+            <img data-release-cover alt="" loading="eager" decoding="async" />
+          </figure>
 
-  // Estructura mínima: default dialog UI funciona sin CSS.
-  dialog.innerHTML = `
-    <div class="release-dialog__inner">
-      <button type="button" class="release-dialog__close" data-release-close aria-label="Cerrar">✕</button>
+          <div class="release-dialog__content">
+            <header class="release-dialog__header">
+              <h3 class="release-dialog__title" data-release-title></h3>
+              <p class="release-dialog__subtitle" data-release-subtitle></p>
+            </header>
 
-      <figure class="release-dialog__figure">
-        <img data-release-cover alt="" loading="eager" decoding="async">
-      </figure>
+            <div class="release-dialog__story" data-release-story></div>
 
-      <header class="release-dialog__header">
-        <h2 data-release-title></h2>
-        <p data-release-subtitle></p>
-      </header>
+            <div class="release-dialog__links" data-release-links></div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(dialog);
+  }
 
-      <div class="release-dialog__story" data-release-story></div>
-
-      <div class="release-dialog__actions" data-release-actions></div>
-    </div>
-  `;
-
-  document.body.appendChild(dialog);
-  return makeApi(dialog);
-}
-
-function makeApi(dialog) {
   const closeBtn = dialog.querySelector("[data-release-close]");
-  const cover = dialog.querySelector("[data-release-cover]");
-  const title = dialog.querySelector("[data-release-title]");
-  const subtitle = dialog.querySelector("[data-release-subtitle]");
-  const story = dialog.querySelector("[data-release-story]");
-  const actions = dialog.querySelector("[data-release-actions]");
+  const coverImg = dialog.querySelector("[data-release-cover]");
+  const titleEl = dialog.querySelector("[data-release-title]");
+  const subtitleEl = dialog.querySelector("[data-release-subtitle]");
+  const storyEl = dialog.querySelector("[data-release-story]");
+  const linksEl = dialog.querySelector("[data-release-links]");
 
   let lastFocus = null;
   let untrap = () => {};
 
   const close = () => {
-    try { dialog.close(); } catch { dialog.removeAttribute("open"); }
+    try {
+      dialog.close();
+    } catch {
+      dialog.removeAttribute("open");
+    }
     untrap();
     if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
   };
 
-  const open = (release, openerEl) => {
-    // Si el browser no soporta <dialog>, degradamos sin drama:
+  const open = (release, opener) => {
+    // Fallback si <dialog> no existe
     if (typeof dialog.showModal !== "function") {
       const primary = pickPrimaryUrl(release);
       if (primary) window.open(primary, "_blank", "noopener");
       return;
     }
 
-    lastFocus = openerEl || document.activeElement;
+    lastFocus = opener || document.activeElement;
 
-    // Populate
-    const t = release.title || release.name || "Release";
-    const sub = release.subtitle || release.type || "";
-    const st = release.story || release.description || "";
+    const title = release.title || release.name || "Release";
+    const subtitle = release.subtitle || release.type || "";
+    const story = release.story || release.description || "";
 
-    const imgUrl = release.cover_url || release.cover || release.image_url || "";
-    cover.src = imgUrl;
-    cover.alt = t ? `Portada ${t}` : "Portada";
-    title.textContent = t;
-    subtitle.textContent = sub;
+    const cover = release.cover_url || release.cover || release.image_url || "";
+    coverImg.src = cover;
+    coverImg.alt = title ? `Portada ${title}` : "Portada";
 
-    // Story como párrafos (sin HTML injection)
-    story.innerHTML = "";
-    const parts = String(st).split("\n\n").map(s => s.trim()).filter(Boolean);
+    titleEl.textContent = title;
+
+    if (subtitle) {
+      subtitleEl.textContent = subtitle;
+      subtitleEl.style.display = "block";
+    } else {
+      subtitleEl.textContent = "";
+      subtitleEl.style.display = "none";
+    }
+
+    // Story a párrafos (sin HTML crudo)
+    storyEl.innerHTML = "";
+    const parts = String(story)
+      .split("\n\n")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
     if (parts.length) {
       for (const p of parts) {
         const el = document.createElement("p");
         el.textContent = p;
-        story.appendChild(el);
+        storyEl.appendChild(el);
       }
+      storyEl.style.display = "block";
+    } else {
+      storyEl.style.display = "none";
     }
 
-    // Actions
-    actions.innerHTML = "";
+    // Links
+    linksEl.innerHTML = "";
     const links = extractPlatformLinks(release);
-    for (const { label, url } of links) {
-      const a = document.createElement("a");
-      a.className = "mp-btn platform-btn";
-      a.textContent = label;
-      a.href = url;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      actions.appendChild(a);
+    if (links.length) {
+      for (const { label, url } of links) {
+        const a = document.createElement("a");
+        a.className = "mp-btn platform-btn";
+        a.href = url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = label;
+        linksEl.appendChild(a);
+      }
+    } else {
+      const hint = document.createElement("p");
+      hint.className = "muted";
+      hint.textContent = "No hay links cargados para este release todavía.";
+      linksEl.appendChild(hint);
     }
 
     dialog.showModal();
 
-    // Focus: al abrir va al botón cerrar
+    // Focus management
     closeBtn?.focus?.();
     untrap = trapFocus(dialog);
 
-    // Cerrar: botón
     closeBtn?.addEventListener("click", close, { once: true });
   };
 
@@ -141,12 +186,11 @@ function makeApi(dialog) {
     close();
   });
 
-  // Click afuera (backdrop)
+  // Click afuera
   dialog.addEventListener("click", (e) => {
     if (e.target === dialog) close();
   });
 
-  // Por si alguien cierra via dialog.close() externo
   dialog.addEventListener("close", () => {
     untrap();
     if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
@@ -155,10 +199,95 @@ function makeApi(dialog) {
   return { open, close };
 }
 
+function injectDialogStyles() {
+  if (document.getElementById("mp-release-dialog-styles")) return;
+  const style = document.createElement("style");
+  style.id = "mp-release-dialog-styles";
+  style.textContent = `
+    dialog.release-dialog {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      max-width: min(820px, calc(100vw - 32px));
+    }
+    dialog.release-dialog::backdrop {
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
+    }
+    .release-dialog__panel {
+      position: relative;
+      background: rgba(8,8,12,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.6);
+      padding: 18px;
+    }
+    .release-dialog__close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(0,0,0,.35);
+      color: #fff;
+      cursor: pointer;
+    }
+    .release-dialog__grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 680px) {
+      .release-dialog__grid { grid-template-columns: 1fr; }
+      .release-dialog__cover { max-width: 320px; margin: 0 auto; }
+    }
+    .release-dialog__cover {
+      margin: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #000;
+      aspect-ratio: 1 / 1;
+    }
+    .release-dialog__cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .release-dialog__title {
+      margin: 0 0 6px 0;
+      font-size: 1.05rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .release-dialog__subtitle {
+      margin: 0 0 10px 0;
+      opacity: .75;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: .78rem;
+    }
+    .release-dialog__story p {
+      margin: 0 0 10px 0;
+      opacity: .9;
+      line-height: 1.6;
+    }
+    .release-dialog__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function trapFocus(container) {
   const onKeydown = (e) => {
     if (e.key !== "Tab") return;
-
     const focusables = getFocusable(container);
     if (!focusables.length) return;
 
@@ -179,9 +308,6 @@ function trapFocus(container) {
 }
 
 function extractPlatformLinks(release) {
-  // Soporta:
-  // - platform_urls (obj, array, JSON string)
-  // - campos sueltos: spotify_url, beatport_url, soundcloud_url, youtube_url, bandcamp_url...
   const out = [];
 
   const add = (label, url) => {
@@ -192,10 +318,14 @@ function extractPlatformLinks(release) {
     out.push({ label, url: u });
   };
 
+  // 1) platform_urls (obj, array, JSON string)
   let pu = release.platform_urls;
-
   if (typeof pu === "string") {
-    try { pu = JSON.parse(pu); } catch { pu = null; }
+    try {
+      pu = JSON.parse(pu);
+    } catch {
+      pu = null;
+    }
   }
 
   if (Array.isArray(pu)) {
@@ -204,6 +334,7 @@ function extractPlatformLinks(release) {
     for (const [k, v] of Object.entries(pu)) add(prettyPlatform(k), v);
   }
 
+  // 2) campos sueltos (compat)
   add("Spotify", release.spotify_url || release.spotify);
   add("Beatport", release.beatport_url || release.beatport);
   add("SoundCloud", release.soundcloud_url || release.soundcloud);
@@ -220,10 +351,10 @@ function prettyPlatform(key) {
   if (k.includes("soundcloud")) return "SoundCloud";
   if (k.includes("youtube")) return "YouTube";
   if (k.includes("bandcamp")) return "Bandcamp";
-  return key;
+  return String(key);
 }
 
 function pickPrimaryUrl(release) {
   const links = extractPlatformLinks(release);
-  return links[0]?.url || "";
+  return links[0]?.url || release.spotify_url || release.beatport_url || release.soundcloud_url || "";
 }

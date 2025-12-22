@@ -186,32 +186,3 @@
     transform: none;
   }
 }
-@media (max-width: 640px){
-  /* neutraliza el panel viejo del wrapper para que no haya doble caja */
-  #musica .release-slider{
-    padding: 0;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    margin-bottom: 0;
-  }
-
-  #musica .release-slides [data-sb="releases"]{
-    gap: 12px;
-    padding: 14px;
-  }
-
-  #musica .release-card{
-    flex-basis: 78vw; /* más “slide” en mobile */
-  }
-}
-@media (max-width: 640px){
-  /* Carrusel cover-only: tamaños más “slide” */
-  #musica .release-slides [data-sb="releases"]{
-    gap: 12px;
-    padding: 14px;
-  }
-  #musica .release-card{
-    flex-basis: 74vw;
-  }
-}

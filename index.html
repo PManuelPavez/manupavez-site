@@ -41,9 +41,8 @@
   <link rel="stylesheet" href="css/responsive.css" />
 
   <!-- Scripts -->
-<script defer src="/js/supabase-config.js"></script>
+ <script defer src="/js/supabase-config.js"></script>
 <script type="module" src="/js/main.js"></script>
-
 </head>
 
 <body>
@@ -151,55 +150,43 @@
       </div>
     </section>
 
-   <section id="musica" class="section releases reveal" aria-labelledby="musica-title">
-  <div class="section-inner">
-    <header class="section-head">
-      <h2 id="musica-title" data-animate="heading">MÚSICA · DIARIOS</h2>
-      <p class="muted">
-        Algunos lanzamientos que ordenan etapas del camino. Portadas claras, pocas palabras
-        y links directos a donde tiene que sonar.
-      </p>
-    </header>
+    <section id="musica" class="section releases reveal" aria-labelledby="musica-title">
+      <div class="section-inner">
+        <header class="section-head">
+          <h2 id="musica-title" data-animate="heading">MÚSICA · DIARIOS</h2>
+          <p class="muted">
+            Algunos lanzamientos que ordenan etapas del camino. Portadas claras, pocas palabras
+            y links directos a donde tiene que sonar.
+          </p>
+        </header>
 
-    <!-- MICRO CAMBIO: data-slider + data-slider-prev/next + data-slider-track -->
-    <div class="release-slider" aria-label="Lanzamientos destacados" data-slider>
-      <button
-        class="release-nav prev"
-        type="button"
-        aria-label="Lanzamiento anterior"
-        data-slider-prev
-      >‹</button>
+        <div class="release-slider" aria-label="Lanzamientos destacados">
+          <button class="release-nav prev" type="button" aria-label="Lanzamiento anterior">‹</button>
 
-      <div class="release-slides" data-slider-track>
-        <div class="supabase-banner" data-supabase-banner hidden>
-          Configurá <code>js/supabase-config.js</code> (url + anonKey) para cargar releases desde Supabase.
+          <div class="release-slides">
+            <div class="supabase-banner" data-supabase-banner hidden>
+              Configurá <code>js/supabase-config.js</code> (url + anonKey) para cargar releases desde Supabase.
+            </div>
+
+            <!-- Render dinámico -->
+            <div data-sb="releases" aria-label="Listado de lanzamientos"></div>
+
+            <!-- Plantilla opcional para render -->
+            <template id="tpl-release">
+              <article class="release-card">
+                <a class="release-link" href="">
+                  <img class="release-cover" src="" alt="" loading="lazy" />
+                  <h3 class="release-title"></h3>
+                  <p class="release-meta"></p>
+                </a>
+              </article>
+            </template>
+          </div>
+
+          <button class="release-nav next" type="button" aria-label="Lanzamiento siguiente">›</button>
         </div>
-
-        <!-- Render dinámico -->
-        <div data-sb="releases" aria-label="Listado de lanzamientos"></div>
-
-        <!-- Plantilla opcional para render -->
-        <template id="tpl-release">
-          <article class="release-card">
-            <a class="release-link" href="">
-              <img class="release-cover" src="" alt="" loading="lazy" />
-              <h3 class="release-title"></h3>
-              <p class="release-meta"></p>
-            </a>
-          </article>
-        </template>
       </div>
-
-      <button
-        class="release-nav next"
-        type="button"
-        aria-label="Lanzamiento siguiente"
-        data-slider-next
-      >›</button>
-    </div>
-  </div>
-</section>
-
+    </section>
 
     <section id="sellos" class="section labels reveal section-centered" aria-labelledby="labels-title">
       <h2 id="labels-title" data-animate="heading">SELLOS &amp; SUPPORT</h2>

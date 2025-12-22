@@ -20,120 +20,139 @@
   opacity: 0.85;
 }
 
-/* Slider música */
+/* =================== Slider música (carousel) =================== */
 
-.release-slider {
+.release-slider{
   position: relative;
   margin-top: 26px;
-  max-width: 880px;
+  max-width: 1060px;
   margin-inline: auto;
 }
 
-.release-slides {
+.release-slides{
   position: relative;
-  min-height: 260px;
-}
-
-.release-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: translateX(24px);
-  pointer-events: none;
-  transition:
-    opacity 0.5s ease,
-    transform 0.5s ease;
-}
-
-.release-slide.active {
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto;
-}
-
-/* Card */
-
-.release-card {
+  overflow: hidden;
+  isolation: isolate;
   border-radius: 18px;
-  padding: 1.8rem;
-  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 55%),
-    rgba(5, 5, 9, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.75);
 }
 
-/* Layout portada + texto */
-
-.release-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
-  gap: 1.8rem;
-  align-items: center;
+/* Track dinámico (render desde Supabase) */
+.release-slides > [data-sb="releases"]{
+  display: flex;
+  gap: 18px;
+  padding: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 18px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.release-slides > [data-sb="releases"]::-webkit-scrollbar{ display:none; }
 
-.release-cover {
+/* Cards visibles (tamaño razonable para tener muchos releases) */
+.release-item{
+  flex: 0 0 clamp(220px, 28vw, 320px);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  padding: 14px;
   border-radius: 18px;
+  background: radial-gradient(circle at top left, rgba(255,255,255,.06), transparent 55%), rgba(5,5,9,.94);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 22px 40px rgba(0,0,0,.60);
+  outline: none;
+}
+
+.release-thumb{
+  position: relative;
+  border-radius: 14px;
   overflow: hidden;
   background: #000;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
-}
-
-.release-cover img {
-  width: 100%;
-  display: block;
-  border-radius: 14px;
-  object-fit: cover;
   aspect-ratio: 1 / 1;
 }
 
-.release-info h3 {
-  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  margin-bottom: 0.4rem;
+.release-thumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1);
+  transition: transform calc(220ms * var(--mp-motion-mult)) var(--mp-ease-groove);
 }
 
-.release-meta {
-  font-size: 0.8rem;
+.release-item:hover .release-thumb img{
+  transform: scale(1.03);
+}
+
+.release-body{
+  padding-top: 12px;
+}
+
+.release-title{
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0 0 6px 0;
+}
+
+.release-meta{
+  font-size: 0.75rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  opacity: 0.7;
-  margin-bottom: 0.9rem;
+  opacity: 0.72;
+  margin: 0 0 8px 0;
 }
 
-.release-story {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  margin-bottom: 1rem;
-  opacity: 0.9;
+/* Story queda “compacta”: 2 líneas como máximo (para que entren muchos releases) */
+.release-story{
+  font-size: 0.86rem;
+  line-height: 1.55;
+  opacity: 0.85;
   color: var(--color-text-muted);
+  margin: 0 0 10px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Tags */
-
-.release-tags {
+.release-tags{
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 1.2rem;
+  gap: 6px;
+  margin: 10px 0 0 0;
 }
 
-.release-tags span {
-  font-size: 0.75rem;
+.release-tags span{
+  font-size: 0.68rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding: 0.32rem 0.7rem;
+  padding: 0.26rem 0.56rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(12, 12, 18, 0.9);
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(12,12,18,.9);
 }
 
-/* Acciones */
-
-.release-actions {
+/* Acciones sobre la portada (estilo “platform chips”) */
+.release-actions{
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 8px;
+}
+
+.release-actions .mp-btn.platform-btn{
+  padding: 8px 9px;
+  border-radius: 999px;
+  background: rgba(5,5,9,.72);
+  border-color: rgba(255,255,255,.25);
+  box-shadow: 0 12px 26px rgba(0,0,0,.55);
+}
+
+.release-actions .platform-icon img{
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 /* Flechas slider música */
@@ -172,289 +191,17 @@
   border-color: #ffffff;
 }
 
-/* =========================
-   Releases v2 — scroll-snap carousel (CSS-only)
-   ========================= */
-
-#musica .release-slider{
-  max-width: 980px;
-  margin-inline: auto;
-}
-
-/* panel del carrusel */
-#musica .release-slides{
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  background:
-    radial-gradient(circle at 0 0, rgba(89, 198, 186, 0.08), transparent 60%),
-    rgba(5, 7, 17, 0.96);
-  box-shadow: var(--mp-shadow-1);
-  overflow: hidden;
-  position: relative;
-
-  /* fade edges */
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-}
-
-/* track real: el contenedor donde Supabase renderiza cards */
-#musica .release-slides [data-sb="releases"]{
-  display: flex;
-  gap: 18px;
-  padding: 18px;
-  align-items: stretch;
-
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: 18px;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
-}
-
-/* scrollbar discreta */
-#musica .release-slides [data-sb="releases"]::-webkit-scrollbar{ height: 10px; }
-#musica .release-slides [data-sb="releases"]::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,0.16);
-  border-radius: 999px;
-}
-#musica .release-slides [data-sb="releases"]::-webkit-scrollbar-track{
-  background: transparent;
-}
-
-/* card nueva: compacta, repetible, “pro” */
-#musica .release-card{
-  flex: 0 0 clamp(220px, 34vw, 320px);
-  scroll-snap-align: start;
-
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.06), transparent 55%),
-    rgba(5, 5, 9, 0.92);
-  box-shadow: var(--mp-shadow-1);
-  overflow: hidden;
-}
-
-#musica .release-link{
-  display: grid;
-  gap: 10px;
-  padding: 14px;
-  text-decoration: none;
-  color: inherit;
-}
-
-/* tu template usa <img class="release-cover"> (no wrapper). Lo estilamos bien. */
-#musica img.release-cover{
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 14px;
-  background: #000;
-  box-shadow: 0 14px 34px rgba(0,0,0,0.55);
-}
-
-/* tipografía más editorial, menos grito */
-#musica .release-title{
-  font-family: var(--font-primary);
-  font-size: 0.98rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  line-height: 1.25;
-}
-
-#musica .release-meta{
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0.75;
-}
-
-/* hover premium (solo en mouse real) */
-@media (hover:hover) and (pointer:fine){
-  #musica .release-card{
-    transition:
-      transform calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-groove),
-      box-shadow calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-out),
-      border-color calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-out);
+@media (max-width: 640px){
+  .release-slides > [data-sb="releases"]{
+    gap: 14px;
+    padding: 14px;
+    scroll-padding-inline: 14px;
   }
-  #musica .release-card:hover{
-    transform: translateY(-2px);
-    box-shadow: var(--mp-shadow-2);
-    border-color: color-mix(in oklab, var(--mp-accent-2) 18%, rgba(255,255,255,0.12));
+  .release-item{
+    flex-basis: clamp(210px, 78vw, 290px);
   }
+  .release-nav.prev{ left: 6px; }
+  .release-nav.next{ right: 6px; }
 }
 
-/* En touch, las flechas suelen ser decorativas si no hay JS: las bajamos */
-@media (pointer:coarse){
-  #musica .release-nav{ display: none; }
-}
-
-/* =========================
-   Modo “infinite” opcional (requiere track duplicado como labels)
-   Activación sugerida: <div class="release-slider" data-marquee="true">
-   ========================= */
-@keyframes mp-releases-marquee{
-  to{ transform: translateX(-50%); }
-}
-
-.release-slider[data-marquee="true"] .release-slides [data-sb="releases"]{
-  overflow: visible;
-  width: max-content;
-  scroll-snap-type: none;
-  animation: mp-releases-marquee 34s linear infinite;
-  will-change: transform;
-}
-
-@media (hover:hover) and (pointer:fine){
-  .release-slider[data-marquee="true"] .release-slides:hover [data-sb="releases"]{
-    animation-play-state: paused;
-  }
-}
-
-@media (prefers-reduced-motion: reduce){
-  .release-slider[data-marquee="true"] .release-slides [data-sb="releases"]{
-    animation: none !important;
-    transform: none !important;
-  }
-}
-/* =========================
-   RELEASES v3 — cover-only carousel
-   (override del sistema viejo .release-layout/.release-slide)
-   ========================= */
-
-#musica .release-slider{
-  max-width: 980px;
-  margin-inline: auto;
-}
-
-/* Caja del carrusel (coherente con labels) */
-#musica .release-slides{
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  background:
-    radial-gradient(circle at 0 0, rgba(89, 198, 186, 0.08), transparent 60%),
-    rgba(5, 7, 17, 0.98);
-  box-shadow: var(--mp-shadow-1);
-  overflow: hidden;
-  position: relative;
-
-  /* Fade lateral para “editorial vibe” */
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-}
-
-/* Track real donde Supabase renderiza */
-#musica .release-slides [data-sb="releases"]{
-  display: flex;
-  gap: 16px;
-  padding: 16px 18px;
-  align-items: stretch;
-
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: 18px;
-  touch-action: pan-x;
-}
-
-/* Scrollbar discreta */
-#musica .release-slides [data-sb="releases"]::-webkit-scrollbar{ height: 10px; }
-#musica .release-slides [data-sb="releases"]::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,0.16);
-  border-radius: 999px;
-}
-#musica .release-slides [data-sb="releases"]::-webkit-scrollbar-track{ background: transparent; }
-
-/* Cada item = sólo tapa (tile) */
-#musica .release-card{
-  flex: 0 0 clamp(180px, 28vw, 260px);
-  scroll-snap-align: start;
-
-  padding: 0; /* mata el padding viejo */
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(5, 5, 9, 0.92);
-  box-shadow: var(--mp-shadow-1);
-  overflow: hidden;
-}
-
-#musica .release-link{
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  padding: 0;
-}
-
-/* CLAVE: tu HTML usa img.release-cover (no wrapper) */
-#musica img.release-cover{
-  width: 100%;
-  display: block;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  object-position: center;
-  background: #000;
-
-  /* “portada premium” */
-  transform: translateZ(0);
-}
-
-/* Si quedan títulos/meta en DOM: los escondemos visualmente */
-#musica .release-title,
-#musica .release-meta{
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0,0,0,0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
-/* Hover pro (sólo mouse real) */
-@media (hover:hover) and (pointer:fine){
-  #musica .release-card{
-    transition:
-      transform calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-groove),
-      box-shadow calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-out),
-      border-color calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-out);
-  }
-  #musica .release-card:hover{
-    transform: translateY(-2px);
-    box-shadow: var(--mp-shadow-2);
-    border-color: color-mix(in oklab, var(--mp-accent-2) 18%, rgba(255,255,255,0.12));
-  }
-}
-
-/* Flechas: sin JS no sirven; en touch molestan */
-@media (pointer:coarse){
-  #musica .release-nav{ display: none; }
-}
-
-/* =========================
-   Infinite mode (requiere duplicar items con JS)
-   Activación: .release-slider[data-marquee="true"]
-   ========================= */
-@keyframes mp-releases-marquee{
-  to{ transform: translateX(-50%); }
-}
-.release-slider[data-marquee="true"] .release-slides [data-sb="releases"]{
-  overflow: visible;
-  width: max-content;
-  scroll-snap-type: none;
-  animation: mp-releases-marquee 34s linear infinite;
-  will-change: transform;
-}
-@media (hover:hover) and (pointer:fine){
-  .release-slider[data-marquee="true"] .release-slides:hover [data-sb="releases"]{
-    animation-play-state: paused;
-  }
-}
-@media (prefers-reduced-motion: reduce){
-  .release-slider[data-marquee="true"] .release-slides [data-sb="releases"]{
-    animation: none !important;
-    transform: none !important;
-  }
-}
 

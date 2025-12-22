@@ -1,173 +1,238 @@
-import { getSupabase, hasSupabase } from "./supabaseClient.js";
+import { supabase, hasSupabase } from "./supabaseClient.js";
 
 function ensure() {
-  const sb = getSupabase();
-  if (!hasSupabase() || !sb) throw new Error("Supabase no configurado");
-  return sb;
+  if (!hasSupabase() || !supabase) throw new Error("Supabase no configurado");
+  return supabase;
 }
 
-function isMissingRelation(error) {
-  const msg = String(error?.message || "").toLowerCase();
-  return msg.includes("schema cache") || msg.includes("not found") || msg.includes("could not find");
+function isMissingRelation(err) {
+  const msg = String(err?.message || "").toLowerCase();
+  return msg.includes("schema cache") || msg.includes("could not find") || msg.includes("not found");
 }
 
-function isMissingColumn(error, col) {
-  const msg = String(error?.message || "").toLowerCase();
-  return msg.includes("column") && msg.includes(String(col).toLowerCase()) && msg.includes("does not exist");
-}
-
-async function selectAllMaybeOrdered(sb, tableName, col = "order") {
-  // Intento 1: con order (si existe)
-  let res = await sb.from(tableName).select("*").order(col, { ascending: true });
-  if (!res.error) return res;
-
-  // Si el error es "la columna no existe", reintenta sin order.
-  if (isMissingColumn(res.error, col)) {
-    res = await sb.from(tableName).select("*");
-    return res;
-  }
-
-  return res;
-}
-
-async function fromAny(names, runner) {
+async function fromAny(sources, buildQuery) {
   const sb = ensure();
-  let last = null;
+  let lastErr = null;
 
-  for (const n of names) {
-    const { data, error } = await runner(sb, n);
-    if (!error) return data || [];
+  for (const name of sources) {
+    const { data, error } = await buildQuery(sb.from(name));
+    if (!error) return { data: data || [], source: name };
 
-    last = error;
-    if (isMissingRelation(error)) continue;
-    throw error;
+    lastErr = error;
+    if (isMissingRelation(error)) continue; // probá la siguiente fuente
+    throw error; // error real: RLS, 401, etc.
   }
-
-  throw last || new Error("No se encontró tabla/view válida");
+  throw lastErr || new Error("No se encontró ninguna fuente válida en Supabase");
 }
 
-// ---------- HOME ----------
-export async function getReleases() {
-  // En tu Supabase existen views v_home_releases y tabla home_releases.
-  return await fromAny(
-    ["v_home_releases", "home_releases", "releases"],
-    (sb, t) => selectAllMaybeOrdered(sb, t)
-  );
+const pick = (obj, keys) => keys.map(k => obj?.[k]).find(v => v !== null && v !== undefined && v !== "") ?? "";
+const toTags = (v) =>
+  Array.isArray(v) ? v :
+  (typeof v === "string" ? v.split(/[,\n]/).map(s => s.trim()).filter(Boolean) : []);
+
+function normalizeRelease(r) {
+  return {
+    id: r.id ?? r.slug ?? null,
+    title: pick(r, ["title", "name"]),
+    subtitle: pick(r, ["subtitle", "sub_title", "headline"]),
+    type: pick(r, ["type", "category"]),
+    story: pick(r, ["story", "description", "bio"]),
+    tags: toTags(r.tags ?? r.tag_list ?? r.taglist),
+    cover_url: pick(r, ["cover_url", "cover", "image_url", "img_url", "artwork_url"]),
+    // Links: soporta JSON (obj/array/string) en platform_urls
+    platform_urls: r.platform_urls ?? r.platforms ?? r.platform_links ?? null,
+    spotify_url: pick(r, ["spotify_url", "spotify", "spotify_link"]),
+    beatport_url: pick(r, ["beatport_url", "beatport", "beatport_link"]),
+    soundcloud_url: pick(r, ["soundcloud_url", "soundcloud", "soundcloud_link"]),
+    youtube_url: pick(r, ["youtube_url", "youtube", "youtube_link"]),
+    bandcamp_url: pick(r, ["bandcamp_url", "bandcamp", "bandcamp_link"]),
+    released_at: pick(r, ["released_at", "release_date", "date"]),
+    is_featured: r.is_featured ?? true,
+    order: r.order ?? r.sort ?? null,
+  };
 }
 
-export async function getLabels() {
-  return await fromAny(
-    ["v_labels_support", "labels_support", "labels"],
-    (sb, t) => selectAllMaybeOrdered(sb, t)
-  );
-}
-
-export async function getMedia(kind) {
-  const k0 = String(kind || "").toLowerCase();
-  const k = k0 === "mixes" ? "mix" : k0 === "videos" ? "video" : k0;
-
-  const view = k === "mix" ? "v_media_mixes" : k === "video" ? "v_media_videos" : null;
-  if (view) {
-    return await fromAny([view], (sb, t) => selectAllMaybeOrdered(sb, t));
-  }
-
-  // fallback genérico si usás una tabla media_items
-  return await fromAny(["media_items"], async (sb, t) => {
-    let res = await sb.from(t).select("*").eq("kind", k).order("order", { ascending: true });
-    if (!res.error) return res;
-    if (isMissingColumn(res.error, "order")) {
-      res = await sb.from(t).select("*").eq("kind", k);
-    }
-    return res;
-  });
-}
-
-// ---------- PRESSKIT ----------
-export async function getPresskitAssets() {
-  // v_presskit_download suele ser la forma más cómoda de exponer assets
-  return await fromAny(
-    ["v_presskit_download", "presskit_packages", "presskit_assets"],
-    (sb, t) => selectAllMaybeOrdered(sb, t)
-  );
-}
-
-export async function getPresskitPhotos() {
-  const assets = await getPresskitAssets();
-  return assets
-    .map((a) => {
-      const url = a.url || a.file_url || a.asset_url || a.download_url || "";
-      return {
-        title: a.title || a.name || "",
-        alt: a.alt || a.caption || a.title || a.name || "Manu Pavez",
-        url,
-        order: a.order ?? a.sort ?? null,
-      };
-    })
-    .filter((a) => isImageUrl(a.url));
-}
-
-function isImageUrl(url) {
+function looksLikeImageUrl(url) {
   const u = String(url || "").toLowerCase();
   return /\.(png|jpe?g|webp|gif|svg)(\?|#|$)/.test(u);
 }
 
-// ---------- CLINICAS ----------
-export async function getClinics() {
-  // Si la tabla se llama distinto en tu proyecto, agregala acá.
-  return await fromAny(
-    ["clinics", "clinicas", "clinic_items"],
-    (sb, t) => selectAllMaybeOrdered(sb, t)
-  );
+function normalizePresskitItem(r) {
+  const url = pick(r, ["url", "file_url", "image_url", "asset_url", "download_url"]);
+  return {
+    title: pick(r, ["title", "name", "label"]) || "Presskit",
+    url,
+    alt: pick(r, ["alt", "caption", "title"]) || "Presskit",
+    order: r.order ?? r.sort ?? null,
+  };
 }
 
-// ---------- BLOQUES DE TEXTO (BIO / PÁGINAS) ----------
-export async function getBlocks(keys = []) {
-  const uniq = Array.from(new Set(keys)).filter(Boolean);
-  if (!uniq.length) return new Map();
+// HOME releases (tu screenshot muestra v_home_releases / home_releases)
+export async function getReleases() {
+  const { data } = await fromAny(
+    ["v_home_releases", "home_releases", "releases"],
+    (q) => q.select("*")
+  );
 
-  const sb = ensure();
+  const items = data.map(normalizeRelease).filter(r => r.is_featured !== false);
 
-  // Intentamos primero con page_blocks (estructura típica)
-  // Si no existe, probamos blocks.
-  const sources = ["page_blocks", "blocks", "profiles"]; // profiles es “plan C” por si ahí tenés bio
-  let lastErr = null;
+  // orden flexible
+  items.sort((a, b) => {
+    const ao = a.order ?? 9999, bo = b.order ?? 9999;
+    if (ao !== bo) return ao - bo;
+    return String(b.released_at).localeCompare(String(a.released_at));
+  });
 
-  for (const src of sources) {
-    const { data, error } = await sb.from(src).select("*").in("key", uniq);
-    if (!error) {
-      // Normalizamos a Map(key -> content)
-      const map = new Map();
-      (data || []).forEach((r) => {
-        const k = r.key || r.slug || r.id;
-        const v = r.content || r.value || r.text || r.bio || r.description;
-        if (k != null && v != null) map.set(String(k), String(v));
-      });
-      return map;
-    }
+  return items;
+}
 
-    lastErr = error;
-    if (isMissingRelation(error)) continue;
-    throw error;
+// LINKS (tu screenshot muestra v_site_links / site_links)
+export async function getSiteLinks() {
+  const { data } = await fromAny(
+    ["v_site_links", "site_links"],
+    (q) => q.select("*")
+  );
+  return data;
+}
+
+// LABELS support (v_labels_support / labels_support)
+export async function getLabels() {
+  const { data } = await fromAny(
+    ["v_labels_support", "labels_support", "labels"],
+    (q) => q.select("*")
+  );
+  return data;
+}
+
+// MEDIA (tenés v_media_mixes / v_media_videos y también media_items)
+export async function getMedia(kind) {
+  const view =
+    kind === "mixes" ? "v_media_mixes" :
+    kind === "videos" ? "v_media_videos" :
+    null;
+
+  if (view) {
+    const { data } = await fromAny([view], (q) => q.select("*"));
+    return data;
   }
 
-  throw lastErr || new Error("No se encontró tabla de bloques");
+  const { data } = await fromAny(
+    ["media_items"],
+    (q) => q.select("*").eq("kind", kind)
+  );
+  return data;
 }
 
-// ---------- FORMS ----------
+// PRESSKIT: en tu Supabase veo presskit_packages + v_presskit_download (no veo presskit_photos)
+export async function getPresskitPhotos() {
+  const { data } = await fromAny(
+    ["presskit_photos", "presskit_packages", "v_presskit_download"],
+    (q) => q.select("*")
+  );
+
+  const items = data.map(normalizePresskitItem).filter(it => looksLikeImageUrl(it.url));
+  items.sort((a, b) => (a.order ?? 9999) - (b.order ?? 9999));
+  return items;
+}
+
+export async function getPresskitAssets() {
+  const { data } = await fromAny(
+    ["v_presskit_download", "presskit_packages", "presskit_assets"],
+    (q) => q.select("*")
+  );
+
+  const items = data.map(normalizePresskitItem).filter(it => it.url && !looksLikeImageUrl(it.url));
+  items.sort((a, b) => (a.order ?? 9999) - (b.order ?? 9999));
+  return items;
+}
+
+// Link principal de descarga del presskit (zip/pdf)
+export async function getPresskitDownload() {
+  const { data } = await fromAny(
+    ["v_presskit_download", "presskit_packages", "presskit_assets"],
+    (q) => q.select("*")
+  );
+
+  const first = data?.[0] || null;
+  if (!first) return "";
+  return pick(first, ["url", "download_url", "file_url", "asset_url", "zip_url", "pdf_url"]);
+}
+
+// Bloques de texto (bio, presskit bio, etc.)
+// Intenta primero page_blocks (si existe) y, si no, cae a profiles.
+export async function getBlocks(keys = []) {
+  const wanted = Array.isArray(keys) ? keys.filter(Boolean) : [];
+  if (!wanted.length) return new Map();
+
+  try {
+    const { data } = await fromAny(
+      ["page_blocks"],
+      (q) => q.select("key,content").in("key", wanted)
+    );
+
+    const map = new Map();
+    for (const row of data) map.set(row.key, row.content);
+    return map;
+  } catch (e) {
+    // fallback a profiles
+  }
+
+  try {
+    const { data } = await fromAny(
+      ["profiles"],
+      (q) => q.select("*").limit(1)
+    );
+
+    const row = data?.[0] || {};
+    const map = new Map();
+    for (const k of wanted) {
+      if (row[k] != null) map.set(k, row[k]);
+    }
+    return map;
+  } catch (e) {
+    return new Map();
+  }
+}
+
+// Navegación (desktop/mobile)
+export async function getNav(kind = "desktop") {
+  const source = kind === "mobile" ? ["v_nav_mobile", "nav_items"] : ["v_nav_desktop", "nav_items"];
+  const { data } = await fromAny(source, (q) => q.select("*"));
+  return data || [];
+}
+
+// Clínicas (si existe tabla). Si no existe, devuelve [].
+export async function getClinics() {
+  try {
+    const { data } = await fromAny(["clinics", "clinic_packages", "packages"], (q) => q.select("*"));
+    return data || [];
+  } catch (e) {
+    return [];
+  }
+}
+// --- Leads (contacto/booking) ---
+// Si no existe tabla o RLS bloquea, forms.js ya cae a mailto (plan B).
 export async function insertBookingLead(payload) {
   const sb = ensure();
 
   const candidates = ["booking_leads", "contact_leads", "leads", "contact_messages"];
-  let last = null;
+  let lastError = null;
 
   for (const table of candidates) {
     const { error } = await sb.from(table).insert([payload]);
     if (!error) return { table };
-    last = error;
 
-    if (isMissingRelation(error)) continue;
+    lastError = error;
+    const msg = String(error?.message || "").toLowerCase();
+
+    // tabla inexistente => probá la siguiente
+    if (msg.includes("schema cache") || msg.includes("not found") || msg.includes("could not find")) {
+      continue;
+    }
+
+    // cualquier otro error (RLS/401/validación) => lo reportamos para que forms haga fallback
     throw error;
   }
 
-  throw last || new Error("No hay tabla para guardar leads");
+  throw lastError || new Error("No hay tabla disponible para guardar leads");
 }

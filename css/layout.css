@@ -291,12 +291,3 @@
 /* --- Menú móvil: que NO se vea si está hidden --- */
 .mobile-nav{ display: none; }
 .mobile-nav:not([hidden]){ display: flex; }
-/* NAV UL: horizontal real */
-.nav{ flex: 1; justify-content: center; }
-.nav-list{
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin: 0;
-  padding: 0;
-}
