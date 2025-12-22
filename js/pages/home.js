@@ -58,6 +58,8 @@ async function hydrate({ releasesRoot, labelsTrack, mixesRoot, videosRoot }) {
         bindReleaseModal(releasesRoot, (id) => byId.get(String(id)));
 
         enableReleaseMarquee(releasesRoot);
+        const track = slider.querySelector("[data-sb='releases']") || slider.querySelector("[data-slider-track]");
+
       })()
     );
   }
