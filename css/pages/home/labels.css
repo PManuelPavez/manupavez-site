@@ -95,3 +95,16 @@
     border-color: rgba(89,198,186,0.35);
   }
 }
+#sellos .label-logo{
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+#sellos .label-item{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-radius: 999px;
+}

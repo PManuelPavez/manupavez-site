@@ -70,6 +70,7 @@ export function renderLabels(track, items = []) {
 
   // Duplicamos para loop infinito (marquee)
   track.innerHTML = items.map(pill).join("") + items.map(pill).join("");
+  
 }
 
 export function renderMedia(root, items = [], kind) {
@@ -93,6 +94,7 @@ export function renderMedia(root, items = [], kind) {
         </article>
       `;
     })
+    
     .join("");
 }
 
