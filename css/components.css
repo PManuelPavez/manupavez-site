@@ -723,3 +723,60 @@
 #en-vivo .media-slider .media-track{
   gap: 0 !important;
 }
+/* =========================
+   Release modal (<dialog>) — CENTRADO REAL
+   Pisa el <style> inyectado por releaseModal.js
+   ========================= */
+
+body dialog.release-dialog{
+  /* que el dialog sea el "overlay" full-screen que centra el panel */
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100svh !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+
+  display: grid !important;
+  place-items: center !important;
+}
+
+/* el panel es el que tiene tamaño + scroll */
+body dialog.release-dialog .release-dialog__panel{
+  width: min(920px, calc(100vw - 28px));
+  max-height: min(86svh, 760px);
+  overflow: auto;
+
+  /* suaviza scroll en iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* opcional: scrollbar discreta (si aparece) */
+body dialog.release-dialog .release-dialog__panel::-webkit-scrollbar{
+  width: 10px;
+}
+body dialog.release-dialog .release-dialog__panel::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.14);
+  border-radius: 999px;
+}
+
+/* mobile: un poco más de aire arriba/abajo */
+@media (max-width: 680px){
+  body dialog.release-dialog{
+    place-items: center;
+  }
+  body dialog.release-dialog .release-dialog__panel{
+    width: calc(100vw - 18px);
+    max-height: 88svh;
+  }
+}
+
+/* opcional (si tu navegador lo soporta): evita que el body “se mueva” atrás */
+@supports selector(body:has(dialog[open])) {
+  body:has(dialog.release-dialog[open]){ overflow: hidden; }
+}
+
