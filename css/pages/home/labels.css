@@ -57,3 +57,41 @@
 }
 
 
+/* Labels: logos en marquee */
+#sellos .labels-track{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  will-change: transform;
+}
+
+#sellos .label-item{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(5,7,17,0.55);
+  text-decoration: none;
+}
+
+#sellos .label-logo{
+  height: 28px;
+  width: auto;
+  display: block;
+  opacity: 0.78;
+  filter: grayscale(1) contrast(1.05);
+  transition: opacity 180ms ease, filter 180ms ease, transform 180ms ease;
+}
+
+@media (hover:hover) and (pointer:fine){
+  #sellos .label-item:hover .label-logo{
+    opacity: 1;
+    filter: none;
+    transform: translateY(-1px);
+  }
+  #sellos .label-item:hover{
+    border-color: rgba(89,198,186,0.35);
+  }
+}
