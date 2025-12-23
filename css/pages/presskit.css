@@ -391,3 +391,253 @@ body[data-page="presskit"] .support-logos .logo{
   body[data-page="presskit"] .press-highlights{ grid-area: highlights; }
   body[data-page="presskit"] .press-support{ grid-area: support; }
 }
+/* =========================
+   PRESSKIT — polish final (sin cambiar HTML)
+   Archivo: css/pages/presskit.css  (PEGAR AL FINAL)
+   ========================= */
+
+body[data-page="presskit"]{
+  --pk-card: rgba(5, 7, 17, 0.92);
+  --pk-border: rgba(255,255,255,0.12);
+  --pk-shadow-1: var(--mp-shadow-1, 0 22px 40px rgba(0,0,0,.55));
+  --pk-shadow-2: var(--mp-shadow-2, 0 28px 60px rgba(0,0,0,.65));
+  --pk-pad: clamp(18px, 2.4vw, 28px);
+  --pk-gap: clamp(14px, 2vw, 22px);
+  --pk-reading: 78ch;
+}
+
+/* Layout base */
+body[data-page="presskit"] main.presskit{
+  position: relative;
+  isolation: isolate;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 16px;
+  padding-top: calc(var(--header-height, 72px) + 28px);
+  padding-bottom: 84px;
+  display: grid;
+  gap: var(--pk-gap);
+}
+
+/* Fondo “dossier” suave */
+body[data-page="presskit"] main.presskit::before{
+  content: "";
+  position: absolute;
+  inset: -160px -90px auto;
+  height: 460px;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 18% 40%, rgba(89,198,186,0.18), transparent 56%),
+    radial-gradient(circle at 82% 20%, rgba(49,64,151,0.18), transparent 62%);
+  opacity: 0.9;
+}
+
+/* Cards */
+body[data-page="presskit"] main.presskit > section{
+  border-radius: 24px;
+  border: 1px solid color-mix(in oklab, var(--mp-border, rgba(255,255,255,.12)) 82%, white 10%);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), transparent 52%),
+    radial-gradient(circle at top left, rgba(89,198,186,0.08), transparent 60%),
+    var(--pk-card);
+  box-shadow: var(--pk-shadow-1);
+  overflow: hidden;
+}
+
+/* =========================
+   BIO (editorial)
+   ========================= */
+
+body[data-page="presskit"] .presskit .bio{
+  padding: var(--pk-pad);
+}
+
+body[data-page="presskit"] .presskit .bio h1{
+  margin: 0 0 10px;
+  letter-spacing: 0.28em;
+  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.2rem);
+  position: relative;
+}
+
+body[data-page="presskit"] .presskit .bio h1::after{
+  content: "";
+  display: block;
+  width: 180px;
+  height: 2px;
+  border-radius: 999px;
+  margin-top: 12px;
+  background: var(--mp-grad-accent, linear-gradient(90deg, rgba(89,198,186,.9), rgba(49,64,151,.9)));
+  opacity: 0.9;
+}
+
+body[data-page="presskit"] .presskit .bio h2{
+  margin: 18px 0 10px;
+  font-size: clamp(1.05rem, 0.95rem + 0.55vw, 1.25rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--mp-text, #fff) 92%, white 8%);
+}
+
+body[data-page="presskit"] .presskit .bio p{
+  margin: 12px 0 0;
+  max-width: var(--pk-reading);
+  line-height: 1.9;
+  color: var(--mp-muted, rgba(255,255,255,.82));
+  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.08rem);
+}
+
+/* hace que los nombres “pesen” sin gritar */
+body[data-page="presskit"] .presskit .bio p strong{
+  color: var(--mp-text, #fff);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* dropcap MUY sutil (solo el primer párrafo, primera letra) */
+@supports selector(p:first-of-type::first-letter){
+  body[data-page="presskit"] .presskit .bio p:first-of-type::first-letter{
+    float: left;
+    font-family: var(--mp-font-display, inherit);
+    font-weight: 700;
+    font-size: 2.7em;
+    line-height: 0.95;
+    padding: 0.06em 0.14em 0 0;
+    color: color-mix(in oklab, var(--mp-accent-2, #59c6ba) 70%, white 30%);
+    opacity: 0.9;
+  }
+}
+
+/* =========================
+   SLIDER (más premium)
+   ========================= */
+
+body[data-page="presskit"] .presskit .slider{
+  padding: 16px;
+}
+
+body[data-page="presskit"] .presskit .slides{
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(5, 7, 17, 0.96);
+  box-shadow: var(--pk-shadow-2);
+  min-height: 320px;
+}
+
+@supports (aspect-ratio: 16 / 9){
+  body[data-page="presskit"] .presskit .slides{ aspect-ratio: 16 / 9; }
+}
+
+/* overlay para “look pro” */
+body[data-page="presskit"] .presskit .slides::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 22% 0%, rgba(255,255,255,0.10), transparent 52%),
+    linear-gradient(180deg, rgba(0,0,0,0.18), transparent 38%);
+  opacity: 0.9;
+}
+
+body[data-page="presskit"] .presskit .slides img{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  opacity: 0;
+  transform: scale(1.02);
+  transition:
+    opacity calc(420ms * var(--mp-motion-mult, 1)) var(--mp-ease-out, ease),
+    transform calc(1200ms * var(--mp-motion-mult, 1)) var(--mp-ease-out, ease);
+}
+
+body[data-page="presskit"] .presskit .slides img.active{
+  opacity: 1;
+  transform: scale(1);
+}
+
+body[data-page="presskit"] .presskit .slider-dots{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 12px;
+}
+
+body[data-page="presskit"] .presskit .slider-dots .dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.14);
+  opacity: 0.85;
+  cursor: pointer;
+  transition:
+    transform calc(180ms * var(--mp-motion-mult, 1)) ease,
+    background-color calc(180ms * var(--mp-motion-mult, 1)) ease,
+    opacity calc(180ms * var(--mp-motion-mult, 1)) ease;
+}
+
+body[data-page="presskit"] .presskit .slider-dots .dot.is-active{
+  background: rgba(255,255,255,0.92);
+  opacity: 1;
+  transform: scale(1.14);
+}
+
+body[data-page="presskit"] .presskit .slider-dots .dot:focus-visible{
+  outline: none;
+  box-shadow: var(--mp-ring-strong, 0 0 0 3px rgba(89,198,186,.35));
+}
+
+/* =========================
+   DOWNLOAD (CTA)
+   ========================= */
+
+body[data-page="presskit"] .presskit .press-download{
+  padding: var(--pk-pad);
+  display: grid;
+  gap: 10px;
+}
+
+body[data-page="presskit"] .presskit .press-download::before{
+  content: "Assets listos para agencias";
+  font-size: var(--mp-text-sm, 0.85rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--mp-muted, rgba(255,255,255,.78)) 90%, white 10%);
+}
+
+body[data-page="presskit"] .presskit .press-download a.mp-btn{
+  width: 100%;
+  justify-content: center;
+  box-shadow: var(--pk-shadow-1);
+}
+
+body[data-page="presskit"] .presskit .press-download a.mp-btn:hover{
+  box-shadow: var(--pk-shadow-2);
+}
+
+/* Desktop layout: bio grande + columna derecha */
+@media (min-width: 980px){
+  body[data-page="presskit"] main.presskit{
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
+    align-items: start;
+  }
+
+  body[data-page="presskit"] .presskit .press-download{
+    position: sticky;
+    top: calc(var(--header-height, 72px) + 18px);
+  }
+}
+
+/* Reduced motion: sin zoom dramático */
+@media (prefers-reduced-motion: reduce){
+  body[data-page="presskit"] .presskit .slides img{
+    transition: opacity 1ms linear;
+    transform: none;
+  }
+}
