@@ -224,3 +224,38 @@ body{
   transition: transform calc(var(--mp-dur-2) * var(--mp-motion-mult)) var(--mp-ease-out);
 }
 .skip-link:focus-visible{ transform: translateY(0); box-shadow: var(--mp-ring-strong); }
+
+/* ===== Pro polish: type + anti horizontal overflow ===== */
+
+:root{
+  --mp-reading: 72ch; /* ancho cómodo de lectura */
+  --mp-text: clamp(16px, 0.95rem + 0.25vw, 18px);
+  --mp-h2: clamp(1.35rem, 1.05rem + 1.2vw, 2rem);
+  --mp-lead: clamp(1rem, 0.95rem + 0.35vw, 1.15rem);
+}
+
+/* Evita “la página se fue para la derecha” por iframes, tracks, 100vw, etc */
+html{ overflow-x: clip; }
+@supports not (overflow: clip){
+  html{ overflow-x: hidden; }
+}
+
+body{
+  font-size: var(--mp-text);
+  line-height: 1.65;
+}
+
+/* Medios nunca empujan el layout */
+img, video, iframe{
+  max-width: 100%;
+  height: auto;
+}
+
+/* Headings con jerarquía real */
+.section h2{
+  font-size: var(--mp-h2);
+}
+.section .muted{
+  font-size: var(--mp-lead);
+  line-height: 1.7;
+}

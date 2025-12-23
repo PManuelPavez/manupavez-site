@@ -96,4 +96,51 @@
   transform: translateY(-50%) translateY(-1px);
 }
 
+/* ===== EN VIVO: sliders (videos/mixes) robustos ===== */
+
+#en-vivo .media-slider{
+  position: relative;
+  overflow: hidden;  /* el viewport recorta */
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
+/* Track: no dejes que el gap rompa el cálculo ni ensanche la página */
+#en-vivo .media-track{
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0 !important;              /* clave: el slider JS suele medir por ancho exacto */
+  will-change: transform;
+}
+
+/* Cada “slide” ocupa el viewport */
+#en-vivo .media-track > *{
+  flex: 0 0 100%;
+  min-width: 100%;
+  box-sizing: border-box;
+  padding-inline: 14px;           /* el “gap” vive acá, no en el track */
+}
+
+/* Cualquier embed o media dentro: nunca empuja ancho */
+#en-vivo .media-track iframe,
+#en-vivo .media-track video,
+#en-vivo .media-track img{
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
+
+/* Si tus botones nav existen, que no tapen demasiado */
+#en-vivo .media-nav{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+#en-vivo .media-nav.prev{ left: 10px; }
+#en-vivo .media-nav.next{ right: 10px; }
+
+@media (pointer:coarse){
+  #en-vivo .media-nav{ display: none; } /* en mobile: swipe manda */
+}
 

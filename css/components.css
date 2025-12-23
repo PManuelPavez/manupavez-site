@@ -651,3 +651,75 @@
     transform: translateX(-50%) scaleX(1);
   }
 }
+/* ===== Layout editorial: centra títulos, alinea texto para leer mejor ===== */
+
+.section-head{
+  max-width: var(--mp-reading);
+  margin-inline: auto;
+}
+
+/* En desktop: título puede seguir centrado, pero el texto se lee mejor a la izquierda */
+@media (min-width: 820px){
+  .section-head .muted{
+    text-align: left;
+  }
+}
+
+/* Un toque menos de “espaciado militar” en textos chicos (se siente más caro) */
+.muted{
+  letter-spacing: 0.02em;
+}
+/* =========================
+   EN VIVO — FIX: el 2º slide no aparece (track se mueve al vacío)
+   Causa típica: slides no miden 100% o están position:absolute (apilados)
+   Scope: #en-vivo solamente
+   ========================= */
+
+#en-vivo .media-slider{
+  overflow: hidden;         /* viewport real */
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
+/* Track horizontal real */
+#en-vivo .media-slider .media-track{
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* MUY IMPORTANTE:
+   Cualquier hijo del track = 1 slide de ancho completo.
+   (funciona aunque tu render NO use .media-slide) */
+#en-vivo .media-slider .media-track > *{
+  flex: 0 0 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+
+  /* Evita “apilado absoluto” (esto es lo que genera el vacío al mover) */
+  position: relative !important;
+  inset: auto !important;
+}
+
+/* Si el layout interno usa grid, evitamos que empuje el ancho */
+#en-vivo .media-slider .media-track > * *{
+  min-width: 0;
+}
+
+/* Embeds nunca empujan el body */
+#en-vivo .media-slider iframe,
+#en-vivo .media-slider video,
+#en-vivo .media-slider img{
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
+
+/* Bonus: si tu JS usa gap en track en algún momento, lo anulamos
+   (gap rompe cálculos en sliders por translateX) */
+#en-vivo .media-slider .media-track{
+  gap: 0 !important;
+}
