@@ -724,14 +724,19 @@
   gap: 0 !important;
 }
 /* =========================
-   Release modal (<dialog>) — CENTRADO REAL
-   Pisa el <style> inyectado por releaseModal.js
+   Release modal (<dialog>) — centrado SIN romper interacción
    ========================= */
 
-body dialog.release-dialog{
-  /* que el dialog sea el "overlay" full-screen que centra el panel */
+/* Cuando NO está abierto, debe desaparecer sí o sí */
+dialog.release-dialog:not([open]){
+  display: none !important;
+}
+
+/* Solo cuando está abierto: overlay full-screen + centrado */
+dialog.release-dialog[open]{
   position: fixed !important;
   inset: 0 !important;
+
   width: 100vw !important;
   height: 100svh !important;
   max-width: none !important;
@@ -743,40 +748,29 @@ body dialog.release-dialog{
 
   display: grid !important;
   place-items: center !important;
+
+  /* importante: no bloquear clicks internos */
+  pointer-events: auto;
 }
 
-/* el panel es el que tiene tamaño + scroll */
-body dialog.release-dialog .release-dialog__panel{
+/* Backdrop real del dialog */
+dialog.release-dialog::backdrop{
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(10px);
+}
+
+/* El panel: tamaño y scroll interno */
+dialog.release-dialog[open] .release-dialog__panel{
   width: min(920px, calc(100vw - 28px));
   max-height: min(86svh, 760px);
   overflow: auto;
-
-  /* suaviza scroll en iOS */
   -webkit-overflow-scrolling: touch;
+  pointer-events: auto;
 }
 
-/* opcional: scrollbar discreta (si aparece) */
-body dialog.release-dialog .release-dialog__panel::-webkit-scrollbar{
-  width: 10px;
-}
-body dialog.release-dialog .release-dialog__panel::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,0.14);
-  border-radius: 999px;
-}
-
-/* mobile: un poco más de aire arriba/abajo */
 @media (max-width: 680px){
-  body dialog.release-dialog{
-    place-items: center;
-  }
-  body dialog.release-dialog .release-dialog__panel{
+  dialog.release-dialog[open] .release-dialog__panel{
     width: calc(100vw - 18px);
     max-height: 88svh;
   }
 }
-
-/* opcional (si tu navegador lo soporta): evita que el body “se mueva” atrás */
-@supports selector(body:has(dialog[open])) {
-  body:has(dialog.release-dialog[open]){ overflow: hidden; }
-}
-
