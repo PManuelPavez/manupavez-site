@@ -186,3 +186,59 @@
     transform: none;
   }
 }
+/* =========================
+   HEADER: FIX mobile (evitar nav desktop + burger juntos)
+   Archivo: css/responsive.css (PEGAR AL FINAL)
+   ========================= */
+
+@media (max-width: 980px){
+  /* 1) Apagar el nav desktop en mobile/tablet */
+  .site-header .nav{
+    display: none !important;
+  }
+
+  /* 2) Header compacto y estable */
+  .site-header .header-inner{
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-inline: 14px;
+  }
+
+  /* 3) Logo no debe empujar */
+  .site-header .brand{
+    flex: 0 0 auto;
+  }
+  .site-header .brand img{
+    height: 34px;
+    width: auto;
+    display: block;
+  }
+
+  /* 4) Acciones: solo burger (y si querés, ocultamos el CTA duplicado) */
+  .site-header .header-actions{
+    flex: 0 0 auto;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  /* Recomendado: en mobile el booking va dentro del menú */
+  .site-header .header-cta{
+    display: none !important;
+  }
+
+  .site-header .menu-toggle{
+    display: inline-flex !important;
+  }
+
+  /* 5) Respeta notch (si el header es fixed) */
+  .site-header.fixed{
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* 6) Panel mobile: ocupa ancho completo y queda “pegado” al header */
+  .site-header .mobile-nav{
+    width: 100%;
+    max-width: 100%;
+  }
+}

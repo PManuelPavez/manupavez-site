@@ -291,3 +291,71 @@
 /* --- Menú móvil: que NO se vea si está hidden --- */
 .mobile-nav{ display: none; }
 .mobile-nav:not([hidden]){ display: flex; }
+/* =========================
+   HEADER: normalización cross-pages (ul.nav-list y links sueltos)
+   Archivo: css/responsive.css (PEGAR AL FINAL)
+   ========================= */
+
+/* 1) Contenedor consistente */
+.site-header .header-inner{
+  width: min(1220px, 100%);
+  margin-inline: auto;
+  padding-inline: clamp(14px, 2vw, 22px);
+  gap: clamp(10px, 1.6vw, 18px);
+}
+
+/* 2) NAV como “fila única” SIEMPRE */
+.site-header .nav{
+  flex: 1 1 auto;
+  min-width: 0; /* clave: permite que flex calcule bien sin forzar wrap */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Caso A: nav con ul */
+.site-header .nav .nav-list{
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: clamp(12px, 1.55vw, 22px);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Caso B: nav con anchors directos */
+.site-header .nav{
+  gap: clamp(12px, 1.55vw, 22px);
+  flex-wrap: nowrap;
+}
+
+/* 3) Links: no se parten nunca (adiós “EN / VIVO”) */
+.site-header :where(.nav a, .nav .nav-list a){
+  white-space: nowrap;
+  word-break: keep-all;
+  line-height: 1;
+}
+
+/* 4) Si el ancho queda justo (laptop chica): scroll horizontal en vez de 2 líneas */
+@media (max-width: 1180px) and (min-width: 900px){
+  .site-header .nav{
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .site-header .nav::-webkit-scrollbar{ display: none; }
+
+  /* asegura que el contenido pueda ser más ancho que el contenedor */
+  .site-header .nav .nav-list{
+    width: max-content;
+  }
+}
+
+/* 5) Acciones (booking/burger) no deben encoger raro */
+.site-header .header-actions{
+  flex: 0 0 auto;
+  min-width: max-content;
+}

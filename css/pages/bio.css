@@ -1,1 +1,245 @@
-/* Bio page uses shared layout + components */
+/* =========================
+   BIO — editorial / premium
+   Scope: solo bio.html
+   ========================= */
+
+body[data-page="bio"] .story-page{
+  /* respeta header fijo */
+  padding-top: calc(var(--header-height) + clamp(26px, 4vw, 56px));
+  padding-bottom: clamp(56px, 8vw, 96px);
+  padding-inline: 16px;
+}
+
+/* Contenedor “prose” */
+body[data-page="bio"] .mp-story{
+  width: min(980px, 100%);
+  margin-inline: auto;
+
+  padding: clamp(18px, 2.6vw, 34px);
+  border-radius: 22px;
+
+  background:
+    radial-gradient(800px 420px at 10% 0%, rgba(89,198,186,.10), transparent 60%),
+    radial-gradient(760px 520px at 100% 120%, rgba(49,64,151,.14), transparent 62%),
+    rgba(5, 7, 17, 0.90);
+
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 18px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05) inset;
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* “línea frecuencia” arriba (decorativa, liviana) */
+body[data-page="bio"] .mp-story::before{
+  content:"";
+  position:absolute;
+  left: 18px;
+  right: 18px;
+  top: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(89,198,186,.55), rgba(49,64,151,.55), transparent);
+  opacity: .55;
+}
+
+/* Grano ultra sutil (sin imágenes externas) */
+body[data-page="bio"] .mp-story::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity: .06;
+  mix-blend-mode: overlay;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.06) 0 1px, transparent 1px 4px);
+}
+
+/* Título */
+body[data-page="bio"] .mp-story > h1{
+  position: relative;
+  z-index: 1;
+
+  font-size: clamp(1.6rem, 1.2rem + 2.2vw, 2.4rem);
+  letter-spacing: 0.22em;
+  margin-bottom: 18px;
+
+  /* un toque más “premium” */
+  text-shadow: 0 14px 40px rgba(0,0,0,.65);
+}
+
+/* Prosa: ancho de lectura + ritmo */
+body[data-page="bio"] .mp-story > p{
+  position: relative;
+  z-index: 1;
+
+  max-width: 72ch;
+  font-size: clamp(1.02rem, 0.98rem + 0.35vw, 1.14rem);
+  line-height: 1.85;
+  color: var(--mp-muted);
+  text-align: left;
+
+  margin: 0;
+}
+
+body[data-page="bio"] .mp-story > p + p{
+  margin-top: 14px;
+}
+
+/* Drop cap sutil (solo primer párrafo) */
+body[data-page="bio"] .mp-story > p:first-of-type::first-letter{
+  float: left;
+  font-family: var(--font-primary);
+  font-size: 3.2em;
+  line-height: 0.9;
+  margin: 0.06em 0.12em 0 0;
+  color: color-mix(in oklab, var(--mp-accent-2) 65%, white 35%);
+  text-shadow: 0 18px 50px rgba(0,0,0,.65);
+}
+
+/* Énfasis “caro” (sin subrayados infantiles) */
+body[data-page="bio"] .mp-story strong{
+  color: rgba(255,255,255,.95);
+  font-weight: 700;
+}
+
+body[data-page="bio"] .mp-story em{
+  color: color-mix(in oklab, var(--mp-accent-2) 70%, white 30%);
+  font-style: italic;
+}
+
+/* Links dentro del texto */
+body[data-page="bio"] .mp-story a{
+  color: color-mix(in oklab, var(--mp-accent-2) 85%, white 15%);
+  text-decoration-color: color-mix(in oklab, var(--mp-accent-2) 40%, transparent);
+  text-underline-offset: 0.18em;
+}
+
+body[data-page="bio"] .mp-story a:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--mp-accent-2) 25%, transparent);
+  border-radius: 10px;
+}
+
+/* Mobile: un pelín más compacto */
+@media (max-width: 640px){
+  body[data-page="bio"] .mp-story{
+    border-radius: 18px;
+    padding: 18px;
+  }
+  body[data-page="bio"] .mp-story::before{
+    left: 14px;
+    right: 14px;
+  }
+}
+
+/* Reduced motion: sin “nada raro” (ya es liviano, pero por las dudas) */
+@media (prefers-reduced-motion: reduce){
+  body[data-page="bio"] .mp-story *{
+    scroll-behavior: auto;
+  }
+}
+/* BIO: kill drop-cap (la E gigante) */
+body[data-page="bio"] .mp-story > p:first-of-type::first-letter{
+  float: none;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  color: inherit;
+  text-shadow: none;
+}
+/* =========================
+   BIO: títulos envolventes + motion sutil
+   ========================= */
+
+body[data-page="bio"] .mp-story > h1{
+  position: relative;
+  z-index: 1;
+  margin-bottom: 18px;
+
+  /* un poco más “envolvente” */
+  line-height: 1.05;
+  letter-spacing: 0.22em;
+
+  /* brillo suave sin blur pesado */
+  text-shadow:
+    0 16px 60px rgba(0,0,0,.75),
+    0 0 24px rgba(89,198,186,.10);
+}
+
+/* Halo detrás del título */
+body[data-page="bio"] .mp-story > h1::before{
+  content:"";
+  position:absolute;
+  left: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(520px, 72%);
+  height: 90px;
+  border-radius: 999px;
+
+  background:
+    radial-gradient(circle at 20% 50%, rgba(89,198,186,.26), transparent 60%),
+    radial-gradient(circle at 80% 50%, rgba(49,64,151,.22), transparent 62%);
+  opacity: .85;
+  filter: none;
+
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Subrayado “frecuencia” animado (liviano) */
+body[data-page="bio"] .mp-story > h1::after{
+  content:"";
+  display:block;
+  margin-top: 14px;
+  height: 1px;
+  width: min(420px, 78%);
+  background: linear-gradient(90deg, transparent, rgba(89,198,186,.65), rgba(49,64,151,.65), transparent);
+  opacity: .55;
+
+  transform-origin: left center;
+  transform: scaleX(.72);
+}
+
+/* Micro-movimiento solo en hover (desktop) para no marear en mobile */
+@media (hover:hover) and (pointer:fine){
+  body[data-page="bio"] .mp-story{
+    transition: transform 220ms cubic-bezier(.2,.8,.2,1);
+  }
+  body[data-page="bio"] .mp-story:hover{
+    transform: translateY(-1px);
+  }
+
+  body[data-page="bio"] .mp-story:hover > h1::after{
+    transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 260ms cubic-bezier(.2,.8,.2,1);
+    transform: scaleX(1);
+    opacity: .75;
+  }
+}
+
+/* Reduced motion: nada de movimientos */
+@media (prefers-reduced-motion: reduce){
+  body[data-page="bio"] .mp-story{
+    transition: none !important;
+    transform: none !important;
+  }
+  body[data-page="bio"] .mp-story > h1::after{
+    transition: none !important;
+  }
+}
+/* BIO: centrar título (solo H1) */
+body[data-page="bio"] .mp-story > h1{
+  text-align: center;
+}
+
+/* Halo y línea centrados */
+body[data-page="bio"] .mp-story > h1::before{
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+body[data-page="bio"] .mp-story > h1::after{
+  margin-inline: auto;
+  transform-origin: center;
+}
