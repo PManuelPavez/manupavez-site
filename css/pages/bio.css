@@ -243,3 +243,42 @@ body[data-page="bio"] .mp-story > h1::after{
   margin-inline: auto;
   transform-origin: center;
 }
+body[data-page="bio"] .mp-story > p + p{
+  margin-top: clamp(14px, 1.6vw, 20px);
+}
+
+@media (min-width: 980px){
+  body[data-page="bio"] .mp-story > p{
+    max-width: 76ch;
+  }
+}
+@media (min-width: 640px){
+  body[data-page="bio"] .mp-story > p:nth-of-type(2n){
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+}
+body[data-page="bio"] .mp-story{
+  background:
+    radial-gradient(800px 420px at 10% 0%, rgba(89,198,186,.10), transparent 60%),
+    radial-gradient(760px 520px at 100% 120%, rgba(49,64,151,.14), transparent 62%),
+    rgba(3, 5, 12, 0.92);
+}
+
+body[data-page="bio"] .mp-story > p{
+  color: rgba(233, 238, 245, 0.86);
+}
+body[data-page="bio"] .mp-story > p:has(q),
+body[data-page="bio"] .mp-story > p:has(quote){
+  border-left: 2px solid rgba(89,198,186,.35);
+  padding-left: 14px;
+}
+body[data-page="bio"] .mp-story img{
+  margin-block: 18px;
+}
+
+@media (min-width: 980px){
+  body[data-page="bio"] .mp-story img{
+    margin-block: 22px;
+  }
+}
