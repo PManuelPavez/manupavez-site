@@ -24,6 +24,7 @@
   <meta name="twitter:title" content="GROOVIN Producciones — 2026" />
   <meta name="twitter:description" content="17/01/26 — Pergamino — Open Air — 23:00 hs to end." />
   <meta name="twitter:image" content="https://tudominio.com/img/groovin2026.png" />
+<meta http-equiv="refresh" content="30;url=https://www.instagram.com/groovin_producciones/">
 
   <style>
     html, body { height: 100%; }
@@ -189,6 +190,127 @@ body.flyer-page figure > a:focus-visible{
     transform: none;
   }
 }
+/* =========================
+   IG CTA — pequeño y debajo del flyer
+   ========================= */
+
+body.flyer-page main{
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+}
+
+/* Botón compacto */
+body.flyer-page .ig-cta{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 9px 12px;
+  border-radius: 999px;
+
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  line-height: 1;
+
+  color: rgba(255,255,255,0.92);
+  background: rgba(5, 7, 17, 0.62);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.55);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  transform: translateZ(0);
+  transition: transform 180ms cubic-bezier(.2,.8,.2,1), background-color 180ms cubic-bezier(.2,.8,.2,1);
+}
+
+/* Indicador mini (sin assets) */
+body.flyer-page .ig-cta::before{
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 2.5px;
+  background: linear-gradient(135deg, rgba(89,198,186,0.95), rgba(49,64,151,0.95));
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.16);
+}
+
+@media (hover:hover) and (pointer:fine){
+  body.flyer-page .ig-cta:hover{
+    transform: translateY(-1px);
+    background: rgba(5, 7, 17, 0.74);
+  }
+}
+
+body.flyer-page .ig-cta:active{ transform: translateY(0); }
+
+body.flyer-page .ig-cta:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(89,198,186,0.32), 0 12px 28px rgba(0,0,0,0.55);
+}
+
+@media (prefers-reduced-motion: reduce){
+  body.flyer-page .ig-cta{ transition: none; }
+}
+/* =========================
+   FIX: mostrar CTA debajo + layout correcto
+   (pegá al FINAL del <style>)
+   ========================= */
+
+body.flyer-page{
+  /* que el layout tenga espacio real para CTA */
+  padding:
+    max(16px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+}
+
+/* main: 2 filas -> flyer (flexible) + botón (auto) */
+body.flyer-page main{
+  height: calc(100svh - (max(16px, env(safe-area-inset-top)) + max(16px, env(safe-area-inset-bottom))));
+  width: min(980px, 100%);
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: center;
+  align-items: center;
+  gap: 12px;
+}
+
+/* figure ya NO ocupa 100% por obligación: ocupa la fila 1 */
+body.flyer-page figure{
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+/* el link del flyer sí puede ocupar la fila entera */
+body.flyer-page figure > a{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* la imagen recuerda: siempre completa */
+body.flyer-page figure img{
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* CTA: cancelar el a{height:100%} global */
+body.flyer-page .ig-cta{
+  width: auto !important;
+  height: auto !important;
+  justify-self: center;
+  margin: 0;
+}
 
   </style>
 </head>
@@ -213,6 +335,16 @@ body.flyer-page figure > a:focus-visible{
         Evento Open Air en Pergamino el 17/01/26, desde 23:00. Artistas: Andres Zacco, Inverso, Ovidio, Mariano Sisti.
       </figcaption>
     </figure>
+      <a class="ig-cta" href="https://www.instagram.com/groovin_producciones/" target="_blank" rel="noopener">
+  Seguir en Instagram
+</a>
+
   </main>
+  <script>
+  setTimeout(() => {
+    location.href = "https://www.instagram.com/groovin_producciones/";
+  }, 30000);
+</script>
+
 </body>
 </html>
