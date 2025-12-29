@@ -1,85 +1,415 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-AR">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+
   <title>Clínicas — Manu Pavez</title>
-  <meta name="description" content="Clínicas y mentorías: Ableton, producción, mix, y flujo de trabajo." />
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages/clinicas.css">
-  <link rel="stylesheet" href="css/responsive.css">
+  <meta name="description" content="Clínicas y mentorías: producción, DJing, flujo de trabajo, criterio y narrativa musical. Paquetes y consulta." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#050711" />
+  <meta name="author" content="Manu Pavez" />
+
+  <link rel="canonical" href="https://manupavez.com/clinicas.html" />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Manu Pavez" />
+  <meta property="og:title" content="Clínicas — Manu Pavez" />
+  <meta property="og:description" content="Mentorías para productores y DJs: criterio, narrativa y flujo de trabajo." />
+  <meta property="og:url" content="https://manupavez.com/clinicas.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:image" content="https://manupavez.com/logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Clínicas — Manu Pavez" />
+  <meta name="twitter:description" content="Mentorías para productores y DJs: criterio, narrativa y flujo de trabajo." />
+  <meta name="twitter:image" content="https://manupavez.com/logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages/clinicas.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+
+  <!-- Scripts -->
   <script defer src="js/supabase-config.js"></script>
   <script type="module" src="js/main.js"></script>
+
+  <!-- Structured Data: Service (suave, estable) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Clínicas y mentorías — Manu Pavez",
+    "description": "Mentorías para productores y DJs: criterio, narrativa, workflow y revisión de material real.",
+    "provider": {
+      "@type": "Person",
+      "name": "Manu Pavez",
+      "url": "https://manupavez.com/"
+    },
+    "areaServed": "AR",
+    "serviceType": "Mentoría musical"
+  }
+  </script>
 </head>
 
 <body data-page="clinicas">
-  <header class="site-header fixed" role="banner">
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+  <header class="site-header fixed">
     <div class="header-inner">
       <a class="brand" href="index.html#inicio" aria-label="Ir al inicio">
-        <img src="logos/CUBO BLANCO MP.png" alt="Manu Pavez" onerror="this.style.display='none'" />
+        <img src="logos/CUBO BLANCO MP.png" alt="Logo de Manu Pavez" />
       </a>
 
-      <nav class="nav" role="navigation" aria-label="Navegación principal">
-        <a href="index.html#inicio">INICIO</a>
-        <a href="index.html#musica">MÚSICA</a>
-        <a href="index.html#sellos">SELLOS</a>
-        <a href="index.html#en-vivo">EN VIVO</a>
-        <a href="index.html#lab">FREQUENCY LAB</a>
-        <a href="clinicas.html" class="is-active">CLÍNICAS</a>
-        <a href="bio.html">SOBRE MANU</a>
-        <a href="presskit.html">PRESSKIT</a>
-        <a href="index.html#booking" class="cta-book">BOOKING</a>
+      <nav class="nav" aria-label="Navegación principal">
+        <ul class="nav-list">
+          <li><a href="index.html#inicio">INICIO</a></li>
+          <li><a href="index.html#musica">MÚSICA</a></li>
+          <li><a href="index.html#sellos">SELLOS</a></li>
+          <li><a href="index.html#en-vivo">EN VIVO</a></li>
+          <li><a href="index.html#lab">FREQUENCY LAB</a></li>
+
+          <!-- ✅ Dropdown de Clínicas en el header -->
+          <li class="nav-item nav-item--dropdown">
+            <details class="nav-dropdown" data-nav-dropdown>
+              <summary class="nav-link is-active">CLÍNICAS</summary>
+
+              <ul class="nav-submenu" aria-label="Secciones de Clínicas">
+                <li><a href="clinicas.html" aria-current="page">Ver página</a></li>
+                <li><a href="clinicas.html#paquetes">Paquetes</a></li>
+                <li><a href="clinicas.html#para-quien">Para quién</a></li>
+                <li><a href="clinicas.html#que-trabajamos">Qué trabajamos</a></li>
+                <li><a href="clinicas.html#como-funciona">Cómo funciona</a></li>
+                <li><a href="clinicas.html#requisitos">Requisitos</a></li>
+                <li><a href="clinicas.html#faq">FAQ</a></li>
+                <li><a href="clinicas.html#reservar">Reservar</a></li>
+              </ul>
+            </details>
+          </li>
+
+          <li><a href="bio.html">SOBRE MANU</a></li>
+          <li><a href="presskit.html">PRESSKIT</a></li>
+          <li><a href="index.html#booking" class="cta-book">BOOKING</a></li>
+        </ul>
       </nav>
 
       <div class="header-actions">
         <a href="index.html#booking" class="header-cta">BOOKING</a>
-        <button class="menu-toggle" data-nav-toggle aria-controls="mobile-nav" aria-expanded="false" aria-label="Abrir menú móvil" type="button">
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-controls="mobile-nav"
+          aria-expanded="false"
+          aria-label="Abrir menú móvil"
+          data-nav-toggle
+        >
           <span class="burger" aria-hidden="true"></span>
         </button>
       </div>
     </div>
 
-    <nav id="mobile-nav" class="mobile-nav" data-nav-panel hidden aria-label="Menú móvil">
-      <a href="index.html#inicio">INICIO</a>
-      <a href="index.html#musica">MÚSICA</a>
-      <a href="index.html#sellos">SELLOS</a>
-      <a href="index.html#en-vivo">EN VIVO</a>
-      <a href="index.html#lab">FREQUENCY LAB</a>
-      <a href="clinicas.html">CLÍNICAS</a>
-      <a href="bio.html">SOBRE MANU</a>
-      <a href="presskit.html">PRESSKIT</a>
-      <a href="index.html#booking">BOOKING</a>
-      <a href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Clínicas" class="mobile-book">MAIL DIRECTO</a>
+    <nav id="mobile-nav" class="mobile-nav" hidden aria-label="Menú móvil" data-nav-panel>
+      <ul class="mobile-nav-list">
+        <li><a href="index.html#inicio">INICIO</a></li>
+        <li><a href="index.html#musica">MÚSICA</a></li>
+        <li><a href="index.html#sellos">SELLOS</a></li>
+        <li><a href="index.html#en-vivo">EN VIVO</a></li>
+        <li><a href="index.html#lab">FREQUENCY LAB</a></li>
+
+        <!-- ✅ Dropdown de Clínicas en mobile -->
+        <li class="mobile-nav-item mobile-nav-item--dropdown">
+          <details class="mobile-dropdown" data-mobile-dropdown>
+            <summary>CLÍNICAS</summary>
+            <ul aria-label="Secciones de Clínicas">
+              <li><a href="clinicas.html" aria-current="page">Ver página</a></li>
+              <li><a href="clinicas.html#paquetes">Paquetes</a></li>
+              <li><a href="clinicas.html#para-quien">Para quién</a></li>
+              <li><a href="clinicas.html#que-trabajamos">Qué trabajamos</a></li>
+              <li><a href="clinicas.html#como-funciona">Cómo funciona</a></li>
+              <li><a href="clinicas.html#requisitos">Requisitos</a></li>
+              <li><a href="clinicas.html#faq">FAQ</a></li>
+              <li><a href="clinicas.html#reservar">Reservar</a></li>
+            </ul>
+          </details>
+        </li>
+
+        <li><a href="bio.html">SOBRE MANU</a></li>
+        <li><a href="presskit.html">PRESSKIT</a></li>
+        <li><a href="index.html#booking">BOOKING</a></li>
+        <li>
+          <a href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Cl%C3%ADnicas" class="mobile-book">
+            MAIL DIRECTO
+          </a>
+        </li>
+      </ul>
     </nav>
+
+    <noscript>
+      <nav class="mobile-nav" aria-label="Menú (sin JavaScript)">
+        <ul class="mobile-nav-list">
+          <li><a href="index.html#inicio">INICIO</a></li>
+          <li><a href="index.html#musica">MÚSICA</a></li>
+          <li><a href="index.html#sellos">SELLOS</a></li>
+          <li><a href="index.html#en-vivo">EN VIVO</a></li>
+          <li><a href="index.html#lab">FREQUENCY LAB</a></li>
+          <li><a href="clinicas.html" aria-current="page">CLÍNICAS</a></li>
+          <li><a href="bio.html">SOBRE MANU</a></li>
+          <li><a href="presskit.html">PRESSKIT</a></li>
+          <li><a href="index.html#booking">BOOKING</a></li>
+        </ul>
+      </nav>
+    </noscript>
   </header>
 
-  <main class="section section-centered reveal" style="padding-top: 120px;">
-    <div class="section-inner" style="max-width: 980px; margin: 0 auto;">
-      <header class="section-head">
-        <h1 data-animate="heading">CLÍNICAS</h1>
-        <p class="muted">Contenido gestionado desde Supabase: paquetes, temario, precios, links y CTA.</p>
-      </header>
+  <main id="main-content" class="page page-clinicas" tabindex="-1">
+    <!-- Breadcrumb -->
+    <nav class="section" aria-label="Migas de pan">
+      <p class="muted">
+        <a href="index.html#inicio">Inicio</a> <span aria-hidden="true">/</span> <span>Clínicas</span>
+      </p>
+    </nav>
 
-      <div class="supabase-banner" data-supabase-banner hidden>
-        Configurá <code>js/supabase-config.js</code> (url + anonKey) para cargar clínicas desde Supabase.
+    <!-- Hero -->
+    <header class="section section-centered reveal" aria-labelledby="clinicas-title">
+      <h1 id="clinicas-title">CLÍNICAS</h1>
+      <p class="muted">
+        Mentorías para productores y DJs que quieren ordenar criterio, narrativa y flujo de trabajo.
+        Acá se trabaja con material real: tus proyectos, tus sets, tus decisiones.
+      </p>
+
+      <div class="hero-ctas">
+        <a class="mp-btn primary" href="#reservar" data-cta="primary">Consultar disponibilidad</a>
+        <a class="mp-btn ghost" href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Cl%C3%ADnicas" data-cta="secondary">
+          Mail directo
+        </a>
       </div>
+    </header>
 
-      <section class="clinics-grid" data-sb="clinics"></section>
+    <!-- Paquetes -->
+    <section id="paquetes" class="section reveal" aria-labelledby="paquetes-title" data-section>
+      <div class="section-inner">
+        <h2 id="paquetes-title" data-animate="heading">PAQUETES DISPONIBLES</h2>
+        <p class="muted">
+          Estos paquetes se cargan desde Supabase. La estructura de cada card es estable (título, descripción, detalles, CTA).
+        </p>
 
-      <div class="hero-ctas" style="margin-top: 20px;">
-        <a class="mp-btn primary" href="index.html#booking">Consultar por una clínica</a>
-        <a class="mp-btn ghost" href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Clínicas">Mail directo</a>
+        <form class="clinic-filters" aria-label="Filtrar clínicas" data-clinic-filters>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="clinic-search">Buscar</label>
+              <input id="clinic-search" name="q" type="search" placeholder="Ej: mezcla, DJ set, workflow…" autocomplete="off" data-clinic-search />
+            </div>
+
+            <div class="form-field">
+              <label for="clinic-modality">Modalidad</label>
+              <select id="clinic-modality" name="modality" data-clinic-modality>
+                <option value="">Todas</option>
+                <option value="online">Online</option>
+                <option value="presencial">Presencial</option>
+              </select>
+            </div>
+          </div>
+        </form>
+
+        <div class="supabase-banner" data-supabase-banner hidden>
+          Configurá <code>js/supabase-config.js</code> (url + anonKey) para cargar clínicas desde Supabase.
+        </div>
+
+        <noscript>
+          <p class="muted">Para ver paquetes dinámicos necesitás habilitar JavaScript.</p>
+        </noscript>
+
+        <div class="clinics-grid" data-sb="clinics" aria-live="polite" aria-label="Listado de clínicas"></div>
+
+        <template id="tpl-clinic">
+          <article class="clinic-card" itemscope itemtype="https://schema.org/Service">
+            <header class="clinic-card-head">
+              <h3 class="clinic-title" itemprop="name"></h3>
+              <p class="clinic-subtitle muted" itemprop="description"></p>
+            </header>
+
+            <dl class="clinic-meta" aria-label="Detalles del paquete">
+              <div>
+                <dt>Duración</dt>
+                <dd class="clinic-duration"></dd>
+              </div>
+              <div>
+                <dt>Modalidad</dt>
+                <dd class="clinic-modality"></dd>
+              </div>
+              <div>
+                <dt>Incluye</dt>
+                <dd class="clinic-includes"></dd>
+              </div>
+            </dl>
+
+            <ul class="clinic-bullets" aria-label="Puntos clave"></ul>
+
+            <div class="clinic-actions">
+              <a class="mp-btn primary clinic-cta" href="#" itemprop="url">Consultar</a>
+              <a class="mp-btn ghost clinic-cta-alt" href="#">Ver detalles</a>
+            </div>
+          </article>
+        </template>
       </div>
-    </div>
+    </section>
+
+    <!-- Para quién -->
+    <section id="para-quien" class="section section-centered reveal" aria-labelledby="para-quien-title" data-section>
+      <h2 id="para-quien-title" data-animate="heading">PARA QUIÉN ES</h2>
+      <ul class="clinic-list" aria-label="Perfil recomendado">
+        <li>Productores que tienen ideas pero les cuesta cerrar temas (“termino mañana” hace 6 meses).</li>
+        <li>DJs que quieren sets con intención (no una ensalada de tracks con ego).</li>
+        <li>Artistas que buscan identidad: criterio, referencias y dirección clara.</li>
+      </ul>
+
+      <h3 class="subsection-title">Para quién NO es</h3>
+      <p class="muted">
+        Si buscás una lista de “10 trucos mágicos” sin tocar tu material real, vas a salir decepcionado (y con razón).
+      </p>
+    </section>
+
+    <!-- Qué trabajamos -->
+    <section id="que-trabajamos" class="section section-centered reveal" aria-labelledby="temas-title" data-section>
+      <h2 id="temas-title" data-animate="heading">QUÉ TRABAJAMOS</h2>
+      <p class="muted">Mapa general. El foco se ajusta a tu etapa y objetivo.</p>
+
+      <ul class="clinic-list" aria-label="Temas habituales">
+        <li>Narrativa y tensión: cuándo empujar, cuándo respirar, y por qué.</li>
+        <li>Workflow de producción: orden, decisiones, finish y consistencia.</li>
+        <li>Mezcla orientada a club: low-end, espacio, traducción.</li>
+        <li>DJing: estructura por bloques, transiciones, energía y lectura.</li>
+        <li>Identidad: referencias, gusto entrenado y dirección artística.</li>
+      </ul>
+    </section>
+
+    <!-- Cómo funciona -->
+    <section id="como-funciona" class="section reveal" aria-labelledby="proceso-title" data-section>
+      <div class="section-inner">
+        <h2 id="proceso-title" data-animate="heading">CÓMO FUNCIONA</h2>
+
+        <ol class="clinic-steps" aria-label="Pasos del proceso">
+          <li><strong>Brief corto:</strong> objetivo, etapa, y dónde te trabás.</li>
+          <li><strong>Revisión real:</strong> proyecto / set / referencias (sin humo).</li>
+          <li><strong>Decisiones:</strong> qué queda, qué se corta, qué se prioriza.</li>
+          <li><strong>Hoja de ruta:</strong> acciones concretas para la próxima semana.</li>
+        </ol>
+
+        <aside class="clinic-callout" aria-label="Recomendación">
+          <p class="muted">
+            Traé 1 objetivo claro + 1 material concreto. Eso vale más que 200 plugins y 0 decisiones.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Requisitos -->
+    <section id="requisitos" class="section section-centered reveal" aria-labelledby="requisitos-title" data-section>
+      <h2 id="requisitos-title" data-animate="heading">QUÉ NECESITÁS TRAER</h2>
+      <ul class="clinic-list" aria-label="Requisitos recomendados">
+        <li>1–2 tracks de referencia (por qué te importan).</li>
+        <li>Tu proyecto abierto o bounce del material (lo que tengas, pero real).</li>
+        <li>Un objetivo medible: “cerrar un tema”, “armar un set de 60’”, “mejorar mezcla”.</li>
+      </ul>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section reveal" aria-labelledby="faq-title" data-section>
+      <div class="section-inner">
+        <h2 id="faq-title" data-animate="heading">FAQ</h2>
+
+        <details>
+          <summary>¿Online o presencial?</summary>
+          <p class="muted">Según paquete y disponibilidad. Se define en la consulta inicial.</p>
+        </details>
+
+        <details>
+          <summary>¿Necesito Ableton sí o sí?</summary>
+          <p class="muted">No. El foco es criterio y proceso. Se adapta a tu setup.</p>
+        </details>
+
+        <details>
+          <summary>¿Cuánto dura cada clínica?</summary>
+          <p class="muted">Depende del paquete. En cada card se muestra duración y alcance.</p>
+        </details>
+
+        <details>
+          <summary>¿Cómo reservo?</summary>
+          <p class="muted">Completá el formulario abajo o escribí directo por mail.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Reservar -->
+    <section id="reservar" class="section section-centered reveal" aria-labelledby="reservar-title" data-section>
+      <h2 id="reservar-title" data-animate="heading">RESERVAR / CONSULTAR</h2>
+      <p class="muted">
+        Contame tu objetivo y tu etapa actual. Si tenés links (SoundCloud privado, Drive, etc.), sumalos.
+      </p>
+
+      <form class="clinic-contact" action="#" method="post" aria-label="Formulario de consulta por clínicas" data-clinic-form>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="cc-name">Nombre</label>
+            <input id="cc-name" name="name" type="text" required autocomplete="name" />
+          </div>
+
+          <div class="form-field">
+            <label for="cc-email">Email</label>
+            <input id="cc-email" name="email" type="email" required autocomplete="email" />
+          </div>
+
+          <div class="form-field">
+            <label for="cc-goal">Objetivo</label>
+            <select id="cc-goal" name="goal" required>
+              <option value="" disabled selected>Elegí uno</option>
+              <option value="produccion">Producción</option>
+              <option value="mezcla">Mezcla</option>
+              <option value="dj">DJ set</option>
+              <option value="identidad">Identidad / dirección</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="form-field form-field-full">
+            <label for="cc-message">Mensaje</label>
+            <textarea id="cc-message" name="message" rows="5" required placeholder="Contame tu situación y qué querés lograr."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="mp-btn primary">ENVIAR</button>
+
+        <p class="muted">
+          O escribí directo a <a href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Cl%C3%ADnicas">manupavez22@gmail.com</a>
+        </p>
+      </form>
+
+      <section class="clinic-policy" aria-labelledby="policy-title">
+        <h3 id="policy-title" class="subsection-title">Política simple</h3>
+        <p class="muted">
+          Reprogramaciones con aviso. Si no aparecés, el universo sigue igual… pero tu progreso no.
+        </p>
+      </section>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <img src="logos/CUBO BLANCO MP.png" alt="Logo" class="footer-logo" />
-      <p>© 2025 MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
+      <img src="logos/CUBO BLANCO MP.png" alt="Logo de Manu Pavez" class="footer-logo" />
+      <p>© <time datetime="2025">2025</time> MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
     </div>
   </footer>
+
+  <button class="scroll-top" aria-label="Volver arriba">↑</button>
 </body>
 </html>
