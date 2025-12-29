@@ -282,3 +282,41 @@ body[data-page="bio"] .mp-story img{
     margin-block: 22px;
   }
 }
+/* =========================
+   BIO: contraste + fondo más premium (rentable)
+   Archivo: css/pages/bio.css (PEGAR AL FINAL)
+   ========================= */
+
+body[data-page="bio"] .mp-story{
+  /* un pelo más oscuro y “profundo” para que el texto respire */
+  background:
+    radial-gradient(860px 460px at 12% 0%, rgba(89,198,186,.12), transparent 62%),
+    radial-gradient(840px 560px at 100% 120%, rgba(49,64,151,.16), transparent 64%),
+    rgba(3, 5, 12, 0.94);
+
+  border-color: rgba(255,255,255,.12);
+  box-shadow:
+    0 22px 60px rgba(0,0,0,.62),
+    0 0 0 1px rgba(255,255,255,.06) inset;
+}
+
+/* Texto: más legible sin volverse blanco nuclear */
+body[data-page="bio"] .mp-story > p{
+  color: rgba(233, 238, 245, 0.88);
+}
+
+/* Muted y detalles un poquito más claros */
+body[data-page="bio"] .mp-story :where(.muted){
+  color: rgba(233, 238, 245, 0.72);
+}
+
+/* Énfasis: sube contraste y queda “afilado” */
+body[data-page="bio"] .mp-story strong{
+  color: rgba(255,255,255,0.96);
+}
+
+/* Links más visibles sin gritar */
+body[data-page="bio"] .mp-story a{
+  color: color-mix(in oklab, var(--mp-accent-2) 88%, white 12%);
+  text-decoration-color: color-mix(in oklab, var(--mp-accent-2) 45%, transparent);
+}
