@@ -1,510 +1,503 @@
-/* =================== CLÍNICAS (cards) =================== */
-.clinics-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 18px;
-  max-width: 980px;
-  margin: 22px auto 0;
-  padding: 0 16px;
-}
-
-.clinic-card {
-  grid-column: span 12;
-  padding: 18px;
-  border-radius: 24px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-}
-
-.clinic-card h3 { margin: 0 0 8px; }
-
-.clinic-list {
-  margin: 12px 0 0;
-  padding-left: 18px;
-}
-
-.clinic-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.clinic-price {
-  opacity: 0.9;
-  font-weight: 600;
-}
-
-@media (min-width: 860px) {
-  .clinic-card { grid-column: span 6; }
-}
 /* =========================
-   CLÍNICAS — polish premium
-   Scope: solo clinicas.html
-   Archivo: css/pages/clinicas.css (PEGAR AL FINAL)
+   CLÍNICAS — NIVEL 2 (FINAL)
    ========================= */
 
 body[data-page="clinicas"]{
   --cl-card: rgba(5, 7, 17, .88);
   --cl-border: rgba(255,255,255,.10);
-  --cl-border-2: rgba(255,255,255,.14);
   --cl-shadow: 0 22px 60px rgba(0,0,0,.60);
   --cl-radius: 18px;
 }
 
-/* Evitar que anchors queden “bajo” el header fijo */
-body[data-page="clinicas"] [id]{
-  scroll-margin-top: calc(var(--header-height, 80px) + 18px);
-}
+/* =========================
+   HERO FULLSCREEN
+   ========================= */
 
-/* Page spacing (sin romper otros layouts) */
-body[data-page="clinicas"] .page-clinicas{
-  padding-top: calc(var(--header-height, 80px) + clamp(18px, 3vw, 44px));
-  padding-bottom: clamp(56px, 7vw, 96px);
-}
+body[data-page="clinicas"] .page-clinicas > header.section{
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-/* Secciones: un poco más de “aire” + separación sutil */
-body[data-page="clinicas"] .page-clinicas .section{
-  padding-block: clamp(24px, 5vw, 54px);
-}
-
-body[data-page="clinicas"] .page-clinicas .section[data-section]{
+  text-align: center;
   position: relative;
+
+  padding: 40px 20px;
 }
 
-body[data-page="clinicas"] .page-clinicas .section[data-section]::before{
+body[data-page="clinicas"] .page-clinicas > header.section::before{
   content:"";
   position:absolute;
-  left: 50%;
-  top: 0;
-  width: min(980px, 92%);
-  height: 1px;
-  transform: translateX(-50%);
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
+  inset:0;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(89,198,186,.08), transparent 60%),
+    radial-gradient(circle at 50% 80%, rgba(49,64,151,.12), transparent 70%);
+  pointer-events:none;
+}
+
+/* =========================
+   TYPOGRAPHY
+   ========================= */
+
+body[data-page="clinicas"] h1{
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  letter-spacing: .28em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.lab-lead{
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 500;
   opacity: .9;
 }
 
-/* Headings: “frequency underline” consistente */
-body[data-page="clinicas"] .page-clinicas h1{
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  text-shadow: 0 18px 60px rgba(0,0,0,.7);
-}
-
-body[data-page="clinicas"] .page-clinicas h2[data-animate="heading"]{
-  position: relative;
-  letter-spacing: .20em;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-
-body[data-page="clinicas"] .page-clinicas h2[data-animate="heading"]::after{
-  content:"";
-  display:block;
-  margin-top: 12px;
-  height: 1px;
-  width: min(420px, 78%);
-  background: linear-gradient(90deg, transparent, rgba(89,198,186,.65), rgba(49,64,151,.65), transparent);
-  opacity: .60;
-}
-
-/* Hero: tarjeta editorial */
-body[data-page="clinicas"] .page-clinicas > header.section{
-  width: min(980px, 100%);
-  margin-inline: auto;
-
-  padding: clamp(18px, 2.6vw, 34px);
-  border-radius: 22px;
-  background:
-    radial-gradient(900px 480px at 10% 0%, rgba(89,198,186,.10), transparent 60%),
-    radial-gradient(900px 520px at 100% 120%, rgba(49,64,151,.14), transparent 62%),
-    rgba(3, 5, 12, .92);
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow: var(--cl-shadow);
-}
-
-body[data-page="clinicas"] .page-clinicas .hero-ctas{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 18px;
+.lab-sub{
+  opacity: .6;
+  font-size: .95rem;
 }
 
 /* =========================
-   Filtros
+   SECCIONES
    ========================= */
 
-body[data-page="clinicas"] .clinic-filters{
-  width: min(980px, 100%);
-  margin: 18px auto 0 auto;
-  padding: 14px;
-  border-radius: var(--cl-radius);
-  background: rgba(5,7,17,.72);
-  border: 1px solid rgba(255,255,255,.09);
+body[data-page="clinicas"] .section{
+  padding-block: clamp(60px, 10vw, 120px);
 }
 
-body[data-page="clinicas"] .clinic-filters .form-grid{
+.section:first-of-type{
+  padding-top: 0;
+}
+
+.section:nth-of-type(even){
+  opacity: .95;
+}
+
+/* =========================
+   LISTAS
+   ========================= */
+
+.clinic-list{
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
   display: grid;
-  gap: 12px;
-  grid-template-columns: 1.4fr .6fr;
+  gap: 10px;
 }
 
-@media (max-width: 740px){
-  body[data-page="clinicas"] .clinic-filters .form-grid{
-    grid-template-columns: 1fr;
-  }
+.clinic-list li{
+  position: relative;
+  padding: 14px 14px 14px 24px;
+  border-radius: 14px;
+  background: rgba(0,0,0,.2);
+  border: 1px solid rgba(255,255,255,.08);
 }
 
-/* Inputs más “pro” */
-body[data-page="clinicas"] .clinic-filters :where(input, select){
-  width: 100%;
-  background: rgba(0,0,0,.28);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 12px;
-  color: rgba(255,255,255,.92);
-  padding: 12px 12px;
-  outline: none;
-}
-
-body[data-page="clinicas"] .clinic-filters :where(input, select):focus-visible{
-  box-shadow: 0 0 0 3px rgba(89,198,186,.22);
-  border-color: rgba(89,198,186,.35);
+.clinic-list li::before{
+  content:"";
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform: translateY(-50%);
+  width:6px;
+  height:6px;
+  border-radius:999px;
+  background: rgba(89,198,186,.9);
 }
 
 /* =========================
-   Grid de paquetes (Supabase)
+   COMPARE (TABLA PRO)
    ========================= */
 
-body[data-page="clinicas"] .clinics-grid{
-  width: min(1100px, 100%);
-  margin: 18px auto 0 auto;
+.compare{
+  margin: 120px 0;
+  text-align: center;
+  position: relative;
+}
 
+.compare-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 40px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+}
+
+.compare-grid::before{
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, #6ff, transparent);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.compare-col{
+  padding: 40px 20px;
+  backdrop-filter: blur(10px);
+  transition: all .3s ease;
+}
+
+.compare-head{
+  padding: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.compare-col--no{
+  background: linear-gradient(
+    180deg,
+    rgba(80,120,160,0.25),
+    rgba(10,20,30,0.4)
+  );
+}
+
+.compare-col--yes{
+  background: linear-gradient(
+    180deg,
+    rgba(120,200,200,0.25),
+    rgba(10,20,30,0.4)
+  );
+}
+
+.compare-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.compare-list li{
+  padding: 20px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* INTERACCIÓN */
+
+.compare-grid:hover .compare-col{
+  opacity: .5;
+}
+
+.compare-grid:hover .compare-col:hover{
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+/* =========================
+   CARDS (SUPABASE)
+   ========================= */
+
+.clinics-grid{
   display: grid;
   gap: 18px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 1100px;
+  margin: 40px auto;
 }
 
 @media (max-width: 980px){
-  body[data-page="clinicas"] .clinics-grid{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  .clinics-grid{ grid-template-columns: repeat(2, 1fr); }
 }
+
 @media (max-width: 640px){
-  body[data-page="clinicas"] .clinics-grid{
-    grid-template-columns: 1fr;
-  }
+  .clinics-grid{ grid-template-columns: 1fr; }
 }
 
-body[data-page="clinicas"] .clinic-card{
+.clinic-card{
+  padding: 18px;
   border-radius: 18px;
-  background:
-    radial-gradient(520px 240px at 10% 0%, rgba(89,198,186,.08), transparent 55%),
-    rgba(5, 7, 17, .90);
-  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(5,7,17,.9);
+  border: 1px solid rgba(255,255,255,.1);
   box-shadow: 0 18px 48px rgba(0,0,0,.55);
-  padding: 16px;
-
   display: grid;
   gap: 12px;
-
-  transition: transform 180ms cubic-bezier(.2,.8,.2,1), border-color 180ms cubic-bezier(.2,.8,.2,1);
+  transition: all .2s ease;
 }
 
-@media (hover:hover) and (pointer:fine){
-  body[data-page="clinicas"] .clinic-card:hover{
-    transform: translateY(-2px);
-    border-color: rgba(255,255,255,.16);
-  }
+.clinic-card:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.16);
 }
 
-body[data-page="clinicas"] .clinic-card-head{
-  display: grid;
-  gap: 6px;
-}
-
-body[data-page="clinicas"] .clinic-title{
-  margin: 0;
-  font-size: 1.05rem;
+.clinic-title{
+  font-size: 1rem;
   letter-spacing: .14em;
   text-transform: uppercase;
 }
 
-body[data-page="clinicas"] .clinic-subtitle{
-  margin: 0;
-  line-height: 1.6;
+/* =========================
+   CTA
+   ========================= */
+
+.mp-btn.primary{
+  box-shadow: 0 10px 30px rgba(89,198,186,.25);
+  transition: all .2s ease;
 }
 
-/* Meta como mini “spec sheet” */
-body[data-page="clinicas"] .clinic-meta{
-  margin: 0;
-  display: grid;
-  gap: 10px;
+.mp-btn.primary:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(89,198,186,.35);
 }
 
-body[data-page="clinicas"] .clinic-meta > div{
-  display: grid;
-  grid-template-columns: 92px 1fr;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(0,0,0,.22);
-  border: 1px solid rgba(255,255,255,.08);
+/* =========================
+   FORM
+   ========================= */
+
+.clinic-contact{
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(5,7,17,.8);
+  border: 1px solid rgba(255,255,255,.1);
+  backdrop-filter: blur(12px);
 }
 
-body[data-page="clinicas"] .clinic-meta dt{
-  font-size: .72rem;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  opacity: .75;
+.clinic-contact input,
+.clinic-contact select,
+.clinic-contact textarea{
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(255,255,255,.1);
+  color: white;
 }
 
-body[data-page="clinicas"] .clinic-meta dd{
-  margin: 0;
-  color: rgba(255,255,255,.88);
+.clinic-contact :focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(89,198,186,.25);
 }
 
-/* Bullets con “chip” */
-body[data-page="clinicas"] .clinic-bullets{
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 8px;
+/* =========================
+   REVEAL ANIMATION
+   ========================= */
+
+.reveal{
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeIn .6s ease forwards;
 }
 
-body[data-page="clinicas"] .clinic-bullets li{
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(0,0,0,.18);
-  color: rgba(233,238,245,.86);
+@keyframes fadeIn{
+  to{
+    opacity:1;
+    transform: translateY(0);
+  }
 }
 
-/* Acciones */
-body[data-page="clinicas"] .clinic-actions{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 6px;
-}
+/* =========================
+   RESPONSIVE
+   ========================= */
 
-@media (max-width: 640px){
-  body[data-page="clinicas"] .clinic-actions{
+@media (max-width: 768px){
+  .compare-grid{
     grid-template-columns: 1fr;
   }
 }
-
-/* =========================
-   Lists (para quién / qué trabajamos / requisitos)
-   ========================= */
-
-body[data-page="clinicas"] .clinic-list{
-  width: min(860px, 100%);
-  margin: 16px auto 0 auto;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 10px;
-  text-align: left;
-}
-
-body[data-page="clinicas"] .clinic-list li{
-  padding: 12px 14px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(0,0,0,.16);
-  box-shadow: 0 14px 40px rgba(0,0,0,.35);
-}
-
-/* =========================
-   Steps (cómo funciona): timeline simple
-   ========================= */
-
-body[data-page="clinicas"] .clinic-steps{
-  margin: 16px 0 0 0;
-  padding: 0;
-  list-style: none;
-
-  display: grid;
-  gap: 10px;
-}
-
-body[data-page="clinicas"] .clinic-steps li{
+.lab-wave {
+  width: 120px;
+  height: 2px;
+  margin: 24px auto;
   position: relative;
-  padding: 14px 14px 14px 48px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(0,0,0,.16);
-}
-
-body[data-page="clinicas"] .clinic-steps li::before{
-  content:"";
-  position:absolute;
-  left: 14px;
-  top: 16px;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(89,198,186,.9), rgba(49,64,151,.9));
-  box-shadow: 0 0 0 1px rgba(255,255,255,.18);
-}
-
-body[data-page="clinicas"] .clinic-callout{
-  margin-top: 14px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  background:
-    radial-gradient(520px 220px at 10% 0%, rgba(89,198,186,.10), transparent 55%),
-    rgba(5, 7, 17, .78);
-  border: 1px solid rgba(255,255,255,.10);
-}
-
-/* =========================
-   FAQ (details/summary) — más usable
-   ========================= */
-
-body[data-page="clinicas"] #faq details{
-  width: min(980px, 100%);
-  margin: 12px auto 0 auto;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.14);
   overflow: hidden;
 }
 
-body[data-page="clinicas"] #faq summary{
-  list-style: none;
-  cursor: pointer;
-
-  padding: 14px 46px 14px 14px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  font-size: .86rem;
-
-  position: relative;
-}
-
-body[data-page="clinicas"] #faq summary::-webkit-details-marker{ display:none; }
-
-body[data-page="clinicas"] #faq summary::after{
-  content:"";
-  position:absolute;
-  right: 14px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-right: 2px solid rgba(255,255,255,.65);
-  border-bottom: 2px solid rgba(255,255,255,.65);
-  transform: translateY(-60%) rotate(45deg);
-  opacity: .85;
-  transition: transform 180ms cubic-bezier(.2,.8,.2,1);
-}
-
-body[data-page="clinicas"] #faq details[open] summary::after{
-  transform: translateY(-35%) rotate(-135deg);
-}
-
-body[data-page="clinicas"] #faq details p{
-  margin: 0;
-  padding: 0 14px 14px 14px;
-  line-height: 1.7;
-}
-
-/* Focus accesible en summary */
-body[data-page="clinicas"] #faq summary:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(89,198,186,.22);
-}
-
-/* =========================
-   Form reservar: elevarlo un poco
-   ========================= */
-
-body[data-page="clinicas"] .clinic-contact{
-  width: min(980px, 100%);
-  margin: 18px auto 0 auto;
-  padding: 16px;
-  border-radius: 18px;
-  background: rgba(5,7,17,.78);
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow: 0 18px 48px rgba(0,0,0,.45);
-}
-
-body[data-page="clinicas"] .clinic-contact :where(input, select, textarea){
-  background: rgba(0,0,0,.24);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 12px;
-}
-
-body[data-page="clinicas"] .clinic-contact :where(input, select, textarea):focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(89,198,186,.22);
-  border-color: rgba(89,198,186,.35);
-}
-
-/* =========================
-   Header dropdown de CLÍNICAS (solo esta página)
-   ========================= */
-
-body[data-page="clinicas"] .nav-dropdown > summary{
-  list-style: none;
-  cursor: pointer;
-  user-select: none;
-  white-space: nowrap;
-}
-
-body[data-page="clinicas"] .nav-dropdown > summary::-webkit-details-marker{ display:none; }
-
-body[data-page="clinicas"] .nav-dropdown{
-  position: relative;
-}
-
-body[data-page="clinicas"] .nav-submenu{
+.lab-wave span {
   position: absolute;
-  top: calc(100% + 10px);
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(89,198,186,0.9),
+    rgba(49,64,151,0.9),
+    transparent
+  );
+  animation: waveMove 2.5s linear infinite;
+}
+
+@keyframes waveMove {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(50%); }
+}
+
+.mp-btn.primary {
+  background: linear-gradient(135deg, #5bc8be, #4a6cf7);
+  box-shadow: 0 0 40px rgba(89,198,186,.25);
+}
+
+.mp-btn.primary:hover {
+  box-shadow: 0 0 60px rgba(89,198,186,.45);
+}
+
+.lab-hero p {
+  margin: 10px 0;
+}
+
+.hero-ctas {
+  margin-top: 28px;
+}
+
+.lab-ambient{
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(30, 0, 83, 0.748), transparent 20%),
+    radial-gradient(circle at 70% 80%, rgba(14, 10, 133, 0.18), transparent 50%);
+  filter: blur(40px);
+  animation: ambientMove 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes ambientMove {
+  from { transform: translateY(-10px); }
+  to { transform: translateY(10px); }
+}
+
+.lab-wave {
+  width: 140px;
+  height: 2px;
+  margin: 28px auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.lab-wave span {
+  position: absolute;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(89,198,186,1),
+    rgba(49,64,151,1),
+    transparent
+  );
+  animation: waveMove 2.2s linear infinite;
+}
+
+@keyframes waveMove {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(50%); }
+}
+
+.lab-scroll-indicator{
+  position: absolute;
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  width: max-content;
-  min-width: 220px;
-
-  margin: 0;
-  padding: 10px;
-  list-style: none;
-
-  border-radius: 16px;
-  background: rgba(5,7,17,.92);
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 18px 54px rgba(0,0,0,.65);
-  z-index: 50;
 }
 
-body[data-page="clinicas"] .nav-submenu a{
+.lab-scroll-indicator span{
   display: block;
-  padding: 10px 10px;
-  border-radius: 12px;
-  text-decoration: none;
-  white-space: nowrap;
+  width: 2px;
+  height: 40px;
+  background: rgba(255,255,255,.2);
+  position: relative;
+  overflow: hidden;
 }
 
-body[data-page="clinicas"] .nav-submenu a:hover{
-  background: rgba(255,255,255,.06);
+.lab-scroll-indicator span::after{
+  content:"";
+  position:absolute;
+  top:-20px;
+  left:0;
+  width:100%;
+  height:20px;
+  background: rgba(89,198,186,.8);
+  animation: scrollPulse 1.6s ease-in-out infinite;
 }
 
-body[data-page="clinicas"] .nav-dropdown > summary:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(89,198,186,.22);
-  border-radius: 12px;
+@keyframes scrollPulse{
+  0%{ top:-20px; opacity:0; }
+  50%{ opacity:1; }
+  100%{ top:100%; opacity:0; }
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce){
-  body[data-page="clinicas"] .clinic-card{
-    transition: none;
-  }
-  body[data-page="clinicas"] #faq summary::after{
-    transition: none;
-  }
+.lab-hero{
+  isolation: isolate;
+}
+
+.lab-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,.6));
+  z-index:-1;
+}
+.compare-col--no{
+  filter: brightness(.85);
+}
+
+.compare-col--yes{
+  filter: brightness(1.1);
+}
+
+.compare-head h3{
+  font-size: 1rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  opacity: .8;
+}
+
+.compare-head h3{
+  font-size: 1rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  opacity: .8;
+}
+
+.clinic-card:hover{
+  transform: translateY(-4px) scale(1.01);
+}
+
+.clinic-card:hover{
+  transform: translateY(-4px) scale(1.01);
+}
+.lab-tagline{
+  font-size: 1.1rem;
+  opacity: .6;
+  letter-spacing: .1em;
+}
+
+.lab-lead{
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.lab-sub{
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+html{
+  scroll-behavior: smooth;
+}
+
+.lab-hero{
+  min-height: 80vh;
+  padding: 20px 16px;
+}
+.lab-hero h1{
+  margin-bottom: 16px;
+}
+
+.lab-hero p{
+  margin: 6px 0;
+}
+
+.hero-ctas{
+  margin-top: 20px;
+}
+.section{
+  padding-block: clamp(40px, 6vw, 70px);
+}
+.lab-hero{
+  min-height: 75vh;
+  justify-content: flex-start;
+  padding-top: 120px;
 }

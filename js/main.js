@@ -135,4 +135,3 @@ function initPresskitSlider() {
   startAutoplay();
 }
 
-initPresskitSlider();
