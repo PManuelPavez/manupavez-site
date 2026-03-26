@@ -35,3 +35,25 @@ window.addEventListener('scroll', () => {
   hero.style.opacity = fade;
   hero.style.transform = `scale(${scale})`;
 });
+const revealEl = document.querySelector('.reveal-enter');
+
+window.addEventListener('scroll', () => {
+  if (!revealEl) return;
+
+  const rect = revealEl.getBoundingClientRect();
+
+  if (rect.top < window.innerHeight * 0.8) {
+    revealEl.classList.add('is-visible');
+  }
+});
+const indicator = document.querySelector('.lab-scroll-indicator');
+
+window.addEventListener('scroll', () => {
+  if (!indicator) return;
+
+  if (window.scrollY > 40) {
+    indicator.style.opacity = "0";
+  } else {
+    indicator.style.opacity = "0.6";
+  }
+});

@@ -501,3 +501,42 @@ html{
   justify-content: flex-start;
   padding-top: 120px;
 }
+/* ESTADO INICIAL */
+.reveal-enter{
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* ESTADO ACTIVO */
+.reveal-enter.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+  transition: 
+    opacity .8s ease,
+    transform .8s cubic-bezier(.2,.8,.2,1);
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+body{
+  scroll-snap-type: y proximity;
+}
+
+.lab-hero,
+.section{
+  scroll-snap-align: start;
+}
+
+.lab-scroll-indicator{
+  opacity: .6;
+  transition: opacity .3s ease;
+}
+
+.lab-scroll-indicator:hover{
+  opacity: 1;
+}
+:target{
+  scroll-margin-top: 80px;
+}
