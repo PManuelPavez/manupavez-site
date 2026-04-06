@@ -135,3 +135,42 @@ function initPresskitSlider() {
   startAutoplay();
 }
 
+const form = document.querySelector('[data-clinic-form]');
+
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      level: formData.get('level'),
+      goal: formData.get('goal'),
+      message: formData.get('message')
+    };
+
+    try {
+      // 1. Guardar en Supabase
+      await supabase.from('lab_leads').insert([data]);
+
+      // 2. Enviar email
+      await fetch('https://psnprhzowknhfylvgcci.supabase.co/functions/v1/send-lead-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzbnByaHpvd2tuaGZ5bHZnY2NpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNTM5MDQsImV4cCI6MjA4MTcyOTkwNH0.FFGPhYc_8J-U5BSvx0VGnpzmaGLoP-NX-6MRe0RMR0U'
+        },
+        body: JSON.stringify(data)
+      });
+
+      alert('Aplicación enviada 🚀');
+      form.reset();
+
+    } catch (err) {
+      console.error(err);
+      alert('Error al enviar 😢');
+    }
+  });
+}
