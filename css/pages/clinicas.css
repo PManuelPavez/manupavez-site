@@ -540,3 +540,15 @@ body{
 :target{
   scroll-margin-top: 80px;
 }
+.form-step {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .3s ease;
+}
+
+.form-step.is-active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -191,51 +191,57 @@ QUIERO DEJAR DE ESTAR EN ESTE PUNTO      </a>
   No respondas rápido.  
   Esto define cómo vamos a trabajar.
 </p>
+<div class="form-progress" aria-live="polite">
+  Paso <span id="step-number">1</span> de 4
+</div>
+   <form data-clinic-form class="lab-form" novalidate>
 
-      <form class="clinic-contact" data-clinic-form>
-        <div class="form-grid">
+  <!-- STEP 1 -->
+  <fieldset data-step="1" class="form-step is-active">
+    <label>Nombre</label>
+    <input name="name" required>
 
-          <div class="form-field">
-            <label for="name">Nombre</label>
-            <input id="name" name="name" required />
-          </div>
+    <label>Email</label>
+    <input type="email" name="email" required>
 
-          <div class="form-field">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" required />
-          </div>
+    <button type="button" data-next>Siguiente</button>
+  </fieldset>
 
-          <div class="form-field">
-            <label for="level">Nivel</label>
-            <select id="level" name="level" required>
-              <option value="">Seleccionar</option>
-              <option>Inicial</option>
-              <option>Intermedio</option>
-              <option>Avanzado</option>
-            </select>
-          </div>
+  <!-- STEP 2 -->
+  <fieldset data-step="2" class="form-step">
+    <label>Nivel</label>
+    <select name="level" required>
+      <option value="">Seleccionar</option>
+      <option value="principiante">Principiante</option>
+      <option value="intermedio">Intermedio</option>
+      <option value="avanzado">Avanzado</option>
+    </select>
 
-          <div class="form-field">
-            <label for="goal">Objetivo</label>
-            <select id="goal" name="goal" required>
-              <option value="">Elegir</option>
-              <option>Producción</option>
-              <option>DJ</option>
-              <option>Identidad</option>
-            </select>
-          </div>
+    <button type="button" data-prev>Atrás</button>
+    <button type="button" data-next>Siguiente</button>
+  </fieldset>
 
-          <div class="form-field form-field-full">
-            <label for="message">Mensaje</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
-          </div>
+  <!-- STEP 3 -->
+  <fieldset data-step="3" class="form-step">
+    <label>¿Qué querés cambiar en tu música?</label>
+    <input name="goal">
 
-        </div>
+    <button type="button" data-prev>Atrás</button>
+    <button type="button" data-next>Siguiente</button>
+  </fieldset>
 
-      <button class="mp-btn primary">
-  ENVIAR APLICACIÓN
+  <!-- STEP 4 -->
+  <fieldset data-step="4" class="form-step">
+    <label>Contame en qué punto estás ahora</label>
+    <textarea name="message"></textarea>
+
+    <button type="button" data-prev>Atrás</button>
+   <button type="submit" class="mp-btn primary">
+  QUIERO ENTRAR AL LAB
 </button>
-      </form>
+  </fieldset>
+
+</form>
 
       <p class="muted">
         O escribime directo a
