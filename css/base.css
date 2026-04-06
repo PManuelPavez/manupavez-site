@@ -259,3 +259,97 @@ img, video, iframe{
   font-size: var(--mp-lead);
   line-height: 1.7;
 }
+/* ===== FORM PREMIUM ===== */
+
+.lab-form {
+  max-width: 520px;
+  margin: 40px auto 0;
+  display: grid;
+  gap: 24px;
+}
+
+.form-progress {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.6;
+  letter-spacing: 0.12em;
+  margin-bottom: 10px;
+}
+
+/* STEPS */
+.form-step {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+}
+
+.form-step.is-active {
+  display: grid;
+  gap: 14px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* INPUTS */
+.lab-form input,
+.lab-form select,
+.lab-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.3);
+  color: white;
+  font-size: 0.95rem;
+}
+
+.lab-form input:focus,
+.lab-form select:focus,
+.lab-form textarea:focus {
+  outline: none;
+  border-color: rgba(89,198,186,0.6);
+  box-shadow: 0 0 0 3px rgba(89,198,186,0.2);
+}
+
+/* LABEL */
+.lab-form label {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  letter-spacing: 0.08em;
+}
+
+/* NAV */
+.form-nav {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* BOTONES */
+.mp-btn {
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.mp-btn.primary {
+  background: linear-gradient(135deg,#5bc6ba,#314097);
+  color: white;
+  border: none;
+}
+
+.mp-btn.ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+  .lab-form {
+    padding: 0 16px;
+  }
+}
