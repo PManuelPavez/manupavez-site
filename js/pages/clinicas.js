@@ -21,9 +21,9 @@ async function hydrate(root) {
     console.warn("[clinicas] Supabase hydrate error:", e);
   }
 }
-initPresskitSlider();
-const hero = document.querySelector('.lab-hero');
-
+if (typeof initPresskitSlider === "function") {
+  initPresskitSlider();
+}
 window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
 
