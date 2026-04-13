@@ -184,3 +184,51 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+// ===== FORM STEPS (FIX REAL) =====
+document.addEventListener('DOMContentLoaded', () => {
+
+  const form = document.querySelector('[data-clinic-form]');
+  if (!form) return;
+
+  const steps = form.querySelectorAll('.form-step');
+  const stepNumber = document.getElementById('step-number');
+
+  let current = 0;
+
+  function validateStep(step) {
+    const required = step.querySelectorAll('[required]');
+    for (let input of required) {
+      if (!input.value.trim()) {
+        input.focus();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function showStep(index) {
+    steps.forEach((step, i) => {
+      step.classList.toggle('is-active', i === index);
+    });
+
+    if (stepNumber) {
+      stepNumber.textContent = index + 1;
+    }
+  }
+
+  form.querySelectorAll('[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!validateStep(steps[current])) return;
+      current++;
+      showStep(current);
+    });
+  });
+
+  form.querySelectorAll('[data-prev]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      current--;
+      showStep(current);
+    });
+  });
+
+});
