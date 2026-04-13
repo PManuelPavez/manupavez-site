@@ -262,3 +262,90 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+// ===== FORM STEPS (FIX REAL) =====
+document.addEventListener('DOMContentLoaded', () => {
+
+  const form = document.querySelector('[data-clinic-form]');
+  if (!form) return;
+
+  const steps = form.querySelectorAll('.form-step');
+  const stepNumber = document.getElementById('step-number');
+
+  let current = 0;
+
+  function validateStep(step) {
+    const required = step.querySelectorAll('[required]');
+    for (let input of required) {
+      if (!input.value.trim()) {
+        input.focus();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function showStep(index) {
+    steps.forEach((step, i) => {
+      step.classList.toggle('is-active', i === index);
+    });
+
+    if (stepNumber) {
+      stepNumber.textContent = index + 1;
+    }
+  }
+
+  form.querySelectorAll('[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!validateStep(steps[current])) return;
+      current++;
+      showStep(current);
+    });
+  });
+
+  form.querySelectorAll('[data-prev]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      current--;
+      showStep(current);
+    });
+  });
+
+});
+
+const container = document.querySelector('[data-sb="clinics"]');
+
+if (container) {
+  const { data, error } = await supabase
+    .from('clinics')
+    .select('*')
+    .eq('active', true);
+
+  if (data) {
+    container.innerHTML = data.map(item => `
+      <article class="clinic-card">
+        <div class="clinic-card-head">
+          <h3 class="clinic-title">${item.title}</h3>
+          <p class="clinic-subtitle">${item.subtitle}</p>
+        </div>
+
+        <dl class="clinic-meta">
+          <div>
+            <dt>Duración</dt>
+            <dd>${item.duration}</dd>
+          </div>
+          <div>
+            <dt>Precio</dt>
+            <dd>${item.price}</dd>
+          </div>
+        </dl>
+
+        <ul class="clinic-bullets">
+          ${item.bullets.map(b => `<li>${b}</li>`).join('')}
+        </ul>
+
+        <div class="clinic-actions">
+          <a href="#reservar" class="mp-btn primary">Reservar</a>
+        </div>
+      </article>
+    `).join('');
+  }
+}
