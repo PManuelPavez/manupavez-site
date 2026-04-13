@@ -2,9 +2,9 @@ export function initClinicas() {
   const isPage = document.body.dataset.page === "clinicas";
   if (!isPage) return;
 
-  if (typeof supabase === "undefined") {
+  // 👉 seguridad: no romper si supabase no está listo
+  if (typeof window.supabase === "undefined") {
     console.warn("Supabase no disponible");
-    return;
   }
 
   initForm();
@@ -13,7 +13,7 @@ export function initClinicas() {
 
 
 // =========================
-// FORM
+// FORM (multi-step)
 // =========================
 
 function initForm() {
@@ -46,6 +46,7 @@ function initForm() {
     }
   }
 
+  // next
   form.querySelectorAll('[data-next]').forEach(btn => {
     btn.addEventListener('click', () => {
       if (!validateStep(steps[current])) return;
@@ -54,6 +55,7 @@ function initForm() {
     });
   });
 
+  // prev
   form.querySelectorAll('[data-prev]').forEach(btn => {
     btn.addEventListener('click', () => {
       current--;
@@ -61,23 +63,29 @@ function initForm() {
     });
   });
 
+  // submit
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const data = Object.fromEntries(new FormData(form));
 
     try {
-      await supabase.from('lab_leads').insert([data]);
+      // ===== GUARDAR EN DB =====
+      if (window.supabase) {
+        await window.supabase.from('lab_leads').insert([data]);
+      }
 
+      // ===== ENVIAR EMAIL =====
       await fetch('https://psnprhzowknhfylvgcci.supabase.co/functions/v1/send-lead-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer TU_ANON_KEY'
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzbnByaHpvd2tuaGZ5bHZnY2NpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNTM5MDQsImV4cCI6MjA4MTcyOTkwNH0.FFGPhYc_8J-U5BSvx0VGnpzmaGLoP-NX-6MRe0RMR0U'
         },
         body: JSON.stringify(data)
       });
 
+      // ===== UX SUCCESS =====
       form.innerHTML = `
         <div class="form-success">
           <h3>Listo 🚀</h3>
@@ -86,36 +94,47 @@ function initForm() {
       `;
 
     } catch (err) {
-      console.error(err);
+      console.error("ERROR SUBMIT:", err);
+      alert("Error al enviar 😢");
     }
   });
 }
 
 
 // =========================
-// LOAD CLINICS
+// LOAD CLINICS (Supabase)
 // =========================
 
 async function loadClinics() {
   const container = document.querySelector('[data-sb="clinics"]');
   if (!container) return;
 
+  if (typeof window.supabase === "undefined") return;
+
   try {
-    const { data } = await supabase
+    const { data, error } = await window.supabase
       .from('clinics')
       .select('*')
       .eq('active', true);
 
-    if (!data) return;
+    if (error) {
+      console.warn("Clinics error:", error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `<p>No hay clínicas disponibles.</p>`;
+      return;
+    }
 
     container.innerHTML = data.map(item => `
       <article class="clinic-card">
-        <h3>${item.title}</h3>
-        <p>${item.subtitle}</p>
+        <h3 class="clinic-title">${item.title}</h3>
+        <p class="clinic-subtitle">${item.subtitle || ''}</p>
       </article>
     `).join('');
 
   } catch (err) {
-    console.error("Error cargando clinics", err);
+    console.error("Error cargando clinics:", err);
   }
 }
