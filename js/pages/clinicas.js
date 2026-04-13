@@ -1,234 +1,121 @@
-import { $ } from "../core/dom.js";
-import { hasSupabase } from "../data/supabaseClient.js";
-import { getClinics } from "../data/content.js";
-import { renderClinics } from "../ui/renderers.js";
-import { initReveal } from "../features/reveal.js";
-
 export function initClinicas() {
-  const root = $("[data-sb='clinics']");
-  if (!root) return;
+  const isPage = document.body.dataset.page === "clinicas";
+  if (!isPage) return;
 
-  if (!hasSupabase()) return;
-  hydrate(root);
+  if (typeof supabase === "undefined") {
+    console.warn("Supabase no disponible");
+    return;
+  }
+
+  initForm();
+  loadClinics();
 }
 
-async function hydrate(root) {
-  try {
-    const items = await getClinics();
-    renderClinics(root, items);
-    initReveal();
-  } catch (e) {
-    console.warn("[clinicas] Supabase hydrate error:", e);
+
+// =========================
+// FORM
+// =========================
+
+function initForm() {
+  const form = document.querySelector('[data-clinic-form]');
+  if (!form) return;
+
+  const steps = form.querySelectorAll('.form-step');
+  const stepNumber = document.getElementById('step-number');
+
+  let current = 0;
+
+  function validateStep(step) {
+    const required = step.querySelectorAll('[required]');
+    for (let input of required) {
+      if (!input.value.trim()) {
+        input.focus();
+        return false;
+      }
+    }
+    return true;
   }
-}
-if (typeof initPresskitSlider === "function") {
-  initPresskitSlider();
-}
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
 
-  if (!hero) return;
+  function showStep(index) {
+    steps.forEach((step, i) => {
+      step.classList.toggle('is-active', i === index);
+    });
 
-  const fade = Math.max(1 - scrollY / 400, 0);
-  const scale = 1 - scrollY / 2000;
-
-  hero.style.opacity = fade;
-  hero.style.transform = `scale(${scale})`;
-});
-const revealEl = document.querySelector('.reveal-enter');
-
-window.addEventListener('scroll', () => {
-  if (!revealEl) return;
-
-  const rect = revealEl.getBoundingClientRect();
-
-  if (rect.top < window.innerHeight * 0.8) {
-    revealEl.classList.add('is-visible');
+    if (stepNumber) {
+      stepNumber.textContent = index + 1;
+    }
   }
-});
-const indicator = document.querySelector('.lab-scroll-indicator');
 
-window.addEventListener('scroll', () => {
-  if (!indicator) return;
+  form.querySelectorAll('[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!validateStep(steps[current])) return;
+      current++;
+      showStep(current);
+    });
+  });
 
-  if (window.scrollY > 40) {
-    indicator.style.opacity = "0";
-  } else {
-    indicator.style.opacity = "0.6";
-  }
-});
-const form = document.querySelector('[data-clinic-form]');
+  form.querySelectorAll('[data-prev]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      current--;
+      showStep(current);
+    });
+  });
 
-if (form) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(form);
-
-    const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      level: formData.get('level'),
-      goal: formData.get('goal'),
-      message: formData.get('message')
-    };
+    const data = Object.fromEntries(new FormData(form));
 
     try {
-      // 1. Guardar en Supabase
       await supabase.from('lab_leads').insert([data]);
 
-      // 2. Enviar email
       await fetch('https://psnprhzowknhfylvgcci.supabase.co/functions/v1/send-lead-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzbnByaHpvd2tuaGZ5bHZnY2NpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNTM5MDQsImV4cCI6MjA4MTcyOTkwNH0.FFGPhYc_8J-U5BSvx0VGnpzmaGLoP-NX-6MRe0RMR0U'
+          'Authorization': 'Bearer TU_ANON_KEY'
         },
         body: JSON.stringify(data)
       });
 
-      alert('Aplicación enviada 🚀');
-      form.reset();
+      form.innerHTML = `
+        <div class="form-success">
+          <h3>Listo 🚀</h3>
+          <p>Recibí tu aplicación. Te escribo en breve.</p>
+        </div>
+      `;
 
     } catch (err) {
       console.error(err);
-      alert('Error al enviar 😢');
     }
   });
 }
-const steps = document.querySelectorAll('.form-step');
-const stepNumber = document.getElementById('step-number');
 
-let current = 0;
 
-function validateStep(step) {
-  const inputs = step.querySelectorAll('input, select, textarea');
-  for (let input of inputs) {
-    if (input.hasAttribute('required') && !input.value.trim()) {
-      input.focus();
-      return false;
-    }
+// =========================
+// LOAD CLINICS
+// =========================
+
+async function loadClinics() {
+  const container = document.querySelector('[data-sb="clinics"]');
+  if (!container) return;
+
+  try {
+    const { data } = await supabase
+      .from('clinics')
+      .select('*')
+      .eq('active', true);
+
+    if (!data) return;
+
+    container.innerHTML = data.map(item => `
+      <article class="clinic-card">
+        <h3>${item.title}</h3>
+        <p>${item.subtitle}</p>
+      </article>
+    `).join('');
+
+  } catch (err) {
+    console.error("Error cargando clinics", err);
   }
-  return true;
 }
-
-function showStep(index) {
-  steps.forEach((step, i) => {
-    step.classList.toggle('is-active', i === index);
-  });
-
-  if (stepNumber) {
-    stepNumber.textContent = index + 1;
-  }
-}
-
-document.querySelectorAll('[data-next]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (!validateStep(steps[current])) return;
-    current++;
-    showStep(current);
-  });
-});
-
-document.querySelectorAll('[data-prev]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    current--;
-    showStep(current);
-  });
-});
-// ===== FORM STEPS (FIX REAL) =====
-document.addEventListener('DOMContentLoaded', () => {
-
-  const form = document.querySelector('[data-clinic-form]');
-  if (!form) return;
-
-  const steps = form.querySelectorAll('.form-step');
-  const stepNumber = document.getElementById('step-number');
-
-  let current = 0;
-
-  function validateStep(step) {
-    const required = step.querySelectorAll('[required]');
-    for (let input of required) {
-      if (!input.value.trim()) {
-        input.focus();
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function showStep(index) {
-    steps.forEach((step, i) => {
-      step.classList.toggle('is-active', i === index);
-    });
-
-    if (stepNumber) {
-      stepNumber.textContent = index + 1;
-    }
-  }
-
-  form.querySelectorAll('[data-next]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (!validateStep(steps[current])) return;
-      current++;
-      showStep(current);
-    });
-  });
-
-  form.querySelectorAll('[data-prev]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      current--;
-      showStep(current);
-    });
-  });
-
-});
-// ===== FORM STEPS (FIX REAL) =====
-document.addEventListener('DOMContentLoaded', () => {
-
-  const form = document.querySelector('[data-clinic-form]');
-  if (!form) return;
-
-  const steps = form.querySelectorAll('.form-step');
-  const stepNumber = document.getElementById('step-number');
-
-  let current = 0;
-
-  function validateStep(step) {
-    const required = step.querySelectorAll('[required]');
-    for (let input of required) {
-      if (!input.value.trim()) {
-        input.focus();
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function showStep(index) {
-    steps.forEach((step, i) => {
-      step.classList.toggle('is-active', i === index);
-    });
-
-    if (stepNumber) {
-      stepNumber.textContent = index + 1;
-    }
-  }
-
-  form.querySelectorAll('[data-next]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (!validateStep(steps[current])) return;
-      current++;
-      showStep(current);
-    });
-  });
-
-  form.querySelectorAll('[data-prev]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      current--;
-      showStep(current);
-    });
-  });
-
-});
