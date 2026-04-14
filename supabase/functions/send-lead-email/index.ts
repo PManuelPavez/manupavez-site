@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std/http/server.ts";
 
 serve(async (req) => {
+  // CORS
   if (req.method === "OPTIONS") {
     return new Response("ok", {
       headers: {
@@ -10,35 +11,47 @@ serve(async (req) => {
     });
   }
 
-  const { name, email, level, goal, message } = await req.json();
+  try {
+    const { name, email, level, goal, message } = await req.json();
 
-  const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${RESEND_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      from: "onboarding@resend.dev",
-      to: ["manupavez22@gmail.com"],
-      subject: "Nuevo lead",
-      html: `
-        <h2>Nuevo Lead</h2>
-        <p><b>Nombre:</b> ${name}</p>
-        <p><b>Email:</b> ${email}</p>
-        <p><b>Nivel:</b> ${level}</p>
-        <p><b>Objetivo:</b> ${goal}</p>
-        <p><b>Mensaje:</b> ${message}</p>
-      `
-    })
-  });
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from: "onboarding@resend.dev",
+        to: ["manupavez22@gmail.com"],
+        subject: "Nuevo lead",
+        html: `
+          <h2>Nuevo Lead</h2>
+          <p><b>Nombre:</b> ${name}</p>
+          <p><b>Email:</b> ${email}</p>
+          <p><b>Nivel:</b> ${level}</p>
+          <p><b>Objetivo:</b> ${goal}</p>
+          <p><b>Mensaje:</b> ${message}</p>
+        `
+      })
+    });
 
-  return new Response(JSON.stringify({ ok: true }), {
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
-    }
-  });
+    const result = await res.json();
+
+    return new Response(JSON.stringify({ ok: true, result }), {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+  }
 });
