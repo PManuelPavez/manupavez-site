@@ -86,7 +86,7 @@ function initForm() {
         method: 'POST',
         headers: {
   'Content-Type': 'application/json',
-  'Authorization': 'Bearer TU_ANON_KEY'
+  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzbnByaHpvd2tuaGZ5bHZnY2NpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNTM5MDQsImV4cCI6MjA4MTcyOTkwNH0.FFGPhYc_8J-U5BSvx0VGnpzmaGLoP-NX-6MRe0RMR0U'
 },
         body: JSON.stringify(data)
       });
