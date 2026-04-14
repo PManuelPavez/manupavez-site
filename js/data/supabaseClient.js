@@ -1,5 +1,5 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
+import { supabase, hasSupabase } from "./supabaseClient.js";
+if (!hasSupabase() || !supabase) throw new Error("Supabase no configurado");
 function readConfig() {
   // Opción A: config del proyecto (ya existe en el repo)
   if (window.MP_SUPABASE?.url && window.MP_SUPABASE?.anonKey) return window.MP_SUPABASE;
