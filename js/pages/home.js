@@ -15,11 +15,12 @@ export function initHome() {
 
   // Si no hay nada de lo que hidratamos, salimos.
   if (!releasesRoot && !labelsTrack && !videoRoot && !mixRoot) return;
+const supabase = window.supabase;
 
-  if (!hasSupabase()) {
-    console.warn("[home] Supabase no configurado: usando contenido estático.");
-    return;
-  }
+if (!supabase) {
+  console.warn("[home] Supabase no disponible");
+  return;
+}
 
   // No bloqueamos la carga: corremos async sin exigir que el caller "await".
   void (async () => {

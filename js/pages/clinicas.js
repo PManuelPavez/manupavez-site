@@ -3,10 +3,12 @@ export function initClinicas() {
   if (!isPage) return;
 
   // 👉 seguridad: no romper si supabase no está listo
-  if (typeof window.supabase === "undefined") {
-    console.warn("Supabase no disponible");
-  }
+const supabase = window.supabase;
 
+if (!supabase) {
+  console.warn("[home] Supabase no disponible");
+  return;
+}
   initForm();
   loadClinics();
 }

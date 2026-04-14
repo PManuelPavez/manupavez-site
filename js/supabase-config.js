@@ -5,4 +5,4 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 window.supabase = createClient(supabaseUrl, supabaseKey);
 
-console.log("SUPABASE OK", window.supabase);
+console.log("SUPABASE OK", window.supabase);                 
