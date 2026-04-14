@@ -85,8 +85,9 @@ function initForm() {
       await fetch('https://psnprhzowknhfylvgcci.supabase.co/functions/v1/send-lead-email', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-        },
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer TU_ANON_KEY'
+},
         body: JSON.stringify(data)
       });
 
