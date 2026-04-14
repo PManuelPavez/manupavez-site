@@ -1,14 +1,15 @@
+import { hasSupabase, supabase } from "../data/supabaseClient.js";
+import { getClinics } from "../data/content.js";
+
 export function initClinicas() {
   const isPage = document.body.dataset.page === "clinicas";
   if (!isPage) return;
 
-  // 👉 seguridad: no romper si supabase no está listo
-const supabase = window.supabase;
+  if (!hasSupabase()) {
+    console.warn("[clinicas] Supabase no configurado");
+    return;
+  }
 
-if (!supabase) {
-  console.warn("[home] Supabase no disponible");
-  return;
-}
   initForm();
   loadClinics();
 }
@@ -24,6 +25,7 @@ function initForm() {
 
   const steps = form.querySelectorAll('.form-step');
   const stepNumber = document.getElementById('step-number');
+  const submitBtn = form.querySelector('[type="submit"]');
 
   let current = 0;
 
@@ -48,7 +50,7 @@ function initForm() {
     }
   }
 
-  // next
+  // NEXT
   form.querySelectorAll('[data-next]').forEach(btn => {
     btn.addEventListener('click', () => {
       if (!validateStep(steps[current])) return;
@@ -57,7 +59,7 @@ function initForm() {
     });
   });
 
-  // prev
+  // PREV
   form.querySelectorAll('[data-prev]').forEach(btn => {
     btn.addEventListener('click', () => {
       current--;
@@ -65,64 +67,58 @@ function initForm() {
     });
   });
 
-  // submit
+  // SUBMIT
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const data = Object.fromEntries(new FormData(form));
 
     try {
-      // ===== GUARDAR EN DB =====
-      if (window.supabase) {
-        await window.supabase.from('lab_leads').insert([data]);
-      }
+      // UX loading
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
 
-      // ===== ENVIAR EMAIL =====
+      // ===== DB =====
+      await supabase.from('lab_leads').insert([data]);
+
+      // ===== EMAIL =====
       await fetch('https://psnprhzowknhfylvgcci.supabase.co/functions/v1/send-lead-email', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzbnByaHpvd2tuaGZ5bHZnY2NpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNTM5MDQsImV4cCI6MjA4MTcyOTkwNH0.FFGPhYc_8J-U5BSvx0VGnpzmaGLoP-NX-6MRe0RMR0U'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
       });
 
-      // ===== UX SUCCESS =====
+      // ===== SUCCESS UX =====
       form.innerHTML = `
         <div class="form-success">
           <h3>Listo 🚀</h3>
           <p>Recibí tu aplicación. Te escribo en breve.</p>
         </div>
-      `;
+     `;
 
     } catch (err) {
       console.error("ERROR SUBMIT:", err);
       alert("Error al enviar 😢");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "QUIERO ENTRAR AL LAB";
     }
   });
 }
 
 
 // =========================
-// LOAD CLINICS (Supabase)
+// LOAD CLINICS (desde content.js)
 // =========================
 
 async function loadClinics() {
   const container = document.querySelector('[data-sb="clinics"]');
   if (!container) return;
 
-  if (typeof window.supabase === "undefined") return;
-
   try {
-    const { data, error } = await window.supabase
-      .from('clinics')
-      .select('*')
-      .eq('active', true);
-
-    if (error) {
-      console.warn("Clinics error:", error);
-      return;
-    }
+    const data = await getClinics();
 
     if (!data || data.length === 0) {
       container.innerHTML = `<p>No hay clínicas disponibles.</p>`;
