@@ -4,7 +4,7 @@ import { initActiveNav } from "./features/activeNav.js";
 import { initScrollTop } from "./features/scrollTop.js";
 import { initSliders } from "./features/slider.js";
 import { initContactForm } from "./features/forms.js";
-
+import { supabase } from "./data/supabaseClient.js";
 import { initHome } from "./pages/home.js";
 import { initPresskit } from "./pages/presskit.js";
 import { initClinicas } from "./pages/clinicas.js";
@@ -26,11 +26,20 @@ safeInit("scrollTop", initScrollTop);
 safeInit("sliders", initSliders);
 safeInit("contactForm", initContactForm);
 
-// Page modules (auto-detect via body[data-page])
-safeInit("home", initHome);
-safeInit("presskit", initPresskit);
-safeInit("clinicas", initClinicas);
-safeInit("bio", initBio);
+function waitForSupabase(callback) {
+  if (window.MP_SUPABASE?.url && window.MP_SUPABASE?.anonKey) {
+    callback();
+  } else {
+    setTimeout(() => waitForSupabase(callback), 50);
+  }
+}
+
+waitForSupabase(() => {
+  safeInit("home", initHome);
+  safeInit("presskit", initPresskit);
+  safeInit("clinicas", initClinicas);
+  safeInit("bio", initBio);
+});
 // =========================
 // Presskit slider (sin tocar HTML)
 // =========================

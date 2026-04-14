@@ -15,10 +15,8 @@ export function initHome() {
 
   // Si no hay nada de lo que hidratamos, salimos.
   if (!releasesRoot && !labelsTrack && !videoRoot && !mixRoot) return;
-const supabase = window.supabase;
-
-if (!supabase) {
-  console.warn("[home] Supabase no disponible");
+if (!hasSupabase()) {
+  console.warn("[home] Supabase no configurado (config no cargó aún)");
   return;
 }
 
