@@ -680,3 +680,96 @@ body[data-page="clinicas"] .section + .section {
 .section.section-centered a.mp-btn {
   margin-top: 10px;
 }
+.form-wrapper {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.form-step {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+}
+
+.form-step.is-active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  color: white;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #6ee7b7;
+  background: rgba(255,255,255,0.06);
+}
+button[type="submit"],
+.form-btn-primary {
+  padding: 16px 28px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #6ee7b7, #6366f1);
+  color: #0b0f19;
+
+  transition: all 0.25s ease;
+}
+
+button:hover {
+  transform: scale(1.04);
+  box-shadow: 0 10px 30px rgba(99,102,241,0.25);
+}
+.form-btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+}
+
+.form-btn-secondary:hover {
+  background: rgba(255,255,255,0.05);
+}
+.form-step-indicator {
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.6;
+  letter-spacing: 0.1em;
+}
+.form-success {
+  text-align: center;
+  padding: 40px 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.form-success h3 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.form-success p {
+  opacity: 0.7;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px);}
+  to { opacity: 1; transform: translateY(0);}
+}
