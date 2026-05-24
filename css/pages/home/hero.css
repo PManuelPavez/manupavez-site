@@ -48,81 +48,77 @@
   text-shadow: 0 6px 22px rgba(0, 0, 0, 0.9);
 }
 
-/* FREQUENCY STORYTELLER con brillo */
+/* Eyebrow editorial — pre-titular limpio */
 
-.hero-lead {
-  margin-top: 12px;
-  display: inline-block;
-  padding: 4px 10px;
-  font-size: 0.9rem;
-  letter-spacing: 0.32em;
+.hero-eyebrow {
+  margin-bottom: 16px;
+  font-size: 0.72rem;
+  letter-spacing: 0.42em;
   text-transform: uppercase;
-  background: linear-gradient(120deg, #ffffff, #59c6ba, #ffffff);
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  color: transparent;
-  position: relative;
-  animation: hero-lead-shimmer 6s linear infinite;
+  color: rgba(255, 255, 255, 0.55);
 }
 
-.hero-lead a {
+.hero-eyebrow a {
   color: inherit;
   text-decoration: none;
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.25s ease;
 }
 
-.hero-lead::after {
+.hero-eyebrow a::after {
   content: "";
   position: absolute;
-  inset: -4px -10px;
-  border-radius: 999px;
-  border: 1px solid rgba(89, 198, 186, 0.25);
-  opacity: 0;
-  pointer-events: none;
-  animation: hero-lead-pulse 5.2s ease-in-out infinite;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.3;
+  transform: scaleX(0.4);
+  transform-origin: left;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-@keyframes hero-lead-shimmer {
-  0% {
-    background-position: 0% 50%;
-    opacity: 0.85;
-  }
-  50% {
-    background-position: 100% 50%;
-    opacity: 1;
-  }
-  100% {
-    background-position: 0% 50%;
-    opacity: 0.85;
-  }
+.hero-eyebrow a:hover {
+  color: #fff;
 }
 
-@keyframes hero-lead-pulse {
-  0%,
-  70%,
-  100% {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  40% {
-    opacity: 1;
-    transform: scale(1.03);
-  }
+.hero-eyebrow a:hover::after {
+  transform: scaleX(1);
+  opacity: 0.8;
 }
 
 .hero-sub {
-  margin-top: 20px;
+  margin-top: 24px;
   font-size: 1.02rem;
   line-height: 1.8;
   color: var(--color-text-muted);
+  max-width: 540px;
+  margin-inline: auto;
 }
 
 .hero-ctas,
 .hero-ctas-main {
-  margin-top: 28px;
+  margin-top: 36px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Secundario tipo "or, go here →" — patrón Polo / Wainot */
+.hero-secondary {
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.hero-secondary:hover {
+  color: #fff;
+  transform: translateX(2px);
 }
 
 

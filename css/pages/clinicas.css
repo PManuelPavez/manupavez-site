@@ -540,236 +540,302 @@ body{
 :target{
   scroll-margin-top: 80px;
 }
-.form-step {
-  display: none;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all .3s ease;
+/* =========================
+   COMPACT MODE — densidad
+   ========================= */
+
+body[data-page="clinicas"] .section {
+  padding-block: clamp(18px, 3vw, 36px);
 }
 
-.form-step.is-active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
-}
-/* ===== FORM PREMIUM ===== */
+body[data-page="clinicas"] .section + .section { margin-top: 0; }
+.lab-hero { margin-bottom: 30px; }
+#reservar.section { padding-top: 20px; }
+.compare { margin: 60px 0; }
+.clinic-list li { padding: 10px 12px; }
+.section.section-centered a.mp-btn { margin-top: 10px; }
 
-.lab-form {
-  max-width: 520px;
-  margin: 40px auto 0;
-  display: grid;
-  gap: 24px;
+/* =========================
+   LAB FORM — dark minimal pro
+   Refs: Polo / Ezequiel Arias / Victoria Wainot
+   ========================= */
+
+.form-intro {
+  max-width: 460px;
+  margin: 0 auto 20px;
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  text-align: center;
 }
 
 .form-progress {
+  max-width: 460px;
+  margin: 0 auto 28px;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
   text-align: center;
-  font-size: 0.85rem;
-  opacity: 0.6;
-  letter-spacing: 0.12em;
-  margin-bottom: 10px;
 }
 
-/* STEPS */
+.form-progress-bar {
+  display: block;
+  height: 1px;
+  width: 100%;
+  margin-top: 10px;
+  background: rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.form-progress-bar::after {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: var(--progress, 25%);
+  background: linear-gradient(90deg, #59c6ba, #314097);
+  transition: width .35s var(--mp-ease-out, cubic-bezier(.16,1,.3,1));
+}
+
+.lab-form {
+  max-width: 460px;
+  margin: 0 auto;
+  display: block;
+  position: relative;
+}
+
+/* Step transitions */
 .form-step {
   display: none;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.4s ease;
+  border: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .form-step.is-active {
   display: grid;
-  gap: 14px;
-  opacity: 1;
-  transform: translateY(0);
+  gap: 22px;
+  animation: stepIn .45s cubic-bezier(.16,1,.3,1) both;
 }
 
-/* INPUTS */
+@keyframes stepIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fields — underline minimal style */
+.lab-form .field {
+  display: grid;
+  gap: 8px;
+}
+
+.lab-form label {
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+
 .lab-form input,
 .lab-form select,
 .lab-form textarea {
   width: 100%;
-  padding: 14px 16px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(0,0,0,0.3);
-  color: white;
-  font-size: 0.95rem;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+  border-radius: 0;
+  padding: 12px 0;
+  color: #fff;
+  font: inherit;
+  font-size: 1.05rem;
+  transition: border-color .25s ease;
+}
+
+.lab-form input::placeholder,
+.lab-form textarea::placeholder {
+  color: rgba(255,255,255,0.25);
 }
 
 .lab-form input:focus,
 .lab-form select:focus,
 .lab-form textarea:focus {
   outline: none;
-  border-color: rgba(89,198,186,0.6);
-  box-shadow: 0 0 0 3px rgba(89,198,186,0.2);
+  border-bottom-color: #fff;
+  box-shadow: none;
 }
 
-/* LABEL */
-.lab-form label {
-  font-size: 0.8rem;
-  opacity: 0.7;
-  letter-spacing: 0.08em;
+.lab-form input:user-invalid,
+.lab-form select:user-invalid {
+  border-bottom-color: rgba(255, 90, 90, 0.7);
 }
 
-/* NAV */
+.lab-form textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.6;
+}
+
+/* Custom select chevron */
+.lab-form select {
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.6) 50%),
+    linear-gradient(135deg, rgba(255,255,255,0.6) 50%, transparent 50%);
+  background-position: right 6px center, right 0 center;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 24px;
+  cursor: pointer;
+}
+
+.lab-form select option {
+  background: #050711;
+  color: #fff;
+}
+
+/* Chips — level selector */
+.cl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cl-chips input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cl-chips label {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.cl-chips label:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.4);
+}
+
+.cl-chips input[type="radio"]:checked + label {
+  background: #fff;
+  color: #050509;
+  border-color: #fff;
+}
+
+.cl-chips input[type="radio"]:focus-visible + label {
+  box-shadow: 0 0 0 3px rgba(89,198,186,.3);
+}
+
+/* Nav */
 .form-nav {
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 8px;
 }
 
-/* BOTONES */
-.mp-btn {
-  padding: 12px 18px;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
-  cursor: pointer;
+.form-nav .mp-btn {
+  flex: 1;
 }
 
-.mp-btn.primary {
-  background: linear-gradient(135deg,#5bc6ba,#314097);
-  color: white;
-  border: none;
-}
-
-.mp-btn.ghost {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
-}
-
-/* MOBILE */
-@media (max-width: 640px) {
-  .lab-form {
-    padding: 0 16px;
-  }
-}
-/* ===== COMPACT MODE (CONVERSIÓN) ===== */
-
-body[data-page="clinicas"] .section {
-  padding-block: clamp(18px, 3vw, 36px);
-}
-
-body[data-page="clinicas"] .section + .section {
-  margin-top: 0;
-}
-
-/* Hero más cerca del contenido */
-.lab-hero {
-  margin-bottom: 30px;
-}
-
-/* Reduce espacio antes del form */
-#reservar.section {
-  padding-top: 20px;
-}
-
-/* Compare section más ajustada */
-.compare {
-  margin: 60px 0;
-}
-
-/* Listas más compactas */
-.clinic-list li {
-  padding: 10px 12px;
-}
-
-/* CTA intermedio menos aire */
-.section.section-centered a.mp-btn {
-  margin-top: 10px;
-}
-.form-wrapper {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 40px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-.form-step {
-  display: none;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.4s ease;
-}
-
-.form-step.is-active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
-}
-.form-group input,
-.form-group textarea {
+.form-step:first-of-type .mp-btn,
+.form-step:last-of-type .mp-btn[type="submit"] {
   width: 100%;
-  padding: 18px 20px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.03);
-  color: white;
-  font-size: 16px;
-  transition: all 0.2s ease;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #6ee7b7;
-  background: rgba(255,255,255,0.06);
-}
-button[type="submit"],
-.form-btn-primary {
-  padding: 16px 28px;
-  border-radius: 999px;
-  border: none;
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-
-  background: linear-gradient(135deg, #6ee7b7, #6366f1);
-  color: #0b0f19;
-
-  transition: all 0.25s ease;
+/* Submit loading state */
+.lab-form button[type="submit"][aria-busy="true"],
+.lab-form .mp-btn[data-loading="true"] {
+  opacity: 0.7;
+  pointer-events: none;
+  position: relative;
 }
 
-button:hover {
-  transform: scale(1.04);
-  box-shadow: 0 10px 30px rgba(99,102,241,0.25);
-}
-.form-btn-secondary {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
+.lab-form button[type="submit"][aria-busy="true"]::after,
+.lab-form .mp-btn[data-loading="true"]::after {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 10px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: spin .7s linear infinite;
 }
 
-.form-btn-secondary:hover {
-  background: rgba(255,255,255,0.05);
-}
-.form-step-indicator {
-  text-align: center;
-  font-size: 14px;
-  opacity: 0.6;
-  letter-spacing: 0.1em;
-}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Success */
 .form-success {
   text-align: center;
-  padding: 40px 20px;
-  animation: fadeIn 0.5s ease;
+  padding: 56px 20px;
+  animation: stepIn .5s cubic-bezier(.16,1,.3,1) both;
+}
+
+.form-success__icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(89,198,186,0.6);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.form-success__icon::before {
+  content: "";
+  width: 16px;
+  height: 8px;
+  border-left: 2px solid #59c6ba;
+  border-bottom: 2px solid #59c6ba;
+  transform: rotate(-45deg) translate(2px, -2px);
 }
 
 .form-success h3 {
-  font-size: 28px;
+  font-size: 1.4rem;
+  letter-spacing: 0.12em;
   margin-bottom: 12px;
 }
 
 .form-success p {
-  opacity: 0.7;
+  max-width: 320px;
+  margin: 0 auto;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.7;
+  font-size: 0.95rem;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px);}
-  to { opacity: 1; transform: translateY(0);}
+/* Error */
+.form-error {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: rgba(255, 90, 90, 0.08);
+  border: 1px solid rgba(255, 90, 90, 0.25);
+  border-radius: 8px;
+  color: #ff8a8a;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.form-error[hidden] { display: none; }
+
+/* Mobile polish */
+@media (max-width: 640px) {
+  .lab-form { padding: 0 6px; }
+  .form-nav { flex-direction: column-reverse; }
+  .form-nav .mp-btn { width: 100%; }
 }

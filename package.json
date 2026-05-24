@@ -1,0 +1,9 @@
+{
+  "name": "manupavez-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync:music": "node scripts/sync-music.js",
+    "dev": "python3 -m http.server 5173"
+  }
+}
