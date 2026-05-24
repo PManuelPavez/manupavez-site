@@ -1,0 +1,82 @@
+/* =================== PHOTO STRIP — dynamic image marquee =================== */
+
+.photo-strip {
+  position: relative;
+  overflow: hidden;
+  padding: 18px 0;
+  background:
+    linear-gradient(to bottom, rgba(5, 7, 17, 0.6), rgba(5, 7, 17, 0));
+  isolation: isolate;
+}
+
+.photo-strip::before,
+.photo-strip::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(60px, 12vw, 160px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.photo-strip::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(5, 5, 9, 1), rgba(5, 5, 9, 0));
+}
+
+.photo-strip::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(5, 5, 9, 1), rgba(5, 5, 9, 0));
+}
+
+.photo-strip-track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  animation: photo-strip-scroll 42s linear infinite;
+  will-change: transform;
+}
+
+.photo-strip-track img {
+  height: clamp(180px, 26vw, 320px);
+  width: auto;
+  border-radius: 14px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  filter: saturate(1.05) brightness(0.95);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.photo-strip:hover .photo-strip-track {
+  animation-play-state: paused;
+}
+
+.photo-strip-track img:hover {
+  filter: saturate(1.15) brightness(1.05);
+  transform: scale(1.02);
+}
+
+@keyframes photo-strip-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-strip-track {
+    animation: none;
+    overflow-x: auto;
+    width: 100%;
+    padding-inline: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .photo-strip {
+    padding: 14px 0;
+  }
+  .photo-strip-track {
+    gap: 10px;
+    animation-duration: 36s;
+  }
+}

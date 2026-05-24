@@ -121,4 +121,105 @@
   transform: translateX(2px);
 }
 
+/* ===== Hero social row (under CTAs) ===== */
+.hero-social {
+  margin: 28px auto 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(5, 7, 17, 0.55);
+  backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.hero-social a svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.hero-social a:hover {
+  color: #050509;
+  background: #fff;
+  border-color: #fff;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .hero-social a span {
+    display: none;
+  }
+  .hero-social a {
+    padding: 10px;
+  }
+  .hero-social a svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* ===== Hero scroll indicator ===== */
+.hero-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 2;
+  width: 22px;
+  height: 36px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 6px;
+  opacity: 0.75;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+@media (min-width: 720px) {
+  .hero-scroll {
+    display: inline-flex;
+  }
+}
+
+.hero-scroll:hover {
+  opacity: 1;
+  transform: translateX(-50%) translateY(2px);
+}
+
+.hero-scroll span {
+  display: block;
+  width: 2px;
+  height: 8px;
+  background: #fff;
+  border-radius: 2px;
+  animation: hero-scroll-bob 1.6s ease-in-out infinite;
+}
+
+@keyframes hero-scroll-bob {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll span { animation: none; }
+}
 

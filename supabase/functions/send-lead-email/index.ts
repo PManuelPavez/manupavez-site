@@ -1,57 +1,93 @@
-import { serve } from "https://deno.land/std/http/server.ts";
+// supabase/functions/send-lead-email/index.ts
+// Notifica por mail (vía Resend) cada vez que se completa el form del Lab.
+
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { ...CORS, "Content-Type": "application/json" },
+  });
+
+const esc = (v: unknown) =>
+  String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 
 serve(async (req) => {
-  // CORS
-  if (req.method === "OPTIONS") {
-    return new Response("ok", {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "authorization, content-type",
-      },
-    });
+  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
+  if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
+
+  const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+  if (!RESEND_API_KEY) return json({ error: "missing_resend_api_key" }, 500);
+
+  const FROM = Deno.env.get("LAB_FROM_EMAIL") || "Frequency Lab <onboarding@resend.dev>";
+  const TO = (Deno.env.get("LAB_TO_EMAIL") || "manupavez22@gmail.com")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  let payload: Record<string, unknown> = {};
+  try {
+    payload = await req.json();
+  } catch {
+    return json({ error: "invalid_json" }, 400);
   }
 
+  const name = String(payload.name ?? "").trim();
+  const email = String(payload.email ?? "").trim();
+  const level = String(payload.level ?? "").trim();
+  const goal = String(payload.goal ?? "").trim();
+  const message = String(payload.message ?? "").trim();
+
+  if (!name || !email) return json({ error: "missing_required_fields" }, 422);
+
+  const html = `
+    <div style="font-family:system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;line-height:1.55;color:#0a0a0a;max-width:560px">
+      <h2 style="font-weight:600;letter-spacing:.04em;margin:0 0 12px">Nuevo lead — Frequency Lab</h2>
+      <table cellpadding="6" style="border-collapse:collapse;font-size:14px">
+        <tr><td style="opacity:.6">Nombre</td><td><strong>${esc(name)}</strong></td></tr>
+        <tr><td style="opacity:.6">Email</td><td><a href="mailto:${esc(email)}">${esc(email)}</a></td></tr>
+        <tr><td style="opacity:.6">Nivel</td><td>${esc(level) || "—"}</td></tr>
+        <tr><td style="opacity:.6">Objetivo</td><td>${esc(goal) || "—"}</td></tr>
+      </table>
+      <p style="margin-top:18px;white-space:pre-wrap;background:#f6f6f8;padding:14px;border-radius:8px;font-size:14px">
+        ${esc(message) || "<em style='opacity:.6'>Sin mensaje extra.</em>"}
+      </p>
+    </div>
+  `;
+
   try {
-    const { name, email, level, goal, message } = await req.json();
-
-    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "onboarding@resend.dev",
-        to: ["manupavez22@gmail.com"],
-        subject: "Nuevo lead",
-        html: `
-          <h2>Nuevo Lead</h2>
-          <p><b>Nombre:</b> ${name}</p>
-          <p><b>Email:</b> ${email}</p>
-          <p><b>Nivel:</b> ${level}</p>
-          <p><b>Objetivo:</b> ${goal}</p>
-          <p><b>Mensaje:</b> ${message}</p>
-        `
-      })
+        from: FROM,
+        to: TO,
+        reply_to: email || undefined,
+        subject: `Nuevo lead Lab — ${name}`,
+        html,
+      }),
     });
 
-    const result = await res.json();
+    const result = await res.json().catch(() => ({}));
 
-    return new Response(JSON.stringify({ ok: true, result }), {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      }
-    });
+    if (!res.ok) return json({ error: "resend_failed", detail: result }, 502);
 
+    return json({ ok: true, id: (result as { id?: string })?.id ?? null });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*"
-      }
-    });
+    return json({ error: (err as Error).message }, 500);
   }
 });

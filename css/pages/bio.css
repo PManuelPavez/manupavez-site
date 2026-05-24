@@ -1,322 +1,251 @@
 /* =========================
-   BIO — editorial / premium
+   BIO — editorial / premium (rediseño)
    Scope: solo bio.html
    ========================= */
 
-body[data-page="bio"] .story-page{
-  /* respeta header fijo */
+body[data-page="bio"] .story-page {
   padding-top: calc(var(--header-height) + clamp(26px, 4vw, 56px));
   padding-bottom: clamp(56px, 8vw, 96px);
   padding-inline: 16px;
+  position: relative;
+  isolation: isolate;
 }
 
-/* Contenedor “prose” */
-body[data-page="bio"] .mp-story{
+/* Halo de fondo, ambient */
+body[data-page="bio"] .story-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(700px 460px at 12% 8%, rgba(89, 198, 186, 0.10), transparent 60%),
+    radial-gradient(820px 540px at 100% 110%, rgba(49, 64, 151, 0.14), transparent 65%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ============ BIO HERO ============ */
+
+.bio-hero {
   width: min(980px, 100%);
   margin-inline: auto;
+  text-align: center;
+  padding: clamp(20px, 4vw, 48px) clamp(16px, 3vw, 36px) clamp(32px, 5vw, 56px);
+}
 
-  padding: clamp(18px, 2.6vw, 34px);
-  border-radius: 22px;
+.bio-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 18px;
+}
+
+body[data-page="bio"] .bio-hero h1 {
+  font-family: var(--font-primary);
+  font-size: clamp(2.4rem, 1.4rem + 4vw, 4.4rem);
+  letter-spacing: 0.22em;
+  line-height: 1;
+  margin: 0 auto 14px;
+  text-shadow: 0 16px 60px rgba(0, 0, 0, 0.75);
+  position: relative;
+  display: inline-block;
+}
+
+body[data-page="bio"] .bio-hero h1::after {
+  content: "";
+  display: block;
+  margin: 22px auto 0;
+  height: 1px;
+  width: clamp(120px, 24vw, 220px);
+  background: linear-gradient(90deg, transparent, rgba(89, 198, 186, 0.7), rgba(49, 64, 151, 0.7), transparent);
+}
+
+.bio-tagline {
+  font-size: 0.92rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 30px;
+}
+
+.bio-stats {
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+.bio-stats li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 22px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(5, 7, 17, 0.6);
+  backdrop-filter: blur(8px);
+  min-width: 120px;
+}
+
+.bio-stats li span {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+.bio-stats li small {
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ============ STORY CARD ============ */
+
+body[data-page="bio"] .mp-story {
+  width: min(880px, 100%);
+  margin-inline: auto;
+
+  padding: clamp(22px, 3vw, 44px);
+  border-radius: 24px;
 
   background:
-    radial-gradient(800px 420px at 10% 0%, rgba(89,198,186,.10), transparent 60%),
-    radial-gradient(760px 520px at 100% 120%, rgba(49,64,151,.14), transparent 62%),
-    rgba(5, 7, 17, 0.90);
+    radial-gradient(860px 460px at 12% 0%, rgba(89, 198, 186, 0.10), transparent 60%),
+    radial-gradient(840px 560px at 100% 120%, rgba(49, 64, 151, 0.14), transparent 64%),
+    rgba(3, 5, 12, 0.94);
 
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow: 0 18px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05) inset;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.62),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
 
   position: relative;
   overflow: hidden;
 }
 
-/* “línea frecuencia” arriba (decorativa, liviana) */
-body[data-page="bio"] .mp-story::before{
-  content:"";
-  position:absolute;
+body[data-page="bio"] .mp-story::before {
+  content: "";
+  position: absolute;
   left: 18px;
   right: 18px;
   top: 16px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(89,198,186,.55), rgba(49,64,151,.55), transparent);
-  opacity: .55;
+  background: linear-gradient(90deg, transparent, rgba(89, 198, 186, 0.55), rgba(49, 64, 151, 0.55), transparent);
+  opacity: 0.55;
 }
 
-/* Grano ultra sutil (sin imágenes externas) */
-body[data-page="bio"] .mp-story::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  opacity: .06;
-  mix-blend-mode: overlay;
-  background-image:
-    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px),
-    repeating-linear-gradient(90deg, rgba(0,0,0,.06) 0 1px, transparent 1px 4px);
+/* ============ CHAPTERS ============ */
+
+.bio-chapter + .bio-chapter {
+  margin-top: clamp(28px, 4vw, 44px);
 }
 
-/* Título */
-body[data-page="bio"] .mp-story > h1{
+.bio-chapter__kicker {
+  font-family: var(--font-primary);
+  font-size: 0.78rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--mp-accent-2) 75%, white 25%);
+  margin-bottom: 12px;
   position: relative;
-  z-index: 1;
-
-  font-size: clamp(1.6rem, 1.2rem + 2.2vw, 2.4rem);
-  letter-spacing: 0.22em;
-  margin-bottom: 18px;
-
-  /* un toque más “premium” */
-  text-shadow: 0 14px 40px rgba(0,0,0,.65);
+  padding-left: 18px;
 }
 
-/* Prosa: ancho de lectura + ritmo */
-body[data-page="bio"] .mp-story > p{
-  position: relative;
-  z-index: 1;
+.bio-chapter__kicker::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 8px;
+  height: 1px;
+  background: currentColor;
+}
 
+body[data-page="bio"] .bio-chapter p {
   max-width: 72ch;
-  font-size: clamp(1.02rem, 0.98rem + 0.35vw, 1.14rem);
+  font-size: clamp(1.02rem, 0.98rem + 0.35vw, 1.16rem);
   line-height: 1.85;
-  color: var(--mp-muted);
-  text-align: left;
-
+  color: rgba(233, 238, 245, 0.9);
   margin: 0;
 }
 
-body[data-page="bio"] .mp-story > p + p{
-  margin-top: 14px;
+body[data-page="bio"] .bio-chapter p + p {
+  margin-top: 12px;
 }
 
-/* Drop cap sutil (solo primer párrafo) */
-body[data-page="bio"] .mp-story > p:first-of-type::first-letter{
-  float: left;
-  font-family: var(--font-primary);
-  font-size: 3.2em;
-  line-height: 0.9;
-  margin: 0.06em 0.12em 0 0;
-  color: color-mix(in oklab, var(--mp-accent-2) 65%, white 35%);
-  text-shadow: 0 18px 50px rgba(0,0,0,.65);
+body[data-page="bio"] .mp-story strong {
+  color: rgba(255, 255, 255, 0.97);
+  font-weight: 600;
 }
 
-/* Énfasis “caro” (sin subrayados infantiles) */
-body[data-page="bio"] .mp-story strong{
-  color: rgba(255,255,255,.95);
-  font-weight: 700;
-}
-
-body[data-page="bio"] .mp-story em{
-  color: color-mix(in oklab, var(--mp-accent-2) 70%, white 30%);
+body[data-page="bio"] .mp-story em {
+  color: color-mix(in oklab, var(--mp-accent-2) 75%, white 25%);
   font-style: italic;
 }
 
-/* Links dentro del texto */
-body[data-page="bio"] .mp-story a{
-  color: color-mix(in oklab, var(--mp-accent-2) 85%, white 15%);
-  text-decoration-color: color-mix(in oklab, var(--mp-accent-2) 40%, transparent);
-  text-underline-offset: 0.18em;
+/* ============ CTA FOOTER ============ */
+
+.bio-cta {
+  margin-top: clamp(36px, 5vw, 56px);
+  padding-top: clamp(24px, 4vw, 36px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
 }
 
-body[data-page="bio"] .mp-story a:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--mp-accent-2) 25%, transparent);
-  border-radius: 10px;
-}
+/* ============ MOBILE ============ */
 
-/* Mobile: un pelín más compacto */
-@media (max-width: 640px){
-  body[data-page="bio"] .mp-story{
+@media (max-width: 640px) {
+  body[data-page="bio"] .mp-story {
     border-radius: 18px;
-    padding: 18px;
+    padding: 22px;
   }
-  body[data-page="bio"] .mp-story::before{
+  body[data-page="bio"] .mp-story::before {
     left: 14px;
     right: 14px;
   }
-}
-
-/* Reduced motion: sin “nada raro” (ya es liviano, pero por las dudas) */
-@media (prefers-reduced-motion: reduce){
-  body[data-page="bio"] .mp-story *{
-    scroll-behavior: auto;
+  .bio-stats {
+    gap: 8px;
   }
-}
-/* BIO: kill drop-cap (la E gigante) */
-body[data-page="bio"] .mp-story > p:first-of-type::first-letter{
-  float: none;
-  font-size: inherit;
-  line-height: inherit;
-  margin: 0;
-  color: inherit;
-  text-shadow: none;
-}
-/* =========================
-   BIO: títulos envolventes + motion sutil
-   ========================= */
-
-body[data-page="bio"] .mp-story > h1{
-  position: relative;
-  z-index: 1;
-  margin-bottom: 18px;
-
-  /* un poco más “envolvente” */
-  line-height: 1.05;
-  letter-spacing: 0.22em;
-
-  /* brillo suave sin blur pesado */
-  text-shadow:
-    0 16px 60px rgba(0,0,0,.75),
-    0 0 24px rgba(89,198,186,.10);
-}
-
-/* Halo detrás del título */
-body[data-page="bio"] .mp-story > h1::before{
-  content:"";
-  position:absolute;
-  left: -18px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: min(520px, 72%);
-  height: 90px;
-  border-radius: 999px;
-
-  background:
-    radial-gradient(circle at 20% 50%, rgba(89,198,186,.26), transparent 60%),
-    radial-gradient(circle at 80% 50%, rgba(49,64,151,.22), transparent 62%);
-  opacity: .85;
-  filter: none;
-
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* Subrayado “frecuencia” animado (liviano) */
-body[data-page="bio"] .mp-story > h1::after{
-  content:"";
-  display:block;
-  margin-top: 14px;
-  height: 1px;
-  width: min(420px, 78%);
-  background: linear-gradient(90deg, transparent, rgba(89,198,186,.65), rgba(49,64,151,.65), transparent);
-  opacity: .55;
-
-  transform-origin: left center;
-  transform: scaleX(.72);
-}
-
-/* Micro-movimiento solo en hover (desktop) para no marear en mobile */
-@media (hover:hover) and (pointer:fine){
-  body[data-page="bio"] .mp-story{
-    transition: transform 220ms cubic-bezier(.2,.8,.2,1);
+  .bio-stats li {
+    padding: 10px 16px;
+    min-width: 96px;
   }
-  body[data-page="bio"] .mp-story:hover{
-    transform: translateY(-1px);
+  .bio-stats li span {
+    font-size: 1.2rem;
   }
-
-  body[data-page="bio"] .mp-story:hover > h1::after{
-    transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 260ms cubic-bezier(.2,.8,.2,1);
-    transform: scaleX(1);
-    opacity: .75;
+  .bio-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .bio-cta .mp-btn {
+    width: 100%;
   }
 }
 
-/* Reduced motion: nada de movimientos */
-@media (prefers-reduced-motion: reduce){
-  body[data-page="bio"] .mp-story{
+/* ============ MOTION ============ */
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-page="bio"] .mp-story,
+  body[data-page="bio"] .bio-chapter {
     transition: none !important;
     transform: none !important;
   }
-  body[data-page="bio"] .mp-story > h1::after{
-    transition: none !important;
-  }
-}
-/* BIO: centrar título (solo H1) */
-body[data-page="bio"] .mp-story > h1{
-  text-align: center;
 }
 
-/* Halo y línea centrados */
-body[data-page="bio"] .mp-story > h1::before{
-  left: 50%;
-  transform: translate(-50%, -50%);
+/* ============ NAV ACTIVE FIX ============ */
+
+body[data-page="bio"] .site-header .nav a.is-active {
+  color: #fff;
 }
 
-body[data-page="bio"] .mp-story > h1::after{
-  margin-inline: auto;
-  transform-origin: center;
-}
-body[data-page="bio"] .mp-story > p + p{
-  margin-top: clamp(14px, 1.6vw, 20px);
-}
-
-@media (min-width: 980px){
-  body[data-page="bio"] .mp-story > p{
-    max-width: 76ch;
-  }
-}
-@media (min-width: 640px){
-  body[data-page="bio"] .mp-story > p:nth-of-type(2n){
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255,255,255,.06);
-  }
-}
-body[data-page="bio"] .mp-story{
-  background:
-    radial-gradient(800px 420px at 10% 0%, rgba(89,198,186,.10), transparent 60%),
-    radial-gradient(760px 520px at 100% 120%, rgba(49,64,151,.14), transparent 62%),
-    rgba(3, 5, 12, 0.92);
-}
-
-body[data-page="bio"] .mp-story > p{
-  color: rgba(233, 238, 245, 0.86);
-}
-body[data-page="bio"] .mp-story > p:has(q),
-body[data-page="bio"] .mp-story > p:has(quote){
-  border-left: 2px solid rgba(89,198,186,.35);
-  padding-left: 14px;
-}
-body[data-page="bio"] .mp-story img{
-  margin-block: 18px;
-}
-
-@media (min-width: 980px){
-  body[data-page="bio"] .mp-story img{
-    margin-block: 22px;
-  }
-}
-/* =========================
-   BIO: contraste + fondo más premium (rentable)
-   Archivo: css/pages/bio.css (PEGAR AL FINAL)
-   ========================= */
-
-body[data-page="bio"] .mp-story{
-  /* un pelo más oscuro y “profundo” para que el texto respire */
-  background:
-    radial-gradient(860px 460px at 12% 0%, rgba(89,198,186,.12), transparent 62%),
-    radial-gradient(840px 560px at 100% 120%, rgba(49,64,151,.16), transparent 64%),
-    rgba(3, 5, 12, 0.94);
-
-  border-color: rgba(255,255,255,.12);
-  box-shadow:
-    0 22px 60px rgba(0,0,0,.62),
-    0 0 0 1px rgba(255,255,255,.06) inset;
-}
-
-/* Texto: más legible sin volverse blanco nuclear */
-body[data-page="bio"] .mp-story > p{
-  color: rgba(233, 238, 245, 0.88);
-}
-
-/* Muted y detalles un poquito más claros */
-body[data-page="bio"] .mp-story :where(.muted){
-  color: rgba(233, 238, 245, 0.72);
-}
-
-/* Énfasis: sube contraste y queda “afilado” */
-body[data-page="bio"] .mp-story strong{
-  color: rgba(255,255,255,0.96);
-}
-
-/* Links más visibles sin gritar */
-body[data-page="bio"] .mp-story a{
-  color: color-mix(in oklab, var(--mp-accent-2) 88%, white 12%);
-  text-decoration-color: color-mix(in oklab, var(--mp-accent-2) 45%, transparent);
+body[data-page="bio"] .site-header .nav a.is-active::after {
+  transform: scaleX(1);
 }

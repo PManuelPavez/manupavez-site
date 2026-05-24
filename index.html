@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-  <title>Manu Pavez | Frequency Storyteller</title>
-  <meta name="description" content="Manu Pavez — Frequency Storyteller. Música, laboratorio de procesos y noches en la pista." />
+  <title>Manu Pavez | Frequency Storyteller — Progressive House DJ &amp; Producer</title>
+  <meta name="description" content="Manu Pavez — Frequency Storyteller. DJ y productor argentino de progressive house. Música, sets en vivo, sellos y laboratorio creativo." />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#050711" />
   <meta name="author" content="Manu Pavez" />
@@ -16,22 +16,27 @@
   <!-- Open Graph -->
   <meta property="og:site_name" content="Manu Pavez" />
   <meta property="og:title" content="Manu Pavez | Frequency Storyteller" />
-  <meta property="og:description" content="Música, laboratorio de procesos y noches en la pista." />
+  <meta property="og:description" content="DJ y productor argentino de progressive house. Música, sets en vivo, sellos y laboratorio creativo." />
   <meta property="og:url" content="https://manupavez.com/" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_AR" />
   <meta property="og:image" content="https://manupavez.com/logos/CUBO%20BLANCO%20MP.png" />
 
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Manu Pavez | Frequency Storyteller" />
-  <meta name="twitter:description" content="Música, laboratorio de procesos y noches en la pista." />
+  <meta name="twitter:description" content="DJ y productor argentino de progressive house." />
   <meta name="twitter:image" content="https://manupavez.com/logos/CUBO%20BLANCO%20MP.png" />
 
   <!-- Tipografías -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Preconnect a plataformas para que los embeds carguen rápido -->
+  <link rel="preconnect" href="https://open.spotify.com" crossorigin />
+  <link rel="preconnect" href="https://www.youtube.com" />
+  <link rel="preconnect" href="https://i.ytimg.com" />
 
   <!-- Estilos -->
   <link rel="stylesheet" href="css/base.css" />
@@ -41,11 +46,11 @@
   <link rel="stylesheet" href="css/responsive.css" />
 
   <!-- Scripts -->
-<script type="module" src="js/supabase-config.js"></script>
-<script type="module" src="js/main.js"></script>
+  <script type="module" src="js/supabase-config.js"></script>
+  <script type="module" src="js/main.js"></script>
 </head>
 
-<body>
+<body data-page="home">
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
 
   <header class="site-header fixed">
@@ -61,6 +66,7 @@
           <li><a href="index.html#sellos">SELLOS</a></li>
           <li><a href="index.html#en-vivo">EN VIVO</a></li>
           <li><a href="clinicas.html">FREQUENCY LAB</a></li>
+          <li><a href="bio.html">SOBRE MANU</a></li>
           <li><a href="presskit.html">PRESSKIT</a></li>
           <li><a href="index.html#booking" class="cta-book">BOOKING</a></li>
         </ul>
@@ -89,8 +95,7 @@
         <li><a href="index.html#musica">MÚSICA</a></li>
         <li><a href="index.html#sellos">SELLOS</a></li>
         <li><a href="index.html#en-vivo">EN VIVO</a></li>
-        <li><a href="index.html#lab">FREQUENCY LAB</a></li>
-        <li><a href="clinicas.html">CLÍNICAS</a></li>
+        <li><a href="clinicas.html">FREQUENCY LAB</a></li>
         <li><a href="bio.html">SOBRE MANU</a></li>
         <li><a href="presskit.html">PRESSKIT</a></li>
         <li><a href="index.html#booking">BOOKING</a></li>
@@ -110,8 +115,7 @@
           <li><a href="index.html#musica">MÚSICA</a></li>
           <li><a href="index.html#sellos">SELLOS</a></li>
           <li><a href="index.html#en-vivo">EN VIVO</a></li>
-          <li><a href="index.html#lab">FREQUENCY LAB</a></li>
-          <li><a href="clinicas.html">CLÍNICAS</a></li>
+          <li><a href="clinicas.html">FREQUENCY LAB</a></li>
           <li><a href="bio.html">SOBRE MANU</a></li>
           <li><a href="presskit.html">PRESSKIT</a></li>
           <li><a href="index.html#booking">BOOKING</a></li>
@@ -121,37 +125,80 @@
   </header>
 
   <main id="main-content" tabindex="-1">
+    <!-- ============ HERO ============ -->
     <section id="inicio" class="hero" aria-labelledby="hero-title">
       <div class="hero-bg" aria-hidden="true">
-        <video class="hero-video" autoplay muted loop playsinline>
+        <video class="hero-video" autoplay muted loop playsinline poster="img/fotos/slide1.jpg">
           <source src="img/bg-1080.webm" type="video/webm" />
           <source src="img/bg-720.webm" type="video/webm" />
         </video>
       </div>
 
       <div class="hero-wrap">
-        <p class="hero-eyebrow"><a href="bio.html">FREQUENCY STORYTELLER</a></p>
+        <p class="hero-eyebrow"><a href="bio.html">FREQUENCY STORYTELLER · PROGRESSIVE HOUSE</a></p>
 
         <h1 id="hero-title" class="hero-title">MANU PAVEZ</h1>
 
         <p class="hero-sub">
-          Uso la música para ordenar lo que siento y compartir ese camino. Procesos reales:
-          en estudio, en la pista y hacia adentro.
+          DJ y productor argentino. Construyo sets que no se olvidan
+          y tracks que cuentan algo. Música, criterio y noche, en ese orden.
         </p>
 
         <div class="hero-ctas hero-ctas-main">
-          <a class="mp-btn primary" href="index.html#booking">BOOKING</a>
-          <a class="hero-secondary" href="index.html#lab">o entrá al Frequency Lab →</a>
+          <a class="mp-btn primary" href="index.html#musica">ESCUCHAR</a>
+          <a class="hero-secondary" href="index.html#booking">o reservar fecha →</a>
         </div>
+
+        <ul class="hero-social" aria-label="Redes y plataformas">
+          <li><a href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h" target="_blank" rel="noopener" aria-label="Spotify">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2Zm4.4 14.6a.75.75 0 0 1-1 .3 8.3 8.3 0 0 0-8.8 0 .75.75 0 0 1-.8-1.3 9.8 9.8 0 0 1 10.4 0 .75.75 0 0 1 .2 1Zm1.3-2.7a.9.9 0 0 1-1.2.3 10.7 10.7 0 0 0-11.4 0 .9.9 0 1 1-.9-1.5 12.3 12.3 0 0 1 13.1 0 .9.9 0 0 1 .4 1.2Zm.2-2.8a1 1 0 0 1-1.3.4 13.4 13.4 0 0 0-13.8 0 1 1 0 0 1-.9-1.7 15.3 15.3 0 0 1 15.6 0 1 1 0 0 1 .4 1.3Z"/></svg>
+            <span>Spotify</span>
+          </a></li>
+          <li><a href="https://youtube.com/@manupavez" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 8.2s-.2-1.5-.8-2.1a3.3 3.3 0 0 0-2.2-.8C16 5 12 5 12 5h0s-4 0-6.6.3a3.3 3.3 0 0 0-2.2.8c-.6.6-.8 2.1-.8 2.1S2 9.9 2 11.5v1c0 1.6.4 3.3.4 3.3s.2 1.5.8 2.1a3.3 3.3 0 0 0 2.2.8c1.6.1 6.6.3 6.6.3s4 0 6.6-.3a3.3 3.3 0 0 0 2.2-.8c.6-.6.8-2.1.8-2.1s.4-1.7.4-3.3v-1c0-1.6-.4-3.3-.4-3.3ZM9.8 14.7V9.3l5.4 2.7-5.4 2.7Z"/></svg>
+            <span>YouTube</span>
+          </a></li>
+          <li><a href="https://soundcloud.com/manupavez" target="_blank" rel="noopener" aria-label="SoundCloud">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.3 9.5c-.2 0-.4 0-.5.1a3.8 3.8 0 0 0-3.8-3.6 4 4 0 0 0-1.3.2 3.7 3.7 0 0 0-2.5 3.4c0 .2 0 .4.1.6h-1.2A3.2 3.2 0 0 0 5 16.1h12.3a2.6 2.6 0 0 0 0-5.1Z"/></svg>
+            <span>SoundCloud</span>
+          </a></li>
+          <li><a href="https://www.instagram.com/manupavez_" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.5 2h9a5.5 5.5 0 0 1 5.5 5.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.75-.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>
+            <span>Instagram</span>
+          </a></li>
+        </ul>
+      </div>
+
+      <a class="hero-scroll" href="#musica" aria-label="Bajar a Música">
+        <span></span>
+      </a>
+    </section>
+
+    <!-- ============ DYNAMIC PHOTO STRIP ============ -->
+    <section class="photo-strip reveal" aria-label="Galería de imágenes">
+      <div class="photo-strip-track" aria-hidden="true">
+        <img src="img/fotos/slide1.jpg" alt="" loading="lazy" />
+        <img src="img/fotos/slide2.jpg" alt="" loading="lazy" />
+        <img src="img/fotos/slide3.jpg" alt="" loading="lazy" />
+        <img src="img/fotos/slide4.jpg" alt="" loading="lazy" />
+        <img src="img/fotos/slide5.jpg" alt="" loading="lazy" />
+        <!-- duplicado para loop infinito -->
+        <img src="img/fotos/slide1.jpg" alt="" loading="lazy" />
+        <img src="img/fotos/slide2.jpg" alt="" loading="lazy" />
+        <img src="img/fotos/slide3.jpg" alt="" loading="lazy" />
+        <img src="img/fotos/slide4.jpg" alt="" loading="lazy" />
+        <img src="img/fotos/slide5.jpg" alt="" loading="lazy" />
       </div>
     </section>
 
+    <!-- ============ MÚSICA · RELEASES ============ -->
     <section id="musica" class="section releases reveal" aria-labelledby="musica-title">
       <div class="section-inner">
         <header class="section-head">
           <h2 id="musica-title" data-animate="heading">MÚSICA · DIARIOS</h2>
           <p class="muted">
-            Historia en la música: lanzamientos, remixes y colaboraciones que muestran el camino recorrido.
+            Lanzamientos, remixes y colaboraciones. Cada release es un capítulo;
+            todos juntos cuentan el camino.
           </p>
         </header>
 
@@ -180,14 +227,41 @@
 
           <button class="release-nav next" type="button" aria-label="Lanzamiento siguiente">›</button>
         </div>
+
+        <!-- ====== Spotify Artist Embed ====== -->
+        <div class="spotify-embed-wrap">
+          <header class="embed-header">
+            <h3 class="subsection-title">ESCUCHÁ EN SPOTIFY</h3>
+            <p class="muted">Top tracks, releases y aparición en playlists del catálogo, en tiempo real.</p>
+          </header>
+
+          <div class="spotify-embed">
+            <iframe
+              title="Manu Pavez en Spotify"
+              src="https://open.spotify.com/embed/artist/1m15KTr2Qsf1JkdkBam27h?utm_source=generator&theme=0"
+              width="100%"
+              height="380"
+              frameborder="0"
+              loading="lazy"
+              allowfullscreen
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            ></iframe>
+          </div>
+
+          <p class="embed-foot">
+            <a href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h" target="_blank" rel="noopener">
+              Abrir perfil completo en Spotify →
+            </a>
+          </p>
+        </div>
       </div>
     </section>
 
+    <!-- ============ SELLOS ============ -->
     <section id="sellos" class="section labels reveal section-centered" aria-labelledby="labels-title">
       <h2 id="labels-title" data-animate="heading">SELLOS &amp; SUPPORT</h2>
       <p class="muted">
         Parte de este universo sonoro salió por sellos que cuidan la curaduría y el largo plazo.
-        Algunos de los espacios y artistas que acompañan el proyecto:
       </p>
 
       <div class="supabase-banner" data-supabase-banner hidden>
@@ -199,10 +273,11 @@
       </div>
     </section>
 
+    <!-- ============ EN VIVO ============ -->
     <section id="en-vivo" class="section releases reveal section-centered" aria-labelledby="envivo-title">
       <h2 id="envivo-title" data-animate="heading">EN VIVO</h2>
 
-      <h3 class="subsection-title">Fechas</h3>
+      <h3 class="subsection-title">Próximas fechas</h3>
       <div class="embed-wrap" aria-label="Fechas (Songkick)">
         <div class="songkick-widget-wrap">
           <a
@@ -253,29 +328,48 @@
 
         <button class="media-nav next" type="button" aria-label="Mix siguiente">›</button>
       </div>
+
+      <!-- ====== YouTube channel native card ====== -->
+      <div class="yt-channel-card">
+        <div class="yt-channel-card__inner">
+          <div class="yt-channel-card__copy">
+            <p class="yt-channel-card__eyebrow">YOUTUBE OFICIAL</p>
+            <h3 class="yt-channel-card__title">@manupavez</h3>
+            <p class="yt-channel-card__sub">
+              Sets completos, recorders de fechas y procesos de estudio. Suscribite y recibí cada nuevo set apenas sube.
+            </p>
+            <div class="yt-channel-card__ctas">
+              <a class="mp-btn primary" href="https://www.youtube.com/@manupavez?sub_confirmation=1" target="_blank" rel="noopener">
+                SUSCRIBIRME
+              </a>
+              <a class="hero-secondary" href="https://youtube.com/@manupavez" target="_blank" rel="noopener">
+                Ver canal completo →
+              </a>
+            </div>
+          </div>
+          <a class="yt-channel-card__visual" href="https://youtube.com/@manupavez" target="_blank" rel="noopener" aria-label="Abrir canal de YouTube">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M21.6 8.2s-.2-1.5-.8-2.1a3.3 3.3 0 0 0-2.2-.8C16 5 12 5 12 5s-4 0-6.6.3a3.3 3.3 0 0 0-2.2.8c-.6.6-.8 2.1-.8 2.1S2 9.9 2 11.5v1c0 1.6.4 3.3.4 3.3s.2 1.5.8 2.1a3.3 3.3 0 0 0 2.2.8c1.6.1 6.6.3 6.6.3s4 0 6.6-.3a3.3 3.3 0 0 0 2.2-.8c.6-.6.8-2.1.8-2.1s.4-1.7.4-3.3v-1c0-1.6-.4-3.3-.4-3.3ZM9.8 14.7V9.3l5.4 2.7-5.4 2.7Z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
     </section>
 
+    <!-- ============ FREQUENCY LAB ============ -->
     <section id="lab" class="section reveal section-centered" aria-labelledby="lab-title">
       <h2 id="lab-title" data-animate="heading">FREQUENCY LAB</h2>
       <p class="muted">
-        Frequency Lab es el espacio donde documento decisiones, procesos y herramientas detrás de la música y los sets.
+        El espacio donde documento decisiones, procesos y herramientas detrás de la música y los sets.
       </p>
       <p class="muted">
         Pensado para productores y DJs que quieren ir más allá de la técnica básica y trabajar narrativa, criterio y forma de escuchar.
       </p>
 
-      <h3 class="subsection-title">¿DE QUÉ SE TRATA?</h3>
-      <p class="muted">
-        No enseño a mezclar hits. Trabajo cómo decidís qué merece tiempo, cuánto dura una idea y qué nunca debería sonar en tu pista.
-      </p>
-      <p class="muted">
-        Clínicas 1:1 y grupales para gente que ya está en movimiento y quiere ordenar su propia forma de contar historias con sonido.
-      </p>
-
-      <a class="mp-btn green" href="index.html#booking">QUIERO HABLAR DEL LAB</a>
+      <a class="mp-btn green" href="clinicas.html">ENTRAR AL LAB</a>
     </section>
 
-    <!-- En home ya NO ofrecemos “descargar zip” roto; mandamos a la página canonical -->
+    <!-- ============ PRESSKIT ============ -->
     <section class="section reveal section-centered" aria-labelledby="presskit-title">
       <h2 id="presskit-title" data-animate="heading">PRESSKIT</h2>
       <p class="muted">
@@ -284,8 +378,12 @@
       <a class="mp-btn primary" href="presskit.html">VER PRESSKIT</a>
     </section>
 
+    <!-- ============ BOOKING ============ -->
     <section id="booking" class="section booking reveal section-centered" aria-labelledby="booking-title">
       <h2 id="booking-title" data-animate="heading">BOOKING</h2>
+      <p class="muted">
+        Para fechas, festivales y colaboraciones. Cuanto más claro lo cuentes, mejor te puedo responder.
+      </p>
 
       <form id="contact-form" class="contact-form" action="#" method="post">
         <div class="form-grid">
@@ -333,17 +431,21 @@
       </form>
     </section>
 
+    <!-- ============ INSTAGRAM ============ -->
     <section id="instagram" class="section reveal section-centered" aria-labelledby="instagram-title">
       <h2 id="instagram-title" data-animate="heading">INSTAGRAM</h2>
       <p class="muted">Clips cortos, work in progress y fragmentos del día a día alrededor de la música.</p>
 
       <div class="ig-wrap ig-card">
- <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
- <iframe src="//lightwidget.com/widgets/8b190ae484f25e67ae9aac82b723387a.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width:100%;border:0;overflow:hidden;">
-  
- </iframe>
-
-
+        <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
+        <iframe
+          src="//lightwidget.com/widgets/8b190ae484f25e67ae9aac82b723387a.html"
+          scrolling="no"
+          allowtransparency="true"
+          class="lightwidget-widget"
+          style="width:100%;border:0;overflow:hidden;"
+          title="Instagram feed de Manu Pavez"
+        ></iframe>
       </div>
     </section>
   </main>
@@ -353,19 +455,19 @@
       <img src="logos/CUBO BLANCO MP.png" alt="Logo de Manu Pavez" class="footer-logo" />
 
       <div class="footer-social" aria-label="Redes sociales">
-        <a href="https://www.instagram.com/manupavez_" aria-label="Instagram">
+        <a href="https://www.instagram.com/manupavez_" target="_blank" rel="noopener" aria-label="Instagram">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 2h9a5.5 5.5 0 0 1 5.5 5.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.75-.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>
         </a>
 
-        <a href="https://soundcloud.com/manupavez" aria-label="SoundCloud">
+        <a href="https://soundcloud.com/manupavez" target="_blank" rel="noopener" aria-label="SoundCloud">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.3 9.5c-.2 0-.4 0-.5.1a3.8 3.8 0 0 0-3.8-3.6 4 4 0 0 0-1.3.2 3.7 3.7 0 0 0-2.5 3.4c0 .2 0 .4.1.6h-1.2A3.2 3.2 0 0 0 5 16.1h12.3a2.6 2.6 0 0 0 0-5.1Z"/></svg>
         </a>
 
-        <a href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h" aria-label="Spotify">
+        <a href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h" target="_blank" rel="noopener" aria-label="Spotify">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2Zm4.4 14.6a.75.75 0 0 1-1 .3 8.3 8.3 0 0 0-8.8 0 .75.75 0 0 1-.8-1.3 9.8 9.8 0 0 1 10.4 0 .75.75 0 0 1 .2 1Zm1.3-2.7a.9.9 0 0 1-1.2.3 10.7 10.7 0 0 0-11.4 0 .9.9 0 1 1-.9-1.5 12.3 12.3 0 0 1 13.1 0 .9.9 0 0 1 .4 1.2Zm.2-2.8a1 1 0 0 1-1.3.4 13.4 13.4 0 0 0-13.8 0 1 1 0 0 1-.9-1.7 15.3 15.3 0 0 1 15.6 0 1 1 0 0 1 .4 1.3Z"/></svg>
         </a>
 
-        <a href="https://youtube.com/@manupavez" aria-label="YouTube">
+        <a href="https://youtube.com/@manupavez" target="_blank" rel="noopener" aria-label="YouTube">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 8.2s-.2-1.5-.8-2.1a3.3 3.3 0 0 0-2.2-.8C16 5 12 5 12 5h0s-4 0-6.6.3a3.3 3.3 0 0 0-2.2.8c-.6.6-.8 2.1-.8 2.1S2 9.9 2 11.5v1c0 1.6.4 3.3.4 3.3s.2 1.5.8 2.1a3.3 3.3 0 0 0 2.2.8c1.6.1 6.6.3 6.6.3s4 0 6.6-.3a3.3 3.3 0 0 0 2.2-.8c.6-.6.8-2.1.8-2.1s.4-1.7.4-3.3v-1c0-1.6-.4-3.3-.4-3.3ZM9.8 14.7V9.3l5.4 2.7-5.4 2.7Z"/></svg>
         </a>
       </div>

@@ -1,0 +1,67 @@
+/* =================== SPOTIFY ARTIST EMBED =================== */
+
+.spotify-embed-wrap {
+  max-width: 980px;
+  margin: clamp(40px, 6vw, 72px) auto 0;
+  padding-inline: 4px;
+}
+
+.embed-header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.embed-header .subsection-title {
+  margin-top: 0;
+}
+
+.spotify-embed {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(29, 185, 84, 0.18), transparent 55%),
+    rgba(5, 7, 17, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  padding: 6px;
+}
+
+.spotify-embed iframe {
+  width: 100%;
+  border: 0;
+  display: block;
+  border-radius: 14px;
+  min-height: 380px;
+  background: transparent;
+}
+
+.embed-foot {
+  margin-top: 14px;
+  font-size: 0.84rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.embed-foot a {
+  color: inherit;
+  text-decoration: none;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  padding-bottom: 2px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.embed-foot a:hover {
+  color: #fff;
+  border-color: #fff;
+}
+
+@media (max-width: 640px) {
+  .spotify-embed iframe {
+    min-height: 360px;
+  }
+}
