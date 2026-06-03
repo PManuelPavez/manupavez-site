@@ -146,12 +146,28 @@
 
 /* =================== SECCIONES & TIPOGRAFÍA =================== */
 
+/* ════════════════════════════════════════════════════════════
+   👇 ESPACIO ENTRE SECCIONES — subí/bajá el padding-block para más/menos aire
+   ════════════════════════════════════════════════════════════ */
 .section {
   position: relative;
   max-width: 1120px;
   margin-inline: auto;
   padding-inline: 16px;
-  padding-block: 72px;
+  padding-block: clamp(40px, 6vw, 80px);   /* ← AIRE entre secciones (ref. Polo) */
+}
+
+/* ════════════════════════════════════════════════════════════
+   👇 LÍNEA DIVISORIA entre secciones (la rayita centrada).
+      Subí el 0.28 para que se vea MÁS fuerte, o ponelo en 0 para sacarla.
+   ════════════════════════════════════════════════════════════ */
+.section + .section::before {
+  content: "";
+  display: block;
+  width: min(220px, 50%);
+  height: 1px;
+  margin: 0 auto clamp(44px, 6vw, 84px);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.58), transparent);
 }
 
 .section-centered {

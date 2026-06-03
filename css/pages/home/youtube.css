@@ -1,4 +1,13 @@
-/* =================== YOUTUBE CHANNEL CARD =================== */
+/* CTA unificado de YouTube (debajo del slider de videos) */
+.yt-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+/* =================== YOUTUBE CHANNEL CARD (legacy, ya no se usa en index) =================== */
 
 .yt-channel-card {
   max-width: 980px;
