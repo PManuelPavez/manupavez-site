@@ -26,7 +26,27 @@ Configurar en el repo:
 - **Settings → Secrets and variables → Actions → Variables** (opcional)
   - `SPOTIFY_ARTIST_ID` — default `1m15KTr2Qsf1JkdkBam27h`
 
-El workflow `.github/workflows/sync-music.yml` corre 1×/día a las 06:00 UTC y commitea `data/music.json` si hubo cambios. También se puede disparar a mano desde la pestaña Actions.
+El workflow `.github/workflows/sync-music.yml` corre 1×/día a las 06:00 UTC y commitea `data/music.json` y `data/youtube.json` si hubo cambios. También se puede disparar a mano desde la pestaña Actions (botón **Run workflow**).
+
+## YouTube (sin API key)
+
+El mismo script genera `data/youtube.json` leyendo el **RSS público** del canal
+(últimos ~15 videos, con sus vistas). No requiere API key.
+
+- **Settings → Secrets and variables → Actions → Variables**
+  - `YOUTUBE_CHANNEL_ID` — recomendado: `UCjrVcdq-MG3dMIV7DfAQo0g` (canal de Manu).
+    Si no lo cargás, el script lo resuelve solo desde `YOUTUBE_HANDLE` (default `@manupavez`).
+
+El front (`index.html`) usa `data/youtube.json` para el slider de videos y para el
+contador de "Reproducciones totales" (suma las vistas del feed). `data/music.json`
+alimenta releases, "Seguidores" y "Releases publicados".
+
+### Límite honesto de "reproducciones totales"
+
+El total real de streams de **Spotify** NO está en la API pública (ni followers de otras
+plataformas). El contador suma lo automatizable gratis (vistas de YouTube). Para sumar el
+resto, editá `data-count-base` en los `.stat` de `index.html`, o integrá un servicio pago
+(Chartmetric / Songstats).
 
 ### Qué expone el JSON
 

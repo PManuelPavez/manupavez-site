@@ -839,3 +839,40 @@ body[data-page="clinicas"] .section + .section { margin-top: 0; }
   .form-nav { flex-direction: column-reverse; }
   .form-nav .mp-btn { width: 100%; }
 }
+
+/* =========================
+   RESPONSIVE + TOUCH FIXES (consolidado)
+   ========================= */
+
+/* El efecto "atenuar las otras columnas al hover" no tiene sentido en touch:
+   en mobile dejaría columnas a media opacidad sin forma de revertir. */
+@media (hover: none) {
+  .compare-grid:hover .compare-col,
+  .compare-grid:hover .compare-col:hover {
+    opacity: 1;
+    transform: none;
+  }
+  .clinic-card:hover {
+    transform: none;
+  }
+}
+
+/* Cuando el compare se apila (1 columna), el divisor vertical central sobra */
+@media (max-width: 768px) {
+  .compare-grid::before { display: none; }
+  .compare { margin: 48px 0; }
+}
+
+/* El scroll-snap vertical en mobile se siente "pegajoso" al hacer scroll con el
+   dedo; lo dejamos solo en pantallas grandes con puntero fino. */
+@media (max-width: 980px), (pointer: coarse) {
+  body[data-page="clinicas"] { scroll-snap-type: none; }
+}
+
+/* Hero del Lab: alturas más cómodas en mobile (evita media pantalla vacía) */
+@media (max-width: 640px) {
+  body[data-page="clinicas"] .lab-hero,
+  body[data-page="clinicas"] .lab-hero-section { min-height: 70vh; }
+  .lab-hero { padding-top: calc(var(--header-height) + 24px); }
+  .lab-scroll-indicator { display: none; }
+}

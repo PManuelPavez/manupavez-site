@@ -324,12 +324,38 @@
 .form-field input,
 .form-field select,
 .form-field textarea {
-  padding: 8px 10px;
+  padding: 12px 14px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(4, 6, 15, 0.98);
   color: var(--color-text);
-  font-size: 0.9rem;
+  /* 16px mínimo: evita el zoom automático de iOS al enfocar */
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field input:focus-visible,
+.form-field select:focus-visible,
+.form-field textarea:focus-visible {
+  outline: none;
+  border-color: rgba(89, 198, 186, 0.7);
+  box-shadow: 0 0 0 3px rgba(89, 198, 186, 0.18);
+}
+
+/* Estado de error por campo (lo activa forms.js) */
+.form-field.has-error input,
+.form-field.has-error select,
+.form-field.has-error textarea {
+  border-color: rgba(255, 90, 90, 0.7);
+}
+
+.field-error {
+  font-size: 0.78rem;
+  color: #ff8a8a;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  min-height: 1em;
 }
 
 .form-hint {
@@ -344,6 +370,149 @@
   display: inline-flex;
   margin-inline: auto;
   color: #ffffff;
+}
+
+/* Estado de carga del botón (spinner) — compartido con el form del Lab */
+.form-submit[aria-busy="true"],
+button[type="submit"][aria-busy="true"] {
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.form-submit[aria-busy="true"]::after,
+button[type="submit"][aria-busy="true"]::after {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 10px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Nota de estado general del form */
+.form-note {
+  margin-top: 12px;
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  min-height: 1em;
+}
+
+.form-note.is-error { color: #ff8a8a; }
+
+/* Panel de éxito (index + Lab) */
+.form-success {
+  text-align: center;
+  padding: 48px 20px;
+  max-width: 520px;
+  margin: 20px auto 0;
+  border-radius: var(--radius-lg);
+  background: rgba(5, 7, 17, 0.6);
+  border: 1px solid rgba(89, 198, 186, 0.25);
+  animation: mp-reveal 0.5s var(--mp-ease-out, ease) both;
+}
+
+.form-success__icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(89, 198, 186, 0.6);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.form-success__icon::before {
+  content: "";
+  width: 16px;
+  height: 8px;
+  border-left: 2px solid #59c6ba;
+  border-bottom: 2px solid #59c6ba;
+  transform: rotate(-45deg) translate(2px, -2px);
+}
+
+.form-success h3 {
+  font-size: 1.4rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 12px;
+}
+
+.form-success p {
+  max-width: 360px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+
+/* =================== ÁREA DE ALUMNOS (AUTH) =================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.auth-card {
+  max-width: 480px;
+  margin: 24px auto 0;
+  padding: 28px 24px;
+  border-radius: var(--radius-lg);
+  background: rgba(5, 7, 17, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.auth-form input {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(4, 6, 15, 0.98);
+  color: var(--color-text);
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.auth-form input:focus-visible {
+  outline: none;
+  border-color: rgba(89, 198, 186, 0.7);
+  box-shadow: 0 0 0 3px rgba(89, 198, 186, 0.18);
+}
+
+.auth-form .mp-btn { flex: 0 0 auto; }
+
+.auth-content {
+  margin: 18px 0;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 480px) {
+  .auth-form { flex-direction: column; }
+  .auth-form .mp-btn { width: 100%; }
 }
 
 
@@ -503,6 +672,73 @@
 
   .media-nav.prev { left: 4px; }
   .media-nav.next { right: 4px; }
+}
+
+
+/* =================== STATS / COUNTERS =================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  max-width: 980px;
+  margin: 8px auto 0;
+}
+
+.stat {
+  padding: 26px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(5, 7, 17, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-num {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  background: var(--mp-grad-accent, linear-gradient(120deg, #59c6ba, #314097));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #59c6ba;
+}
+
+.stat-label {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 760px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}
+
+@media (max-width: 380px) {
+  .stats-grid { grid-template-columns: 1fr; }
+}
+
+
+/* =================== SOUNDCLOUD EMBED =================== */
+.soundcloud-embed {
+  max-width: 1040px;
+  margin: 18px auto 8px;
+}
+
+.soundcloud-embed iframe {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.soundcloud-embed .embed-foot {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.88rem;
 }
 
 

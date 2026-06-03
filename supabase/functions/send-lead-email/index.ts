@@ -47,18 +47,35 @@ serve(async (req) => {
   const email = String(payload.email ?? "").trim();
   const level = String(payload.level ?? "").trim();
   const goal = String(payload.goal ?? "").trim();
+  const type = String(payload.type ?? "").trim();
   const message = String(payload.message ?? "").trim();
+  const source = String(payload.source ?? "lab").trim().toLowerCase();
 
   if (!name || !email) return json({ error: "missing_required_fields" }, 422);
 
+  const isBooking = source === "booking";
+  const heading = isBooking ? "Nuevo booking — Manu Pavez" : "Nuevo lead — Frequency Lab";
+  const subject = isBooking ? `Nuevo booking — ${name}` : `Nuevo lead Lab — ${name}`;
+
+  // Filas según origen: el booking muestra "Tipo de evento"; el lab, "Nivel/Objetivo".
+  const rows = isBooking
+    ? [["Tipo de evento", type]]
+    : [["Nivel", level], ["Objetivo", goal]];
+
+  const rowsHtml = rows
+    .map(
+      ([label, value]) =>
+        `<tr><td style="opacity:.6">${esc(label)}</td><td>${esc(value) || "—"}</td></tr>`,
+    )
+    .join("");
+
   const html = `
     <div style="font-family:system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;line-height:1.55;color:#0a0a0a;max-width:560px">
-      <h2 style="font-weight:600;letter-spacing:.04em;margin:0 0 12px">Nuevo lead — Frequency Lab</h2>
+      <h2 style="font-weight:600;letter-spacing:.04em;margin:0 0 12px">${esc(heading)}</h2>
       <table cellpadding="6" style="border-collapse:collapse;font-size:14px">
         <tr><td style="opacity:.6">Nombre</td><td><strong>${esc(name)}</strong></td></tr>
         <tr><td style="opacity:.6">Email</td><td><a href="mailto:${esc(email)}">${esc(email)}</a></td></tr>
-        <tr><td style="opacity:.6">Nivel</td><td>${esc(level) || "—"}</td></tr>
-        <tr><td style="opacity:.6">Objetivo</td><td>${esc(goal) || "—"}</td></tr>
+        ${rowsHtml}
       </table>
       <p style="margin-top:18px;white-space:pre-wrap;background:#f6f6f8;padding:14px;border-radius:8px;font-size:14px">
         ${esc(message) || "<em style='opacity:.6'>Sin mensaje extra.</em>"}
@@ -77,7 +94,7 @@ serve(async (req) => {
         from: FROM,
         to: TO,
         reply_to: email || undefined,
-        subject: `Nuevo lead Lab — ${name}`,
+        subject,
         html,
       }),
     });

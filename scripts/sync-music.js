@@ -31,6 +31,12 @@ const ARTIST_ID = process.env.SPOTIFY_ARTIST_ID || "1m15KTr2Qsf1JkdkBam27h";
 const MARKET = process.env.MARKET || "AR";
 const OUTPUT_PATH = resolve(ROOT, process.env.OUTPUT_PATH || "data/music.json");
 
+// YouTube (sin API key — usa el RSS público del canal)
+const YT_CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID || "";
+const YT_HANDLE = process.env.YOUTUBE_HANDLE || "@manupavez";
+const YT_OUTPUT_PATH = resolve(ROOT, process.env.YOUTUBE_OUTPUT_PATH || "data/youtube.json");
+const YT_MAX = Number(process.env.YOUTUBE_MAX || 8);
+
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
@@ -123,6 +129,78 @@ function normalizeTrack(t) {
   };
 }
 
+// ---------- YouTube (RSS, sin API key) ----------
+
+// Resuelve el channelId (UC...) desde el handle scrapeando la página del canal.
+async function resolveChannelId() {
+  if (YT_CHANNEL_ID) return YT_CHANNEL_ID;
+  const handle = YT_HANDLE.startsWith("@") ? YT_HANDLE : `@${YT_HANDLE}`;
+  const res = await fetch(`https://www.youtube.com/${handle}`, {
+    headers: { "Accept-Language": "es", "User-Agent": "Mozilla/5.0" },
+  });
+  if (!res.ok) throw new Error(`YouTube channel page → ${res.status}`);
+  const html = await res.text();
+  const m = html.match(/"channelId":"(UC[\w-]+)"/) || html.match(/channel\/(UC[\w-]+)/);
+  if (!m) throw new Error("No pude resolver el channelId desde el handle");
+  return m[1];
+}
+
+function parseYouTubeFeed(xml) {
+  const entries = xml.split("<entry>").slice(1);
+  return entries.map((entry) => {
+    const id = (entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/) || [])[1] || "";
+    const title = (entry.match(/<title>([^<]+)<\/title>/) || [])[1] || "";
+    const published = (entry.match(/<published>([^<]+)<\/published>/) || [])[1] || "";
+    const description =
+      (entry.match(/<media:description>([\s\S]*?)<\/media:description>/) || [])[1] || "";
+    const views = Number((entry.match(/<media:statistics[^>]*views="(\d+)"/) || [])[1] || 0);
+    return {
+      id,
+      title: decodeEntities(title),
+      published,
+      views,
+      description: decodeEntities(description).slice(0, 220),
+      embed_url: id ? `https://www.youtube.com/embed/${id}` : "",
+      watch_url: id ? `https://www.youtube.com/watch?v=${id}` : "",
+    };
+  }).filter((v) => v.id);
+}
+
+function decodeEntities(s) {
+  return String(s)
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
+async function syncYouTube() {
+  const channelId = await resolveChannelId();
+  const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`);
+  if (!res.ok) throw new Error(`YouTube RSS → ${res.status}`);
+  const xml = await res.text();
+
+  const allVideos = parseYouTubeFeed(xml);
+  // total_views: suma de vistas de los videos que expone el RSS (últimos ~15).
+  // Nota: es el total de esos videos, no el histórico completo del canal
+  // (YouTube no expone el total del canal sin la Data API).
+  const totalViews = allVideos.reduce((s, v) => s + (v.views || 0), 0);
+  const videos = allVideos.slice(0, YT_MAX);
+
+  const payload = {
+    updated_at: new Date().toISOString(),
+    channel_id: channelId,
+    handle: YT_HANDLE,
+    total_views: totalViews,
+    videos,
+  };
+
+  await mkdir(dirname(YT_OUTPUT_PATH), { recursive: true });
+  await writeFile(YT_OUTPUT_PATH, JSON.stringify(payload, null, 2) + "\n", "utf8");
+  console.log(`✓ wrote ${YT_OUTPUT_PATH} (${videos.length} videos · ${totalViews} views · channel ${channelId})`);
+}
+
 // ---------- Main ----------
 
 async function main() {
@@ -169,6 +247,13 @@ async function main() {
   await writeFile(OUTPUT_PATH, JSON.stringify(payload, null, 2) + "\n", "utf8");
   console.log(`✓ wrote ${OUTPUT_PATH}`);
   console.log(`  releases: ${releases.length} · followers: ${payload.artist.followers} · popularity: ${payload.artist.popularity}`);
+
+  // YouTube es best-effort: si falla, no rompemos el sync de música.
+  try {
+    await syncYouTube();
+  } catch (err) {
+    console.warn("youtube sync failed (continuo igual):", err.message);
+  }
 }
 
 main().catch((err) => {
