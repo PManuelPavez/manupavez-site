@@ -191,6 +191,40 @@
       </div>
     </section>
 
+    <!-- ============ STATS / EN NÚMEROS ============ -->
+    <section class="section stats reveal section-centered" aria-label="Manu Pavez en números">
+      <!--
+        Counters. Auto (tiempo real) vía data/*.json:
+          - followers  → seguidores de Spotify (data/music.json)
+          - plays      → reproducciones de YouTube (data/youtube.json)
+        data-count-base = números reales que NO se pueden automatizar gratis
+        (Spotify plays/oyentes, SoundCloud plays/seguidores). Editalos a mano cuando cambien:
+          · Spotify: +150.000 plays · 20.000 oyentes/año
+          · SoundCloud: +70.000 plays · 989 seguidores
+        El total mostrado = base + lo que suma solo (Spotify followers / YouTube views).
+      -->
+      <div class="stats-grid">
+        <div class="stat">
+          <span class="stat-num" data-counter data-count-to="10" data-count-suffix="+">0</span>
+          <span class="stat-label">Años en cabina</span>
+        </div>
+        <div class="stat">
+          <!-- base 989 (SoundCloud) + seguidores Spotify (auto) -->
+          <span class="stat-num" data-counter data-count-source="followers" data-count-base="989" data-count-suffix="+">0</span>
+          <span class="stat-label">Seguidores totales</span>
+        </div>
+        <div class="stat">
+          <!-- base 220.000 (Spotify 150k + SoundCloud 70k) + views YouTube (auto) -->
+          <span class="stat-num" data-counter data-count-source="plays" data-count-base="220000" data-count-suffix="+">0</span>
+          <span class="stat-label">Reproducciones totales</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-counter data-count-to="20000" data-count-suffix="+">0</span>
+          <span class="stat-label">Oyentes anuales</span>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ MÚSICA · RELEASES ============ -->
     <section id="musica" class="section releases reveal" aria-labelledby="musica-title">
       <div class="section-inner">
@@ -320,6 +354,24 @@
       </div>
 
       <h3 class="subsection-title">Mixes seleccionados</h3>
+
+      <!-- SoundCloud: muestra siempre los últimos tracks del perfil (auto-actualiza) -->
+      <div class="soundcloud-embed">
+        <iframe
+          title="Manu Pavez en SoundCloud"
+          width="100%"
+          height="450"
+          scrolling="no"
+          frameborder="no"
+          allow="autoplay"
+          loading="lazy"
+          src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/manupavez&color=%2359c6ba&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"
+        ></iframe>
+        <p class="embed-foot">
+          <a href="https://soundcloud.com/manupavez" target="_blank" rel="noopener">Abrir perfil completo en SoundCloud →</a>
+        </p>
+      </div>
+
       <div class="media-slider" data-slider="mixes" aria-label="Carrusel de mixes">
         <button class="media-nav prev" type="button" aria-label="Mix anterior">‹</button>
 
@@ -385,16 +437,18 @@
         Para fechas, festivales y colaboraciones. Cuanto más claro lo cuentes, mejor te puedo responder.
       </p>
 
-      <form id="contact-form" class="contact-form" action="#" method="post">
+      <form id="contact-form" class="contact-form" action="#" method="post" novalidate>
         <div class="form-grid">
           <div class="form-field">
             <label for="cf-name">Nombre completo*</label>
             <input type="text" id="cf-name" name="name" required autocomplete="name" />
+            <span class="field-error" data-error-for="name" aria-live="polite"></span>
           </div>
 
           <div class="form-field">
             <label for="cf-email">Correo electrónico*</label>
             <input type="email" id="cf-email" name="email" required autocomplete="email" placeholder="Tu mail de contacto" />
+            <span class="field-error" data-error-for="email" aria-live="polite"></span>
           </div>
 
           <div class="form-field">
@@ -409,6 +463,7 @@
               <option value="clinica">Clínica / Mentoría</option>
               <option value="otro">Otro</option>
             </select>
+            <span class="field-error" data-error-for="type" aria-live="polite"></span>
           </div>
 
           <div class="form-field form-field-full">
@@ -420,15 +475,25 @@
               required
               placeholder="Fecha aproximada, ciudad, formato del evento o qué te gustaría trabajar en el lab."
             ></textarea>
+            <span class="field-error" data-error-for="message" aria-live="polite"></span>
           </div>
         </div>
 
         <button type="submit" class="mp-btn primary form-submit">ENVIAR</button>
 
+        <p class="form-note" id="form-note" role="status" aria-live="polite"></p>
+
         <p class="form-hint" id="booking-hint">
           Si preferís, podés escribir directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>
         </p>
       </form>
+
+      <!-- Estado de éxito (oculto por defecto) -->
+      <div class="form-success" data-booking-success hidden>
+        <div class="form-success__icon" aria-hidden="true"></div>
+        <h3>¡MENSAJE ENVIADO!</h3>
+        <p>Gracias por escribir. Te respondo a la brevedad al mail que dejaste. Si es urgente, escribime directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>.</p>
+      </div>
     </section>
 
     <!-- ============ INSTAGRAM ============ -->
@@ -472,7 +537,7 @@
         </a>
       </div>
 
-      <p>© <time datetime="2025">2025</time> MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
+      <p>© <time datetime="2026">2026</time> MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
     </div>
   </footer>
 

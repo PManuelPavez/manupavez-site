@@ -67,6 +67,52 @@ function normalizePresskitItem(r) {
   };
 }
 
+// =========================
+// FUENTES JSON LOCALES (auto-sync vía GitHub Actions, sin mantenimiento manual)
+// =========================
+
+async function fetchLocalJson(path) {
+  try {
+    const res = await fetch(path, { cache: "no-cache" });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null; // el archivo aún no existe (el workflow no corrió) → caller hace fallback
+  }
+}
+
+// Releases desde data/music.json (Spotify sync). Devuelve [] si no hay archivo.
+export async function getReleasesJson() {
+  const data = await fetchLocalJson("data/music.json");
+  const releases = data?.releases;
+  if (!Array.isArray(releases) || !releases.length) return [];
+
+  return releases.map((r) => ({
+    id: r.id ?? null,
+    title: r.title || "",
+    type: r.type || "",
+    story: "",
+    tags: [],
+    cover_url: r.artwork || "",
+    spotify_url: r.spotify_url || "",
+    released_at: r.release_date || "",
+    is_featured: true,
+    order: null,
+  }));
+}
+
+// Videos desde data/youtube.json (YouTube RSS sync). Devuelve [] si no hay archivo.
+export async function getYouTubeVideos() {
+  const data = await fetchLocalJson("data/youtube.json");
+  const videos = data?.videos;
+  if (!Array.isArray(videos) || !videos.length) return [];
+  return videos.map((v) => ({
+    embed_url: v.embed_url || (v.id ? `https://www.youtube.com/embed/${v.id}` : ""),
+    title: v.title || "",
+    description: v.description || "",
+  })).filter((v) => v.embed_url);
+}
+
 // HOME releases (tu screenshot muestra v_home_releases / home_releases)
 export async function getReleases() {
   const { data } = await fromAny(

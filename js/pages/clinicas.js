@@ -1,5 +1,6 @@
-import { hasSupabase, supabase } from "../data/supabaseClient.js";
+import { hasSupabase } from "../data/supabaseClient.js";
 import { getClinics } from "../data/content.js";
+import { sendLead } from "../data/leadMailer.js";
 
 export function initClinicas() {
   const isPage = document.body.dataset.page === "clinicas";
@@ -127,25 +128,19 @@ function initForm() {
     submitBtn.textContent = "Enviando";
 
     try {
-      if (!hasSupabase()) {
-        throw new Error("supabase-not-configured");
-      }
+      // Envío directo al mail (FormSubmit) — sin API keys ni backend
+      await sendLead(
+        {
+          Nombre: data.name || "",
+          Email: data.email || "",
+          Nivel: data.level || "",
+          Objetivo: data.goal || "",
+          Mensaje: data.message || "",
+        },
+        { subject: `Aplicación Frequency Lab — ${data.name || "sin nombre"}` }
+      );
 
-      // 1) Guardar lead en DB
-      const { error: dbError } = await supabase.from("lab_leads").insert([data]);
-      if (dbError) throw dbError;
-
-      // 2) Disparar notificación por mail vía edge function
-      // (usa el JWT anon del cliente — el bearer hardcodeado quedó eliminado)
-      const { error: fnError } = await supabase.functions.invoke("send-lead-email", {
-        body: data,
-      });
-      if (fnError) {
-        // El lead ya quedó en DB; logueamos pero no rompemos el flujo del usuario
-        console.warn("[lab_leads] notificación falló pero el lead se guardó:", fnError);
-      }
-
-      // 3) Mostrar éxito
+      // Mostrar éxito
       form.hidden = true;
       const progressWrap = document.querySelector(".form-progress");
       const introEl = document.querySelector(".form-intro");

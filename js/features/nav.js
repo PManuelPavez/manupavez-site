@@ -67,9 +67,9 @@ export function initNav() {
     close();
   });
 
-  // Desktop breakpoint safety
+  // Desktop breakpoint safety (debe coincidir con el CSS: nav desktop vuelve a ≥981px)
   window.addEventListener("resize", () => {
-    if (window.innerWidth > 860 && isOpen()) close();
+    if (window.innerWidth > 980 && isOpen()) close();
   });
 }
 

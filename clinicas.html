@@ -6,6 +6,24 @@
 
   <title>Frequency Lab — Manu Pavez</title>
   <meta name="description" content="Frequency Lab: mentorías para DJs y productores que quieren transformar su criterio, sonido y decisiones." />
+  <meta name="theme-color" content="#050711" />
+  <meta name="author" content="Manu Pavez" />
+  <link rel="canonical" href="https://manupavez.com/clinicas.html" />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Manu Pavez" />
+  <meta property="og:title" content="Frequency Lab — Manu Pavez" />
+  <meta property="og:description" content="Mentorías para DJs y productores que quieren transformar su criterio, sonido y decisiones." />
+  <meta property="og:url" content="https://manupavez.com/clinicas.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:image" content="https://manupavez.com/logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/layout.css" />
@@ -23,71 +41,109 @@
   <!-- HEADER -->
   <header class="site-header fixed">
     <div class="header-inner">
-      <a class="brand" href="index.html#inicio">
-        <img src="logos/CUBO BLANCO MP.png" alt="Logo Manu Pavez" />
+      <a class="brand" href="index.html#inicio" aria-label="Ir al inicio">
+        <img src="logos/CUBO BLANCO MP.png" alt="Logo de Manu Pavez" />
       </a>
 
-      <nav class="nav">
+      <nav class="nav" aria-label="Navegación principal">
         <ul class="nav-list">
-          <!-- DROPDOWN CLÍNICAS -->
-          <li>
-            <details class="nav-dropdown">
-              <summary class="nav-link is-active">FREQUENCY LAB</summary>
-              <ul class="nav-submenu">
-                <li><a href="#paquetes">Paquetes</a></li>
-                <li><a href="#para-quien">Para quién</a></li>
-                <li><a href="#metodo">Método</a></li>
-                <li><a href="#faq">FAQ</a></li>
-                <li><a href="#reservar">Reservar</a></li>
-              </ul>
-            </details>
-          </li>
+          <li><a href="index.html#inicio">INICIO</a></li>
+          <li><a href="index.html#musica">MÚSICA</a></li>
+          <li><a href="index.html#sellos">SELLOS</a></li>
+          <li><a href="index.html#en-vivo">EN VIVO</a></li>
+          <li><a href="clinicas.html" aria-current="page">FREQUENCY LAB</a></li>
+          <li><a href="bio.html">SOBRE MANU</a></li>
+          <li><a href="presskit.html">PRESSKIT</a></li>
+          <li><a href="index.html#booking" class="cta-book">BOOKING</a></li>
         </ul>
       </nav>
+
+      <div class="header-actions">
+        <a href="index.html#booking" class="header-cta">BOOKING</a>
+
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-controls="mobile-nav"
+          aria-expanded="false"
+          aria-label="Abrir menú móvil"
+          data-nav-toggle
+        >
+          <span class="burger" aria-hidden="true"></span>
+        </button>
+      </div>
     </div>
+
+    <!-- Menú móvil (controlado por JS) -->
+    <nav id="mobile-nav" class="mobile-nav" hidden aria-label="Menú móvil" data-nav-panel>
+      <ul class="mobile-nav-list">
+        <li><a href="index.html#inicio">INICIO</a></li>
+        <li><a href="index.html#musica">MÚSICA</a></li>
+        <li><a href="index.html#sellos">SELLOS</a></li>
+        <li><a href="index.html#en-vivo">EN VIVO</a></li>
+        <li><a href="clinicas.html" aria-current="page">FREQUENCY LAB</a></li>
+        <li><a href="bio.html">SOBRE MANU</a></li>
+        <li><a href="presskit.html">PRESSKIT</a></li>
+        <li><a href="index.html#booking">BOOKING</a></li>
+        <li>
+          <a href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Contacto/Booking" class="mobile-book">
+            MAIL DIRECTO
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <noscript>
+      <nav class="mobile-nav" aria-label="Menú (sin JavaScript)">
+        <ul class="mobile-nav-list">
+          <li><a href="index.html#inicio">INICIO</a></li>
+          <li><a href="index.html#musica">MÚSICA</a></li>
+          <li><a href="clinicas.html">FREQUENCY LAB</a></li>
+          <li><a href="bio.html">SOBRE MANU</a></li>
+          <li><a href="presskit.html">PRESSKIT</a></li>
+          <li><a href="index.html#booking">BOOKING</a></li>
+        </ul>
+      </nav>
+    </noscript>
   </header>
 
   <!-- MAIN -->
   <main id="main-content">
 
     <!-- HERO -->
-    <section class="section section-centered">
-  <header class="lab-hero" aria-labelledby="lab-title">
-  <h1 id="lab-title">FREQUENCY LAB</h1>
-<div class="lab-ambient" aria-hidden="true"></div>
+    <section class="section section-centered lab-hero-section">
+      <header class="lab-hero" aria-labelledby="lab-title">
+        <div class="lab-ambient" aria-hidden="true"></div>
 
-<div class="lab-wave">
-  <span></span>
-</div>
+        <h1 id="lab-title">FREQUENCY LAB</h1>
 
-<div class="lab-scroll-indicator">
-  <a href="#contenido" aria-label="Entrar">
-    <span></span>
-  </a>
-</div>
-  <p class="lab-lead">
-    Si no podés terminar tracks,
-    no es falta de ideas.
-  </p>
-   <p class="lab-lead">
-    <strong>Es falta de criterio.</strong>
-  </p>
+        <div class="lab-wave" aria-hidden="true">
+          <span></span>
+        </div>
 
+        <p class="lab-lead">
+          Si no podés terminar tracks, no es falta de ideas.
+        </p>
+        <p class="lab-lead">
+          <strong>Es falta de criterio.</strong>
+        </p>
 
-  <div class="hero-ctas">
-    <a href="#reservar" class="mp-btn primary">
-      QUIERO CAMBIAR ESTO
-    </a>
+        <div class="hero-ctas">
+          <a href="#reservar" class="mp-btn primary">QUIERO CAMBIAR ESTO</a>
+          <a href="#metodo" class="mp-btn ghost">CÓMO FUNCIONA</a>
+        </div>
 
-    <a href="#metodo" class="mp-btn ghost">
-      CÓMO FUNCIONA
-    </a>
-  </div>
-</header>
+        <div class="lab-scroll-indicator">
+          <a href="#compare-title" aria-label="Bajar">
+            <span></span>
+          </a>
+        </div>
+      </header>
+    </section>
 
-        <!-- PARA QUIEN -->
-<section class="compare" aria-labelledby="compare-title">
-  <h2 id="compare-title">¿POR QUÉ ENTRAR AL LAB?</h2>
+    <!-- PARA QUIEN -->
+    <section class="compare section" aria-labelledby="compare-title">
+      <h2 id="compare-title">¿POR QUÉ ENTRAR AL LAB?</h2>
 
   <div class="compare-grid">
 
@@ -279,32 +335,102 @@ QUIERO DEJAR DE ESTAR EN ESTE PUNTO      </a>
       </p>
     </section>
 
-  </main>
-     <!-- FAQ -->
-    <section id="faq" class="section">
-      <h2>FAQ</h2>
+    <!-- ÁREA DE ALUMNOS -->
+    <section id="alumnos" class="section section-centered" aria-labelledby="alumnos-title">
+      <h2 id="alumnos-title" data-animate="heading">ÁREA DE ALUMNOS</h2>
+      <p class="muted">
+        Contenido exclusivo para quienes ya están dentro del Lab. El resto de la página es abierta;
+        esta sección se desbloquea con tu acceso.
+      </p>
 
-      <details>
-        <summary>¿Online o presencial?</summary>
-        <p>Depende del formato.</p>
-      </details>
+      <div class="auth-card" data-auth>
+        <!-- Estado: deslogueado -->
+        <div data-auth-loggedout>
+          <p class="muted">
+            Si ya sos parte del Lab, ingresá con tu email y te mando un link de acceso.
+            Sin contraseñas.
+          </p>
 
-      <details>
-        <summary>¿Necesito experiencia?</summary>
-        <p>No, pero necesitás intención.</p>
-      </details>
+          <form class="auth-form" data-auth-form novalidate>
+            <label class="sr-only" for="auth-email">Tu email</label>
+            <input
+              id="auth-email"
+              type="email"
+              inputmode="email"
+              autocomplete="email"
+              placeholder="tu@email.com"
+              data-auth-email
+              required
+            />
+            <button type="submit" class="mp-btn primary">RECIBIR LINK</button>
+          </form>
 
-      <details>
-        <summary>¿Cómo reservo?</summary>
-        <p>Completando el formulario abajo.</p>
-      </details>
+          <p class="form-note" data-auth-note role="status" aria-live="polite"></p>
+        </div>
+
+        <!-- Estado: logueado -->
+        <div data-auth-loggedin hidden>
+          <p class="muted">
+            Sesión iniciada como <strong data-auth-user></strong>.
+          </p>
+
+          <div class="auth-content" data-alumnos-content>
+            <p class="muted">Pronto vas a ver acá el material del Lab, recursos y seguimiento.</p>
+          </div>
+
+          <button type="button" class="mp-btn ghost" data-auth-logout>CERRAR SESIÓN</button>
+        </div>
+      </div>
     </section>
 
+    <!-- FAQ -->
+    <section id="faq" class="section section-centered">
+      <h2 data-animate="heading">FAQ</h2>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>¿Online o presencial?</summary>
+          <p>Depende del formato. Hay sesiones online (1:1 por videollamada) y encuentros presenciales según agenda y ciudad.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>¿Necesito experiencia previa?</summary>
+          <p>No hace falta un nivel mínimo, pero sí intención: venir con material propio y ganas de cuestionar cómo trabajás.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>¿Cómo reservo?</summary>
+          <p>Completá el formulario de aplicación de esta página. Te respondo en menos de 48&nbsp;hs al mail que dejes.</p>
+        </details>
+      </div>
+    </section>
+
+  </main>
 
   <!-- FOOTER -->
   <footer class="site-footer">
-    <p>© Manu Pavez</p>
+    <div class="footer-inner">
+      <img src="logos/CUBO BLANCO MP.png" alt="Logo de Manu Pavez" class="footer-logo" />
+
+      <div class="footer-social" aria-label="Redes sociales">
+        <a href="https://www.instagram.com/manupavez_" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 2h9a5.5 5.5 0 0 1 5.5 5.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.75-.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>
+        </a>
+        <a href="https://soundcloud.com/manupavez" target="_blank" rel="noopener" aria-label="SoundCloud">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.3 9.5c-.2 0-.4 0-.5.1a3.8 3.8 0 0 0-3.8-3.6 4 4 0 0 0-1.3.2 3.7 3.7 0 0 0-2.5 3.4c0 .2 0 .4.1.6h-1.2A3.2 3.2 0 0 0 5 16.1h12.3a2.6 2.6 0 0 0 0-5.1Z"/></svg>
+        </a>
+        <a href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h" target="_blank" rel="noopener" aria-label="Spotify">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2Zm4.4 14.6a.75.75 0 0 1-1 .3 8.3 8.3 0 0 0-8.8 0 .75.75 0 0 1-.8-1.3 9.8 9.8 0 0 1 10.4 0 .75.75 0 0 1 .2 1Zm1.3-2.7a.9.9 0 0 1-1.2.3 10.7 10.7 0 0 0-11.4 0 .9.9 0 1 1-.9-1.5 12.3 12.3 0 0 1 13.1 0 .9.9 0 0 1 .4 1.2Zm.2-2.8a1 1 0 0 1-1.3.4 13.4 13.4 0 0 0-13.8 0 1 1 0 0 1-.9-1.7 15.3 15.3 0 0 1 15.6 0 1 1 0 0 1 .4 1.3Z"/></svg>
+        </a>
+        <a href="https://youtube.com/@manupavez" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 8.2s-.2-1.5-.8-2.1a3.3 3.3 0 0 0-2.2-.8C16 5 12 5 12 5h0s-4 0-6.6.3a3.3 3.3 0 0 0-2.2.8c-.6.6-.8 2.1-.8 2.1S2 9.9 2 11.5v1c0 1.6.4 3.3.4 3.3s.2 1.5.8 2.1a3.3 3.3 0 0 0 2.2.8c1.6.1 6.6.3 6.6.3s4 0 6.6-.3a3.3 3.3 0 0 0 2.2-.8c.6-.6.8-2.1.8-2.1s.4-1.7.4-3.3v-1c0-1.6-.4-3.3-.4-3.3ZM9.8 14.7V9.3l5.4 2.7-5.4 2.7Z"/></svg>
+        </a>
+      </div>
+
+      <p>© <time datetime="2026">2026</time> MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
+    </div>
   </footer>
 
+  <button class="scroll-top" aria-label="Volver arriba">↑</button>
 </body>
 </html>

@@ -4,6 +4,8 @@ import { initActiveNav } from "./features/activeNav.js";
 import { initScrollTop } from "./features/scrollTop.js";
 import { initSliders } from "./features/slider.js";
 import { initContactForm } from "./features/forms.js";
+import { initStudentAuth } from "./features/auth.js";
+import { initCounters } from "./features/counters.js";
 import { initHome } from "./pages/home.js";
 import { initPresskit } from "./pages/presskit.js";
 import { initClinicas } from "./pages/clinicas.js";
@@ -24,6 +26,8 @@ safeInit("activeNav", initActiveNav);
 safeInit("scrollTop", initScrollTop);
 safeInit("sliders", initSliders);
 safeInit("contactForm", initContactForm);
+safeInit("studentAuth", initStudentAuth);
+safeInit("counters", initCounters);
 
 // Inits que dependen de Supabase: esperar a que la config esté cargada (timeout: 5s)
 function waitForSupabase(callback, { timeoutMs = 5000, intervalMs = 50 } = {}) {

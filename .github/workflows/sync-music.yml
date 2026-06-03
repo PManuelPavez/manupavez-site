@@ -25,13 +25,15 @@ jobs:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_ARTIST_ID: ${{ vars.SPOTIFY_ARTIST_ID }}
+          YOUTUBE_HANDLE: ${{ vars.YOUTUBE_HANDLE }}
+          YOUTUBE_CHANNEL_ID: ${{ vars.YOUTUBE_CHANNEL_ID }}
         run: node scripts/sync-music.js
 
       - name: Commit if changed
         run: |
           git config user.name "manupavez-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data/music.json
+          git add data/music.json data/youtube.json
           if git diff --staged --quiet; then
             echo "no changes"
           else
