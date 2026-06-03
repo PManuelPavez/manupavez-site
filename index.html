@@ -63,12 +63,9 @@
         <ul class="nav-list">
           <li><a href="index.html#inicio" aria-current="page">INICIO</a></li>
           <li><a href="index.html#musica">MÚSICA</a></li>
-          <li><a href="index.html#sellos">SELLOS</a></li>
-          <li><a href="index.html#en-vivo">EN VIVO</a></li>
           <li><a href="clinicas.html">FREQUENCY LAB</a></li>
           <li><a href="bio.html">SOBRE MANU</a></li>
           <li><a href="presskit.html">PRESSKIT</a></li>
-          <li><a href="index.html#booking" class="cta-book">BOOKING</a></li>
         </ul>
       </nav>
 
@@ -92,9 +89,6 @@
     <nav id="mobile-nav" class="mobile-nav" hidden aria-label="Menú móvil" data-nav-panel>
       <ul class="mobile-nav-list">
         <li><a href="index.html#inicio">INICIO</a></li>
-        <li><a href="index.html#musica">MÚSICA</a></li>
-        <li><a href="index.html#sellos">SELLOS</a></li>
-        <li><a href="index.html#en-vivo">EN VIVO</a></li>
         <li><a href="clinicas.html">FREQUENCY LAB</a></li>
         <li><a href="bio.html">SOBRE MANU</a></li>
         <li><a href="presskit.html">PRESSKIT</a></li>
@@ -128,16 +122,15 @@
     <!-- ============ HERO ============ -->
     <section id="inicio" class="hero" aria-labelledby="hero-title">
       <div class="hero-bg" aria-hidden="true">
-        <video class="hero-video" autoplay muted loop playsinline poster="img/fotos/slide1.jpg">
-          <source src="img/bg-1080.webm" type="video/webm" />
-          <source src="img/bg-720.webm" type="video/webm" />
-        </video>
+        <img class="hero-img" src="img/indexPERFIL.png" alt="" decoding="async" fetchpriority="high" />
       </div>
 
       <div class="hero-wrap">
-        <p class="hero-eyebrow"><a href="bio.html">FREQUENCY STORYTELLER · PROGRESSIVE HOUSE</a></p>
+        <p class="hero-eyebrow"><a href="bio.html">FREQUENCY STORYTELLER</a></p>
 
-        <h1 id="hero-title" class="hero-title">MANU PAVEZ</h1>
+        <h1 id="hero-title" class="hero-title">
+          <img class="hero-logo" src="logos/Logo Manu Pavez.png" alt="Manu Pavez" />
+        </h1>
 
         <p class="hero-sub">
           DJ y productor argentino. Construyo sets que no se olvidan
@@ -262,32 +255,6 @@
           <button class="release-nav next" type="button" aria-label="Lanzamiento siguiente">›</button>
         </div>
 
-        <!-- ====== Spotify Artist Embed ====== -->
-        <div class="spotify-embed-wrap">
-          <header class="embed-header">
-            <h3 class="subsection-title">ESCUCHÁ EN SPOTIFY</h3>
-            <p class="muted">Top tracks, releases y aparición en playlists del catálogo, en tiempo real.</p>
-          </header>
-
-          <div class="spotify-embed">
-            <iframe
-              title="Manu Pavez en Spotify"
-              src="https://open.spotify.com/embed/artist/1m15KTr2Qsf1JkdkBam27h?utm_source=generator&theme=0"
-              width="100%"
-              height="380"
-              frameborder="0"
-              loading="lazy"
-              allowfullscreen
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            ></iframe>
-          </div>
-
-          <p class="embed-foot">
-            <a href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h" target="_blank" rel="noopener">
-              Abrir perfil completo en Spotify →
-            </a>
-          </p>
-        </div>
       </div>
     </section>
 
@@ -298,12 +265,31 @@
         Parte de este universo sonoro salió por sellos que cuidan la curaduría y el largo plazo.
       </p>
 
-      <div class="supabase-banner" data-supabase-banner hidden>
-        Configurá Supabase para cargar sellos/support.
-      </div>
-
       <div class="labels-marquee" aria-label="Marquesina de sellos y supports">
-        <div class="labels-track" data-sb="labels-track"></div>
+        <div class="labels-track">
+          <!-- set 1 -->
+          <div class="label-item"><img class="label-logo" src="logos/3RDAVENUE.svg" alt="3rd Avenue" loading="lazy" /></div>
+          <div class="label-item"><img class="label-logo" src="logos/AHDIGITAL.svg" alt="AH Digital" loading="lazy" /></div>
+          <div class="label-item"><img class="label-logo" src="logos/SOUNDAVENUE.png" alt="Sound Avenue" loading="lazy" /></div>
+          <div class="label-item"><img class="label-logo" src="logos/MUSIQUEDELUNE.svg" alt="Musique De Lune" loading="lazy" /></div>
+          <div class="label-item"><img class="label-logo" src="logos/THEMANGOALLEY.png" alt="The Mango Alley" loading="lazy" /></div>
+          <div class="label-item"><img class="label-logo" src="logos/LAFORESTA.svg" alt="La Foresta" loading="lazy" /></div>
+          <div class="label-item"><img class="label-logo" src="logos/VENTURERECORDS.png" alt="Venture Records" loading="lazy" /></div>
+          <div class="label-item"><img class="label-logo" src="logos/D9SA.svg" alt="D9SA" loading="lazy" /></div>
+          <div class="label-item"><img class="label-logo" src="logos/TRAFUL.png" alt="Traful" loading="lazy" /></div>
+          <div class="label-item"><img class="label-logo" src="logos/MADDEN.png" alt="Madden" loading="lazy" /></div>
+          <!-- set 2 (duplicado para loop infinito) -->
+          <div class="label-item" aria-hidden="true"><img class="label-logo" src="logos/3RDAVENUE.svg" alt="" loading="lazy" /></div>
+          <div class="label-item" aria-hidden="true"><img class="label-logo" src="logos/AHDIGITAL.svg" alt="" loading="lazy" /></div>
+          <div class="label-item" aria-hidden="true"><img class="label-logo" src="logos/SOUNDAVENUE.png" alt="" loading="lazy" /></div>
+          <div class="label-item" aria-hidden="true"><img class="label-logo" src="logos/MUSIQUEDELUNE.svg" alt="" loading="lazy" /></div>
+          <div class="label-item" aria-hidden="true"><img class="label-logo" src="logos/THEMANGOALLEY.png" alt="" loading="lazy" /></div>
+          <div class="label-item" aria-hidden="true"><img class="label-logo" src="logos/LAFORESTA.svg" alt="" loading="lazy" /></div>
+          <div class="label-item" aria-hidden="true"><img class="label-logo" src="logos/VENTURERECORDS.png" alt="" loading="lazy" /></div>
+          <div class="label-item" aria-hidden="true"><img class="label-logo" src="logos/D9SA.svg" alt="" loading="lazy" /></div>
+          <div class="label-item" aria-hidden="true"><img class="label-logo" src="logos/TRAFUL.png" alt="" loading="lazy" /></div>
+          <div class="label-item" aria-hidden="true"><img class="label-logo" src="logos/MADDEN.png" alt="" loading="lazy" /></div>
+        </div>
       </div>
     </section>
 
@@ -341,16 +327,21 @@
         </div>
       </div>
 
-      <h3 class="subsection-title">Sets en video</h3>
-      <p class="muted">Fragmentos de fechas donde se ve cómo se traduce todo con gente adelante.</p>
+      <h3 class="subsection-title">Sets en video · YouTube</h3>
+      <p class="muted">Lo último de mi canal, directo desde YouTube. Sets, recorders de fechas y procesos de estudio.</p>
 
-      <div class="media-slider" data-slider="videos" aria-label="Carrusel de videos">
+      <div class="media-slider" data-slider="videos" aria-label="Carrusel de videos de YouTube">
         <button class="media-nav prev" type="button" aria-label="Video anterior">‹</button>
 
         <div class="supabase-banner" data-supabase-banner hidden>Configurá Supabase para cargar videos/sets.</div>
         <div class="media-track" data-sb="media-video"></div>
 
         <button class="media-nav next" type="button" aria-label="Video siguiente">›</button>
+      </div>
+
+      <div class="yt-cta">
+        <a class="mp-btn primary" href="https://www.youtube.com/@manupavez?sub_confirmation=1" target="_blank" rel="noopener">SUSCRIBIRME EN YOUTUBE</a>
+        <a class="hero-secondary" href="https://youtube.com/@manupavez" target="_blank" rel="noopener">Ver canal completo →</a>
       </div>
 
       <h3 class="subsection-title">Mixes seleccionados</h3>
@@ -381,31 +372,6 @@
         <button class="media-nav next" type="button" aria-label="Mix siguiente">›</button>
       </div>
 
-      <!-- ====== YouTube channel native card ====== -->
-      <div class="yt-channel-card">
-        <div class="yt-channel-card__inner">
-          <div class="yt-channel-card__copy">
-            <p class="yt-channel-card__eyebrow">YOUTUBE OFICIAL</p>
-            <h3 class="yt-channel-card__title">@manupavez</h3>
-            <p class="yt-channel-card__sub">
-              Sets completos, recorders de fechas y procesos de estudio. Suscribite y recibí cada nuevo set apenas sube.
-            </p>
-            <div class="yt-channel-card__ctas">
-              <a class="mp-btn primary" href="https://www.youtube.com/@manupavez?sub_confirmation=1" target="_blank" rel="noopener">
-                SUSCRIBIRME
-              </a>
-              <a class="hero-secondary" href="https://youtube.com/@manupavez" target="_blank" rel="noopener">
-                Ver canal completo →
-              </a>
-            </div>
-          </div>
-          <a class="yt-channel-card__visual" href="https://youtube.com/@manupavez" target="_blank" rel="noopener" aria-label="Abrir canal de YouTube">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M21.6 8.2s-.2-1.5-.8-2.1a3.3 3.3 0 0 0-2.2-.8C16 5 12 5 12 5s-4 0-6.6.3a3.3 3.3 0 0 0-2.2.8c-.6.6-.8 2.1-.8 2.1S2 9.9 2 11.5v1c0 1.6.4 3.3.4 3.3s.2 1.5.8 2.1a3.3 3.3 0 0 0 2.2.8c1.6.1 6.6.3 6.6.3s4 0 6.6-.3a3.3 3.3 0 0 0 2.2-.8c.6-.6.8-2.1.8-2.1s.4-1.7.4-3.3v-1c0-1.6-.4-3.3-.4-3.3ZM9.8 14.7V9.3l5.4 2.7-5.4 2.7Z"/>
-            </svg>
-          </a>
-        </div>
-      </div>
     </section>
 
     <!-- ============ FREQUENCY LAB ============ -->
@@ -419,15 +385,6 @@
       </p>
 
       <a class="mp-btn green" href="clinicas.html">ENTRAR AL LAB</a>
-    </section>
-
-    <!-- ============ PRESSKIT ============ -->
-    <section class="section reveal section-centered" aria-labelledby="presskit-title">
-      <h2 id="presskit-title" data-animate="heading">PRESSKIT</h2>
-      <p class="muted">
-        Bio pro, fotos, logos y assets para medios, promoters y clubes.
-      </p>
-      <a class="mp-btn primary" href="presskit.html">VER PRESSKIT</a>
     </section>
 
     <!-- ============ BOOKING ============ -->
