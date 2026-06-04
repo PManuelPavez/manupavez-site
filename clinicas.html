@@ -78,8 +78,6 @@
       <ul class="mobile-nav-list">
         <li><a href="index.html#inicio">INICIO</a></li>
         <li><a href="index.html#musica">MÚSICA</a></li>
-        <li><a href="index.html#sellos">SELLOS</a></li>
-        <li><a href="index.html#en-vivo">EN VIVO</a></li>
         <li><a href="clinicas.html" aria-current="page">FREQUENCY LAB</a></li>
         <li><a href="bio.html">SOBRE MANU</a></li>
         <li><a href="presskit.html">PRESSKIT</a></li>
@@ -142,6 +140,7 @@
 
     <!-- PARA QUIEN -->
     <section class="compare section" aria-labelledby="compare-title">
+      <span class="section-kicker">El punto de partida</span>
       <h2 id="compare-title">¿POR QUÉ ENTRAR AL LAB?</h2>
 
   <div class="compare-grid">
@@ -178,7 +177,8 @@
 </section>
 
     <!-- RESULTADOS -->
-    <section class="section section-centered">
+    <section class="section section-centered section--light">
+      <span class="section-kicker">Resultados</span>
       <h2>LO QUE EMPIEZA A PASAR</h2>
 
       <ul class="clinic-list clinic-list--check">
@@ -190,6 +190,7 @@
 
     <!-- METODO -->
     <section id="metodo" class="section section-centered">
+      <span class="section-kicker">El método</span>
       <h2>CÓMO TRABAJAMOS</h2>
       <p class="muted">No es teoría. Es práctica sobre tu propio proyecto.</p>
 
@@ -215,6 +216,7 @@
 
     <!-- ESTO NO ES PARA TODOS -->
     <section class="section section-centered">
+      <span class="section-kicker">¿Es para vos?</span>
       <h2>ESTO NO ES PARA TODOS</h2>
 
       <div class="lab-filter">
@@ -230,34 +232,101 @@
     </section>
 
     <!-- CTA INTERMEDIO -->
-    <section class="section section-centered">
-      <a href="#reservar" class="mp-btn primary">QUIERO DEJAR DE ESTAR EN ESTE PUNTO</a>
+    <section class="section cta-band-section">
+      <div class="cta-band">
+        <span class="cta-band__kicker">El siguiente paso</span>
+        <h2 class="cta-band__title">No tiene por qué seguir igual.</h2>
+        <p class="cta-band__text">
+          Si llegaste hasta acá, ya sabés que el problema no es falta de ideas.
+          Empecemos a darle dirección.
+        </p>
+        <a href="#reservar" class="mp-btn orange cta-band__btn">QUIERO DEJAR DE ESTAR EN ESTE PUNTO</a>
+      </div>
     </section>
 
     <!-- PAQUETES -->
-    <section id="paquetes" class="section">
+    <section id="paquetes" class="section section-centered formats-section">
+      <span class="section-kicker">Planes</span>
       <h2>FORMATOS DISPONIBLES</h2>
+      <p class="muted formats-section__intro">
+        Un único formato activo, pensado para trabajar en serio. Cupos limitados.
+      </p>
 
-      <div class="clinics-grid" data-sb="clinics"></div>
+      <div class="clinics-grid formats-grid">
+
+        <!-- TARJETA PRINCIPAL: 1:1 MENSUAL (estática — precio dinámico) -->
+        <article class="format-card format-card--featured">
+          <span class="format-card__flag">Disponible ahora</span>
+
+          <div class="format-card__body">
+            <header class="format-card__head">
+              <span class="format-card__badge">Mentoría 1:1</span>
+              <h3 class="format-card__title">1:1 Mensual</h3>
+            </header>
+
+            <p class="format-card__lead">
+              No hay programa fijo. Hay tu material, tu proceso y un espacio para
+              trabajarlo en serio.
+            </p>
+            <p class="format-card__text">
+              Cada semana abrís tu proyecto y lo miramos juntos — no para imitarlo,
+              sino para entender qué querías decir cuando empezaste y por qué todavía
+              no lo encontraste.
+            </p>
+
+            <div class="format-card__includes">
+              <span class="format-card__includes-label">Incluye</span>
+              <ul class="format-list">
+                <li>Sesión semanal de 1 hora (videollamada)</li>
+                <li>Espacio en Notion con seguimiento personalizado</li>
+                <li>Trabajo exclusivo sobre tu propio material</li>
+                <li>Acceso directo entre sesiones</li>
+              </ul>
+            </div>
+
+            <div class="format-card__footer">
+              <div class="format-card__price">
+                <span class="format-card__amount" data-sb="precio-1-1">$40 USD</span>
+                <span class="format-card__period">/ mes</span>
+              </div>
+
+              <p class="format-card__scarcity">
+                Cupos activos: <strong>3 de 6</strong> disponibles.<br>
+                <span class="muted">Cuando se completan, se cierran.</span>
+              </p>
+
+              <a href="#reservar" class="mp-btn orange format-card__cta">
+                Aplicar al Lab →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- PLANES DINÁMICOS (próximamente + futuros) -->
+        <div data-sb="clinics"></div>
+
+      </div>
     </section>
 
  
     <!-- RESERVA -->
     <section id="reservar" class="section section-centered">
+      <span class="section-kicker">Aplicación</span>
       <h2>ENTRAR AL LAB</h2>
 
       <p class="muted">
         Este es el primer paso. Contame dónde estás y qué querés cambiar.
       </p>
-      <p class="form-intro">
-        No respondas rápido.<br>
-        Esto define cómo vamos a trabajar.
-      </p>
 
-      <div class="form-progress" aria-live="polite">
-        Paso <span id="step-number">1</span> de 4
-        <span class="form-progress-bar" aria-hidden="true" style="--progress: 25%"></span>
-      </div>
+      <div class="lab-form-panel">
+        <div class="lab-form-panel__head">
+          <span class="lab-form-panel__tag">Aplicación al Lab</span>
+
+          <div class="form-progress" aria-live="polite">
+            <span class="form-progress__label">Paso <span id="step-number">1</span> <span class="form-progress__total">de 4</span></span>
+            <span class="form-progress-bar" aria-hidden="true" style="--progress: 25%"></span>
+          </div>
+        </div>
 
       <form data-clinic-form class="lab-form" novalidate aria-label="Formulario de aplicación al Lab">
 
@@ -320,7 +389,7 @@
 
           <div class="form-nav">
             <button type="button" data-prev class="mp-btn ghost">Atrás</button>
-            <button type="submit" class="mp-btn primary">Entrar al Lab</button>
+            <button type="submit" class="mp-btn orange">Entrar al Lab</button>
           </div>
 
           <p class="form-error" data-form-error hidden role="alert"></p>
@@ -328,15 +397,16 @@
 
       </form>
 
-      <!-- Success state (oculto por defecto) -->
-      <div class="form-success" data-form-success hidden>
-        <div class="form-success__icon" aria-hidden="true"></div>
-        <h3>RECIBIDO</h3>
-        <p>Te respondo en menos de 48hs al mail que dejaste. Si querés adelantar algo, escribime directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>.</p>
-      </div>
+        <!-- Success state (oculto por defecto) -->
+        <div class="form-success" data-form-success hidden>
+          <div class="form-success__icon" aria-hidden="true"></div>
+          <h3>RECIBIDO</h3>
+          <p>Te respondo en menos de 48hs al mail que dejaste. Si querés adelantar algo, escribime directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>.</p>
+        </div>
+      </div><!-- /lab-form-panel -->
 
-      <p class="muted">
-        O escribime directo a
+      <p class="muted lab-form-alt">
+        ¿Preferís el mail? Escribime directo a
         <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>
       </p>
     </section>
@@ -391,6 +461,7 @@
 
     <!-- FAQ -->
     <section id="faq" class="section section-centered">
+      <span class="section-kicker">Preguntas frecuentes</span>
       <h2 data-animate="heading">FAQ</h2>
 
       <div class="faq-list">
