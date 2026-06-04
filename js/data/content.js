@@ -247,14 +247,51 @@ export async function getNav(kind = "desktop") {
   return data || [];
 }
 
-// Clínicas (si existe tabla). Si no existe, devuelve [].
+// Planes del Frequency Lab (tabla: planes). Si no existe, devuelve [].
 export async function getClinics() {
   try {
-    const { data } = await fromAny(["clinics", "clinic_packages", "packages"], (q) => q.select("*"));
-    return data || [];
+    const { data } = await fromAny(
+      ["planes", "clinics", "clinic_packages", "packages"],
+      (q) => q.select("*").order("orden", { ascending: true })
+    );
+    return (data || []).map(normalizePlan);
   } catch (e) {
     return [];
   }
+}
+
+function normalizePlan(r) {
+  const features = Array.isArray(r.features) ? r.features :
+    (typeof r.features === "string" ? JSON.parse(r.features) : []);
+  return {
+    id: r.id,
+    titulo: r.titulo || r.title || "",
+    descripcion: r.descripcion || r.description || "",
+    lead: r.lead || "",
+    badge: r.badge || "",
+    precio: r.precio || r.price || "",
+    periodo: r.periodo || "",
+    features,
+    cupos_totales: r.cupos_totales ?? 0,
+    cupos_activos: r.cupos_activos ?? 0,
+    status: r.status || "disponible",
+    cta_texto: r.cta_texto || "Ver más",
+    cta_link: r.cta_link || "#reservar",
+    is_featured: r.is_featured ?? false,
+  };
+}
+
+// Material exclusivo para alumnos (tabla: material_alumnos). Requiere auth.
+export async function getMaterialAlumnos() {
+  const sb = ensure();
+  const { data, error } = await sb
+    .from("material_alumnos")
+    .select("*")
+    .eq("visible", true)
+    .order("orden", { ascending: true });
+
+  if (error) throw error;
+  return data || [];
 }
 // --- Leads (contacto/booking) ---
 // Si no existe tabla o RLS bloquea, forms.js ya cae a mailto (plan B).

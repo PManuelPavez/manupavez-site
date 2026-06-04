@@ -165,32 +165,99 @@ function initForm() {
 }
 
 // =========================
-// LOAD CLINICS (desde content.js)
+// LOAD PLANES (desde content.js → tabla planes)
 // =========================
 async function loadClinics() {
-  const container = document.querySelector('[data-sb="clinics"]');
-  if (!container) return;
+  const dynamicContainer = document.querySelector('[data-sb="clinics"]');
+  const precioEl = document.querySelector('[data-sb="precio-1-1"]');
 
   try {
-    const data = await getClinics();
+    const planes = await getClinics();
 
-    if (!data || data.length === 0) {
-      container.innerHTML = `<p class="muted">Pronto hay nuevas fechas.</p>`;
-      return;
+    // Actualizar precio del 1:1 estático si viene de Supabase
+    const plan11 = planes.find(p => p.titulo === "1:1 Mensual" && p.status === "disponible");
+    if (plan11 && plan11.precio && precioEl) {
+      precioEl.textContent = plan11.precio;
     }
 
-    container.innerHTML = data
-      .map(
-        (item) => `
-      <article class="clinic-card">
-        <h3 class="clinic-title">${escapeHtml(item.title)}</h3>
-        <p class="clinic-subtitle">${escapeHtml(item.subtitle || "")}</p>
-      </article>`
-      )
-      .join("");
+    // Renderizar solo los planes adicionales (no el 1:1 que es estático)
+    const extras = planes.filter(p => p.titulo !== "1:1 Mensual");
+
+    if (dynamicContainer) {
+      dynamicContainer.innerHTML = extras
+        .filter(p => p.status !== "cerrado")
+        .map(renderDynamicCard)
+        .join("");
+    }
   } catch (err) {
-    console.error("Error cargando clinics:", err);
+    console.error("[clinicas] Error cargando planes:", err);
   }
+}
+
+function renderDynamicCard(p) {
+  if (p.status === "proximamente") return renderSoonCard(p);
+  return renderActiveCard(p);
+}
+
+function renderActiveCard(p) {
+  const featuresHtml = p.features.length
+    ? `<div class="format-card__includes">
+        <span class="format-card__includes-label">Incluye</span>
+        <ul class="format-list">
+          ${p.features.map(f => `<li>${escapeHtml(f)}</li>`).join("")}
+        </ul>
+      </div>`
+    : "";
+
+  const cuposDisponibles = p.cupos_totales - p.cupos_activos;
+  const scarcityHtml = p.cupos_totales > 0
+    ? `<p class="format-card__scarcity">
+        Cupos activos: <strong>${cuposDisponibles} de ${p.cupos_totales}</strong> disponibles.<br>
+        <span class="muted">Cuando se completan, se cierran.</span>
+      </p>`
+    : "";
+
+  const priceHtml = p.precio
+    ? `<div class="format-card__price">
+        <span class="format-card__amount">${escapeHtml(p.precio)}</span>
+        ${p.periodo ? `<span class="format-card__period">${escapeHtml(p.periodo)}</span>` : ""}
+      </div>`
+    : "";
+
+  return `
+    <article class="format-card">
+      <span class="format-card__flag">Disponible ahora</span>
+      <div class="format-card__body">
+        <header class="format-card__head">
+          ${p.badge ? `<span class="format-card__badge">${escapeHtml(p.badge)}</span>` : ""}
+          <h3 class="format-card__title">${escapeHtml(p.titulo)}</h3>
+        </header>
+        ${p.lead ? `<p class="format-card__lead">${escapeHtml(p.lead)}</p>` : ""}
+        ${p.descripcion ? `<p class="format-card__text">${escapeHtml(p.descripcion)}</p>` : ""}
+        ${featuresHtml}
+        <div class="format-card__footer">
+          ${priceHtml}
+          ${scarcityHtml}
+          <a href="${escapeHtml(p.cta_link)}" class="mp-btn orange format-card__cta">
+            ${escapeHtml(p.cta_texto)}
+          </a>
+        </div>
+      </div>
+    </article>`;
+}
+
+function renderSoonCard(p) {
+  return `
+    <article class="format-card format-card--soon">
+      <header class="format-card__head">
+        <span class="format-card__badge format-card__badge--soon">${escapeHtml(p.badge || "Próximamente")}</span>
+        <h3 class="format-card__title format-card__title--soon">${escapeHtml(p.titulo)}</h3>
+      </header>
+      ${p.descripcion ? `<p class="format-card__text muted">${escapeHtml(p.descripcion)}</p>` : ""}
+      <a href="${escapeHtml(p.cta_link)}" class="mp-btn ghost format-card__cta">
+        ${escapeHtml(p.cta_texto)}
+      </a>
+    </article>`;
 }
 
 function escapeHtml(s) {
