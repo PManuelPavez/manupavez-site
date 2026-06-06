@@ -1,0 +1,7 @@
+# Dependencias del script de automatización de fechas (Songkick / SoundCloud)
+# Instalar con:  pip install -r requirements.txt
+
+gspread>=6.0.0          # Cliente de Google Sheets
+google-auth>=2.27.0     # Autenticación con Service Account de Google Cloud
+requests>=2.31.0        # Peticiones HTTP a las APIs de Songkick / SoundCloud
+python-dotenv>=1.0.0    # Carga de variables de entorno desde el archivo .env

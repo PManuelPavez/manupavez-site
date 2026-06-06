@@ -10,9 +10,16 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages/presskit.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/scrollytelling.css">
 
   <link rel="canonical" href="https://manupavez.com/" />
   <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Scrollytelling: smooth scroll (Lenis) + animaciones (GSAP/ScrollTrigger).
+       defer ANTES de los módulos para que window.gsap/Lenis existan al arrancar main.js. -->
+  <script defer src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <script defer src="js/supabase-config.js"></script>
   <script type="module" src="js/main.js"></script>
@@ -60,7 +67,7 @@
 </header>
 
 <main class="presskit">
-  <section class="bio" data-sb-block="presskit_bio">
+  <section class="bio" data-sb-block="presskit_bio" data-fade-up>
     <h1>PRESSKIT</h1>
     <h2>Biografía Profesional</h2>
     <p>
@@ -77,7 +84,7 @@
   </section>
 
   <!-- SLIDER -->
-  <section class="slider" data-slider="presskit" data-autoplay="5500" aria-label="Galería de fotos">
+  <section class="slider" data-slider="presskit" data-autoplay="5500" aria-label="Galería de fotos" data-fade-up>
     <div class="slides" data-sb="presskit-slides">
       <img src="img/press/press1.jpg" alt="Presskit photo 1" class="active">
       <img src="img/press/press2.jpg" alt="Presskit photo 2">
@@ -87,7 +94,7 @@
   </section>
 
   <!-- BOTÓN DE DESCARGA -->
-  <section class="press-download">
+  <section class="press-download" data-fade-up>
     <a href="#" class="mp-btn primary" data-sb="presskit-download" download>DESCARGAR PRESSKIT</a>
   </section>
 </main>

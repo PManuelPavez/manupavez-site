@@ -1,8 +1,11 @@
 import { initNav } from "./features/nav.js";
 import { initReveal } from "./features/reveal.js";
+import { initScrollytelling } from "./features/scrollytelling.js";
+import { initEventos } from "./features/eventos.js";
 import { initActiveNav } from "./features/activeNav.js";
 import { initScrollTop } from "./features/scrollTop.js";
 import { initSliders } from "./features/slider.js";
+import { initIgSlider } from "./features/igSlider.js";
 import { initContactForm } from "./features/forms.js";
 import { initStudentAuth } from "./features/auth.js";
 import { initCounters } from "./features/counters.js";
@@ -22,12 +25,15 @@ function safeInit(name, fn) {
 // Site-wide features (no dependen de Supabase)
 safeInit("nav", initNav);
 safeInit("reveal", initReveal);
+safeInit("scrollytelling", initScrollytelling);
 safeInit("activeNav", initActiveNav);
 safeInit("scrollTop", initScrollTop);
 safeInit("sliders", initSliders);
+safeInit("igSlider", initIgSlider);
 safeInit("contactForm", initContactForm);
 safeInit("studentAuth", initStudentAuth);
 safeInit("counters", initCounters);
+safeInit("eventos", initEventos);
 
 // Inits que dependen de Supabase: esperar a que la config esté cargada (timeout: 5s)
 function waitForSupabase(callback, { timeoutMs = 5000, intervalMs = 50 } = {}) {

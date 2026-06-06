@@ -302,6 +302,84 @@
 }
 
 
+/* =================== SHOWS / PRÓXIMAS FECHAS =================== */
+/* Lista de fechas dinámicas (se carga desde /eventos.json).
+   Estética minimalista oscura, alineada con el resto del sitio. */
+
+.shows-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
+  text-align: left;
+}
+
+.show-row {
+  display: grid;
+  grid-template-columns: minmax(110px, auto) 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.show-row:hover {
+  border-color: rgba(89, 198, 186, 0.45); /* --color-accent-2 */
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-1px);
+}
+
+.show-date {
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent-2);
+  white-space: nowrap;
+}
+
+.show-venue {
+  font-size: 1rem;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.show-soon {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* El botón usa la clase global .mp-btn.primary; acá solo lo achicamos un poco. */
+.show-cta {
+  padding: 8px 18px;
+  font-size: 0.76rem;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+}
+
+/* Mobile: apilar en una sola columna */
+@media (max-width: 600px) {
+  .show-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    text-align: left;
+  }
+  .show-cta,
+  .show-soon {
+    justify-self: start;
+  }
+}
+
+
 /* =================== BOOKING / FORM =================== */
 
 .contact-form {
