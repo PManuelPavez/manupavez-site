@@ -48,48 +48,62 @@ function plantillaEvento(ev) {
     ? `<a class="mp-btn primary show-cta" href="${esc(ev.tickets)}" target="_blank" rel="noopener">TICKETS</a>`
     : `<span class="muted show-soon">Próximamente</span>`;
 
+  // OJO: NO ponemos la clase `reveal` acá porque la inyección ocurre DESPUÉS
+  // del init de scrollytelling.js (que escanea `.reveal` al cargar la página).
+  // Las filas se animan con el IntersectionObserver de revelarFilas() abajo.
   return `
-    <article class="show-row reveal">
+    <article class="show-row">
       <span class="show-date">${fecha}</span>
       <span class="show-venue">${lugar}${ciudad ? ` · ${ciudad}` : ""}</span>
       ${cta}
     </article>`;
 }
 
-// Anima las filas recién inyectadas con el mismo fade-up del resto del sitio.
-// Si GSAP no está (CDN caído) o hay reduce-motion, las muestra sin animar.
+// Anima las filas recién inyectadas con un fade-up sutil.
+// Usamos IntersectionObserver (NO ScrollTrigger) porque las filas se inyectan
+// DESPUÉS del init de GSAP: al crear un trigger con `toggleActions: play none none none`
+// si ya estás dentro del viewport, no auto-dispara el "enter" y la fila se queda
+// en opacity 0. IO sí maneja correctamente el caso "ya estoy adentro al registrarme".
 function revelarFilas(cont) {
-  const filas = cont.querySelectorAll(".show-row");
+  const filas = [...cont.querySelectorAll(".show-row")];
   if (!filas.length) return;
 
   const { gsap, ScrollTrigger } = window;
   const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
-  if (!gsap || !ScrollTrigger || reduce) {
-    // Fallback: sin animación, contenido visible.
+  // Fallback: sin GSAP, con reduce-motion o sin IO → todo visible, sin animar.
+  if (!gsap || reduce || !("IntersectionObserver" in window)) {
     filas.forEach((f) => f.classList.add("is-visible"));
     return;
   }
 
-  gsap.fromTo(
-    filas,
-    { autoAlpha: 0, y: 48 },
-    {
-      autoAlpha: 1,
-      y: 0,
-      duration: 0.9,
-      ease: "power2.out",
-      stagger: 0.08, // entrada escalonada, sutil
-      scrollTrigger: {
-        trigger: cont,
-        start: "top 85%",
-        toggleActions: "play none none none",
-      },
-    }
+  // Estado inicial: ocultas y un poco desplazadas hacia abajo.
+  gsap.set(filas, { autoAlpha: 0, y: 32 });
+
+  // Stagger según el orden en que cada fila entra al viewport.
+  let revealCount = 0;
+  const io = new IntersectionObserver(
+    (entries, obs) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        gsap.to(entry.target, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          delay: revealCount++ * 0.08,
+          onComplete: () => entry.target.classList.add("is-visible"),
+        });
+        obs.unobserve(entry.target);
+      }
+    },
+    { threshold: 0.15 }
   );
 
-  // Recalcular posiciones del resto de triggers ahora que cambió el alto del DOM.
-  ScrollTrigger.refresh();
+  filas.forEach((f) => io.observe(f));
+
+  // Recalcular triggers del resto del sitio (el alto del DOM cambió).
+  ScrollTrigger?.refresh();
 }
 
 export async function initEventos() {

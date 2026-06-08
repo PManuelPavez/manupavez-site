@@ -90,6 +90,18 @@
   font-size: clamp(3.2rem, 7vw, 4.6rem);
   letter-spacing: 0.32em;
   text-shadow: 0 6px 22px rgba(0, 0, 0, 0.9);
+  /* El PNG del logo tiene padding transparente arriba y abajo, lo que hace
+     que el wordmark se sienta "flotando lejos" del eyebrow y de la sub.
+     Compensamos con margin-block negativo (no toca la imagen, solo cierra el aire).
+     Si en el futuro cambiás el PNG, ajustá estos valores a ojo. */
+  margin-top: -28px;
+  margin-bottom: -22px;
+  line-height: 1;
+}
+
+/* La imagen del logo en sí (block para evitar baseline inline-img). */
+.hero-title .hero-logo {
+  display: block;
 }
 
 /* ===== DESKTOP: split editorial =====
