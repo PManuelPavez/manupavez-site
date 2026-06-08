@@ -28,10 +28,17 @@ html.gsap-ready .reveal {
 }
 
 /* El fondo del hero se mueve en parallax: necesita un poco de "aire"
-   arriba y abajo para que el desplazamiento no descubra los bordes. */
+   arriba y abajo para que el desplazamiento no descubra los bordes.
+   IMPORTANTE: el `inset` solo aplica en MOBILE. En desktop el hero usa
+   un split editorial (foto contenida en la mitad izquierda con
+   `inset: 0 50% 0 0`) y aquel override rompería ese layout. */
 html.gsap-ready .hero-bg {
-  inset: -12% 0;
   will-change: transform;
+}
+@media (max-width: 859px) {
+  html.gsap-ready .hero-bg {
+    inset: -8% 0;
+  }
 }
 
 /* Misma idea para el strip de fotos en parallax */
