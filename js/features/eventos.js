@@ -22,14 +22,14 @@ function esc(valor) {
 // Soporta "YYYY-MM-DD" y "DD/MM/YYYY". Devuelve null si no reconoce el formato.
 function aDateLocal(fecha) {
   const txt = String(fecha ?? "").trim();
-  let m = txt.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  let m = txt.match(/^(\d{4})-(\d{2})-(\d{2})$/); // YYYY-MM-DD
   if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
-  m = txt.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  m = txt.match(/^(\d{2})\/(\d{2})\/(\d{4})$/); // DD/MM/YYYY
   if (m) return new Date(+m[3], +m[2] - 1, +m[1]);
   return null;
 }
 
-// Formatea la fecha a algo legible (ej: "15 jul 2026"). Si no parsea, deja el texto original.
+// Formatea la fecha a algo legible (ej: "15 jul 2026"); si no parsea, deja el texto original.
 function formatearFecha(fecha) {
   const d = aDateLocal(fecha);
   if (!d) return esc(fecha);
@@ -49,57 +49,47 @@ function plantillaEvento(ev) {
     : `<span class="muted show-soon">Próximamente</span>`;
 
   return `
-    <article class="show-row">
+    <article class="show-row reveal">
       <span class="show-date">${fecha}</span>
       <span class="show-venue">${lugar}${ciudad ? ` · ${ciudad}` : ""}</span>
       ${cta}
     </article>`;
 }
 
-// Anima las filas recién inyectadas con un fade-up sutil.
-// Usamos IntersectionObserver (no ScrollTrigger) porque las filas se inyectan
-// DESPUÉS del init de GSAP: registrar triggers en ese momento no auto-dispara
-// el "enter" si ya estás dentro del viewport. IO sí maneja ese caso.
+// Anima las filas recién inyectadas con el mismo fade-up del resto del sitio.
+// Si GSAP no está (CDN caído) o hay reduce-motion, las muestra sin animar.
 function revelarFilas(cont) {
-  const filas = [...cont.querySelectorAll(".show-row")];
+  const filas = cont.querySelectorAll(".show-row");
   if (!filas.length) return;
 
   const { gsap, ScrollTrigger } = window;
   const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
-  // Fallback sin GSAP / con reduce-motion / sin IO: mostrar todo sin animar.
-  if (!gsap || reduce || !("IntersectionObserver" in window)) {
+  if (!gsap || !ScrollTrigger || reduce) {
+    // Fallback: sin animación, contenido visible.
     filas.forEach((f) => f.classList.add("is-visible"));
     return;
   }
 
-  // Estado inicial: ocultas y desplazadas un poco hacia abajo.
-  gsap.set(filas, { autoAlpha: 0, y: 32 });
-
-  // Stagger según orden en que cada fila entra al viewport.
-  let revealCount = 0;
-  const io = new IntersectionObserver(
-    (entries, obs) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        gsap.to(entry.target, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.7,
-          ease: "power2.out",
-          delay: revealCount++ * 0.08,
-          onComplete: () => entry.target.classList.add("is-visible"),
-        });
-        obs.unobserve(entry.target);
-      }
-    },
-    { threshold: 0.15 }
+  gsap.fromTo(
+    filas,
+    { autoAlpha: 0, y: 48 },
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.9,
+      ease: "power2.out",
+      stagger: 0.08, // entrada escalonada, sutil
+      scrollTrigger: {
+        trigger: cont,
+        start: "top 85%",
+        toggleActions: "play none none none",
+      },
+    }
   );
 
-  filas.forEach((f) => io.observe(f));
-
-  // Recalcular los triggers del resto del sitio (el alto del DOM cambió).
-  ScrollTrigger?.refresh();
+  // Recalcular posiciones del resto de triggers ahora que cambió el alto del DOM.
+  ScrollTrigger.refresh();
 }
 
 export async function initEventos() {
@@ -119,6 +109,9 @@ export async function initEventos() {
     }
 
     cont.innerHTML = eventos.map(plantillaEvento).join("");
+
+    // Las filas se inyectan DESPUÉS del init de GSAP, así que su fade-up no se
+    // registró en scrollytelling.js. Lo creamos acá explícitamente.
     revelarFilas(cont);
   } catch (error) {
     cont.innerHTML = `<p class="muted">No se pudieron cargar las fechas por ahora.</p>`;

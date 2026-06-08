@@ -1,6 +1,7 @@
 import { initNav } from "./features/nav.js";
 import { initReveal } from "./features/reveal.js";
 import { initScrollytelling } from "./features/scrollytelling.js";
+import { initEventos } from "./features/eventos.js";
 import { initActiveNav } from "./features/activeNav.js";
 import { initScrollTop } from "./features/scrollTop.js";
 import { initSliders } from "./features/slider.js";
@@ -8,7 +9,6 @@ import { initIgSlider } from "./features/igSlider.js";
 import { initContactForm } from "./features/forms.js";
 import { initStudentAuth } from "./features/auth.js";
 import { initCounters } from "./features/counters.js";
-import { initEventos } from "./features/eventos.js";
 import { initHome } from "./pages/home.js";
 import { initPresskit } from "./pages/presskit.js";
 import { initClinicas } from "./pages/clinicas.js";

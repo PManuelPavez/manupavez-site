@@ -47,8 +47,8 @@
   <link rel="stylesheet" href="css/scrollytelling.css" />
 
   <!-- Scrollytelling: smooth scroll (Lenis) + animaciones (GSAP/ScrollTrigger).
-       defer ANTES de los módulos para que window.gsap/Lenis existan al arrancar main.js.
-       Si los CDNs fallan, el sitio sigue funcionando con el reveal por IntersectionObserver. -->
+       Se cargan con defer ANTES de los módulos para que window.gsap/Lenis
+       existan cuando arranca main.js. Si fallan, el sitio sigue funcionando. -->
   <script defer src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -452,7 +452,7 @@
         <div class="swiper-wrapper"></div>
       </div>
 
-      <a class="ig-fallback" href="https://www.instagram.com/manupavez_" target="_blank" rel="noopener">
+      <a class="ig-fallback btn-ghost" href="https://www.instagram.com/manupavez_" target="_blank" rel="noopener">
         Ver más en Instagram →
       </a>
     </section>

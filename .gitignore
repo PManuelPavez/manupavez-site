@@ -3,3 +3,15 @@ node_modules/
 .env
 .env.local
 .vscode/
+
+# Credenciales y secretos (NUNCA commitear)
+google_credentials.json
+*.credentials.json
+*service-account*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/

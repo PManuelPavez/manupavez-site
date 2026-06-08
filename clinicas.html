@@ -32,8 +32,8 @@
   <link rel="stylesheet" href="css/responsive.css" />
   <link rel="stylesheet" href="css/scrollytelling.css" />
 
-  <!-- Scrollytelling: smooth scroll (Lenis) + GSAP/ScrollTrigger.
-       defer ANTES de los módulos. Si fallan, el sitio sigue funcionando. -->
+  <!-- Scrollytelling: smooth scroll (Lenis) + animaciones (GSAP/ScrollTrigger).
+       defer ANTES de los módulos para que window.gsap/Lenis existan al arrancar main.js. -->
   <script defer src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -146,7 +146,7 @@
     </section>
 
     <!-- PARA QUIEN -->
-    <section class="compare section" aria-labelledby="compare-title">
+    <section class="compare section" aria-labelledby="compare-title" data-fade-up>
       <span class="section-kicker">El punto de partida</span>
       <h2 id="compare-title">¿POR QUÉ ENTRAR AL LAB?</h2>
 
@@ -184,7 +184,7 @@
 </section>
 
     <!-- RESULTADOS -->
-    <section class="section section-centered section--light">
+    <section class="section section-centered section--light" data-fade-up>
       <span class="section-kicker">Resultados</span>
       <h2>LO QUE EMPIEZA A PASAR</h2>
 
@@ -196,7 +196,7 @@
     </section>
 
     <!-- METODO -->
-    <section id="metodo" class="section section-centered">
+    <section id="metodo" class="section section-centered" data-fade-up>
       <span class="section-kicker">El método</span>
       <h2>CÓMO TRABAJAMOS</h2>
       <p class="muted">No es teoría. Es práctica sobre tu propio proyecto.</p>
@@ -222,7 +222,7 @@
     </section>
 
     <!-- ESTO NO ES PARA TODOS -->
-    <section class="section section-centered">
+    <section class="section section-centered" data-fade-up>
       <span class="section-kicker">¿Es para vos?</span>
       <h2>ESTO NO ES PARA TODOS</h2>
 
@@ -239,7 +239,7 @@
     </section>
 
     <!-- CTA INTERMEDIO -->
-    <section class="section cta-band-section">
+    <section class="section cta-band-section" data-fade-up>
       <div class="cta-band">
         <span class="cta-band__kicker">El siguiente paso</span>
         <h2 class="cta-band__title">No tiene por qué seguir igual.</h2>
@@ -252,7 +252,7 @@
     </section>
 
     <!-- PAQUETES -->
-    <section id="paquetes" class="section section-centered formats-section">
+    <section id="paquetes" class="section section-centered formats-section" data-fade-up>
       <span class="section-kicker">Planes</span>
       <h2>FORMATOS DISPONIBLES</h2>
       <p class="muted formats-section__intro">
@@ -317,7 +317,7 @@
 
  
     <!-- RESERVA -->
-    <section id="reservar" class="section section-centered">
+    <section id="reservar" class="section section-centered" data-fade-up>
       <span class="section-kicker">Aplicación</span>
       <h2>ENTRAR AL LAB</h2>
 
@@ -419,7 +419,7 @@
     </section>
 
     <!-- ÁREA DE ALUMNOS -->
-    <section id="alumnos" class="section section-centered" aria-labelledby="alumnos-title">
+    <section id="alumnos" class="section section-centered" aria-labelledby="alumnos-title" data-fade-up>
       <h2 id="alumnos-title" data-animate="heading">ÁREA DE ALUMNOS</h2>
       <p class="muted">
         Contenido exclusivo para quienes ya están dentro del Lab. El resto de la página es abierta;
@@ -467,7 +467,7 @@
     </section>
 
     <!-- FAQ -->
-    <section id="faq" class="section section-centered">
+    <section id="faq" class="section section-centered" data-fade-up>
       <span class="section-kicker">Preguntas frecuentes</span>
       <h2 data-animate="heading">FAQ</h2>
 

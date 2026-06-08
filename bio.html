@@ -22,8 +22,8 @@
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/scrollytelling.css">
 
-  <!-- Scrollytelling: smooth scroll (Lenis) + GSAP/ScrollTrigger.
-       defer ANTES de los módulos. Si fallan, el sitio sigue funcionando. -->
+  <!-- Scrollytelling: smooth scroll (Lenis) + animaciones (GSAP/ScrollTrigger).
+       defer ANTES de los módulos para que window.gsap/Lenis existan al arrancar main.js. -->
   <script defer src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -89,7 +89,7 @@
   <!-- ============ STORY ============ -->
   <section id="story-manu-pavez" class="mp-story" data-sb-block="bio_story">
 
-    <article class="bio-chapter">
+    <article class="bio-chapter" data-fade-up>
       <h2 class="bio-chapter__kicker">01 · El origen</h2>
       <p>
         Pergamino, agosto de 2001. Bajo un cielo de pueblo, un chico empieza a imaginar
@@ -99,7 +99,7 @@
       </p>
     </article>
 
-    <article class="bio-chapter">
+    <article class="bio-chapter" data-fade-up>
       <h2 class="bio-chapter__kicker">02 · El click</h2>
       <p>
         Hay un día bisagra: lo que para muchos era ruido, para él era <strong>posibilidad</strong>.
@@ -109,7 +109,7 @@
       </p>
     </article>
 
-    <article class="bio-chapter">
+    <article class="bio-chapter" data-fade-up>
       <h2 class="bio-chapter__kicker">03 · El laboratorio</h2>
       <p>
         A los <strong>19</strong> abre <strong>Ableton</strong> y el cuarto se vuelve laboratorio.
@@ -120,7 +120,7 @@
       </p>
     </article>
 
-    <article class="bio-chapter">
+    <article class="bio-chapter" data-fade-up>
       <h2 class="bio-chapter__kicker">04 · Hoy</h2>
       <p>
         Sus tracks circulan por sellos de referencia del <strong>progressive house</strong>:

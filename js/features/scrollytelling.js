@@ -56,22 +56,22 @@ export function initScrollytelling() {
       });
     });
 
-    window.__mpLenis = lenis;
+    window.__mpLenis = lenis; // expuesto por si hace falta desde otros módulos
   }
 
   /* ---------------------------------------------------------------
      2) PARALLAX — Hero: el fondo se mueve más lento que el scroll
      Importante: animamos `.hero-bg` (contenedor), NO `.hero-img`,
-     porque la imagen lleva su propio transform de encuadre.
+     porque la imagen lleva su propio transform de encuadre (--photo-x/zoom).
      --------------------------------------------------------------- */
   const heroBg = $(".hero-bg");
   const hero = $(".hero");
   if (heroBg && hero) {
     gsap.fromTo(
       heroBg,
-      { yPercent: -4 },
+      { yPercent: -6 },
       {
-        yPercent: 8,
+        yPercent: 12,
         ease: "none",
         scrollTrigger: {
           trigger: hero,
@@ -83,7 +83,7 @@ export function initScrollytelling() {
     );
   }
 
-  // Parallax sutil para el strip de fotos
+  // Parallax sutil para el strip de fotos (profundidad extra)
   const strip = $(".photo-strip-track");
   if (strip) {
     gsap.fromTo(
@@ -104,7 +104,8 @@ export function initScrollytelling() {
 
   /* ---------------------------------------------------------------
      3) FADE-UP — Bloques importantes emergen al entrar al viewport
-     Reutilizamos los `.reveal` existentes y cualquier `[data-fade-up]`.
+     Reutilizamos los `.reveal` existentes (música, sellos, fechas, bio,
+     booking…) y cualquier `[data-fade-up]` opcional.
      --------------------------------------------------------------- */
   const blocks = [...$$(".reveal"), ...$$("[data-fade-up]")].filter(
     (el, i, arr) => arr.indexOf(el) === i
@@ -130,10 +131,11 @@ export function initScrollytelling() {
   });
 
   /* ---------------------------------------------------------------
-     Recalcular posiciones cuando entra contenido async (Supabase),
+     Recalcular posiciones cuando entra contenido dinámico (Supabase),
      se cargan fuentes/imágenes o cambia el tamaño de la ventana.
      --------------------------------------------------------------- */
   window.addEventListener("load", () => ScrollTrigger.refresh());
+  // Releases/videos/mixes se renderizan async tras la config de Supabase
   setTimeout(() => ScrollTrigger.refresh(), 1500);
   setTimeout(() => ScrollTrigger.refresh(), 4000);
 }

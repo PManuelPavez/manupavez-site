@@ -5,7 +5,11 @@
    original de `.reveal` (IntersectionObserver). Cero riesgo de FOUC.
    ============================================================ */
 
-/* Lenis: el smooth scroll necesita estos resets para tomar el control. */
+/* Lenis: el smooth scroll necesita estos resets para tomar el control */
+html.gsap-ready.lenis,
+html.gsap-ready .lenis {
+  height: auto;
+}
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
@@ -23,19 +27,11 @@ html.gsap-ready .reveal {
   transition: none;
 }
 
-/* PARALLAX del hero:
-   - Mobile (<860px): la foto es full-bleed → damos un poco de "aire" arriba
-     y abajo (-8%) para que el parallax no descubra los bordes.
-   - Desktop (≥860px): la foto está contenida en la mitad izquierda
-     (split editorial). NO tocamos `inset` porque rompería el split.
-     El parallax actúa solo desplazando la imagen, sin desbordar. */
+/* El fondo del hero se mueve en parallax: necesita un poco de "aire"
+   arriba y abajo para que el desplazamiento no descubra los bordes. */
 html.gsap-ready .hero-bg {
+  inset: -12% 0;
   will-change: transform;
-}
-@media (max-width: 859px) {
-  html.gsap-ready .hero-bg {
-    inset: -8% 0;
-  }
 }
 
 /* Misma idea para el strip de fotos en parallax */

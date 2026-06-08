@@ -1,20 +1,20 @@
 [
   {
-    "fecha": "2026-08-14",
-    "lugar": "CLUB 74",
-    "ciudad": "Pergamino, Buenos Aires",
-    "tickets": "https://example.com/tickets/crobar"
+    "fecha": "2026-07-15",
+    "lugar": "Crobar",
+    "ciudad": "Buenos Aires",
+    "tickets": "https://ticket.com/a"
   },
   {
-    "fecha": null,
-    "lugar": null,
-    "ciudad": null,
+    "fecha": "2026-08-02",
+    "lugar": "Club Bahrein",
+    "ciudad": "CABA",
     "tickets": null
   },
   {
-    "fecha": null,
-    "lugar": null,
-    "ciudad": null,
-    "tickets": null
+    "fecha": "12/09/2026",
+    "lugar": "Festival Sur",
+    "ciudad": "Rosario",
+    "tickets": "https://ticket.com/b"
   }
 ]
