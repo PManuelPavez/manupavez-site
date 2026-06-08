@@ -1631,3 +1631,75 @@ body[data-page="clinicas"] .section--light .clinic-list--check li::before{
 .lab-form-alt a:hover{
   border-bottom-color: var(--cl-orange);
 }
+
+/* =========================================================
+   RETOQUE — RECUADROS CENTRADOS + DINÁMICA FLUIDA
+   Objetivo: que las tarjetas queden siempre centradas (haya 1
+   o varias) y se reacomoden con fluidez, con hover suave.
+   ========================================================= */
+
+/* FORMATOS: de columnas fijas (1.6fr 1fr) a flex centrado.
+   Así, con una sola tarjeta o con varias, todo queda centrado y
+   la última fila incompleta también se centra (no se pega a la izq). */
+.formats-grid{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 22px;
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
+/* El contenedor dinámico de Supabase deja de ocupar una celda:
+   sus tarjetas se vuelven ítems directos del flex y se centran. */
+.formats-grid [data-sb="clinics"]{
+  display: contents;
+}
+
+/* Anchos fluidos: las tarjetas crecen/encogen y hacen wrap solas */
+.formats-grid .format-card{
+  flex: 1 1 340px;
+  max-width: 420px;
+  width: 100%;
+}
+.formats-grid .format-card--featured{
+  flex: 1 1 420px;
+  max-width: 480px;
+}
+
+/* DINÁMICA FLUIDA: transición suave + hover en todas las format-card
+   (antes la tarjeta destacada no tenía ninguna interacción) */
+.format-card{
+  transition:
+    transform .35s cubic-bezier(.2, .8, .2, 1),
+    box-shadow .35s cubic-bezier(.2, .8, .2, 1),
+    border-color .35s ease;
+}
+.format-card:hover{
+  transform: translateY(-6px);
+}
+.format-card--featured:hover{
+  box-shadow: 0 42px 110px rgba(0, 0, 0, .6);
+}
+.format-card--soon:hover{
+  border-color: rgba(255, 255, 255, .28);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .55);
+}
+
+/* Compare e info-blocks: ancho cómodo y centrado consistente */
+.compare-grid{
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+/* Touch: sin hover-lift (no tiene sentido y puede quedar "pegado") */
+@media (hover: none){
+  .format-card:hover{ transform: none; }
+}
+
+/* Accesibilidad: respetar quien pide menos movimiento */
+@media (prefers-reduced-motion: reduce){
+  .format-card{ transition: none; }
+  .format-card:hover{ transform: none; }
+}

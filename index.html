@@ -44,6 +44,19 @@
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/pages/home.css" />
   <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="css/scrollytelling.css" />
+
+  <!-- Scrollytelling: smooth scroll (Lenis) + animaciones (GSAP/ScrollTrigger).
+       defer ANTES de los módulos para que window.gsap/Lenis existan al arrancar main.js.
+       Si los CDNs fallan, el sitio sigue funcionando con el reveal por IntersectionObserver. -->
+  <script defer src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Swiper: slider del feed de Instagram (CSS + JS desde CDN).
+       JS con defer para que window.Swiper exista cuando arranca main.js. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <!-- Scripts -->
   <script type="module" src="js/supabase-config.js"></script>
@@ -298,34 +311,8 @@
       <h2 id="envivo-title" data-animate="heading">EN VIVO</h2>
 
       <h3 class="subsection-title">Próximas fechas</h3>
-      <div class="embed-wrap" aria-label="Fechas (Songkick)">
-        <div class="songkick-widget-wrap">
-          <a
-            href="https://www.songkick.com/artists/10195234"
-            class="songkick-widget"
-            data-theme="dark"
-            data-track-button="off"
-            data-detect-style="off"
-            data-background-color="rgb(0,0,0,1)"
-            data-font-color="rgb(255,255,255,1)"
-            data-button-bg-color="rgb(255,255,255,1)"
-            data-button-text-color="rgb(0,0,0,1)"
-            data-locale="en"
-            data-other-artists="on"
-            data-share-button="on"
-            data-country-filter="off"
-            data-rsvp="off"
-            data-request-show="off"
-            data-past-events="off"
-            data-past-events-offtour="off"
-            data-remind-me="off"
-            hidden
-          >
-            Ver fechas en Songkick
-          </a>
-          <script src="https://widget-app.songkick.com/injector/10195234"></script>
-        </div>
-      </div>
+      <!-- Fechas dinámicas: se cargan desde /eventos.json (ver js/features/eventos.js) -->
+      <div class="shows-list" data-eventos aria-live="polite"></div>
 
       <h3 class="subsection-title">Sets en video · YouTube</h3>
       <p class="muted">Lo último de mi canal, directo desde YouTube. Sets, recorders de fechas y procesos de estudio.</p>
@@ -458,17 +445,16 @@
       <h2 id="instagram-title" data-animate="heading">INSTAGRAM</h2>
       <p class="muted">Clips cortos, work in progress y fragmentos del día a día alrededor de la música.</p>
 
-      <div class="ig-wrap ig-card">
-        <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
-        <iframe
-          src="//lightwidget.com/widgets/8b190ae484f25e67ae9aac82b723387a.html"
-          scrolling="no"
-          allowtransparency="true"
-          class="lightwidget-widget"
-          style="width:100%;border:0;overflow:hidden;"
-          title="Instagram feed de Manu Pavez"
-        ></iframe>
+      <!-- El slider se llena con los embeds oficiales de IG desde la lista
+           IG_POSTS en js/features/igSlider.js. Si no hay posts cargados (o
+           Swiper no está disponible), se muestra el fallback de abajo. -->
+      <div class="ig-swiper swiper" data-fade-up>
+        <div class="swiper-wrapper"></div>
       </div>
+
+      <a class="ig-fallback" href="https://www.instagram.com/manupavez_" target="_blank" rel="noopener">
+        Ver más en Instagram →
+      </a>
     </section>
   </main>
 

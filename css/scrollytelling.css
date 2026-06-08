@@ -1,0 +1,55 @@
+/* ============================================================
+   SCROLLYTELLING (Lenis + GSAP ScrollTrigger)
+   Esta hoja SOLO actúa cuando el JS marca <html class="gsap-ready">.
+   Si los CDNs no cargan, nada de esto aplica y manda el sistema
+   original de `.reveal` (IntersectionObserver). Cero riesgo de FOUC.
+   ============================================================ */
+
+/* Lenis: el smooth scroll necesita estos resets para tomar el control. */
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Cuando GSAP está activo, le cede el control de la animación de `.reveal`.
+   GSAP setea opacity/transform inline (autoAlpha), así que neutralizamos
+   la transición CSS para que no peleen los dos sistemas. */
+html.gsap-ready .reveal {
+  transition: none;
+}
+
+/* PARALLAX del hero:
+   - Mobile (<860px): la foto es full-bleed → damos un poco de "aire" arriba
+     y abajo (-8%) para que el parallax no descubra los bordes.
+   - Desktop (≥860px): la foto está contenida en la mitad izquierda
+     (split editorial). NO tocamos `inset` porque rompería el split.
+     El parallax actúa solo desplazando la imagen, sin desbordar. */
+html.gsap-ready .hero-bg {
+  will-change: transform;
+}
+@media (max-width: 859px) {
+  html.gsap-ready .hero-bg {
+    inset: -8% 0;
+  }
+}
+
+/* Misma idea para el strip de fotos en parallax */
+html.gsap-ready .photo-strip-track {
+  will-change: transform;
+}
+
+/* Seguridad: si alguien tiene reduce-motion, todo visible y quieto */
+@media (prefers-reduced-motion: reduce) {
+  html.gsap-ready .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  html.gsap-ready .hero-bg {
+    inset: 0;
+  }
+}

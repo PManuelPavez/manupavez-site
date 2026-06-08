@@ -1,0 +1,20 @@
+[
+  {
+    "fecha": "2026-08-14",
+    "lugar": "CLUB 74",
+    "ciudad": "Pergamino, Buenos Aires",
+    "tickets": "https://example.com/tickets/crobar"
+  },
+  {
+    "fecha": null,
+    "lugar": null,
+    "ciudad": null,
+    "tickets": null
+  },
+  {
+    "fecha": null,
+    "lugar": null,
+    "ciudad": null,
+    "tickets": null
+  }
+]
