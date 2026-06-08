@@ -1703,3 +1703,165 @@ body[data-page="clinicas"] .section--light .clinic-list--check li::before{
   .format-card{ transition: none; }
   .format-card:hover{ transform: none; }
 }
+
+/* =========================================================
+   COMPARE v2 — "antes / después" premium
+   Reemplaza el look genérico (2 columnas casi iguales) por una
+   comparativa con semántica clara: PROBLEMA (frío) vs RESULTADO (teal),
+   íconos por ítem, más compacto y centrado.
+   Este bloque va al final: gana por cascada.
+   ========================================================= */
+
+body[data-page="clinicas"] .compare{
+  margin: clamp(32px, 6vw, 64px) 0;
+}
+
+body[data-page="clinicas"] .compare-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(14px, 2vw, 22px);
+  max-width: 880px;
+  margin: clamp(26px, 4vw, 40px) auto 0;
+  /* reset del look anterior (card unificada con divisor) */
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+  background: none;
+  position: relative;
+  align-items: stretch;
+}
+
+/* divisor vertical central del diseño viejo: fuera */
+body[data-page="clinicas"] .compare-grid::before{ display: none; }
+
+body[data-page="clinicas"] .compare-col{
+  padding: clamp(22px, 3vw, 32px) clamp(18px, 2.4vw, 26px);
+  border-radius: 20px;
+  border: 1px solid var(--cl-border);
+  background: var(--cl-card);
+  /* el blur sobre fondos complejos se veía sucio: lo sacamos */
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  filter: none;
+  text-align: left;
+  transition:
+    transform .35s var(--mp-ease-out, cubic-bezier(.16,1,.3,1)),
+    border-color .35s ease,
+    opacity .35s ease;
+}
+
+/* IZQUIERDA — el problema: paleta fría/apagada */
+body[data-page="clinicas"] .compare-col--no{
+  background: linear-gradient(180deg, rgba(255, 86, 86, .05), rgba(5, 7, 17, .92));
+  border-color: rgba(255, 86, 86, .16);
+}
+
+/* DERECHA — el resultado: destacada, acento teal */
+body[data-page="clinicas"] .compare-col--yes{
+  background: linear-gradient(180deg, rgba(89, 198, 186, .085), rgba(5, 7, 17, .92));
+  border-color: rgba(89, 198, 186, .28);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, .5);
+}
+
+/* Encabezado de columna */
+body[data-page="clinicas"] .compare-head{
+  padding: 0 0 14px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+body[data-page="clinicas"] .compare-head h3{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .76rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: 1;
+  margin: 0;
+}
+body[data-page="clinicas"] .compare-head h3::before{
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+body[data-page="clinicas"] .compare-col--no .compare-head h3{
+  color: rgba(255, 150, 150, .92);
+}
+body[data-page="clinicas"] .compare-col--no .compare-head h3::before{
+  background: #ff7a7a;
+  box-shadow: 0 0 0 4px rgba(255, 86, 86, .14);
+}
+body[data-page="clinicas"] .compare-col--yes .compare-head h3{
+  color: var(--mp-accent-2);
+}
+body[data-page="clinicas"] .compare-col--yes .compare-head h3::before{
+  background: var(--mp-accent-2);
+  box-shadow: 0 0 0 4px rgba(89, 198, 186, .16);
+}
+
+/* Lista de ítems con ícono */
+body[data-page="clinicas"] .compare-list{
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+body[data-page="clinicas"] .compare-list li{
+  position: relative;
+  padding: 13px 4px 13px 34px;
+  border-top: 1px solid rgba(255, 255, 255, .055);
+  font-size: .98rem;
+  line-height: 1.45;
+  color: rgba(242, 242, 255, .9);
+}
+body[data-page="clinicas"] .compare-list li:first-child{ border-top: 0; }
+
+body[data-page="clinicas"] .compare-list li::before{
+  position: absolute;
+  left: 2px;
+  top: 12px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: .68rem;
+  font-weight: 700;
+  line-height: 1;
+}
+body[data-page="clinicas"] .compare-col--no .compare-list li::before{
+  content: "✕";
+  color: #ff9a9a;
+  background: rgba(255, 86, 86, .12);
+  border: 1px solid rgba(255, 86, 86, .32);
+}
+body[data-page="clinicas"] .compare-col--yes .compare-list li::before{
+  content: "✓";
+  color: #061014;
+  background: var(--mp-accent-2);
+  border: 1px solid transparent;
+}
+
+/* Interacción más sobria que el dim al 50% anterior */
+body[data-page="clinicas"] .compare-grid:hover .compare-col{ opacity: .72; }
+body[data-page="clinicas"] .compare-grid:hover .compare-col:hover{
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+@media (max-width: 768px){
+  body[data-page="clinicas"] .compare-grid{ grid-template-columns: 1fr; }
+}
+@media (hover: none){
+  body[data-page="clinicas"] .compare-grid:hover .compare-col,
+  body[data-page="clinicas"] .compare-grid:hover .compare-col:hover{
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  body[data-page="clinicas"] .compare-col{ transition: none; }
+  body[data-page="clinicas"] .compare-grid:hover .compare-col:hover{ transform: none; }
+}

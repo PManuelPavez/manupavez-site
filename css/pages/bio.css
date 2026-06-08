@@ -249,3 +249,96 @@ body[data-page="bio"] .site-header .nav a.is-active {
 body[data-page="bio"] .site-header .nav a.is-active::after {
   transform: scaleX(1);
 }
+
+/* ============ TIMELINE DE CAPÍTULOS ============
+   Convierte la lista de capítulos en una línea de tiempo con nodos
+   luminosos: la historia "progresa" visualmente. Solo desde tablet+. */
+@media (min-width: 680px) {
+  body[data-page="bio"] .mp-story {
+    padding-left: clamp(42px, 6vw, 70px);
+  }
+
+  body[data-page="bio"] .bio-chapter {
+    position: relative;
+    padding-left: 30px;
+  }
+
+  /* Línea vertical que conecta los capítulos */
+  body[data-page="bio"] .bio-chapter::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    bottom: calc(-1 * clamp(28px, 4vw, 44px));
+    width: 1px;
+    background: linear-gradient(180deg, rgba(89, 198, 186, 0.55), rgba(49, 64, 151, 0.22));
+  }
+  /* El último capítulo: la línea se desvanece (fin del relato) */
+  body[data-page="bio"] .bio-chapter:last-of-type::before {
+    background: linear-gradient(180deg, rgba(89, 198, 186, 0.5), transparent 85%);
+  }
+
+  /* Nodo luminoso, alineado con el kicker */
+  body[data-page="bio"] .bio-chapter::after {
+    content: "";
+    position: absolute;
+    left: 1px;
+    top: 5px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--color-bg);
+    border: 2px solid var(--mp-accent-2);
+    box-shadow:
+      0 0 0 4px rgba(89, 198, 186, 0.10),
+      0 0 14px rgba(89, 198, 186, 0.5);
+  }
+
+  /* El kicker ya no necesita su guion: ahora manda el nodo */
+  body[data-page="bio"] .bio-chapter__kicker {
+    padding-left: 0;
+  }
+  body[data-page="bio"] .bio-chapter__kicker::before {
+    display: none;
+  }
+
+  /* Pulso sutil del nodo (electrónico, pero sobrio) */
+  body[data-page="bio"] .bio-chapter::after {
+    animation: bioNodePulse 3.6s var(--mp-ease-out, ease-in-out) infinite;
+  }
+  @keyframes bioNodePulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(89, 198, 186, 0.08), 0 0 10px rgba(89, 198, 186, 0.35); }
+    50%      { box-shadow: 0 0 0 5px rgba(89, 198, 186, 0.14), 0 0 18px rgba(89, 198, 186, 0.6); }
+  }
+}
+
+/* Stats del hero: números con leve glow de acento (más "premium") */
+body[data-page="bio"] .bio-stats li span {
+  text-shadow: 0 0 22px rgba(89, 198, 186, 0.22);
+}
+
+/* Línea del hero: shimmer animado en vez de estática */
+body[data-page="bio"] .bio-hero h1::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(89, 198, 186, 0.85),
+    rgba(49, 64, 151, 0.85),
+    rgba(89, 198, 186, 0.85),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: bioHeroLine 5s linear infinite;
+}
+@keyframes bioHeroLine {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* Respetar reduced motion: sin pulsos ni shimmer */
+@media (prefers-reduced-motion: reduce) {
+  body[data-page="bio"] .bio-chapter::after,
+  body[data-page="bio"] .bio-hero h1::after {
+    animation: none !important;
+  }
+}

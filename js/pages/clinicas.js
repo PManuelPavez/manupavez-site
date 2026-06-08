@@ -153,15 +153,33 @@ function initForm() {
     } catch (err) {
       console.error("[lab_leads] submit error:", err);
       showError(
-        "No pude enviar tu aplicación. Probá de nuevo en unos segundos o escribime directo a manupavez22@gmail.com."
+        "No pude enviar automático. Te abro el mail con tus datos como plan B; si no, escribime a manupavez22@gmail.com."
       );
       submitBtn.disabled = false;
       submitBtn.removeAttribute("aria-busy");
       submitBtn.textContent = originalLabel;
+
+      // Plan B: no perder el lead — abrimos el cliente de mail con los datos.
+      window.location.href = buildLabMailto(data);
     }
   });
 
   setProgress(0);
+}
+
+// Fallback: arma un mailto con los datos de la aplicación al Lab.
+function buildLabMailto(data = {}) {
+  const subject = `Aplicación Frequency Lab — ${data.name || "sin nombre"}`;
+  const body = [
+    `Nombre: ${data.name || ""}`,
+    `Email: ${data.email || ""}`,
+    `Nivel: ${data.level || ""}`,
+    `Objetivo: ${data.goal || ""}`,
+    "",
+    "Mensaje:",
+    data.message || "",
+  ].join("\n");
+  return `mailto:manupavez22@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 // =========================

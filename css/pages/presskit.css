@@ -641,3 +641,63 @@ body[data-page="presskit"] .presskit .press-download a.mp-btn:hover{
     transform: none;
   }
 }
+
+/* =========================================================
+   LAYOUT FINAL — dossier de una página (gana por cascada)
+   bio (titular) arriba a todo el ancho · slider + datos clave en
+   una fila · muro de apoyos a todo el ancho · descarga como CTA final.
+   Evita el espacio muerto que dejaba la bio alta junto a un slider corto.
+   ========================================================= */
+@media (min-width: 980px){
+  body[data-page="presskit"] main.presskit{
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "bio        bio"
+      "slider     highlights"
+      "support    support"
+      "download   download";
+    align-items: stretch;
+  }
+  body[data-page="presskit"] .presskit .bio{ grid-area: bio; }
+  body[data-page="presskit"] .presskit .slider{ grid-area: slider; }
+  body[data-page="presskit"] .press-highlights{ grid-area: highlights; }
+  body[data-page="presskit"] .press-support{ grid-area: support; }
+  body[data-page="presskit"] .presskit .press-download{
+    grid-area: download;
+    position: static; /* anula el sticky heredado */
+  }
+
+  /* La bio a todo el ancho: limitamos el ancho de lectura para que no
+     se estire feo, pero el card sí ocupa todo. */
+  body[data-page="presskit"] .presskit .bio p{ max-width: 70ch; }
+
+  /* Datos clave: ocupa toda la altura disponible al lado del slider */
+  body[data-page="presskit"] .press-highlights{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  body[data-page="presskit"] .press-highlights .highlight-grid{ margin-top: 4px; }
+}
+
+/* Descarga: CTA final centrado, ancho contenido */
+body[data-page="presskit"] .presskit .press-download{
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+}
+body[data-page="presskit"] .presskit .press-download::before{
+  text-align: center;
+}
+@media (min-width: 980px){
+  body[data-page="presskit"] .presskit .press-download a.mp-btn{
+    width: auto;
+    min-width: 320px;
+  }
+}
+
+/* Highlight-grid: que el valor resalte un poco más (premium) */
+body[data-page="presskit"] .highlight-grid .v{
+  font-weight: 600;
+  color: #fff;
+}
