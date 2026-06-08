@@ -60,12 +60,16 @@
   filter: drop-shadow(0 8px 28px rgba(0, 0, 0, 0.9));
 }
 
-/* Velo: oscurece solo abajo para que el logo/texto se lean (no tapa la foto) */
+/* Velo: oscurece para que el logo/texto se lean.
+   z-index: 1 → queda ENCIMA de la foto (.hero-bg está en z:0).
+   El .hero-wrap también está en z:1 pero, por orden DOM (viene después),
+   queda sobre el velo. Resultado: foto < velo < texto. */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
+  pointer-events: none;          /* el velo no debe robar clicks */
   background:
     radial-gradient(120% 80% at 50% 38%, transparent 40%, rgba(5, 7, 17, 0.55) 100%),
     linear-gradient(to bottom, rgba(5, 7, 17, 0.35) 0%, transparent 30%, rgba(5, 7, 17, 0.6) 85%, var(--color-bg) 100%);
@@ -77,14 +81,9 @@
   max-width: 880px;
   padding-inline: 16px;
   text-align: center;
-
-  /* ════════════════════════════════════════════════════════════
-     👉 MOVER EL HERO (logo + "FREQUENCY STORYTELLER" + texto + botones)
-        EN HORIZONTAL:  positivo = DERECHA · negativo = IZQUIERDA
-        Ej: 160px (a la derecha) · -120px (a la izquierda) · 0 (centrado)
-     ════════════════════════════════════════════════════════════ */
-  --hero-shift: 222px;
-  transform: translateX(var(--hero-shift));
+  /* Mobile-first: el bloque va al pie del hero (donde el gradiente ya oscureció
+     la foto), para no pelearse con el motivo de la remera. Override en desktop. */
+  margin-top: auto;
 }
 
 .hero-title {
@@ -93,18 +92,81 @@
   text-shadow: 0 6px 22px rgba(0, 0, 0, 0.9);
 }
 
-/* ===== DESKTOP: foto FULLSCREEN protagonista (referencia: polomusica.com) =====
-   La foto ocupa toda la pantalla y se funde con el fondo negro; el logo grande
-   y los CTAs quedan abajo, encima de la parte oscura de la imagen. */
+/* ===== DESKTOP: split editorial =====
+   La foto ancla la columna izquierda (tu perfil mira a la derecha → guía el ojo
+   hacia el texto). El bloque de texto vive en la columna derecha, alineado a la
+   izquierda como un editorial. Sin transform-hack: layout real con grid. */
 @media (min-width: 860px) {
-  .hero-wrap { max-width: 880px; }
-
-  /* Logo grande, estilo Polo (centrado) */
-  .hero-title .hero-logo {
-    width: clamp(360px, 40vw, 540px);   /* ← tamaño del logo en desktop */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    text-align: left;
+    padding-inline: clamp(40px, 6vw, 80px);
   }
 
-  .hero-sub { max-width: 560px; }
+  /* La foto se contiene en la mitad izquierda (no full-bleed). */
+  .hero-bg {
+    inset: 0 50% 0 0;
+  }
+
+  /* Encuadre: cara/perfil bien ubicado, sin necesidad de translate manual. */
+  .hero-img {
+    --photo-x: 0px;
+    --photo-y: 0px;
+    --photo-zoom: 1;
+    width: 100%;
+    object-position: 40% center;
+  }
+
+  /* Velo: gradiente horizontal de la foto al fondo + suave abajo. */
+  .hero::before {
+    background:
+      linear-gradient(to right,
+        transparent 0%,
+        rgba(5, 7, 17, 0.35) 42%,
+        rgba(5, 7, 17, 0.85) 55%,
+        var(--color-bg) 70%),
+      linear-gradient(to bottom,
+        rgba(5, 7, 17, 0.2) 0%,
+        transparent 25%,
+        rgba(5, 7, 17, 0.45) 90%,
+        var(--color-bg) 100%);
+  }
+
+  /* Wrap a la derecha, alineado a la izquierda (editorial). */
+  .hero-wrap {
+    grid-column: 2;
+    max-width: 520px;
+    margin: 0;
+    padding-inline: 0;
+    text-align: left;
+  }
+
+  .hero-title .hero-logo {
+    width: clamp(280px, 26vw, 420px);
+    margin-inline: 0;             /* anclado a la izquierda del wrap */
+  }
+
+  .hero-sub {
+    margin-inline: 0;
+    max-width: 460px;
+  }
+
+  .hero-eyebrow {
+    margin-inline: 0;
+  }
+
+  .hero-ctas,
+  .hero-ctas-main {
+    align-items: flex-start;       /* CTAs alineadas a la izquierda */
+  }
+
+  .hero-social {
+    margin-left: 0;
+    margin-right: auto;
+    justify-content: flex-start;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -112,14 +174,35 @@
    Ajustá ACÁ encuadre de la foto, tamaño del logo y corrimiento:
    ════════════════════════════════════════════════════════════ */
 @media (max-width: 859px) {
-  /* En celular podés usar otros valores de las mismas perillas: */
-  .hero-img {
-    --photo-x: 0px;     /* izquierda/derecha en celular (negativo = izquierda) */
-    --photo-y: 0px;     /* arriba/abajo en celular (negativo = arriba) */
-    --photo-zoom: 1;    /* achicar/agrandar en celular */
+  /* MOBILE: la foto queda como fondo arriba (con tu cara/perfil visible)
+     y el bloque de texto baja al pie, donde el velo oscuro deja el cubo
+     de la remera funcionando como textura sutil sin competir con los CTAs. */
+  .hero {
+    align-items: flex-end;        /* texto al pie del hero */
+    padding-bottom: 56px;
   }
-  .hero-title .hero-logo { width: clamp(240px, 74vw, 420px); }  /* ← tamaño logo en celular */
-  .hero-wrap { --hero-shift: 0px; }                            /* en celular: sin corrimiento horizontal */
+
+  .hero-img {
+    --photo-x: 0px;
+    --photo-y: 0px;
+    --photo-zoom: 1.05;            /* leve zoom para que la cara quede más presente */
+    object-position: 50% 25%;      /* perfil más arriba en el encuadre */
+  }
+
+  /* Velo mobile: foto limpia arriba (cara + hombros), fondo sólido en la mitad
+     inferior para que el cubo/mountain de la remera no compita con el texto.
+     El bloque de contenido vive sobre el color sólido — limpio y minimalista. */
+  .hero::before {
+    background:
+      linear-gradient(to bottom,
+        transparent 0%,
+        transparent 30%,
+        rgba(5, 7, 17, 0.92) 48%,
+        var(--color-bg) 55%);
+  }
+
+  .hero-title .hero-logo { width: clamp(240px, 74vw, 420px); }
+  .hero-wrap { text-align: center; }
 }
 
 /* Eyebrow editorial — pre-titular limpio */
