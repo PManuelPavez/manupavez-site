@@ -79,8 +79,14 @@
 }
 
 .nav a:hover::after,
-.nav a.is-active::after {
+.nav a.is-active::after,
+.nav a[aria-current="page"]::after {
   transform: scaleX(1);
+}
+
+.nav a.is-active,
+.nav a[aria-current="page"] {
+  color: #fff;
 }
 
 /* HEADER RIGHT */

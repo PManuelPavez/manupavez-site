@@ -2109,3 +2109,35 @@ body[data-page="clinicas"] .lab-author .chip{
   .testi-card{ transition: none; }
   .testi-card:hover{ transform: none; }
 }
+
+/* =========================================================
+   POLISH PASS 3 — centrado del comparativo + degradé del bloque claro
+   ========================================================= */
+
+/* (1) El comparativo tenía max-width pero margin-left:0 → quedaba pegado
+   a la izquierda. Lo centramos para que quede alineado con el resto. */
+body[data-page="clinicas"] .compare{
+  margin-inline: auto;
+}
+
+/* (2) Bloque "Resultados": en vez de un cuadrado crema plano, un degradé
+   que lo funde con el fondo oscuro del sitio. SOLO este bloque
+   (la tarjeta de Formatos sigue blanca, sin tocar). */
+body[data-page="clinicas"] .section--light{
+  /* Más compacto: el contenido al ras, sin tanto margen arriba/abajo */
+  padding-block: clamp(24px, 3.5vw, 38px);
+  background:
+    radial-gradient(135% 120% at 50% 42%,
+      #f7f5f0 0%,
+      #f4f2ec 58%,
+      #e4dfd1 86%,
+      rgba(10, 12, 22, 0.55) 97%,
+      var(--color-bg) 100%);
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.45),
+    0 0 60px rgba(89, 198, 186, 0.05);
+}
+/* El kicker "Resultados" pegado arriba, sin margen extra */
+body[data-page="clinicas"] .section--light .section-kicker{
+  margin-bottom: 10px;
+}
