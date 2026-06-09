@@ -1865,3 +1865,247 @@ body[data-page="clinicas"] .compare-grid:hover .compare-col:hover{
   body[data-page="clinicas"] .compare-col{ transition: none; }
   body[data-page="clinicas"] .compare-grid:hover .compare-col:hover{ transform: none; }
 }
+
+/* =========================================================
+   POLISH PASS 2 — alineaciones y consistencia
+   ========================================================= */
+
+/* (1) Descripciones de pasos y del filtro: a la IZQUIERDA.
+   `.section-centered p` las estaba centrando y quedaban "flotando"
+   desconectadas de su título. */
+body[data-page="clinicas"] .clinic-steps p,
+body[data-page="clinicas"] .clinic-steps h3,
+body[data-page="clinicas"] .lab-filter__col p,
+body[data-page="clinicas"] .lab-filter__col h3,
+body[data-page="clinicas"] .format-card p,
+body[data-page="clinicas"] .compare-list li,
+body[data-page="clinicas"] .compare-head h3{
+  text-align: left;
+  margin-inline: 0;
+}
+
+/* (2) Tarjeta "Próximamente": alinear su contenido ARRIBA (como la
+   destacada) y empujar el CTA al fondo, para que ambas cabeceras y
+   ambos botones queden a la misma altura. */
+body[data-page="clinicas"] .format-card--soon{
+  justify-content: flex-start;
+}
+body[data-page="clinicas"] .format-card--soon .format-card__cta{
+  margin-top: auto;
+}
+
+/* (3) Bloque claro de "Resultados": un poco más compacto y con el
+   título separado del borde superior. */
+body[data-page="clinicas"] .section--light .clinic-list{
+  max-width: 620px;
+}
+
+/* (4) Área de alumnos / FAQ: menos vacío vertical. */
+body[data-page="clinicas"] #alumnos,
+body[data-page="clinicas"] #faq{
+  padding-block: clamp(40px, 5.5vw, 72px);
+}
+
+/* (5) FIX títulos invisibles: los h2[data-animate="heading"] de Área de
+   alumnos y FAQ quedaban en opacity:0 (dependían de un JS legacy que no
+   se carga). Forzamos visibilidad con scope de página (gana por orden y
+   especificidad). El movimiento ya lo aporta el fade-up de la sección. */
+body[data-page="clinicas"] .section h2[data-animate="heading"]{
+  opacity: 1;
+  transform: none;
+}
+body[data-page="clinicas"] .section h2[data-animate="heading"]::after{
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* =========================================================
+   CONVERSIÓN — eyebrow del hero + sección de autoridad
+   ========================================================= */
+
+/* Eyebrow del hero: aclara QUÉ es antes del hook (claridad > ingenio) */
+.lab-hero-eyebrow{
+  font-family: var(--font-secondary);
+  font-size: 0.74rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--cl-orange);
+  margin-bottom: 18px;
+}
+
+/* Sección "Quién te va a guiar" — credibilidad antes del precio */
+body[data-page="clinicas"] .lab-author__lead{
+  max-width: 640px;
+  margin-inline: auto;
+  line-height: 1.8;
+}
+body[data-page="clinicas"] .lab-author__lead strong{
+  color: #fff;
+  font-weight: 600;
+}
+
+.lab-author__proof{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(18px, 3vw, 40px);
+  max-width: 860px;
+  margin: 28px auto 0;
+}
+.lab-author__group{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.lab-author__label{
+  font-family: var(--font-secondary);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cl-orange);
+}
+.lab-author__chips{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 420px;
+}
+body[data-page="clinicas"] .lab-author .chip{
+  display: inline-flex;
+  align-items: center;
+  padding: 0.46rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(5, 7, 17, 0.5);
+  color: var(--mp-text);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  transition: border-color .25s ease, background .25s ease, transform .25s ease;
+}
+@media (hover: hover){
+  body[data-page="clinicas"] .lab-author .chip:hover{
+    border-color: rgba(255, 122, 47, 0.5);
+    background: rgba(255, 122, 47, 0.08);
+    transform: translateY(-1px);
+  }
+}
+.lab-author__cta{
+  margin-top: 28px;
+}
+
+/* Dos grupos lado a lado (más compacto) con divisor sutil en desktop */
+@media (min-width: 720px){
+  .lab-author__proof{
+    flex-wrap: nowrap;
+    align-items: flex-start;
+  }
+  .lab-author__group{
+    flex: 1 1 0;
+  }
+  .lab-author__group + .lab-author__group{
+    padding-left: clamp(18px, 3vw, 40px);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* =========================================================
+   TESTIMONIOS — prueba social (cards de cita)
+   ========================================================= */
+.lab-testimonials__intro{
+  max-width: 540px;
+  margin-inline: auto;
+}
+
+.testi-grid{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: clamp(14px, 1.6vw, 20px);
+  max-width: 1040px;
+  margin: clamp(28px, 4vw, 40px) auto 0;
+  text-align: left;
+}
+
+.testi-card{
+  flex: 1 1 320px;
+  max-width: 380px;
+}
+
+@media (max-width: 620px){
+  .testi-card{ flex-basis: 100%; max-width: 460px; }
+}
+
+.testi-card{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 30px 24px 22px;
+  border-radius: 18px;
+  border: 1px solid var(--cl-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 60%),
+    var(--cl-card);
+  box-shadow: var(--cl-shadow);
+  transition:
+    transform .3s var(--mp-ease-out, cubic-bezier(.16,1,.3,1)),
+    border-color .3s ease;
+}
+
+/* Comilla decorativa */
+.testi-card::before{
+  content: "\201C";
+  position: absolute;
+  top: 6px;
+  left: 18px;
+  font-family: var(--font-primary);
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--cl-orange);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.testi-card blockquote{
+  margin: 0;
+  padding-top: 16px;
+  font-size: 0.97rem;
+  line-height: 1.7;
+  color: rgba(242, 242, 255, 0.9);
+}
+
+.testi-card figcaption{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.testi-name{
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.testi-role{
+  font-size: 0.74rem;
+  letter-spacing: 0.03em;
+  color: var(--mp-muted);
+}
+
+@media (hover: hover){
+  .testi-card:hover{
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .testi-card{ transition: none; }
+  .testi-card:hover{ transform: none; }
+}
