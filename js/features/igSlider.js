@@ -17,9 +17,9 @@ import { prefersReducedMotion } from "../core/motion.js";
  */
 const IG_POSTS = [
   "https://www.instagram.com/p/DSnzfXkj0yd/",
-  // Agregá más posts acá (6+ para que el loop/autoplay funcione fluido):
-  // "https://www.instagram.com/p/XXXXXXXXXXX/",
-  // "https://www.instagram.com/reel/XXXXXXXXXXX/",
+  "https://www.instagram.com/p/DHrsQnAsyHu/",
+  "https://www.instagram.com/p/DGO9n4VMOVZ/",
+  "https://www.instagram.com/p/DPPoFVhjC3-/",
 ];
 
 /** Extrae el shortcode de una URL de post/reel/tv de Instagram. */
