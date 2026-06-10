@@ -1,7 +1,6 @@
-# Dependencias del script de automatización de fechas (Songkick / SoundCloud)
+# Dependencias del script de automatización de fechas (SoundCloud)
+# La planilla se lee vía Web App de Apps Script (sin gspread ni Service Account).
 # Instalar con:  pip install -r requirements.txt
 
-gspread>=6.0.0          # Cliente de Google Sheets
-google-auth>=2.27.0     # Autenticación con Service Account de Google Cloud
-requests>=2.31.0        # Peticiones HTTP a las APIs de Songkick / SoundCloud
+requests>=2.31.0        # Peticiones HTTP (Web App de Sheets + API de SoundCloud)
 python-dotenv>=1.0.0    # Carga de variables de entorno desde el archivo .env

@@ -4,14 +4,22 @@
 automation.py
 =============
 Automatización de fechas/eventos de Manu Pavez a partir de una hoja de
-cálculo de Google Sheets.
+cálculo de Google Sheets expuesta como Web App de Google Apps Script.
 
 Dos responsabilidades:
   1. SoundCloud: publica las filas marcadas como "PENDIENTE" en la columna
-     'Estado_SoundCloud' y, si la API responde OK, las marca como "PROCESADO".
+     'Estado_SoundCloud'.
   2. eventos.json: genera un archivo JSON limpio con los eventos FUTUROS para
      que el sitio (manupavez.com) los consuma con fetch() y renderice las
      fechas dinámicamente.
+
+ARQUITECTURA (simplificada):
+  Ya NO usamos gspread ni una Service Account (google_credentials.json).
+  En su lugar, la planilla se publica como Web App (ver apps_script/Codigo.gs)
+  y este script la lee con un simple requests.get() a WEB_APP_URL.
+
+  Esto significa que la lectura es de SOLO LECTURA: ya no podemos escribir
+  "PROCESADO" de vuelta en la planilla. Ver nota en procesar_soundcloud().
 
 NOTA: Songkick fue descartado (API cerrada). No se hace ninguna llamada a Songkick.
 
@@ -19,7 +27,7 @@ Uso:
     pip install -r requirements.txt
     python automation.py          → SoundCloud + genera eventos.json (flujo completo)
     python automation.py json     → SOLO genera eventos.json
-    python automation.py test     → SOLO prueba la conexión con la planilla
+    python automation.py test     → SOLO prueba la conexión con la Web App
 """
 
 import os
@@ -28,8 +36,6 @@ import json
 from datetime import datetime, date
 
 import requests
-import gspread
-from google.oauth2.service_account import Credentials
 from dotenv import load_dotenv
 
 
@@ -37,25 +43,17 @@ from dotenv import load_dotenv
 #  CONFIGURACIÓN GLOBAL
 # ============================================================
 
-# Permisos (scopes) que necesita la Service Account para leer/escribir la planilla.
-SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive",
-]
-
-# Ruta al archivo de credenciales de Google (Service Account).
-CREDENTIALS_FILE = "google_credentials.json"
-
 # Archivo de salida que consumirá el frontend.
 OUTPUT_JSON = "eventos.json"
 
 # Nombres EXACTOS de las columnas en la planilla (cabecera de la fila 1).
-# Ajustá estos valores si tus columnas se llaman distinto.
-COL_FECHA = "Fecha"
-COL_LUGAR = "Lugar"
-COL_CIUDAD = "Ciudad"
+# Deben coincidir con las cabeceras reales de tu hoja (son case-sensitive).
+COL_ID = "ID"
+COL_FECHA = "FECHA"
+COL_LUGAR = "LUGAR"
+COL_CIUDAD = "CIUDAD"
 COL_LINK_TICKETS = "Link_Tickets"
-COL_ESTADO_SOUNDCLOUD = "Estado_SoundCloud"
+COL_ESTADO_SOUNDCLOUD = "Estado_Soundcloud"
 
 # Valores de estado usados en las celdas.
 ESTADO_PENDIENTE = "PENDIENTE"
@@ -69,7 +67,7 @@ FORMATOS_FECHA = ["%Y-%m-%d", "%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%d/%m/%y"]
 
 
 # ============================================================
-#  CARGA DE ENTORNO Y AUTENTICACIÓN
+#  CARGA DE ENTORNO
 # ============================================================
 
 def cargar_entorno():
@@ -80,53 +78,53 @@ def cargar_entorno():
     load_dotenv()  # Lee el archivo .env del directorio actual.
 
     config = {
-        "spreadsheet_id": os.getenv("SPREADSHEET_ID"),
+        "web_app_url": os.getenv("WEB_APP_URL"),
+        "web_app_api_key": os.getenv("WEB_APP_API_KEY"),
         "soundcloud_client_id": os.getenv("SOUNDCLOUD_CLIENT_ID"),
         "soundcloud_oauth_token": os.getenv("SOUNDCLOUD_OAUTH_TOKEN"),
-        "worksheet_name": os.getenv("WORKSHEET_NAME"),  # Opcional.
     }
 
-    # Validación mínima: sin el ID de la planilla no podemos hacer nada.
-    if not config["spreadsheet_id"]:
-        sys.exit("❌ Falta SPREADSHEET_ID en el archivo .env. Abortando.")
+    # Validación mínima: sin la URL de la Web App no podemos leer la planilla.
+    if not config["web_app_url"]:
+        sys.exit("❌ Falta WEB_APP_URL en el archivo .env. "
+                 "Pegá ahí la URL de tu Web App de Apps Script. Abortando.")
 
     return config
 
 
-def conectar_google_sheets(config):
-    """Autentica con la Service Account y devuelve el objeto worksheet.
+# ============================================================
+#  LECTURA DE LA PLANILLA (vía Web App / JSON)
+# ============================================================
 
-    Devuelve None si algo falla (archivo de credenciales faltante, sin permisos, etc.).
+def obtener_filas(config):
+    """Lee la planilla desde la Web App de Apps Script.
+
+    Hace un GET a WEB_APP_URL y espera un JSON: una lista de objetos donde
+    cada objeto es una fila con clave = nombre de columna (igual que lo que
+    devolvía gspread.get_all_records()).
+
+    Returns:
+        list[dict] | None: las filas, o None si la petición/parseo falla.
     """
     try:
-        # 1) Construir credenciales a partir del JSON de la Service Account.
-        credenciales = Credentials.from_service_account_file(
-            CREDENTIALS_FILE, scopes=SCOPES
-        )
+        respuesta = requests.get(config["web_app_url"], timeout=30)
+        respuesta.raise_for_status()
+        filas = respuesta.json()
 
-        # 2) Autorizar el cliente de gspread.
-        cliente = gspread.authorize(credenciales)
+        if not isinstance(filas, list):
+            print("❌ La Web App no devolvió una lista de filas. "
+                  f"Recibido: {type(filas).__name__}.")
+            return None
 
-        # 3) Abrir la planilla por su ID.
-        planilla = cliente.open_by_key(config["spreadsheet_id"])
+        print(f"✅ Planilla leída desde la Web App: {len(filas)} fila(s).")
+        return filas
 
-        # 4) Elegir la pestaña: la indicada en WORKSHEET_NAME o la primera.
-        if config["worksheet_name"]:
-            worksheet = planilla.worksheet(config["worksheet_name"])
-        else:
-            worksheet = planilla.sheet1
-
-        print(f"✅ Conexión establecida con la planilla: '{planilla.title}'")
-        return worksheet
-
-    except FileNotFoundError:
-        print(f"❌ No se encontró el archivo de credenciales '{CREDENTIALS_FILE}'.")
-    except gspread.exceptions.SpreadsheetNotFound:
-        print("❌ SpreadsheetNotFound: la planilla no existe o la Service Account no "
-              "tiene acceso. Verificá el SPREADSHEET_ID y que hayas compartido la hoja "
-              "con el client_email del google_credentials.json.")
-    except Exception as error:  # Captura cualquier otro fallo de conexión/auth.
-        print(f"❌ Error al conectar con Google Sheets: {error}")
+    except requests.exceptions.RequestException as error:
+        print(f"❌ Error al leer la Web App: {error}")
+    except ValueError:
+        # respuesta.json() falla si el cuerpo no es JSON válido.
+        print("❌ La Web App no devolvió JSON válido. "
+              "¿Publicaste la implementación correcta y con acceso público?")
 
     return None
 
@@ -174,35 +172,58 @@ def publicar_en_soundcloud(fila, config):
         return False
 
 
-# ============================================================
-#  ACTUALIZACIÓN DE LA PLANILLA
-# ============================================================
+def marcar_como_procesado(fila, config):
+    """Avisa a la Web App que una fila ya se publicó (write-back).
 
-def marcar_como_procesado(worksheet, num_fila, nombre_columna, cabeceras):
-    """Actualiza una celda a 'PROCESADO' para evitar reenvíos duplicados.
+    Hace un POST a WEB_APP_URL con el ID de la fila y la API key de validación;
+    el Apps Script (doPost) cambia Estado_Soundcloud a 'PROCESADO'.
 
     Args:
-        worksheet: objeto worksheet de gspread.
-        num_fila (int): número de fila en la planilla (1-indexado, con cabecera en la 1).
-        nombre_columna (str): nombre de la columna a actualizar.
-        cabeceras (list): lista de cabeceras para ubicar el índice de la columna.
+        fila (dict): datos de la fila (debe incluir la columna ID).
+        config (dict): variables de entorno cargadas.
+
+    Returns:
+        bool: True si la planilla confirmó la actualización, False si no.
     """
+    id_fila = str(fila.get(COL_ID, "")).strip()
+    if not id_fila:
+        print("   ⚠️ La fila no tiene ID; no se puede marcar como PROCESADO.")
+        return False
+
+    if not config.get("web_app_api_key"):
+        print("   ⚠️ Falta WEB_APP_API_KEY en el .env; se omite el write-back.")
+        return False
+
     try:
-        # gspread usa columnas 1-indexadas; +1 porque la lista empieza en 0.
-        col_index = cabeceras.index(nombre_columna) + 1
-        worksheet.update_cell(num_fila, col_index, ESTADO_PROCESADO)
-        print(f"   📝 Fila {num_fila}: '{nombre_columna}' → {ESTADO_PROCESADO}")
+        respuesta = requests.post(
+            config["web_app_url"],
+            json={"apiKey": config["web_app_api_key"], "id": id_fila},
+            timeout=30,
+        )
+        respuesta.raise_for_status()
+        data = respuesta.json()
+
+        if data.get("ok"):
+            print(f"   📝 Fila ID {id_fila}: {COL_ESTADO_SOUNDCLOUD} → {ESTADO_PROCESADO}")
+            return True
+
+        print(f"   ⚠️ La Web App no marcó la fila ID {id_fila}: {data.get('error')}")
+        return False
+
+    except requests.exceptions.RequestException as error:
+        print(f"   ❌ Error al marcar como PROCESADO (ID {id_fila}): {error}")
+        return False
     except ValueError:
-        print(f"   ❌ La columna '{nombre_columna}' no existe en la planilla.")
-    except Exception as error:
-        print(f"   ❌ No se pudo actualizar la celda (fila {num_fila}): {error}")
+        print(f"   ❌ La Web App no devolvió JSON al marcar la fila ID {id_fila}.")
+        return False
 
 
-def procesar_soundcloud(worksheet, config):
-    """Recorre las filas y publica en SoundCloud las que estén en PENDIENTE."""
-    cabeceras = worksheet.row_values(1)
-    filas = worksheet.get_all_records()
+def procesar_soundcloud(filas, config):
+    """Recorre las filas, publica en SoundCloud las PENDIENTE y marca PROCESADO.
 
+    Tras una publicación exitosa, hace write-back a la planilla vía la Web App
+    (doPost) para evitar reenvíos duplicados en futuras corridas.
+    """
     if not filas:
         print("ℹ️ La planilla no tiene filas de datos. Nada que publicar.")
         return
@@ -216,7 +237,7 @@ def procesar_soundcloud(worksheet, config):
         if estado == ESTADO_PENDIENTE:
             print(f"▶️ Fila {num_fila}: publicando en SoundCloud...")
             if publicar_en_soundcloud(fila, config):
-                marcar_como_procesado(worksheet, num_fila, COL_ESTADO_SOUNDCLOUD, cabeceras)
+                marcar_como_procesado(fila, config)
                 total += 1
 
     print(f"✅ SoundCloud: publicaciones procesadas: {total}.")
@@ -243,7 +264,7 @@ def parsear_fecha(valor):
     return None
 
 
-def generar_eventos_json(worksheet):
+def generar_eventos_json(filas):
     """Genera eventos.json con los eventos FUTUROS, ordenados por fecha.
 
     Estructura de cada evento:
@@ -256,7 +277,6 @@ def generar_eventos_json(worksheet):
     Returns:
         int: cantidad de eventos escritos en el archivo.
     """
-    filas = worksheet.get_all_records()
     hoy = date.today()
     eventos = []
 
@@ -301,14 +321,14 @@ def generar_eventos_json(worksheet):
 # ============================================================
 
 def probar_conexion(config):
-    """Prueba de conexión básica: abre la planilla y lista las pestañas."""
-    print("🔌 Probando conexión con Google Sheets...\n")
-    worksheet = conectar_google_sheets(config)
-    if worksheet is None:
+    """Prueba de conexión básica: lee la Web App e informa cuántas filas trajo."""
+    print("🔌 Probando conexión con la Web App...\n")
+    filas = obtener_filas(config)
+    if filas is None:
         return False
-    planilla = worksheet.spreadsheet
-    pestanas = [hoja.title for hoja in planilla.worksheets()]
-    print(f"📑 Pestañas encontradas ({len(pestanas)}): {', '.join(pestanas)}")
+    print(f"📑 Filas recibidas: {len(filas)}.")
+    if filas:
+        print(f"📋 Columnas detectadas: {', '.join(filas[0].keys())}")
     return True
 
 
@@ -325,21 +345,21 @@ def main():
     if modo == "test":
         sys.exit(0 if probar_conexion(config) else 1)
 
-    # Para los demás modos necesitamos la planilla.
-    worksheet = conectar_google_sheets(config)
-    if worksheet is None:
-        sys.exit("❌ No se pudo conectar a la planilla. Revisá credenciales y permisos.")
+    # Para los demás modos necesitamos las filas de la planilla.
+    filas = obtener_filas(config)
+    if filas is None:
+        sys.exit("❌ No se pudo leer la planilla. Revisá WEB_APP_URL y la publicación de la Web App.")
 
     # --- Modo: solo generar JSON ---
     if modo == "json":
-        generar_eventos_json(worksheet)
+        generar_eventos_json(filas)
         return
 
     # --- Modo completo: SoundCloud + JSON ---
     print("🚀 Iniciando automatización de fechas...\n")
-    procesar_soundcloud(worksheet, config)
+    procesar_soundcloud(filas, config)
     print()
-    generar_eventos_json(worksheet)
+    generar_eventos_json(filas)
 
 
 if __name__ == "__main__":
