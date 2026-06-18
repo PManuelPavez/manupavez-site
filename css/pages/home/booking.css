@@ -1,0 +1,108 @@
+/* =================== BOOKING (destacado, 2 columnas) =================== */
+
+.booking--featured {
+  padding-block: clamp(56px, 9vw, 110px);
+}
+
+.booking-shell {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+  max-width: 1100px;
+  margin-inline: auto;
+  padding: clamp(24px, 4vw, 48px);
+  border-radius: clamp(20px, 3vw, 32px);
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(89, 198, 186, 0.10), transparent 55%),
+    radial-gradient(120% 120% at 100% 100%, rgba(49, 64, 151, 0.18), transparent 55%),
+    rgba(8, 10, 20, 0.92);
+  border: 1px solid var(--mp-border);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+/* Columna izquierda: pitch */
+.booking-intro { text-align: left; }
+
+.booking-eyebrow {
+  margin: 0 0 14px;
+  font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--mp-accent-2);
+}
+
+.booking--featured #booking-title {
+  margin: 0 0 16px;
+  font-size: clamp(1.9rem, 4.4vw, 3rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+
+.booking-lead {
+  margin: 0 0 22px;
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  max-width: 42ch;
+}
+
+.booking-points {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.booking-points li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 0.95rem;
+  color: var(--mp-text);
+}
+.booking-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--mp-accent-2);
+  box-shadow: 0 0 0 4px rgba(89, 198, 186, 0.18);
+}
+
+.booking-direct {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+.booking-direct a {
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  padding-bottom: 1px;
+  transition: border-color 0.2s ease;
+}
+.booking-direct a:hover { border-color: #fff; }
+
+/* Columna derecha: card con el form */
+.booking-card {
+  background: rgba(5, 7, 17, 0.7);
+  border: 1px solid var(--mp-border);
+  border-radius: clamp(16px, 2vw, 22px);
+  padding: clamp(20px, 3vw, 32px);
+}
+.booking-card .contact-form { margin: 0; }
+.booking-card .form-submit { width: 100%; }
+
+@media (max-width: 820px) {
+  .booking-shell {
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 6vw, 36px);
+  }
+  .booking-intro { text-align: center; }
+  .booking-lead { margin-inline: auto; }
+  .booking-points { align-items: flex-start; max-width: 320px; margin-inline: auto; }
+}

@@ -134,17 +134,16 @@
   <main id="main-content" tabindex="-1">
     <!-- ============ HERO ============ -->
     <section id="inicio" class="hero" aria-labelledby="hero-title">
-      <div class="hero-bg" aria-hidden="true">
-        <img class="hero-img" src="img/indexPERFIL.png" alt="" decoding="async" fetchpriority="high" />
-      </div>
+      <div class="hero-card">
+        <img class="hero-card-img" src="img/indexPERFIL.png" alt="Manu Pavez" decoding="async" fetchpriority="high" />
+        <span class="hero-card-veil" aria-hidden="true"></span>
 
-      <div class="hero-wrap">
         <p class="hero-eyebrow"><a href="bio.html">FREQUENCY STORYTELLER</a></p>
 
-        <h1 id="hero-title" class="hero-title">
-          <img class="hero-logo" src="logos/Logo Manu Pavez.png" alt="Manu Pavez" />
-        </h1>
+        <h1 id="hero-title" class="hero-name">MANU PAVEZ</h1>
+      </div>
 
+      <div class="hero-foot">
         <p class="hero-sub">
           DJ y productor argentino. Construyo sets que no se olvidan
           y tracks que cuentan algo. Música, criterio y noche, en ese orden.
@@ -174,10 +173,6 @@
           </a></li>
         </ul>
       </div>
-
-      <a class="hero-scroll" href="#musica" aria-label="Bajar a Música">
-        <span></span>
-      </a>
     </section>
 
     <!-- ============ DYNAMIC PHOTO STRIP ============ -->
@@ -242,10 +237,15 @@
           </p>
         </header>
 
-        <!-- Grilla de portadas (estilo discografía). Render dinámico desde
-             data/music.json (auto-sync Spotify) con fallback a Supabase.
-             Cada card linkea directo a Spotify. -->
-        <div class="tracks-grid" data-sb="releases" aria-label="Listado de lanzamientos"></div>
+        <!-- Slider de portadas (estilo discografía). Render dinámico desde
+             Supabase home_releases. Cada card linkea directo a Spotify. -->
+        <div class="releases-carousel" aria-label="Lanzamientos">
+          <button class="release-nav prev" type="button" aria-label="Lanzamiento anterior">‹</button>
+          <div class="release-slides" data-slider-track>
+            <div class="tracks-row" data-sb="releases" aria-label="Listado de lanzamientos"></div>
+          </div>
+          <button class="release-nav next" type="button" aria-label="Lanzamiento siguiente">›</button>
+        </div>
 
       </div>
     </section>
@@ -318,35 +318,88 @@
       <h3 class="subsection-title">Próximas fechas</h3>
       <!-- Fechas dinámicas: se cargan desde /eventos.json (ver js/features/eventos.js) -->
       <div class="shows-list" data-eventos aria-live="polite"></div>
+    </section>
 
-      <h3 class="subsection-title">Mixes seleccionados</h3>
+    <!-- ============ BOOKING ============ -->
+    <section id="booking" class="section booking booking--featured reveal" aria-labelledby="booking-title">
+      <div class="booking-shell">
+        <div class="booking-intro">
+          <p class="booking-eyebrow">+ Booking</p>
+          <h2 id="booking-title" data-animate="heading">LLEVÁ LA NOCHE<br>AL PRÓXIMO NIVEL</h2>
+          <p class="booking-lead">
+            Clubs, festivales, open airs y privados. Contame fecha, ciudad y formato:
+            cuanto más claro lo cuentes, mejor te puedo responder.
+          </p>
+          <ul class="booking-points">
+            <li>Respuesta en 24–48&nbsp;h</li>
+            <li>Sets de 1 a 5+ horas</li>
+            <li>Progressive &amp; melodic house</li>
+          </ul>
+          <p class="booking-direct">
+            ¿Preferís directo? <a href="mailto:manupavez22@gmail.com?subject=Booking%20Manu%20Pavez">manupavez22@gmail.com</a>
+          </p>
+        </div>
 
-      <!-- SoundCloud: muestra siempre los últimos tracks del perfil (auto-actualiza) -->
-      <div class="soundcloud-embed">
-        <iframe
-          title="Manu Pavez en SoundCloud"
-          width="100%"
-          height="450"
-          scrolling="no"
-          frameborder="no"
-          allow="autoplay"
-          loading="lazy"
-          src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/manupavez&color=%2359c6ba&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"
-        ></iframe>
-        <p class="embed-foot">
-          <a href="https://soundcloud.com/manupavez" target="_blank" rel="noopener">Abrir perfil completo en SoundCloud →</a>
-        </p>
+        <div class="booking-card">
+          <form id="contact-form" class="contact-form" action="#" method="post" novalidate>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="cf-name">Nombre completo*</label>
+                <input type="text" id="cf-name" name="name" required autocomplete="name" />
+                <span class="field-error" data-error-for="name" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field">
+                <label for="cf-email">Correo electrónico*</label>
+                <input type="email" id="cf-email" name="email" required autocomplete="email" placeholder="Tu mail de contacto" />
+                <span class="field-error" data-error-for="email" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field">
+                <label for="cf-type">Tipo de evento*</label>
+                <select id="cf-type" name="type" required>
+                  <option value="" disabled selected>Seleccioná una opción</option>
+                  <option value="club">Club nocturno</option>
+                  <option value="festival">Festival</option>
+                  <option value="fiesta-privada">Fiesta privada</option>
+                  <option value="open-air">Evento al aire libre</option>
+                  <option value="after">After party</option>
+                  <option value="clinica">Clínica / Mentoría</option>
+                  <option value="otro">Otro</option>
+                </select>
+                <span class="field-error" data-error-for="type" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field form-field-full">
+                <label for="cf-message">Mensaje*</label>
+                <textarea
+                  id="cf-message"
+                  name="message"
+                  rows="5"
+                  required
+                  placeholder="Fecha aproximada, ciudad, formato del evento o qué te gustaría trabajar en el lab."
+                ></textarea>
+                <span class="field-error" data-error-for="message" aria-live="polite"></span>
+              </div>
+            </div>
+
+            <button type="submit" class="mp-btn primary form-submit">RESERVAR FECHA</button>
+
+            <p class="form-note" id="form-note" role="status" aria-live="polite"></p>
+
+            <p class="form-hint" id="booking-hint">
+              Al enviar, te respondo al mail que dejes. Tus datos no se comparten.
+            </p>
+          </form>
+
+          <!-- Estado de éxito (oculto por defecto) -->
+          <div class="form-success" data-booking-success hidden>
+            <div class="form-success__icon" aria-hidden="true"></div>
+            <h3>¡MENSAJE ENVIADO!</h3>
+            <p>Gracias por escribir. Te respondo a la brevedad al mail que dejaste. Si es urgente, escribime directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>.</p>
+          </div>
+        </div>
       </div>
-
-      <div class="media-slider" data-slider="mixes" aria-label="Carrusel de mixes">
-        <button class="media-nav prev" type="button" aria-label="Mix anterior">‹</button>
-
-        <div class="supabase-banner" data-supabase-banner hidden>Configurá Supabase para cargar mixes.</div>
-        <div class="media-track" data-sb="media-mix"></div>
-
-        <button class="media-nav next" type="button" aria-label="Mix siguiente">›</button>
-      </div>
-
     </section>
 
     <!-- ============ FREQUENCY LAB ============ -->
@@ -360,72 +413,6 @@
       </p>
 
       <a class="mp-btn green" href="clinicas.html">ENTRAR AL LAB</a>
-    </section>
-
-    <!-- ============ BOOKING ============ -->
-    <section id="booking" class="section booking reveal section-centered" aria-labelledby="booking-title">
-      <h2 id="booking-title" data-animate="heading">BOOKING</h2>
-      <p class="muted">
-        Para fechas, festivales y colaboraciones. Cuanto más claro lo cuentes, mejor te puedo responder.
-      </p>
-
-      <form id="contact-form" class="contact-form" action="#" method="post" novalidate>
-        <div class="form-grid">
-          <div class="form-field">
-            <label for="cf-name">Nombre completo*</label>
-            <input type="text" id="cf-name" name="name" required autocomplete="name" />
-            <span class="field-error" data-error-for="name" aria-live="polite"></span>
-          </div>
-
-          <div class="form-field">
-            <label for="cf-email">Correo electrónico*</label>
-            <input type="email" id="cf-email" name="email" required autocomplete="email" placeholder="Tu mail de contacto" />
-            <span class="field-error" data-error-for="email" aria-live="polite"></span>
-          </div>
-
-          <div class="form-field">
-            <label for="cf-type">Tipo de evento*</label>
-            <select id="cf-type" name="type" required>
-              <option value="" disabled selected>Seleccioná una opción</option>
-              <option value="club">Club nocturno</option>
-              <option value="festival">Festival</option>
-              <option value="fiesta-privada">Fiesta privada</option>
-              <option value="open-air">Evento al aire libre</option>
-              <option value="after">After party</option>
-              <option value="clinica">Clínica / Mentoría</option>
-              <option value="otro">Otro</option>
-            </select>
-            <span class="field-error" data-error-for="type" aria-live="polite"></span>
-          </div>
-
-          <div class="form-field form-field-full">
-            <label for="cf-message">Mensaje*</label>
-            <textarea
-              id="cf-message"
-              name="message"
-              rows="5"
-              required
-              placeholder="Fecha aproximada, ciudad, formato del evento o qué te gustaría trabajar en el lab."
-            ></textarea>
-            <span class="field-error" data-error-for="message" aria-live="polite"></span>
-          </div>
-        </div>
-
-        <button type="submit" class="mp-btn primary form-submit">ENVIAR</button>
-
-        <p class="form-note" id="form-note" role="status" aria-live="polite"></p>
-
-        <p class="form-hint" id="booking-hint">
-          Si preferís, podés escribir directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>
-        </p>
-      </form>
-
-      <!-- Estado de éxito (oculto por defecto) -->
-      <div class="form-success" data-booking-success hidden>
-        <div class="form-success__icon" aria-hidden="true"></div>
-        <h3>¡MENSAJE ENVIADO!</h3>
-        <p>Gracias por escribir. Te respondo a la brevedad al mail que dejaste. Si es urgente, escribime directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>.</p>
-      </div>
     </section>
 
     <!-- ============ INSTAGRAM ============ -->

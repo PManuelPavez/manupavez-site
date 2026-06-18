@@ -82,15 +82,39 @@ async function hydrateReleases(root) {
       releases = await getReleasesJson();
     }
 
-    // Render como grilla de portadas (estilo discografía). Cada card linkea
-    // directo a Spotify, así que no hace falta slider ni modal.
+    // Render como slider de portadas (estilo discografía). Cada card linkea
+    // directo a Spotify, así que no hace falta modal.
     renderReleases(root, releases);
     root.setAttribute("data-hydrated", "true");
+
+    await nextFrame();
+    bindReleaseNav(root);
   } catch (e) {
     console.error("[home] releases hydrate error:", e);
   } finally {
     root.removeAttribute("data-loading");
   }
+}
+
+// Slider simple de releases: las flechas scrollean la fila ~una página.
+// Sin clones ni marquee (a diferencia de initReleaseSlider).
+function bindReleaseNav(row) {
+  const slider = row.closest(".releases-carousel");
+  if (!slider) return;
+  const prev = slider.querySelector(".release-nav.prev");
+  const next = slider.querySelector(".release-nav.next");
+
+  const page = () => Math.max(220, Math.round(row.clientWidth * 0.8));
+  const update = () => {
+    const max = row.scrollWidth - row.clientWidth - 1;
+    if (prev) prev.disabled = row.scrollLeft <= 0;
+    if (next) next.disabled = row.scrollLeft >= max;
+  };
+
+  prev?.addEventListener("click", () => row.scrollBy({ left: -page(), behavior: "smooth" }));
+  next?.addEventListener("click", () => row.scrollBy({ left: page(), behavior: "smooth" }));
+  row.addEventListener("scroll", update, { passive: true });
+  update();
 }
 
 async function hydrateLiveSets(root) {

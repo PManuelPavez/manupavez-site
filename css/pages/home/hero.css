@@ -1,234 +1,66 @@
-/* =================== HERO =================== */
-
-/* ===========================================================
-   HERO / BANNER PRINCIPAL
+/* =================== HERO (estilo Nacho Scoppa, dark) ===================
+   Tarjeta-foto grande con bordes redondeados + nombre gigante abajo.
    Perillas rápidas:
-   · Tamaño del LOGO         → .hero-title .hero-logo  (width)
-   · Recorte/posición FOTO   → .hero-img  (object-fit / object-position)
-   · Oscurecido de la foto   → .hero-img  (filter brightness) y .hero::before
-   · Ancho de la columna foto (desktop) → @media .hero-bg (width)
-   =========================================================== */
+   · Encuadre de la foto → .hero-card-img (object-position)
+   · Tamaño del nombre   → .hero-name (font-size clamp)
+   · Redondeo de la tarjeta → .hero-card (border-radius)
+   ======================================================================== */
 
 .hero {
-  position: relative;
   min-height: 100svh;
-  padding-top: calc(var(--header-height) + 40px);
-  padding-bottom: 56px;
   display: flex;
-  align-items: center;        /* contenido centrado vertical */
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
+  flex-direction: column;
+  gap: clamp(16px, 2.2vw, 28px);
+  padding:
+    calc(var(--header-height, 64px) + 14px)
+    clamp(12px, 3vw, 30px)
+    clamp(22px, 3vw, 34px);
+  box-sizing: border-box;
+  background: var(--color-bg);
 }
 
-.hero-bg {
+/* La tarjeta-foto crece para llenar el viewport */
+.hero-card {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: clamp(380px, 64vh, 780px);
+  border-radius: clamp(18px, 2.4vw, 30px);
+  overflow: hidden;
+  background: #05060c;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+.hero-card-img {
   position: absolute;
   inset: 0;
-  z-index: 0;
-}
-
-/* Foto full-bleed.
-   ════════════════════════════════════════════════════════════
-   👇 PERILLAS DE LA FOTO (valores en PÍXELES — se corre de verdad):
-     --photo-x  → IZQUIERDA/DERECHA: negativo = IZQUIERDA · positivo = DERECHA (ej: -120px)
-     --photo-y  → ARRIBA/ABAJO:      negativo = ARRIBA     · positivo = ABAJO  (ej:  60px)
-     --photo-zoom → ACHICAR/AGRANDAR: 1 = normal · 1.2 = más grande · 0.85 = más chica
-   (el fondo de la foto es negro y se funde con la página, podés correrla libre)
-   ════════════════════════════════════════════════════════════ */
-.hero-video,
-.hero-img {
-  --photo-x: -222px;
-  --photo-y: 0px;
-  --photo-zoom: 0.7;
-
-  width: 90%;
+  width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  transform: translate(var(--photo-x), var(--photo-y)) scale(var(--photo-zoom));
-  transform-origin: center;
-  filter: contrast(1.05) brightness(0.95);
+  object-position: 50% 22%;
+  filter: contrast(1.04) brightness(0.96);
 }
 
-/* Logo dentro del H1 (reemplaza el texto "MANU PAVEZ") — AGRANDÁ acá.
-   Formato clamp(MÍNIMO, IDEAL, MÁXIMO): el MÁXIMO debe ser mayor que el mínimo. */
-.hero-title .hero-logo {
-  width: clamp(280px, 80vw, 560px);   /* ← tamaño del logo (subí el 560px para más grande) */
-  height: auto;
-  margin-block: 0;
-  margin-inline: auto;
-  filter: drop-shadow(0 8px 28px rgba(0, 0, 0, 0.9));
-}
-
-/* Velo: oscurece para que el logo/texto se lean.
-   z-index: 1 → queda ENCIMA de la foto (.hero-bg está en z:0).
-   El .hero-wrap también está en z:1 pero, por orden DOM (viene después),
-   queda sobre el velo. Resultado: foto < velo < texto. */
-.hero::before {
-  content: "";
+/* Velo para que el nombre y el eyebrow se lean sobre la foto */
+.hero-card-veil {
   position: absolute;
   inset: 0;
-  z-index: 1;
-  pointer-events: none;          /* el velo no debe robar clicks */
+  pointer-events: none;
   background:
-    radial-gradient(120% 80% at 50% 38%, transparent 40%, rgba(5, 7, 17, 0.55) 100%),
-    linear-gradient(to bottom, rgba(5, 7, 17, 0.35) 0%, transparent 30%, rgba(5, 7, 17, 0.6) 85%, var(--color-bg) 100%);
+    linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.25) 32%, transparent 58%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, transparent 26%);
 }
 
-.hero-wrap {
-  position: relative;
-  z-index: 1;
-  max-width: 880px;
-  padding-inline: 16px;
-  text-align: center;
-  /* Mobile-first: el bloque va al pie del hero (donde el gradiente ya oscureció
-     la foto), para no pelearse con el motivo de la remera. Override en desktop. */
-  margin-top: auto;
-}
-
-.hero-title {
-  font-size: clamp(3.2rem, 7vw, 4.6rem);
-  letter-spacing: 0.32em;
-  text-shadow: 0 6px 22px rgba(0, 0, 0, 0.9);
-  /* El PNG del logo tiene padding transparente arriba y abajo, lo que hace
-     que el wordmark se sienta "flotando lejos" del eyebrow y de la sub.
-     Compensamos con margin-block negativo (no toca la imagen, solo cierra el aire).
-     Si en el futuro cambiás el PNG, ajustá estos valores a ojo. */
-  margin-top: -28px;
-  margin-bottom: -22px;
-  line-height: 1;
-}
-
-/* La imagen del logo en sí (block para evitar baseline inline-img). */
-.hero-title .hero-logo {
-  display: block;
-}
-
-/* ===== DESKTOP: split editorial =====
-   La foto ancla la columna izquierda (tu perfil mira a la derecha → guía el ojo
-   hacia el texto). El bloque de texto vive en la columna derecha, alineado a la
-   izquierda como un editorial. Sin transform-hack: layout real con grid. */
-@media (min-width: 860px) {
-  .hero {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    text-align: left;
-    padding-inline: clamp(40px, 6vw, 80px);
-  }
-
-  /* La foto se contiene en la mitad izquierda (no full-bleed). */
-  .hero-bg {
-    inset: 0 50% 0 0;
-  }
-
-  /* Encuadre: cara/perfil bien ubicado, sin necesidad de translate manual. */
-  .hero-img {
-    --photo-x: 0px;
-    --photo-y: 0px;
-    --photo-zoom: 1;
-    width: 100%;
-    object-position: 40% center;
-  }
-
-  /* Velo: gradiente horizontal de la foto al fondo + suave abajo. */
-  .hero::before {
-    background:
-      linear-gradient(to right,
-        transparent 0%,
-        rgba(5, 7, 17, 0.35) 42%,
-        rgba(5, 7, 17, 0.85) 55%,
-        var(--color-bg) 70%),
-      linear-gradient(to bottom,
-        rgba(5, 7, 17, 0.2) 0%,
-        transparent 25%,
-        rgba(5, 7, 17, 0.45) 90%,
-        var(--color-bg) 100%);
-  }
-
-  /* Wrap a la derecha, alineado a la izquierda (editorial). */
-  .hero-wrap {
-    grid-column: 2;
-    max-width: 520px;
-    margin: 0;
-    padding-inline: 0;
-    text-align: left;
-  }
-
-  .hero-title .hero-logo {
-    width: clamp(280px, 26vw, 420px);
-    margin-inline: 0;             /* anclado a la izquierda del wrap */
-  }
-
-  .hero-sub {
-    margin-inline: 0;
-    max-width: 460px;
-  }
-
-  .hero-eyebrow {
-    margin-inline: 0;
-  }
-
-  .hero-ctas,
-  .hero-ctas-main {
-    align-items: flex-start;       /* CTAs alineadas a la izquierda */
-  }
-
-  .hero-social {
-    margin-left: 0;
-    margin-right: auto;
-    justify-content: flex-start;
-  }
-}
-
-/* ════════════════════════════════════════════════════════════
-   📱 HERO EN CELULAR — el banner se comporta distinto en mobile.
-   Ajustá ACÁ encuadre de la foto, tamaño del logo y corrimiento:
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 859px) {
-  /* MOBILE: la foto queda como fondo arriba (con tu cara/perfil visible)
-     y el bloque de texto baja al pie, donde el velo oscuro deja el cubo
-     de la remera funcionando como textura sutil sin competir con los CTAs. */
-  .hero {
-    align-items: flex-end;        /* texto al pie del hero */
-    padding-bottom: 56px;
-  }
-
-  .hero-img {
-    --photo-x: 0px;
-    --photo-y: 0px;
-    --photo-zoom: 1.05;            /* leve zoom para que la cara quede más presente */
-    object-position: 50% 25%;      /* perfil más arriba en el encuadre */
-  }
-
-  /* Velo mobile: foto limpia arriba (cara + hombros), fondo sólido en la mitad
-     inferior para que el cubo/mountain de la remera no compita con el texto.
-     El bloque de contenido vive sobre el color sólido — limpio y minimalista. */
-  .hero::before {
-    background:
-      linear-gradient(to bottom,
-        transparent 0%,
-        transparent 30%,
-        rgba(5, 7, 17, 0.92) 48%,
-        var(--color-bg) 55%);
-  }
-
-  .hero-title .hero-logo { width: clamp(240px, 74vw, 420px); }
-  .hero-wrap { text-align: center; }
-}
-
-/* Eyebrow editorial — pre-titular limpio */
-
-/* ====== ESPACIADO ENTRE SECCIONES DEL HERO ======
-   Para juntar/separar el eyebrow, logo, texto, botones y redes,
-   tocá los margin-top de: .hero-eyebrow (abajo), .hero-sub, .hero-ctas, .hero-social */
-
+/* Eyebrow arriba a la izquierda */
 .hero-eyebrow {
-  margin-bottom: 10px;       /* ← espacio eyebrow → logo */
-  font-size: 0.72rem;
+  position: absolute;
+  top: clamp(16px, 2.4vw, 28px);
+  left: clamp(18px, 3vw, 34px);
+  z-index: 2;
+  margin: 0;
+  font-size: clamp(0.66rem, 1.1vw, 0.74rem);
   letter-spacing: 0.42em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .hero-eyebrow a {
@@ -238,7 +70,6 @@
   padding-bottom: 4px;
   transition: color 0.25s ease;
 }
-
 .hero-eyebrow a::after {
   content: "";
   position: absolute;
@@ -250,53 +81,70 @@
   transform-origin: left;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
+.hero-eyebrow a:hover { color: #fff; }
+.hero-eyebrow a:hover::after { transform: scaleX(1); opacity: 0.8; }
 
-.hero-eyebrow a:hover {
+/* Nombre gigante centrado abajo, encima de la foto */
+.hero-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(8px, 2vw, 26px);
+  z-index: 2;
+  margin: 0;
+  padding-inline: clamp(8px, 2vw, 20px);
+  text-align: center;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: clamp(2.9rem, 15.5vw, 12rem);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
   color: #fff;
+  text-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
 }
 
-.hero-eyebrow a:hover::after {
-  transform: scaleX(1);
-  opacity: 0.8;
+/* Pie del hero: bajada + CTAs + redes, sobre el fondo oscuro */
+.hero-foot {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-inline: 12px;
 }
 
 .hero-sub {
-  margin-top: 14px;          /* ← espacio logo → texto */
-  font-size: 1.02rem;
-  line-height: 1.75;
+  margin: 0;
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  line-height: 1.65;
   color: var(--color-text-muted);
-  max-width: 480px;
-  margin-inline: auto;
+  max-width: 540px;
 }
 
 .hero-ctas,
 .hero-ctas-main {
-  margin-top: 22px;          /* ← espacio texto → botones */
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
+  justify-content: center;
+  gap: 16px;
 }
 
-/* Secundario tipo "or, go here →" — patrón Polo / Wainot */
 .hero-secondary {
   font-size: 0.82rem;
   letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
   position: relative;
-  padding-bottom: 2px;
   transition: color 0.25s ease, transform 0.25s ease;
 }
+.hero-secondary:hover { color: #fff; transform: translateX(2px); }
 
-.hero-secondary:hover {
-  color: #fff;
-  transform: translateX(2px);
-}
-
-/* ===== Hero social row (under CTAs) ===== */
+/* Redes */
 .hero-social {
-  margin: 18px auto 0;       /* ← espacio botones → redes */
+  margin: 4px 0 0;
   display: inline-flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -304,7 +152,6 @@
   padding: 0;
   list-style: none;
 }
-
 .hero-social a {
   display: inline-flex;
   align-items: center;
@@ -313,7 +160,6 @@
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(5, 7, 17, 0.55);
-  backdrop-filter: blur(8px);
   color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   font-size: 0.72rem;
@@ -321,13 +167,7 @@
   text-transform: uppercase;
   transition: all 0.2s ease;
 }
-
-.hero-social a svg {
-  width: 14px;
-  height: 14px;
-  display: block;
-}
-
+.hero-social a svg { width: 14px; height: 14px; display: block; }
 .hero-social a:hover {
   color: #050509;
   background: #fff;
@@ -336,85 +176,25 @@
 }
 
 @media (max-width: 640px) {
-  .hero-social a span {
-    display: none;
-  }
-  .hero-social a {
-    padding: 10px;
-  }
-  .hero-social a svg {
-    width: 16px;
-    height: 16px;
-  }
+  .hero-social a span { display: none; }
+  .hero-social a { padding: 10px; }
+  .hero-social a svg { width: 16px; height: 16px; }
 }
 
-/* ===== Hero scroll indicator ===== */
-.hero-scroll {
-  position: absolute;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  z-index: 2;
-  width: 22px;
-  height: 36px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  display: none;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 6px;
-  opacity: 0.75;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-@media (min-width: 720px) {
-  .hero-scroll {
-    display: inline-flex;
-  }
-}
-
-.hero-scroll:hover {
-  opacity: 1;
-  transform: translateX(-50%) translateY(2px);
-}
-
-.hero-scroll span {
-  display: block;
-  width: 2px;
-  height: 8px;
-  background: #fff;
-  border-radius: 2px;
-  animation: hero-scroll-bob 1.6s ease-in-out infinite;
-}
-
-@keyframes hero-scroll-bob {
-  0%, 100% { transform: translateY(0); opacity: 0.4; }
-  50% { transform: translateY(8px); opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-scroll span { animation: none; }
-}
-
-/* ===== Entrada escalonada del hero (aparición suave al cargar) ===== */
+/* Entrada suave */
 @media (prefers-reduced-motion: no-preference) {
   .hero-eyebrow,
-  .hero-title,
-  .hero-sub,
-  .hero-ctas,
-  .hero-social {
+  .hero-name,
+  .hero-foot {
     opacity: 0;
     transform: translateY(14px);
     animation: hero-in 0.7s var(--mp-ease-out, cubic-bezier(.16, 1, .3, 1)) forwards;
   }
-  .hero-eyebrow { animation-delay: 0.05s; }
-  .hero-title   { animation-delay: 0.15s; }
-  .hero-sub     { animation-delay: 0.28s; }
-  .hero-ctas    { animation-delay: 0.40s; }
-  .hero-social  { animation-delay: 0.52s; }
+  .hero-eyebrow { animation-delay: 0.10s; }
+  .hero-name    { animation-delay: 0.22s; }
+  .hero-foot    { animation-delay: 0.38s; }
 }
 
 @keyframes hero-in {
   to { opacity: 1; transform: translateY(0); }
 }
-
