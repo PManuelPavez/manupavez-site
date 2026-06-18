@@ -1,6 +1,12 @@
 .DS_Store
 node_modules/
 .env
+
+# Fotos originales sin optimizar (la web usa las versiones de img/live/)
+img/fotos/live*.JPG
+img/fotos/live*.jpg
+img/fotos/live*.jpeg
+
 .env.local
 .vscode/
 

@@ -1,3 +1,21 @@
+/* Fotos en vivo (feature) */
+.lab-photo {
+  margin: clamp(36px, 7vw, 72px) auto;
+  max-width: 480px;
+  border-radius: clamp(16px, 2.2vw, 24px);
+  overflow: hidden;
+  background: #05060c;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+}
+.lab-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.7s cubic-bezier(.2, .9, .2, 1);
+}
+.lab-photo:hover img { transform: scale(1.03); }
+
 /* =========================
    CLÍNICAS — NIVEL 2 (FINAL)
    ========================= */

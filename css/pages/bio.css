@@ -145,6 +145,36 @@ body[data-page="bio"] .mp-story::before {
   margin-top: clamp(28px, 4vw, 44px);
 }
 
+/* Fotos en vivo intercaladas en la historia */
+body[data-page="bio"] .bio-photo {
+  margin: clamp(32px, 6vw, 56px) 0;
+  border-radius: clamp(14px, 2vw, 20px);
+  overflow: hidden;
+  background: #05060c;
+  border: 1px solid var(--mp-border);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  max-width: 460px;
+}
+
+body[data-page="bio"] .bio-photo--wide {
+  max-width: 100%;
+}
+
+body[data-page="bio"] .bio-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.6s var(--mp-ease-groove, ease);
+}
+
+body[data-page="bio"] .bio-photo:hover img {
+  transform: scale(1.03);
+}
+
+@media (max-width: 640px) {
+  body[data-page="bio"] .bio-photo { max-width: 100%; }
+}
+
 .bio-chapter__kicker {
   font-family: var(--font-primary);
   font-size: 0.78rem;
