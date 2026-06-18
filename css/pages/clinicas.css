@@ -1,20 +1,50 @@
-/* Fotos en vivo (feature) */
-.lab-photo {
-  margin: clamp(36px, 7vw, 72px) auto;
-  max-width: 480px;
-  border-radius: clamp(16px, 2.2vw, 24px);
+/* =========================
+   FOTOS COMO FONDO DE BLOQUE (blur + tinte de marca)
+   ========================= */
+.has-photo-bg {
+  position: relative;
   overflow: hidden;
-  background: #05060c;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+  isolation: isolate;
 }
-.lab-photo img {
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: transform 0.7s cubic-bezier(.2, .9, .2, 1);
+.has-photo-bg > .block-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
-.lab-photo:hover img { transform: scale(1.03); }
+/* todo el contenido directo queda por encima de la foto */
+.has-photo-bg > *:not(.block-bg) {
+  position: relative;
+  z-index: 1;
+}
+
+.block-bg__img {
+  position: absolute;
+  inset: -28px;                 /* evita que el blur deje bordes claros */
+  background-size: cover;
+  background-position: center 35%;
+  filter: blur(15px) brightness(0.42) saturate(1.05);
+  transform: scale(1.08);
+}
+/* Tinte de marca: azul + teal sobre oscuro, para sentar la base */
+.block-bg__tint {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(49, 64, 151, 0.55), transparent 60%),
+    linear-gradient(315deg, rgba(89, 198, 186, 0.30), transparent 55%),
+    rgba(5, 7, 17, 0.55);
+}
+
+/* Método: bloque-card con la foto de fondo */
+body[data-page="clinicas"] #metodo.metodo-photo {
+  max-width: 1040px;
+  margin-inline: auto;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  padding: clamp(40px, 6vw, 76px) clamp(24px, 5vw, 56px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
 
 /* =========================
    CLÍNICAS — NIVEL 2 (FINAL)
