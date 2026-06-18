@@ -62,12 +62,28 @@ async function getAccessToken() {
   return json.access_token;
 }
 
-async function api(token, path) {
-  const res = await fetch(`https://api.spotify.com/v1${path}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!res.ok) throw new Error(`GET ${path} → ${res.status}`);
-  return res.json();
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function api(token, path, { retries = 4 } = {}) {
+  let lastStatus = 0;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const res = await fetch(`https://api.spotify.com/v1${path}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) return res.json();
+
+    lastStatus = res.status;
+    // 429 trae Retry-After (segundos). El resto: backoff exponencial.
+    // Spotify devuelve 400/403 intermitentes bajo carga, así que reintentamos.
+    if (attempt < retries && [400, 403, 429, 500, 502, 503].includes(res.status)) {
+      const retryAfter = Number(res.headers.get("retry-after"));
+      const waitMs = retryAfter > 0 ? retryAfter * 1000 : Math.min(8000, 500 * 2 ** attempt);
+      await sleep(waitMs);
+      continue;
+    }
+    break;
+  }
+  throw new Error(`GET ${path} → ${lastStatus}`);
 }
 
 async function getArtist(token) {
@@ -76,11 +92,27 @@ async function getArtist(token) {
 
 async function getAlbums(token) {
   const all = [];
-  let url = `/artists/${ARTIST_ID}/albums?include_groups=album,single,appears_on&market=${MARKET}&limit=50`;
-  while (url) {
-    const data = await api(token, url);
-    all.push(...data.items);
-    url = data.next ? data.next.replace("https://api.spotify.com/v1", "") : null;
+  const limit = 50;
+  let offset = 0;
+  // Solo releases propios (album + single). Evitamos `appears_on` porque trae
+  // recopilatorios de otros artistas y además rompe la paginación del endpoint
+  // (Spotify devuelve 400 en offsets > 0). Paginación con offset manual y
+  // tolerante a fallos: si una página falla, devolvemos lo que ya tenemos.
+  while (true) {
+    let data;
+    try {
+      data = await api(
+        token,
+        `/artists/${ARTIST_ID}/albums?include_groups=album,single&market=${MARKET}&limit=${limit}&offset=${offset}`
+      );
+    } catch (err) {
+      console.warn(`albums page offset=${offset} falló (${err.message}); corto acá`);
+      break;
+    }
+    const items = data.items || [];
+    all.push(...items);
+    offset += limit;
+    if (items.length < limit || offset >= (data.total || 0)) break;
   }
   // Dedup por nombre lowercased (Spotify devuelve duplicados por market a veces)
   const seen = new Set();
@@ -93,8 +125,34 @@ async function getAlbums(token) {
 }
 
 async function getTopTracks(token) {
-  const data = await api(token, `/artists/${ARTIST_ID}/top-tracks?market=${MARKET}`);
-  return data.tracks || [];
+  // Best-effort: Spotify devuelve 403 en este endpoint para apps nuevas.
+  // No es crítico (solo alimenta una estadística), así que no frena el sync.
+  try {
+    const data = await api(token, `/artists/${ARTIST_ID}/top-tracks?market=${MARKET}`);
+    return data.tracks || [];
+  } catch (err) {
+    console.warn("top-tracks no disponible (continuo):", err.message);
+    return [];
+  }
+}
+
+// La lista de álbumes (simplified objects) NO trae el sello/label.
+// Lo pedimos con /albums?ids= (full objects, hasta 20 por request) para
+// poder mostrar "Sello • Año" estilo discografía.
+async function getAlbumLabels(token, ids) {
+  const labels = new Map();
+  for (let i = 0; i < ids.length; i += 20) {
+    const chunk = ids.slice(i, i + 20);
+    try {
+      const data = await api(token, `/albums?ids=${chunk.join(",")}&market=${MARKET}`);
+      for (const a of data.albums || []) {
+        if (a?.id) labels.set(a.id, a.label || "");
+      }
+    } catch (err) {
+      console.warn("album labels chunk failed (continuo):", err.message);
+    }
+  }
+  return labels;
 }
 
 // ---------- Transform ----------
@@ -109,6 +167,7 @@ function normalizeAlbum(a) {
     id: a.id,
     title: a.name,
     type: a.album_type,
+    label: "", // se completa luego con getAlbumLabels()
     release_date: a.release_date,
     artwork: pickImage(a.images),
     spotify_url: a.external_urls?.spotify || null,
@@ -217,6 +276,11 @@ async function main() {
   const releases = albums
     .map(normalizeAlbum)
     .sort((a, b) => b.release_date.localeCompare(a.release_date));
+
+  // Completar el sello/label de cada release (request aparte, ver getAlbumLabels)
+  console.log("→ fetching album labels");
+  const labelMap = await getAlbumLabels(token, releases.map((r) => r.id));
+  for (const r of releases) r.label = labelMap.get(r.id) || "";
 
   const tracks = topTracks.map(normalizeTrack);
 

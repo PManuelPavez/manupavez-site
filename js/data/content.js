@@ -35,6 +35,7 @@ function normalizeRelease(r) {
     id: r.id ?? r.slug ?? null,
     title: pick(r, ["title", "name"]),
     subtitle: pick(r, ["subtitle", "sub_title", "headline"]),
+    label: pick(r, ["label", "sello", "sello_locacion"]),
     type: pick(r, ["type", "category"]),
     story: pick(r, ["story", "description", "bio"]),
     tags: toTags(r.tags ?? r.tag_list ?? r.taglist),
@@ -48,7 +49,7 @@ function normalizeRelease(r) {
     bandcamp_url: pick(r, ["bandcamp_url", "bandcamp", "bandcamp_link"]),
     released_at: pick(r, ["released_at", "release_date", "date"]),
     is_featured: r.is_featured ?? true,
-    order: r.order ?? r.sort ?? null,
+    order: r.order ?? r.sort ?? r.sort_order ?? null,
   };
 }
 
@@ -91,6 +92,7 @@ export async function getReleasesJson() {
     id: r.id ?? null,
     title: r.title || "",
     type: r.type || "",
+    label: r.label || "",
     story: "",
     tags: [],
     cover_url: r.artwork || "",
@@ -99,6 +101,54 @@ export async function getReleasesJson() {
     is_featured: true,
     order: null,
   }));
+}
+
+// LIVE SETS desde data/youtube.json (YouTube RSS sync). Cada video del canal
+// se trata como un "set en vivo" estilo Nacho Scoppa (lista numerada con
+// preview + CTA). Devuelve [] si no hay archivo.
+export async function getLiveSets() {
+  const data = await fetchLocalJson("data/youtube.json");
+  const videos = data?.videos;
+  if (!Array.isArray(videos) || !videos.length) return [];
+
+  return videos
+    .map((v) => {
+      const id = v.id || "";
+      const { venue, city } = parseSetTitle(v.title || "");
+      return {
+        id,
+        title: v.title || "",
+        venue,
+        city,
+        date: formatSetDate(v.published),
+        detail: (v.description || "").trim(),
+        listen_label: "Ver en YouTube",
+        stream_url: v.watch_url || (id ? `https://www.youtube.com/watch?v=${id}` : ""),
+        preview_src: id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : "",
+      };
+    })
+    .filter((s) => s.stream_url);
+}
+
+// "MANU PAVEZ @ CLUB 74, PERGAMINO" -> { venue:"CLUB 74", city:"PERGAMINO" }
+// "GASPAR & MANU PAVEZ - ALL NIGHT LONG @ CLUB 74, PERGAMINO" idem.
+function parseSetTitle(title) {
+  let venue = title;
+  let city = "";
+  const at = title.split("@")[1];
+  if (at) {
+    const parts = at.split(/[,(]/);
+    venue = (parts[0] || "").trim();
+    city = (parts[1] || "").replace(/\).*$/, "").trim();
+  }
+  return { venue, city };
+}
+
+function formatSetDate(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d)) return "";
+  return d.toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" });
 }
 
 // Videos desde data/youtube.json (YouTube RSS sync). Devuelve [] si no hay archivo.

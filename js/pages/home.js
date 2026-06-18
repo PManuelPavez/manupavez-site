@@ -1,9 +1,9 @@
 import { $ } from "../core/dom.js";
 import { hasSupabase } from "../data/supabaseClient.js";
-import { getReleases, getLabels, getMedia, getReleasesJson, getYouTubeVideos } from "../data/content.js";
-import { renderReleases, renderLabels, renderMedia } from "../ui/renderers.js";
-import { initReleaseSlider, initMediaSliders } from "../features/slider.js";
-import { bindReleaseModal } from "../features/releaseModal.js";
+import { getReleases, getLabels, getMedia, getReleasesJson, getYouTubeVideos, getLiveSets } from "../data/content.js";
+import { renderReleases, renderLabels, renderMedia, renderLiveSets } from "../ui/renderers.js";
+import { initMediaSliders } from "../features/slider.js";
+import { initLiveSets } from "../features/liveSets.js";
 
 const nextFrame = () => new Promise((r) => requestAnimationFrame(() => r()));
 
@@ -12,9 +12,10 @@ export function initHome() {
   const labelsTrack = $("[data-sb='labels-track']") || $("[data-sb-labels-track]");
   const videoRoot = $("[data-sb='media-video']") || $("[data-sb-media-video]");
   const mixRoot = $("[data-sb='media-mix']") || $("[data-sb-media-mix]");
+  const liveSetsRoot = $("[data-sb='live-sets']");
 
   // Si no hay nada de lo que hidratamos, salimos.
-  if (!releasesRoot && !labelsTrack && !videoRoot && !mixRoot) return;
+  if (!releasesRoot && !labelsTrack && !videoRoot && !mixRoot && !liveSetsRoot) return;
 
   // Nota: releases y videos pueden venir de JSON estático (data/*.json) sin Supabase.
   // Sólo labels y mixes dependen de Supabase.
@@ -34,6 +35,11 @@ export function initHome() {
     // Labels: solo Supabase
     if (hasSupabase() && labelsTrack && !labelsTrack.hasAttribute("data-hydrated")) {
       tasks.push(hydrateLabels(labelsTrack));
+    }
+
+    // Live sets: JSON estático (data/youtube.json, auto-sync RSS)
+    if (liveSetsRoot && !liveSetsRoot.hasAttribute("data-hydrated")) {
+      tasks.push(hydrateLiveSets(liveSetsRoot));
     }
 
     // Media: hidratamos ambos y recién al final inicializamos sliders UNA vez
@@ -62,27 +68,45 @@ async function hydrateReleases(root) {
   try {
     root.setAttribute("data-loading", "true");
 
-    // 1) JSON estático (data/music.json, auto-sync Spotify) — sin mantenimiento
-    let releases = await getReleasesJson();
-    // 2) Fallback a Supabase si el JSON aún no existe
-    if (!releases.length && hasSupabase()) {
-      releases = await getReleases();
+    // 1) Supabase (home_releases) es la fuente curada de releases.
+    let releases = [];
+    if (hasSupabase()) {
+      try {
+        releases = await getReleases();
+      } catch (e) {
+        console.warn("[home] releases Supabase error, pruebo JSON:", e);
+      }
     }
+    // 2) Fallback a JSON estático (data/music.json) si Supabase no devolvió nada.
+    if (!releases.length) {
+      releases = await getReleasesJson();
+    }
+
+    // Render como grilla de portadas (estilo discografía). Cada card linkea
+    // directo a Spotify, así que no hace falta slider ni modal.
     renderReleases(root, releases);
-
-    // Modal de detalle (portada + links)
-    const byId = new Map();
-    releases.forEach((r, idx) => byId.set(String(r.id ?? r.slug ?? idx), r));
-    bindReleaseModal(root, (id) => byId.get(String(id)));
-
-    // Marcar hidratado antes de re-init
     root.setAttribute("data-hydrated", "true");
-
-    // Re-init del slider una vez que existen .release-slide y el layout está listo
-    await nextFrame();
-    initReleaseSlider();
   } catch (e) {
     console.error("[home] releases hydrate error:", e);
+  } finally {
+    root.removeAttribute("data-loading");
+  }
+}
+
+async function hydrateLiveSets(root) {
+  try {
+    root.setAttribute("data-loading", "true");
+    const sets = await getLiveSets();
+    renderLiveSets(root, sets);
+    root.setAttribute("data-hydrated", "true");
+
+    const count = document.querySelector("[data-live-count]");
+    if (count && sets.length) count.textContent = `(${String(sets.length).padStart(2, "0")})`;
+
+    await nextFrame();
+    initLiveSets();
+  } catch (e) {
+    console.error("[home] live sets hydrate error:", e);
   } finally {
     root.removeAttribute("data-loading");
   }

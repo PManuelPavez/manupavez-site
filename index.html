@@ -242,32 +242,37 @@
           </p>
         </header>
 
-        <div class="release-slider" aria-label="Lanzamientos destacados">
-          <button class="release-nav prev" type="button" aria-label="Lanzamiento anterior">‹</button>
+        <!-- Grilla de portadas (estilo discografía). Render dinámico desde
+             data/music.json (auto-sync Spotify) con fallback a Supabase.
+             Cada card linkea directo a Spotify. -->
+        <div class="tracks-grid" data-sb="releases" aria-label="Listado de lanzamientos"></div>
 
-          <div class="release-slides">
-            <div class="supabase-banner" data-supabase-banner hidden>
-              Configurá <code>js/supabase-config.js</code> (url + anonKey) para cargar releases desde Supabase.
-            </div>
+      </div>
+    </section>
 
-            <!-- Render dinámico -->
-            <div data-sb="releases" aria-label="Listado de lanzamientos"></div>
-
-            <!-- Plantilla opcional para render -->
-            <template id="tpl-release">
-              <article class="release-card">
-                <a class="release-link" href="">
-                  <img class="release-cover" src="" alt="" loading="lazy" />
-                  <h3 class="release-title"></h3>
-                  <p class="release-meta"></p>
-                </a>
-              </article>
-            </template>
+    <!-- ============ LIVE SETS ============ -->
+    <section id="live-sets" class="live-sets reveal" aria-labelledby="live-sets-title">
+      <div class="live-sets__card">
+        <div class="live-sets__grain" aria-hidden="true"></div>
+        <div class="live-sets__inner">
+          <div class="live-sets__badge-row">
+            <span class="live-sets__badge-icon" aria-hidden="true"><span class="live-sets__badge-plus">+</span></span>
+            <span class="live-sets__badge-label">Live sets</span>
           </div>
 
-          <button class="release-nav next" type="button" aria-label="Lanzamiento siguiente">›</button>
-        </div>
+          <h2 id="live-sets-title" class="live-sets__title" data-animate="heading">
+            Sets<span class="live-sets__title-count" data-live-count></span>
+          </h2>
 
+          <!-- Lista numerada (acordeón). Render dinámico desde data/youtube.json. -->
+          <ul class="live-sets__list" data-sb="live-sets" aria-label="Sets en vivo"></ul>
+
+          <div class="live-sets__foot">
+            <a class="live-sets__youtube-cta" href="https://www.youtube.com/@manupavez?sub_confirmation=1" target="_blank" rel="noopener">
+              Suscribirme en YouTube <span class="live-sets__youtube-cta-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -313,23 +318,6 @@
       <h3 class="subsection-title">Próximas fechas</h3>
       <!-- Fechas dinámicas: se cargan desde /eventos.json (ver js/features/eventos.js) -->
       <div class="shows-list" data-eventos aria-live="polite"></div>
-
-      <h3 class="subsection-title">Sets en video · YouTube</h3>
-      <p class="muted">Lo último de mi canal, directo desde YouTube. Sets, recorders de fechas y procesos de estudio.</p>
-
-      <div class="media-slider" data-slider="videos" aria-label="Carrusel de videos de YouTube">
-        <button class="media-nav prev" type="button" aria-label="Video anterior">‹</button>
-
-        <div class="supabase-banner" data-supabase-banner hidden>Configurá Supabase para cargar videos/sets.</div>
-        <div class="media-track" data-sb="media-video"></div>
-
-        <button class="media-nav next" type="button" aria-label="Video siguiente">›</button>
-      </div>
-
-      <div class="yt-cta">
-        <a class="mp-btn primary" href="https://www.youtube.com/@manupavez?sub_confirmation=1" target="_blank" rel="noopener">SUSCRIBIRME EN YOUTUBE</a>
-        <a class="hero-secondary" href="https://youtube.com/@manupavez" target="_blank" rel="noopener">Ver canal completo →</a>
-      </div>
 
       <h3 class="subsection-title">Mixes seleccionados</h3>
 

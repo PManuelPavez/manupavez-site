@@ -25,32 +25,88 @@ export function renderReleases(root, releases = []) {
     return "";
   };
 
+  const yearOf = (r) => String(r.released_at || "").slice(0, 4);
+  const capitalize = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
+  // Meta estilo discografía. Si la fila trae `subtitle` (Supabase), se usa tal
+  // cual (ahí editás "Sello • Año"). Si no, se arma "Sello • Año" con label/tipo.
+  const metaOf = (r) => {
+    if (r.subtitle) return escapeHtml(r.subtitle);
+    const left = r.label || capitalize(r.type) || "";
+    const year = yearOf(r);
+    return [escapeHtml(left), year ? `<span class="track-card__dot" aria-hidden="true">•</span>${escapeHtml(year)}` : ""]
+      .filter(Boolean)
+      .join("");
+  };
+
   root.innerHTML = releases
     .map((r, idx) => {
       const id = String(r.id ?? r.slug ?? idx);
-
       const safeCover = escapeHtml(r.cover_url || "");
       const title = escapeHtml(r.title || "Release");
-      const meta = escapeHtml(r.type || "");
-      const story = escapeHtml(r.story || "");
+      const meta = metaOf(r);
+      const href = escapeHtml(primaryUrl(r));
 
-      const href = escapeHtml(primaryUrl(r)) || "#";
+      const tag = href ? "a" : "article";
+      const attrs = href
+        ? `href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Escuchar ${title} en Spotify — se abre en una pestaña nueva"`
+        : "";
 
-      // Nota: dejamos el body en DOM (para SEO/lectores), pero en home se puede ocultar por CSS.
       return `
-        <article class="release-item mp-card" data-release-id="${id}" tabindex="0">
-          <a class="release-link" data-release-id="${id}" href="${href}" ${href === "#" ? 'aria-label="Abrir detalles del release"' : 'aria-label="Abrir detalles del release (Ctrl/⌘ click abre el link directo)"'}>
-            <div class="release-thumb">
-              ${safeCover ? `<img src="${safeCover}" alt="Portada ${title}" loading="lazy" decoding="async" draggable="false">` : ""}
-            </div>
-          </a>
-
-          <div class="release-body">
-            <h3 class="release-title">${title}</h3>
-            ${meta ? `<p class="release-meta">${meta}</p>` : ""}
-            ${story ? `<p class="release-story">${story}</p>` : ""}
+        <${tag} class="track-card${href ? " track-card--link" : ""}" data-release-id="${id}" ${attrs}>
+          <div class="track-card__cover">
+            ${safeCover ? `<img src="${safeCover}" alt="Portada — ${title}" width="320" height="320" loading="lazy" decoding="async" draggable="false">` : ""}
           </div>
-        </article>
+          <h3 class="track-card__title">${title}</h3>
+          ${meta ? `<p class="track-card__meta">${meta}</p>` : ""}
+        </${tag}>
+      `;
+    })
+    .join("");
+}
+
+// LIVE SETS — lista numerada tipo acordeón (estilo Nacho Scoppa).
+// Cada item: índice (001), nombre, panel desplegable con detalle + CTA, y una
+// imagen de preview que aparece detrás al hacer hover/abrir.
+export function renderLiveSets(root, sets = []) {
+  if (!root) return;
+  if (!sets.length) return;
+
+  const pad = (n) => String(n + 1).padStart(3, "0");
+
+  root.innerHTML = sets
+    .map((s, idx) => {
+      const name = escapeHtml(s.venue || s.title || "Set");
+      const sub = [s.city, s.date].filter(Boolean).map(escapeHtml).join(" · ");
+      const detail = escapeHtml(s.detail || "");
+      const preview = escapeHtml(s.preview_src || "");
+      const url = escapeHtml(s.stream_url || "");
+      const listen = escapeHtml(s.listen_label || "Escuchar");
+      const panelId = `live-set-panel-${idx}`;
+
+      return `
+        <li class="live-sets__item">
+          <div class="live-sets__main-col">
+            <div class="live-sets__row" data-live-row>
+              ${preview ? `<span class="live-sets__preview-bg" style="background-image:url('${preview}')" aria-hidden="true"></span>` : ""}
+              <div class="live-sets__index-col"><span class="live-sets__index">${pad(idx)}</span></div>
+              <button class="live-sets__trigger" type="button" aria-expanded="false" aria-controls="${panelId}" data-live-trigger>
+                <span class="live-sets__trigger-main">
+                  <span class="live-sets__name">${name}</span>
+                  ${sub ? `<span class="live-sets__sub">${sub}</span>` : ""}
+                </span>
+                <span class="live-sets__icon-wrap" aria-hidden="true"><span class="live-sets__icon"></span></span>
+              </button>
+              <div class="live-sets__panel" id="${panelId}">
+                <div class="live-sets__panel-measure">
+                  <div class="live-sets__panel-inner">
+                    ${detail ? `<p class="live-sets__detail">${detail}</p>` : ""}
+                    ${url ? `<a class="live-sets__youtube-cta" href="${url}" target="_blank" rel="noopener noreferrer">${listen} <span class="live-sets__youtube-cta-arrow" aria-hidden="true">→</span></a>` : ""}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
       `;
     })
     .join("");
