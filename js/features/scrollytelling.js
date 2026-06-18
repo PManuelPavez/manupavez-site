@@ -64,14 +64,17 @@ export function initScrollytelling() {
      Importante: animamos `.hero-bg` (contenedor), NO `.hero-img`,
      porque la imagen lleva su propio transform de encuadre (--photo-x/zoom).
      --------------------------------------------------------------- */
-  const heroBg = $(".hero-bg");
+  // La foto dentro de la tarjeta del hero se mueve y escala apenas con el
+  // scroll: da profundidad sin despegar el encuadre.
+  const heroImg = $(".hero-card-img");
   const hero = $(".hero");
-  if (heroBg && hero) {
+  if (heroImg && hero) {
     gsap.fromTo(
-      heroBg,
-      { yPercent: -6 },
+      heroImg,
+      { yPercent: -5, scale: 1.08 },
       {
-        yPercent: 12,
+        yPercent: 8,
+        scale: 1.14,
         ease: "none",
         scrollTrigger: {
           trigger: hero,
@@ -138,4 +141,43 @@ export function initScrollytelling() {
   // Releases/videos/mixes se renderizan async tras la config de Supabase
   setTimeout(() => ScrollTrigger.refresh(), 1500);
   setTimeout(() => ScrollTrigger.refresh(), 4000);
+}
+
+/**
+ * Cascada (stagger) de aparición para un grupo de elementos que se renderizan
+ * de forma asíncrona (cards de releases, items de live sets…).
+ * Si no hay GSAP o el usuario pide menos movimiento, los deja visibles.
+ */
+export function staggerReveal(elements, opts = {}) {
+  const els = Array.from(elements || []).filter(Boolean);
+  if (!els.length) return;
+
+  const { gsap, ScrollTrigger } = window;
+  if (!gsap || !ScrollTrigger || prefersReducedMotion()) {
+    els.forEach((el) => {
+      el.style.opacity = "";
+      el.style.transform = "";
+      el.style.visibility = "";
+    });
+    return;
+  }
+
+  gsap.fromTo(
+    els,
+    { autoAlpha: 0, y: opts.y ?? 26 },
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: opts.duration ?? 0.7,
+      ease: "power3.out",
+      stagger: opts.stagger ?? 0.07,
+      scrollTrigger: {
+        trigger: opts.trigger || els[0],
+        start: opts.start || "top 88%",
+        toggleActions: "play none none none",
+      },
+    }
+  );
+
+  ScrollTrigger.refresh();
 }

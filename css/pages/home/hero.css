@@ -183,6 +183,12 @@
 
 /* Entrada suave */
 @media (prefers-reduced-motion: no-preference) {
+  .hero-card {
+    opacity: 0;
+    transform: scale(0.985);
+    animation: hero-card-in 0.9s var(--mp-ease-out, cubic-bezier(.16, 1, .3, 1)) forwards;
+  }
+
   .hero-eyebrow,
   .hero-name,
   .hero-foot {
@@ -190,9 +196,13 @@
     transform: translateY(14px);
     animation: hero-in 0.7s var(--mp-ease-out, cubic-bezier(.16, 1, .3, 1)) forwards;
   }
-  .hero-eyebrow { animation-delay: 0.10s; }
-  .hero-name    { animation-delay: 0.22s; }
-  .hero-foot    { animation-delay: 0.38s; }
+  .hero-eyebrow { animation-delay: 0.20s; }
+  .hero-name    { animation-delay: 0.34s; }
+  .hero-foot    { animation-delay: 0.50s; }
+}
+
+@keyframes hero-card-in {
+  to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes hero-in {

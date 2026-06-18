@@ -4,6 +4,7 @@ import { getReleases, getLabels, getMedia, getReleasesJson, getYouTubeVideos, ge
 import { renderReleases, renderLabels, renderMedia, renderLiveSets } from "../ui/renderers.js";
 import { initMediaSliders } from "../features/slider.js";
 import { initLiveSets } from "../features/liveSets.js";
+import { staggerReveal } from "../features/scrollytelling.js";
 
 const nextFrame = () => new Promise((r) => requestAnimationFrame(() => r()));
 
@@ -89,6 +90,7 @@ async function hydrateReleases(root) {
 
     await nextFrame();
     bindReleaseNav(root);
+    staggerReveal(root.querySelectorAll(".track-card"), { trigger: root, start: "top 90%" });
   } catch (e) {
     console.error("[home] releases hydrate error:", e);
   } finally {
@@ -129,6 +131,7 @@ async function hydrateLiveSets(root) {
 
     await nextFrame();
     initLiveSets();
+    staggerReveal(root.querySelectorAll(".live-sets__item"), { trigger: root, start: "top 85%", stagger: 0.06 });
   } catch (e) {
     console.error("[home] live sets hydrate error:", e);
   } finally {

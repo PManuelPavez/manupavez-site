@@ -48,6 +48,11 @@
   flex: 0 0 clamp(150px, 22vw, 200px);
   scroll-snap-align: start;
   min-width: 0;
+  transition: transform 0.35s var(--mp-ease-groove);
+}
+
+.track-card--link:hover {
+  transform: translateY(-5px);
 }
 
 /* Flechas del slider */
