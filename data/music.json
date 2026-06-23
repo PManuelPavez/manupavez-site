@@ -1,0 +1,18 @@
+{
+  "updated_at": "2026-06-23T09:27:19.490Z",
+  "artist": {
+    "id": "1m15KTr2Qsf1JkdkBam27h",
+    "name": "Manu Pavez",
+    "followers": 0,
+    "popularity": 0,
+    "genres": [],
+    "image": "https://i.scdn.co/image/ab6761610000e5eb9f67823f0aef94db91fe685d",
+    "spotify_url": "https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h"
+  },
+  "stats": {
+    "total_releases": 0,
+    "top_tracks_popularity_avg": 0
+  },
+  "releases": [],
+  "top_tracks": []
+}
