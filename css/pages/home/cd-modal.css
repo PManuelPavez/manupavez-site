@@ -1,71 +1,63 @@
-/* =================== MODAL "CD CASE" =================== */
+/* =================== RELEASE REVEAL (inline, dentro de la sección) ===================
+   Panel que se despliega debajo del slider: el disco sale del artwork y aparecen
+   los links. No usa overlay fullscreen ni oscurece la web: es parte de la página.
+   ==================================================================================== */
 
-.cd-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
+.release-reveal {
   display: grid;
-  place-items: center;
-  padding: clamp(20px, 5vw, 48px);
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s var(--mp-ease-out, cubic-bezier(.16, 1, .3, 1));
+  margin-top: 6px;
 }
-.cd-modal[hidden] { display: none; }
-
-body.cd-modal-open { overflow: hidden; }
-
-/* Fondo oscurecido */
-.cd-modal__backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(3, 4, 10, 0.8);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  opacity: 0;
-  transition: opacity 0.45s ease;
+.release-reveal__inner {
+  overflow: hidden;
+  min-height: 0;
 }
-.cd-modal.is-open .cd-modal__backdrop { opacity: 1; }
+.release-reveal.is-open { grid-template-rows: 1fr; }
 
-.cd-modal__dialog {
+.release-reveal__content {
   position: relative;
-  z-index: 1;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
-  gap: clamp(20px, 3vw, 30px);
-  text-align: center;
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.45s ease, transform 0.55s var(--mp-ease-out, cubic-bezier(.16, 1, .3, 1));
+  justify-content: center;
+  gap: clamp(28px, 6vw, 72px);
+  max-width: 980px;
+  margin-inline: auto;
+  /* el padding-top reserva el aire para que el CD salga arriba sin recortarse */
+  padding: clamp(96px, 15vw, 168px) clamp(16px, 4vw, 40px) clamp(28px, 4vw, 44px);
 }
-.cd-modal.is-open .cd-modal__dialog { opacity: 1; transform: none; }
 
-.cd-modal__close {
+.release-reveal__close {
   position: absolute;
-  top: clamp(-44px, -6vw, -8px);
-  right: 0;
-  width: 40px;
-  height: 40px;
+  top: clamp(18px, 3vw, 32px);
+  right: clamp(10px, 2vw, 18px);
+  width: 38px;
+  height: 38px;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(5, 7, 17, 0.6);
+  border: 1px solid var(--mp-border);
+  background: rgba(5, 7, 17, 0.5);
   color: #fff;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.2s, background 0.2s ease, transform 0.2s ease;
 }
-.cd-modal__close:hover { background: #fff; color: #050509; transform: scale(1.05); }
+.release-reveal.is-open .release-reveal__close { opacity: 1; }
+.release-reveal__close:hover { background: #fff; color: #050509; transform: scale(1.05); }
 
 /* Escenario: tapa (cover) + disco */
 .cd-stage {
   position: relative;
-  width: clamp(220px, 58vw, 300px);
+  flex: 0 0 auto;
+  width: clamp(200px, 30vw, 300px);
   aspect-ratio: 1;
-  margin-top: clamp(48px, 16vw, 110px); /* aire para que el CD salga arriba */
   perspective: 1600px;
   transform-style: preserve-3d;
 }
 
-/* CD que sale hacia arriba (eje vertical) */
+/* CD que sale hacia arriba */
 .cd-disc {
   position: absolute;
   inset: 7%;
@@ -73,27 +65,22 @@ body.cd-modal-open { overflow: hidden; }
   z-index: 0;
   transform: translateY(0);
   transition: transform 1s cubic-bezier(.34, 1.12, .4, 1);
-  transition-delay: 0.16s;
-  filter: drop-shadow(0 30px 55px rgba(0, 0, 0, 0.6));
+  transition-delay: 0.18s;
+  filter: drop-shadow(0 26px 48px rgba(0, 0, 0, 0.55));
 }
-.cd-modal.is-open .cd-disc {
-  transform: translateY(-68%);
-}
+.release-reveal.is-open .cd-disc { transform: translateY(-62%); }
 
-/* Cara del disco: metálico + iridiscente + grooves. Gira de forma continua. */
+/* Cara del disco: metálico + iridiscente + grooves. Gira continuo cuando está abierto. */
 .cd-disc__face {
   position: absolute;
   inset: 0;
   border-radius: 50%;
   background:
-    /* grooves finos concéntricos */
     repeating-radial-gradient(circle at 50% 50%,
       rgba(0, 0, 0, 0.05) 0 1px, rgba(255, 255, 255, 0.05) 1px 2.4px),
-    /* difracción iridiscente (suave, no neón) */
     conic-gradient(from 0deg,
       #c2cdf0, #d6c3f0, #f3c9df, #f3d8c0, #eef0c2, #c4efd2, #c2e6f2,
       #d6c3f0, #f3c9df, #eef0c2, #c4efd2, #c2cdf0),
-    /* base metálica plateada */
     radial-gradient(circle at 50% 50%,
       #eef0f4 0%, #d3d6dd 42%, #b0b4bf 66%, #c9ccd4 82%, #9ea2ad 100%);
   background-blend-mode: overlay, soft-light, normal;
@@ -101,12 +88,9 @@ body.cd-modal-open { overflow: hidden; }
     inset 0 0 0 1px rgba(255, 255, 255, 0.4),
     inset 0 0 14px rgba(0, 0, 0, 0.25);
 }
-.cd-modal.is-open .cd-disc__face {
-  animation: cd-spin 5.5s linear infinite;
-}
+.release-reveal.is-open .cd-disc__face { animation: cd-spin 5.5s linear infinite; }
 @keyframes cd-spin { to { transform: rotate(360deg); } }
 
-/* Anillo de sujeción (mirror ring) + zona clara del hub */
 .cd-disc__face::before {
   content: "";
   position: absolute;
@@ -119,7 +103,6 @@ body.cd-modal-open { overflow: hidden; }
       rgba(150, 154, 165, 0.5) 60% 66%,
       rgba(10, 11, 18, 0.0) 67%);
 }
-/* Agujero central + aro plateado */
 .cd-disc__face::after {
   content: "";
   position: absolute;
@@ -131,7 +114,7 @@ body.cd-modal-open { overflow: hidden; }
     0 0 0 5px rgba(190, 194, 204, 0.35);
 }
 
-/* Brillo especular FIJO (no gira con el disco) → realismo */
+/* Brillo especular FIJO (no gira con el disco) */
 .cd-disc__shine {
   position: absolute;
   inset: 0;
@@ -146,7 +129,7 @@ body.cd-modal-open { overflow: hidden; }
       transparent 180deg, rgba(255, 255, 255, 0.14) 210deg, transparent 250deg);
 }
 
-/* Tapa = portada del release, gira ~45° (se abre como estuche) */
+/* Tapa = portada, gira ~45° (se abre como estuche) */
 .cd-case {
   position: absolute;
   inset: 0;
@@ -163,42 +146,43 @@ body.cd-modal-open { overflow: hidden; }
   object-fit: cover;
   border-radius: 12px;
   box-shadow:
-    0 30px 70px rgba(0, 0, 0, 0.6),
+    0 26px 60px rgba(0, 0, 0, 0.55),
     0 0 0 1px rgba(255, 255, 255, 0.08);
   backface-visibility: hidden;
   transition: box-shadow 0.6s ease;
 }
-.cd-modal.is-open .cd-case {
-  transform: rotateY(-46deg);
-}
-.cd-modal.is-open .cd-cover {
+.release-reveal.is-open .cd-case { transform: rotateY(-45deg); }
+.release-reveal.is-open .cd-cover {
   box-shadow:
-    34px 34px 80px rgba(0, 0, 0, 0.7),
+    30px 30px 70px rgba(0, 0, 0, 0.6),
     0 0 0 1px rgba(255, 255, 255, 0.10);
 }
 
 /* Info + links */
 .cd-info {
-  max-width: 420px;
+  flex: 1 1 240px;
+  max-width: 360px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  text-align: left;
   gap: 6px;
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity 0.5s ease 0.42s, transform 0.55s var(--mp-ease-out, cubic-bezier(.16, 1, .3, 1)) 0.42s;
+  transition: opacity 0.5s ease 0.4s, transform 0.55s var(--mp-ease-out, cubic-bezier(.16, 1, .3, 1)) 0.4s;
 }
-.cd-modal.is-open .cd-info { opacity: 1; transform: none; }
+.release-reveal.is-open .cd-info { opacity: 1; transform: none; }
+
 .cd-title {
   margin: 0;
   font-family: var(--font-primary);
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
   font-weight: 700;
   letter-spacing: -0.01em;
   color: #fff;
 }
 .cd-meta {
-  margin: 0 0 6px;
+  margin: 0 0 8px;
   font-size: 0.8rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -207,9 +191,8 @@ body.cd-modal-open { overflow: hidden; }
 .cd-links {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 10px;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 .cd-link {
   display: inline-flex;
@@ -223,36 +206,39 @@ body.cd-modal-open { overflow: hidden; }
   text-decoration: none;
   transition: transform 0.2s ease, filter 0.2s ease;
 }
-.cd-link--spotify {
-  background: #1db954;
-  color: #04140a;
-}
+.cd-link--spotify { background: #1db954; color: #04140a; }
 .cd-link:hover { transform: translateY(-2px); filter: brightness(1.05); }
-.cd-link-empty {
-  margin: 0;
-  color: var(--mp-muted);
-  font-size: 0.9rem;
+.cd-link-empty { margin: 0; color: var(--mp-muted); font-size: 0.9rem; }
+
+/* La card activa queda destacada */
+.track-card.is-revealing .track-card__cover {
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5), 0 0 0 2px var(--mp-accent-2);
 }
 
-/* Reduced motion / fallback: sin transforms, sólo fade */
-.cd-modal.cd-no-motion .cd-disc,
-.cd-modal.cd-no-motion .cd-case,
-.cd-modal.cd-no-motion .cd-info,
-.cd-modal.cd-no-motion .cd-modal__dialog,
-.cd-modal.cd-no-motion .cd-modal__backdrop {
+@media (min-width: 760px) {
+  .release-reveal__content { flex-wrap: nowrap; }
+  .cd-info { align-self: center; }
+}
+
+/* Reduced motion: sin giros, despliegue instantáneo */
+.release-reveal.cd-no-motion,
+.release-reveal.cd-no-motion .cd-disc,
+.release-reveal.cd-no-motion .cd-case,
+.release-reveal.cd-no-motion .cd-info,
+.release-reveal.cd-no-motion .release-reveal__close {
   transition-duration: 0.01ms !important;
   transition-delay: 0s !important;
 }
-.cd-modal.cd-no-motion.is-open .cd-disc { transform: translateY(-40%); }
-.cd-modal.cd-no-motion.is-open .cd-case { transform: none; }
-.cd-modal.cd-no-motion .cd-disc__face { animation: none !important; }
+.release-reveal.cd-no-motion .cd-disc__face { animation: none !important; }
+.release-reveal.cd-no-motion.is-open .cd-disc { transform: translateY(-38%); }
+.release-reveal.cd-no-motion.is-open .cd-case { transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .cd-disc, .cd-case, .cd-info, .cd-modal__dialog, .cd-modal__backdrop {
+  .release-reveal, .cd-disc, .cd-case, .cd-info, .release-reveal__close {
     transition-duration: 0.01ms !important;
     transition-delay: 0s !important;
   }
   .cd-disc__face { animation: none !important; }
-  .cd-modal.is-open .cd-case { transform: none; }
-  .cd-modal.is-open .cd-disc { transform: translateY(-40%); }
+  .release-reveal.is-open .cd-case { transform: none; }
+  .release-reveal.is-open .cd-disc { transform: translateY(-38%); }
 }

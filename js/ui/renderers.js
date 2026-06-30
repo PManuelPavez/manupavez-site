@@ -53,8 +53,11 @@ export function renderReleases(root, releases = []) {
 
       return `
         <${tag} class="track-card${href ? " track-card--link" : ""}" data-release-id="${id}" ${attrs}>
-          <div class="track-card__cover">
-            ${safeCover ? `<img src="${safeCover}" alt="Portada — ${title}" width="320" height="320" loading="lazy" decoding="async" draggable="false">` : ""}
+          <div class="track-card__art">
+            <span class="track-card__disc" aria-hidden="true"></span>
+            <div class="track-card__cover">
+              ${safeCover ? `<img src="${safeCover}" alt="Portada — ${title}" width="320" height="320" loading="lazy" decoding="async" draggable="false">` : ""}
+            </div>
           </div>
           <h3 class="track-card__title">${title}</h3>
           ${meta ? `<p class="track-card__meta">${meta}</p>` : ""}

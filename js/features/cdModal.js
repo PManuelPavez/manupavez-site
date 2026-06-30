@@ -1,66 +1,67 @@
 // js/features/cdModal.js
-// Modal "CD case": al clickear la portada de un release, la tapa gira ~45º
-// (se abre), sale un CD hacia arriba, se oscurece el fondo y aparecen los
-// links para escuchar. Lee los datos directo del DOM de la card.
+// Reveal inline del release: al clickear la portada, se despliega un panel
+// DENTRO de la sección de música (debajo del slider) donde el disco sale del
+// artwork y aparecen los links. NO oscurece la web: es parte de la página.
 import { prefersReducedMotion } from "../core/motion.js";
 
-let modal, coverImg, discEl, titleEl, metaEl, linksEl, dialogEl;
-let lastFocused = null;
-let closeTimer = null;
+let panel, coverImg, titleEl, metaEl, linksEl, activeCard = null;
 
 export function initCdModal() {
-  if (modal) return; // una sola vez
-  build();
+  if (panel) return; // una sola vez
+  const host = document.querySelector("#musica .section-inner") || document.querySelector("#musica");
+  if (!host) return;
+  build(host);
   document.addEventListener("click", onDocClick);
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal.classList.contains("is-open")) close();
+    if (e.key === "Escape") close();
   });
 }
 
-function build() {
-  modal = document.createElement("div");
-  modal.className = "cd-modal";
-  modal.setAttribute("hidden", "");
-  modal.innerHTML = `
-    <div class="cd-modal__backdrop" data-cd-close></div>
-    <div class="cd-modal__dialog" role="dialog" aria-modal="true" aria-label="Escuchar release">
-      <button class="cd-modal__close" type="button" data-cd-close aria-label="Cerrar">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-      <div class="cd-stage">
-        <div class="cd-disc" aria-hidden="true">
-          <div class="cd-disc__face"></div>
-          <div class="cd-disc__shine"></div>
+function build(host) {
+  panel = document.createElement("div");
+  panel.className = "release-reveal";
+  panel.setAttribute("aria-hidden", "true");
+  panel.innerHTML = `
+    <div class="release-reveal__inner">
+      <div class="release-reveal__content">
+        <button class="release-reveal__close" type="button" aria-label="Cerrar">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <div class="cd-stage">
+          <div class="cd-disc" aria-hidden="true">
+            <div class="cd-disc__face"></div>
+            <div class="cd-disc__shine"></div>
+          </div>
+          <div class="cd-case"><img class="cd-cover" alt="" /></div>
         </div>
-        <div class="cd-case">
-          <img class="cd-cover" alt="" />
+        <div class="cd-info">
+          <h3 class="cd-title"></h3>
+          <p class="cd-meta"></p>
+          <div class="cd-links"></div>
         </div>
-      </div>
-      <div class="cd-info">
-        <h3 class="cd-title"></h3>
-        <p class="cd-meta"></p>
-        <div class="cd-links"></div>
       </div>
     </div>`;
-  document.body.appendChild(modal);
+  host.appendChild(panel);
 
-  coverImg = modal.querySelector(".cd-cover");
-  discEl = modal.querySelector(".cd-disc");
-  titleEl = modal.querySelector(".cd-title");
-  metaEl = modal.querySelector(".cd-meta");
-  linksEl = modal.querySelector(".cd-links");
-  dialogEl = modal.querySelector(".cd-modal__dialog");
-
-  modal.querySelectorAll("[data-cd-close]").forEach((el) =>
-    el.addEventListener("click", close)
-  );
+  coverImg = panel.querySelector(".cd-cover");
+  titleEl = panel.querySelector(".cd-title");
+  metaEl = panel.querySelector(".cd-meta");
+  linksEl = panel.querySelector(".cd-links");
+  panel.querySelector(".release-reveal__close").addEventListener("click", close);
 }
 
 function onDocClick(e) {
   const card = e.target.closest(".track-card");
-  if (!card || !card.closest("[data-sb='releases']")) return;
-  e.preventDefault(); // no navegamos: abrimos el modal
-  openFromCard(card);
+  if (card && card.closest("[data-sb='releases']")) {
+    e.preventDefault(); // no navegamos: revelamos inline
+    if (activeCard === card) { close(); return; } // toggle
+    openFromCard(card);
+    return;
+  }
+  // click fuera del panel (y fuera de una card) → cerrar
+  if (panel.classList.contains("is-open") && !e.target.closest(".release-reveal")) {
+    close();
+  }
 }
 
 function openFromCard(card) {
@@ -77,20 +78,24 @@ function openFromCard(card) {
   metaEl.textContent = meta;
   buildLinks(spotify);
 
-  lastFocused = document.activeElement;
-  modal.removeAttribute("hidden");
-  clearTimeout(closeTimer);
+  if (activeCard) activeCard.classList.remove("is-revealing");
+  activeCard = card;
+  card.classList.add("is-revealing");
 
-  // Lock scroll (Lenis + body)
-  window.__mpLenis?.stop?.();
-  document.body.classList.add("cd-modal-open");
+  panel.setAttribute("aria-hidden", "false");
+  panel.classList.toggle("cd-no-motion", prefersReducedMotion());
 
-  // forzar reflow para que la transición corra desde el estado cerrado
-  void modal.offsetWidth;
-  requestAnimationFrame(() => modal.classList.add("is-open"));
+  const wasOpen = panel.classList.contains("is-open");
+  if (!wasOpen) {
+    void panel.offsetWidth; // reflow → la transición corre desde cerrado
+    requestAnimationFrame(() => panel.classList.add("is-open"));
+  }
 
-  if (prefersReducedMotion()) modal.classList.add("cd-no-motion");
-  modal.querySelector(".cd-modal__close")?.focus({ preventScroll: true });
+  // traer el reveal a la vista (suave)
+  setTimeout(() => {
+    if (window.__mpLenis?.scrollTo) window.__mpLenis.scrollTo(panel, { offset: -110 });
+    else panel.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, wasOpen ? 0 : 240);
 }
 
 function buildLinks(spotify) {
@@ -115,19 +120,9 @@ function buildLinks(spotify) {
 }
 
 function close() {
-  if (!modal.classList.contains("is-open")) return;
-  modal.classList.remove("is-open");
-  window.__mpLenis?.start?.();
-  document.body.classList.remove("cd-modal-open");
-
-  const done = () => {
-    modal.setAttribute("hidden", "");
-    modal.classList.remove("cd-no-motion");
-    if (lastFocused && lastFocused.focus) lastFocused.focus({ preventScroll: true });
-  };
-  if (prefersReducedMotion()) {
-    done();
-  } else {
-    closeTimer = setTimeout(done, 520);
-  }
+  if (!panel || !panel.classList.contains("is-open")) return;
+  panel.classList.remove("is-open");
+  panel.setAttribute("aria-hidden", "true");
+  if (activeCard) activeCard.classList.remove("is-revealing");
+  activeCard = null;
 }
