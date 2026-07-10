@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T09:26:18.679Z",
+  "updated_at": "2026-07-10T09:22:53.386Z",
   "artist": {
     "id": "1m15KTr2Qsf1JkdkBam27h",
     "name": "Manu Pavez",
@@ -84,7 +84,7 @@
       "artwork": "https://i.scdn.co/image/ab67616d0000b273f1c04e395e02a2219fe4c255",
       "album": "Vortex (Manu Pavez Remix)",
       "release_date": "2025-04-21",
-      "popularity": 0,
+      "popularity": 1,
       "duration_ms": 440329,
       "spotify_url": "https://open.spotify.com/track/7LI0644CJKOaoNQL4Q8Ag7"
     },
@@ -99,6 +99,16 @@
       "spotify_url": "https://open.spotify.com/track/4RbFxzU0GzH1LnDz5A6ktI"
     },
     {
+      "id": "6glb69y14OvEJIBWEznTMp",
+      "title": "Essence of Soul - Christian Monique Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b27360a7f3556b4bed58cf1128b5",
+      "album": "Ataraxia (Remixes)",
+      "release_date": "2023-02-06",
+      "popularity": 1,
+      "duration_ms": 442046,
+      "spotify_url": "https://open.spotify.com/track/6glb69y14OvEJIBWEznTMp"
+    },
+    {
       "id": "4hffrfYhRgdK1S0CK9CVcd",
       "title": "Levitate - Manu Pavez Remix",
       "artwork": "https://i.scdn.co/image/ab67616d0000b273d24d817053e32a65b5ab9ec7",
@@ -107,16 +117,6 @@
       "popularity": 1,
       "duration_ms": 448119,
       "spotify_url": "https://open.spotify.com/track/4hffrfYhRgdK1S0CK9CVcd"
-    },
-    {
-      "id": "70xfyTdnSzkrYgWZ6ZGTE4",
-      "title": "Dear Friends",
-      "artwork": "https://i.scdn.co/image/ab67616d0000b273d360d971f390e418697d8887",
-      "album": "Augmented 014 / Forty Cats",
-      "release_date": "2024-06-06",
-      "popularity": 1,
-      "duration_ms": 440655,
-      "spotify_url": "https://open.spotify.com/track/70xfyTdnSzkrYgWZ6ZGTE4"
     }
   ]
 }
