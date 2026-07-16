@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T07:55:06.263Z",
+  "updated_at": "2026-07-16T08:00:44.102Z",
   "artist": {
     "id": "1m15KTr2Qsf1JkdkBam27h",
     "name": "Manu Pavez",
@@ -422,7 +422,7 @@
       "artwork": "https://i.scdn.co/image/ab67616d0000b273e14bcf1831d741190644f955",
       "album": "After Hours – Classics 03 (604) [DJ Mix]",
       "release_date": "2026-07-10",
-      "popularity": 12,
+      "popularity": 14,
       "duration_ms": 472008,
       "spotify_url": "https://open.spotify.com/track/4vCg1Gd7HyVBHqdEtyE0Jz"
     },
@@ -497,14 +497,14 @@
       "spotify_url": "https://open.spotify.com/track/6glb69y14OvEJIBWEznTMp"
     },
     {
-      "id": "4RbFxzU0GzH1LnDz5A6ktI",
-      "title": "Human - Agustin Pengov Remix - Mixed",
-      "artwork": "https://i.scdn.co/image/ab67616d0000b273cc1b3bb209cb8af000521090",
-      "album": "Late Night Frequencies 05 | Progressive House (DJ Mix)",
-      "release_date": "2025-10-31",
-      "popularity": 2,
-      "duration_ms": 425086,
-      "spotify_url": "https://open.spotify.com/track/4RbFxzU0GzH1LnDz5A6ktI"
+      "id": "54veWDQ5Px44uEwfBS49Kh",
+      "title": "Hold Me",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b27344c04ad9ea5031cca989e622",
+      "album": "Noisy Silences",
+      "release_date": "2025-05-05",
+      "popularity": 1,
+      "duration_ms": 456000,
+      "spotify_url": "https://open.spotify.com/track/54veWDQ5Px44uEwfBS49Kh"
     }
   ]
 }
