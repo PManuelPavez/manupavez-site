@@ -1,20 +1,17 @@
 {
-  "updated_at": "2026-07-20T08:46:09.320Z",
+  "updated_at": "2026-07-21T08:13:27.827Z",
   "artist": {
     "id": "1m15KTr2Qsf1JkdkBam27h",
     "name": "Manu Pavez",
-    "followers": 570,
-    "popularity": 11,
-    "genres": [
-      "progressive house",
-      "organic house"
-    ],
+    "followers": 0,
+    "popularity": 0,
+    "genres": [],
     "image": "https://i.scdn.co/image/ab6761610000e5eb9f67823f0aef94db91fe685d",
     "spotify_url": "https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h"
   },
   "stats": {
     "total_releases": 39,
-    "top_tracks_popularity_avg": 0
+    "top_tracks_popularity_avg": 6
   },
   "releases": [
     {
@@ -408,5 +405,106 @@
       "total_tracks": 2
     }
   ],
-  "top_tracks": []
+  "top_tracks": [
+    {
+      "id": "4vCg1Gd7HyVBHqdEtyE0Jz",
+      "title": "Dawn in Port - Gaspar Aguilera & Manu Pavez - Mixed",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273e14bcf1831d741190644f955",
+      "album": "After Hours – Classics 03 (604) [DJ Mix]",
+      "release_date": "2026-07-10",
+      "popularity": 21,
+      "duration_ms": 472008,
+      "spotify_url": "https://open.spotify.com/track/4vCg1Gd7HyVBHqdEtyE0Jz"
+    },
+    {
+      "id": "1YKtA4sA4xXOISS2dPuBar",
+      "title": "TERMOSFERE",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273a758764c2deb556ccb4aacfc",
+      "album": "TERMOSFERE",
+      "release_date": "2024-04-17",
+      "popularity": 14,
+      "duration_ms": 209777,
+      "spotify_url": "https://open.spotify.com/track/1YKtA4sA4xXOISS2dPuBar"
+    },
+    {
+      "id": "0ajQCzeJJsZtbnObBbFQMv",
+      "title": "Sleepwalker - Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b2736f7fd4ef105228b5565e963c",
+      "album": "All Around Us / Sleepwalker",
+      "release_date": "2026-06-25",
+      "popularity": 8,
+      "duration_ms": 403361,
+      "spotify_url": "https://open.spotify.com/track/0ajQCzeJJsZtbnObBbFQMv"
+    },
+    {
+      "id": "6RlzVo3GmzgSQ5TsEmRMGU",
+      "title": "Jungle Trip",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b27320d8576eb7bee92b672b3e5e",
+      "album": "Various Artists - Revelations, Vol. 26",
+      "release_date": "2026-02-20",
+      "popularity": 4,
+      "duration_ms": 406779,
+      "spotify_url": "https://open.spotify.com/track/6RlzVo3GmzgSQ5TsEmRMGU"
+    },
+    {
+      "id": "2ktSK8eEg4okAY2MZnDrDV",
+      "title": "Downlifter - Gaspar Aguilera & Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b2732709d16fa3dda92e1031c642",
+      "album": "Downlifter (Gaspar Aguilera & Manu Pavez Remix)",
+      "release_date": "2025-02-08",
+      "popularity": 2,
+      "duration_ms": 443697,
+      "spotify_url": "https://open.spotify.com/track/2ktSK8eEg4okAY2MZnDrDV"
+    },
+    {
+      "id": "7IUpXu2RMbk7XggJ6P70cH",
+      "title": "Perspective",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273c867b6109f3a68b20c659a64",
+      "album": "Twenty Two",
+      "release_date": "2022-05-22",
+      "popularity": 3,
+      "duration_ms": 388007,
+      "spotify_url": "https://open.spotify.com/track/7IUpXu2RMbk7XggJ6P70cH"
+    },
+    {
+      "id": "7DQWfqmkJVbOmOE209IRRL",
+      "title": "Downlifter - Gaspar Aguilera & Manu Pavez Remix - Mixed",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273a8737ff6505775b3925ff318",
+      "album": "Progressive a-Go-Go, Vol. 20 (DJ Mix)",
+      "release_date": "2026-07-11",
+      "popularity": 3,
+      "duration_ms": 322543,
+      "spotify_url": "https://open.spotify.com/track/7DQWfqmkJVbOmOE209IRRL"
+    },
+    {
+      "id": "6glb69y14OvEJIBWEznTMp",
+      "title": "Essence of Soul - Christian Monique Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b27360a7f3556b4bed58cf1128b5",
+      "album": "Ataraxia (Remixes)",
+      "release_date": "2023-02-06",
+      "popularity": 1,
+      "duration_ms": 442046,
+      "spotify_url": "https://open.spotify.com/track/6glb69y14OvEJIBWEznTMp"
+    },
+    {
+      "id": "7LI0644CJKOaoNQL4Q8Ag7",
+      "title": "Vortex - Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273f1c04e395e02a2219fe4c255",
+      "album": "Vortex (Manu Pavez Remix)",
+      "release_date": "2025-04-21",
+      "popularity": 0,
+      "duration_ms": 440329,
+      "spotify_url": "https://open.spotify.com/track/7LI0644CJKOaoNQL4Q8Ag7"
+    },
+    {
+      "id": "56JuPcK1Oys42PHwi6L80S",
+      "title": "Welcome - Intro Mix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273c867b6109f3a68b20c659a64",
+      "album": "Twenty Two",
+      "release_date": "2022-05-22",
+      "popularity": 2,
+      "duration_ms": 434871,
+      "spotify_url": "https://open.spotify.com/track/56JuPcK1Oys42PHwi6L80S"
+    }
+  ]
 }
