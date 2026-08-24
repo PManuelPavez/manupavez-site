@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-23T06:28:18.372Z",
+  "updated_at": "2026-08-24T06:41:17.011Z",
   "artist": {
     "id": "1m15KTr2Qsf1JkdkBam27h",
     "name": "Manu Pavez",
@@ -34,7 +34,7 @@
       "artwork": "https://i.scdn.co/image/ab67616d0000b2736f7fd4ef105228b5565e963c",
       "album": "All Around Us / Sleepwalker",
       "release_date": "2026-06-25",
-      "popularity": 9,
+      "popularity": 8,
       "duration_ms": 403361,
       "spotify_url": "https://open.spotify.com/track/0ajQCzeJJsZtbnObBbFQMv"
     },
@@ -54,7 +54,7 @@
       "artwork": "https://i.scdn.co/image/ab67616d0000b273e012d9e36f06911bd502ecc3",
       "album": "Panacea",
       "release_date": "2026-08-07",
-      "popularity": 4,
+      "popularity": 5,
       "duration_ms": 378483,
       "spotify_url": "https://open.spotify.com/track/6dNhy8TOsPu1fhJDSfeAQi"
     },
