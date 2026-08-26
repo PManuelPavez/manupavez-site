@@ -1,18 +1,122 @@
 {
-  "updated_at": "2026-08-25T06:33:26.101Z",
+  "updated_at": "2026-08-26T06:35:31.681Z",
   "artist": {
     "id": "1m15KTr2Qsf1JkdkBam27h",
     "name": "Manu Pavez",
-    "followers": 0,
-    "popularity": 0,
-    "genres": [],
+    "followers": 581,
+    "popularity": 10,
+    "genres": [
+      "progressive house",
+      "organic house"
+    ],
     "image": "https://i.scdn.co/image/ab6761610000e5eb9f67823f0aef94db91fe685d",
     "spotify_url": "https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h"
   },
   "stats": {
     "total_releases": 0,
-    "top_tracks_popularity_avg": 0
+    "top_tracks_popularity_avg": 6
   },
   "releases": [],
-  "top_tracks": []
+  "top_tracks": [
+    {
+      "id": "4vCg1Gd7HyVBHqdEtyE0Jz",
+      "title": "Dawn in Port - Gaspar Aguilera & Manu Pavez - Mixed",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273e14bcf1831d741190644f955",
+      "album": "After Hours – Classics 03 (604) [DJ Mix]",
+      "release_date": "2026-07-10",
+      "popularity": 18,
+      "duration_ms": 472008,
+      "spotify_url": "https://open.spotify.com/track/4vCg1Gd7HyVBHqdEtyE0Jz"
+    },
+    {
+      "id": "0ajQCzeJJsZtbnObBbFQMv",
+      "title": "Sleepwalker - Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b2736f7fd4ef105228b5565e963c",
+      "album": "All Around Us / Sleepwalker",
+      "release_date": "2026-06-25",
+      "popularity": 8,
+      "duration_ms": 403361,
+      "spotify_url": "https://open.spotify.com/track/0ajQCzeJJsZtbnObBbFQMv"
+    },
+    {
+      "id": "1YKtA4sA4xXOISS2dPuBar",
+      "title": "TERMOSFERE",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273a758764c2deb556ccb4aacfc",
+      "album": "TERMOSFERE",
+      "release_date": "2024-04-17",
+      "popularity": 7,
+      "duration_ms": 209777,
+      "spotify_url": "https://open.spotify.com/track/1YKtA4sA4xXOISS2dPuBar"
+    },
+    {
+      "id": "6dNhy8TOsPu1fhJDSfeAQi",
+      "title": "Nadie - Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273e012d9e36f06911bd502ecc3",
+      "album": "Panacea",
+      "release_date": "2026-08-07",
+      "popularity": 5,
+      "duration_ms": 378483,
+      "spotify_url": "https://open.spotify.com/track/6dNhy8TOsPu1fhJDSfeAQi"
+    },
+    {
+      "id": "7IUpXu2RMbk7XggJ6P70cH",
+      "title": "Perspective",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273c867b6109f3a68b20c659a64",
+      "album": "Twenty Two",
+      "release_date": "2022-05-22",
+      "popularity": 4,
+      "duration_ms": 388007,
+      "spotify_url": "https://open.spotify.com/track/7IUpXu2RMbk7XggJ6P70cH"
+    },
+    {
+      "id": "2ktSK8eEg4okAY2MZnDrDV",
+      "title": "Downlifter - Gaspar Aguilera & Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b2732709d16fa3dda92e1031c642",
+      "album": "Downlifter (Gaspar Aguilera & Manu Pavez Remix)",
+      "release_date": "2025-02-08",
+      "popularity": 3,
+      "duration_ms": 443697,
+      "spotify_url": "https://open.spotify.com/track/2ktSK8eEg4okAY2MZnDrDV"
+    },
+    {
+      "id": "6RlzVo3GmzgSQ5TsEmRMGU",
+      "title": "Jungle Trip",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b27320d8576eb7bee92b672b3e5e",
+      "album": "Various Artists - Revelations, Vol. 26",
+      "release_date": "2026-02-20",
+      "popularity": 3,
+      "duration_ms": 406779,
+      "spotify_url": "https://open.spotify.com/track/6RlzVo3GmzgSQ5TsEmRMGU"
+    },
+    {
+      "id": "2FhAKX5okvh5Nv1vNV56ED",
+      "title": "Dawn in Port - Gaspar Aguilera & Manu Pavez",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273e645e26c93fd032157365e5d",
+      "album": "Dawn in Port",
+      "release_date": "2023-10-20",
+      "popularity": 3,
+      "duration_ms": 487991,
+      "spotify_url": "https://open.spotify.com/track/2FhAKX5okvh5Nv1vNV56ED"
+    },
+    {
+      "id": "1abwgZ7wid9UVPOY0dklU7",
+      "title": "Intencion - Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273769296bda48750b7dc00bc9e",
+      "album": "Intencion (Manu Pavez Remix)",
+      "release_date": "2026-07-31",
+      "popularity": 2,
+      "duration_ms": 440655,
+      "spotify_url": "https://open.spotify.com/track/1abwgZ7wid9UVPOY0dklU7"
+    },
+    {
+      "id": "7u6cNYqfUElWP7OKXJiYgZ",
+      "title": "Kta in My Universe - Gaspar Aguilera & Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273f3d5ff8e947850085a279b9c",
+      "album": "Kta in My Universe (Gaspar Aguilera & Manu Pavez Remix)",
+      "release_date": "2023-09-29",
+      "popularity": 2,
+      "duration_ms": 440657,
+      "spotify_url": "https://open.spotify.com/track/7u6cNYqfUElWP7OKXJiYgZ"
+    }
+  ]
 }
