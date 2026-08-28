@@ -1,14 +1,11 @@
 {
-  "updated_at": "2026-08-27T17:11:51.151Z",
+  "updated_at": "2026-08-28T17:58:46.528Z",
   "artist": {
     "id": "1m15KTr2Qsf1JkdkBam27h",
     "name": "Manu Pavez",
-    "followers": 581,
-    "popularity": 10,
-    "genres": [
-      "progressive house",
-      "organic house"
-    ],
+    "followers": 0,
+    "popularity": 0,
+    "genres": [],
     "image": "https://i.scdn.co/image/ab6761610000e5eb9f67823f0aef94db91fe685d",
     "spotify_url": "https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h"
   },
