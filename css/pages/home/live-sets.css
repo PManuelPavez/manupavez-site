@@ -6,7 +6,7 @@
   --live-index-w: clamp(2.4rem, 6vw, 3.4rem);
   --live-col-gap: clamp(1rem, 4vw, 2.5rem);
   position: relative;
-  padding: clamp(28px, 4.5vw, 56px) clamp(16px, 4vw, 40px);
+  padding: clamp(20px, 3vw, 36px) clamp(16px, 4vw, 40px) clamp(14px, 2vw, 24px);
 }
 
 .live-sets__card {
@@ -34,7 +34,7 @@
 .live-sets__inner {
   position: relative;
   z-index: 1;
-  padding: clamp(1.8rem, 4.5vw, 3.25rem) clamp(1.35rem, 3.5vw, 2.75rem);
+  padding: clamp(1.2rem, 3vw, 2rem) clamp(1.35rem, 3.5vw, 2.75rem) clamp(1rem, 2.4vw, 1.6rem);
   color: #fff;
 }
 
@@ -319,7 +319,7 @@
 }
 
 .live-sets__foot {
-  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  margin-top: clamp(0.9rem, 2.4vw, 1.4rem);
 }
 
 @media (prefers-reduced-motion: reduce) {

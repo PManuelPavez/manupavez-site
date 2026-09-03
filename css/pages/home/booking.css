@@ -11,7 +11,7 @@
   align-items: center;
   max-width: 1100px;
   margin-inline: auto;
-  padding: clamp(24px, 4vw, 48px);
+  padding: clamp(18px, 3vw, 32px);
   border-radius: clamp(20px, 3vw, 32px);
   background:
     radial-gradient(120% 120% at 0% 0%, rgba(89, 198, 186, 0.10), transparent 55%),

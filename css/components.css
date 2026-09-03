@@ -166,7 +166,7 @@
   display: block;
   width: min(220px, 50%);
   height: 1px;
-  margin: 0 auto clamp(44px, 6vw, 84px);
+  margin: 0 auto clamp(20px, 3vw, 40px);
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.58), transparent);
 }
 
