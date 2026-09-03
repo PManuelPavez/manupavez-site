@@ -9,7 +9,7 @@
 }
 
 #sellos h2 {
-  margin: 0 0 clamp(28px, 4vw, 44px);
+  margin: 0 0 clamp(18px, 2.5vw, 28px);
 }
 
 .labels-grid {

@@ -154,7 +154,7 @@
   max-width: 1120px;
   margin-inline: auto;
   padding-inline: 16px;
-  padding-block: clamp(40px, 6vw, 80px);   /* ← AIRE entre secciones (ref. Polo) */
+  padding-block: clamp(24px, 3.5vw, 52px);   /* ← AIRE entre secciones (más compacto) */
 }
 
 /* ════════════════════════════════════════════════════════════

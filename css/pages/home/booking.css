@@ -1,7 +1,7 @@
 /* =================== BOOKING (destacado, 2 columnas) =================== */
 
 .booking--featured {
-  padding-block: clamp(56px, 9vw, 110px);
+  padding-block: clamp(32px, 5vw, 64px);
 }
 
 .booking-shell {

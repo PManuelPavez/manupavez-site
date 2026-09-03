@@ -6,7 +6,7 @@
   --live-index-w: clamp(2.4rem, 6vw, 3.4rem);
   --live-col-gap: clamp(1rem, 4vw, 2.5rem);
   position: relative;
-  padding: clamp(48px, 8vw, 96px) clamp(16px, 4vw, 40px);
+  padding: clamp(28px, 4.5vw, 56px) clamp(16px, 4vw, 40px);
 }
 
 .live-sets__card {

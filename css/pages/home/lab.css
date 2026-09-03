@@ -1,7 +1,7 @@
 /* =================== LAB (compacto — tarjeta baja en la home) =================== */
 
 #lab.lab-compact {
-  padding-block: clamp(40px, 6vw, 72px);
+  padding-block: clamp(24px, 3.5vw, 44px);
 }
 
 .lab-compact__card {
