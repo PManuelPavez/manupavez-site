@@ -132,6 +132,20 @@
   transform: translateY(-1px);
 }
 
+/* Variante secundaria (para PRESSKIT al lado de BOOKING) */
+.header-cta--ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.78);
+}
+.header-cta--ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.header-actions { gap: 8px; }
+
 /* HAMBURGER */
 
 .menu-toggle {
