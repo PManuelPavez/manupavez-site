@@ -116,15 +116,18 @@ Los sellos donde editaste organizan showcases. Escribir directo a A&R.
 Hola [nombre],
 
 Soy Manu Pavez, DJ y productor de progressive house de Pergamino,
-Argentina. Vengo de warm-ups compartiendo cabina con Alex O'Rion,
-Roy Rosenfeld y Soundexile (Sun to Sun Festival, dic 2025) y edito
-en Sound Avenue, Mango Alley y 3rd Avenue.
+Argentina. Mi música fue apoyada por Nick Warren, Sahar Z y DJ Ruby,
+y edito en Sound Avenue, Mango Alley, 3rd Avenue y Droid9 (entre 20+
+sellos internacionales).
+
+Recientemente compartí cabina con Alex O'Rion, Roy Rosenfeld y
+Soundexile en el Sun to Sun Festival (dic 2025), y con Graziano Raffa
+en fechas locales.
 
 [SI ES BRASIL/RIO:]
-Voy a estar en Rio de Janeiro toda la primera quincena de enero
-por un tema personal. Me encantaría cerrar una fecha aprovechando
-que estoy en la ciudad — puedo cerrar por cachet + hospedaje sin
-sumar pasaje.
+Voy a estar en Rio de Janeiro en enero por un tema personal. Me
+encantaría cerrar una fecha aprovechando que estoy en la ciudad —
+puedo cerrar por cachet + hospedaje sin sumar pasaje.
 
 [SI ES ARG/LATAM:]
 Me encantaría proponerme para una fecha en [nombre fiesta] — tengo
@@ -132,11 +135,14 @@ material fresco y un warm-up muy cuidado, pensado para preparar
 el momento antes del prime time.
 
 Set reciente: [URL SoundCloud]
-Presskit: [manupavez.com/presskit]
+Presskit: manupavez.com/presskit
 
 Quedo atento,
 Manu
 ```
+
+> **Tip:** en el asunto del mail o DM poné directo `[NICK WARREN SUPPORTED] Booking Manu Pavez / [ciudad]`.
+> Ese "supported by" en el subject aumenta la tasa de apertura para promoters progressive.
 
 ---
 

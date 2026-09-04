@@ -84,19 +84,27 @@
 .hero-eyebrow a:hover { color: #fff; }
 .hero-eyebrow a:hover::after { transform: scaleX(1); opacity: 0.8; }
 
-/* Nombre gigante centrado abajo, encima de la foto */
-.hero-name {
+/* Bloque inferior del card: redes + nombre, apilados */
+.hero-card-bottom {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: clamp(8px, 2vw, 26px);
+  bottom: clamp(20px, 3vw, 40px);
   z-index: 2;
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(18px, 2.6vw, 32px);
   padding-inline: clamp(8px, 2vw, 20px);
+}
+
+/* Nombre gigante centrado */
+.hero-name {
+  margin: 0;
   text-align: center;
   font-family: var(--font-primary);
   font-weight: 700;
-  font-size: clamp(2.9rem, 15.5vw, 12rem);
+  font-size: clamp(2.6rem, 13vw, 11rem);
   line-height: 0.88;
   letter-spacing: -0.02em;
   text-transform: uppercase;
@@ -104,61 +112,38 @@
   text-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
 }
 
-/* Pie del hero: bajada + CTAs + redes, sobre el fondo oscuro */
+/* Pie del hero: SOLO el CTA BOOKING */
 .hero-foot {
   flex: 0 0 auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 16px;
+  justify-content: center;
   padding-inline: 12px;
 }
 
-.hero-sub {
-  margin: 0;
-  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
-  line-height: 1.65;
-  color: var(--color-text-muted);
-  max-width: 540px;
-}
-
-.hero-ctas,
-.hero-ctas-main {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.hero-secondary {
+.hero-cta-single {
+  min-width: clamp(200px, 30vw, 260px);
+  padding: 14px 34px;
   font-size: 0.82rem;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.6);
-  text-decoration: none;
-  position: relative;
-  transition: color 0.25s ease, transform 0.25s ease;
+  letter-spacing: 0.28em;
 }
-.hero-secondary:hover { color: #fff; transform: translateX(2px); }
 
-/* Redes */
+/* Redes: dentro del bloque inferior (arriba del nombre) */
 .hero-social {
-  margin: 4px 0 0;
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+  margin: 0;
   padding: 0;
+  display: inline-flex;
+  gap: clamp(10px, 1.6vw, 16px);
   list-style: none;
 }
 .hero-social a {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  justify-content: center;
+  width: clamp(38px, 5vw, 46px);
+  height: clamp(38px, 5vw, 46px);
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
   background: rgba(5, 7, 17, 0.55);
   color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
@@ -167,18 +152,12 @@
   text-transform: uppercase;
   transition: all 0.2s ease;
 }
-.hero-social a svg { width: 14px; height: 14px; display: block; }
+.hero-social a svg { width: clamp(16px, 2vw, 20px); height: clamp(16px, 2vw, 20px); display: block; }
 .hero-social a:hover {
   color: #050509;
   background: #fff;
   border-color: #fff;
-  transform: translateY(-1px);
-}
-
-@media (max-width: 640px) {
-  .hero-social a span { display: none; }
-  .hero-social a { padding: 10px; }
-  .hero-social a svg { width: 16px; height: 16px; }
+  transform: translateY(-2px);
 }
 
 /* Entrada suave */

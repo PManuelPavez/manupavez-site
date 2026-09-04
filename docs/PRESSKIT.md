@@ -6,15 +6,15 @@
 
 ---
 
-## SHORT BIO (ES) — 60 palabras
+## SHORT BIO (ES) — 65 palabras
 
-Manu Pavez es DJ y productor argentino de progressive & melodic house, nacido en Pergamino (2001). Con firmas en Sound Avenue, Mango Alley y 3rd Avenue, construye warm-ups elegantes y opening sets con narrativa: del aire hipnótico al prime time sin excesos. Compartió cabina con Alex O'Rion, Roy Rosenfeld y Soundexile en el Sun to Sun Festival 2025, y su música fue apoyada por Ezequiel Arias, John Cosani, Ricky Ryan y Antrim.
+Manu Pavez es DJ y productor argentino de progressive & melodic house, nacido en Pergamino (2001). Su música fue apoyada por **Nick Warren, Sahar Z y DJ Ruby**, con firmas en Sound Avenue, Mango Alley, 3rd Avenue, Droid9 y AH Digital entre 20+ sellos internacionales. Warm-up specialist con narrativa: del aire hipnótico al prime time sin excesos. Compartió cabina con Alex O'Rion, Roy Rosenfeld, Soundexile y Graziano Raffa.
 
 ---
 
-## SHORT BIO (EN) — 60 words
+## SHORT BIO (EN) — 65 words
 
-Manu Pavez is an Argentinian DJ and producer of progressive & melodic house, born in Pergamino (2001). With releases on Sound Avenue, Mango Alley and 3rd Avenue, he crafts elegant warm-ups and opening sets with narrative — from hypnotic air to prime time without excess. He shared stage with Alex O'Rion, Roy Rosenfeld and Soundexile at Sun to Sun Festival 2025, and his music has been supported by Ezequiel Arias, John Cosani, Ricky Ryan and Antrim.
+Manu Pavez is an Argentinian DJ and producer of progressive & melodic house, born in Pergamino (2001). His music has been supported by **Nick Warren, Sahar Z and DJ Ruby**, with releases on Sound Avenue, Mango Alley, 3rd Avenue, Droid9 and AH Digital among 20+ international labels. Warm-up specialist with narrative — from hypnotic air to prime time without excess. Shared stage with Alex O'Rion, Roy Rosenfeld, Soundexile and Graziano Raffa.
 
 ---
 
@@ -33,13 +33,18 @@ Manu Pavez is an Argentinian DJ and producer of progressive & melodic house, bor
 
 ---
 
-## SELLOS
+## SELLOS (20+)
 
+**Destacados:**
 - **Sound Avenue**
 - **The Mango Alley**
 - **3rd Avenue**
 
-*(Ediciones adicionales via Anjunadeep pool, Bedrock Records remix, Global Underground.)*
+**Catálogo completo:**
+Droid9 · Droid9 South America · AH Digital · Future Avenue · La Foresta Recordings ·
+Balkan Connection South America · Venture Records · Massive Harmony Records · Arcedian ·
+Musique de Lune · Soundteller Records · Symmetric Records · Electronic Groove Records ·
+Traful · MADDEN · For Senses Records · Coral Tide.
 
 ---
 
@@ -54,8 +59,12 @@ Manu Pavez is an Argentinian DJ and producer of progressive & melodic house, bor
 
 ## SUPPORT ARTÍSTICO
 
-Música apoyada por:
-**Ezequiel Arias · John Cosani · Ricky Ryan · Antrim**
+**Support internacional:**
+Nick Warren · Sahar Z · DJ Ruby · Fortycats · JFR
+
+**Support LATAM:**
+Ezequiel Arias · John Cosani · Graziano Raffa · Emi Galvan · Franco Armellini ·
+Ricky Ryan · Antrim · Mayro · Nacho Lopez
 
 ---
 

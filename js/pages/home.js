@@ -104,7 +104,8 @@ async function hydrateReleases(root) {
 async function hydrateLiveSets(root) {
   try {
     root.setAttribute("data-loading", "true");
-    const sets = await getLiveSets();
+    const allSets = await getLiveSets();
+    const sets = allSets.slice(0, 4); // solo los primeros 4
     renderLiveSets(root, sets);
     root.setAttribute("data-hydrated", "true");
 

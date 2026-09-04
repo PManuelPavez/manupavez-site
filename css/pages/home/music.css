@@ -49,9 +49,9 @@
 }
 .tracks-row img { -webkit-user-drag: none; user-select: none; }
 
-/* Card: portada + título + "sello • año" */
+/* Card: portada + título + "sello • año" (miniaturas más chicas) */
 .track-card {
-  flex: 0 0 clamp(150px, 22vw, 200px);
+  flex: 0 0 clamp(120px, 16vw, 160px);
   min-width: 0;
   transform-origin: center 45%;
   will-change: transform, opacity;
@@ -230,6 +230,6 @@
 
 @media (max-width: 560px) {
   .track-card {
-    flex-basis: clamp(140px, 44vw, 180px);
+    flex-basis: clamp(110px, 36vw, 150px);
   }
 }
