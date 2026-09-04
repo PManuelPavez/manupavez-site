@@ -73,6 +73,18 @@
   box-shadow: 0 0 0 4px rgba(89, 198, 186, 0.18);
 }
 
+.booking-highlight {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(89, 198, 186, 0.22);
+  background: rgba(89, 198, 186, 0.06);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--mp-text);
+}
+.booking-highlight strong { font-weight: 600; }
+
 .booking-direct {
   margin: 0;
   font-size: 0.9rem;
