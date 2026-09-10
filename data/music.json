@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T10:33:10.844Z",
+  "updated_at": "2026-09-10T10:22:09.322Z",
   "artist": {
     "id": "1m15KTr2Qsf1JkdkBam27h",
     "name": "Manu Pavez",
@@ -79,16 +79,6 @@
       "spotify_url": "https://open.spotify.com/track/6dNhy8TOsPu1fhJDSfeAQi"
     },
     {
-      "id": "6br0ZaKdl1fS2YWdF11xIc",
-      "title": "655",
-      "artwork": "https://i.scdn.co/image/ab67616d0000b27344c04ad9ea5031cca989e622",
-      "album": "Noisy Silences",
-      "release_date": "2025-05-05",
-      "popularity": 1,
-      "duration_ms": 448060,
-      "spotify_url": "https://open.spotify.com/track/6br0ZaKdl1fS2YWdF11xIc"
-    },
-    {
       "id": "6RlzVo3GmzgSQ5TsEmRMGU",
       "title": "Jungle Trip",
       "artwork": "https://i.scdn.co/image/ab67616d0000b27320d8576eb7bee92b672b3e5e",
@@ -99,14 +89,14 @@
       "spotify_url": "https://open.spotify.com/track/6RlzVo3GmzgSQ5TsEmRMGU"
     },
     {
-      "id": "7LI0644CJKOaoNQL4Q8Ag7",
-      "title": "Vortex - Manu Pavez Remix",
-      "artwork": "https://i.scdn.co/image/ab67616d0000b273f1c04e395e02a2219fe4c255",
-      "album": "Vortex (Manu Pavez Remix)",
-      "release_date": "2025-04-21",
-      "popularity": 0,
-      "duration_ms": 440329,
-      "spotify_url": "https://open.spotify.com/track/7LI0644CJKOaoNQL4Q8Ag7"
+      "id": "6br0ZaKdl1fS2YWdF11xIc",
+      "title": "655",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b27344c04ad9ea5031cca989e622",
+      "album": "Noisy Silences",
+      "release_date": "2025-05-05",
+      "popularity": 1,
+      "duration_ms": 448060,
+      "spotify_url": "https://open.spotify.com/track/6br0ZaKdl1fS2YWdF11xIc"
     },
     {
       "id": "2ktSK8eEg4okAY2MZnDrDV",
@@ -117,6 +107,16 @@
       "popularity": 2,
       "duration_ms": 443697,
       "spotify_url": "https://open.spotify.com/track/2ktSK8eEg4okAY2MZnDrDV"
+    },
+    {
+      "id": "7LI0644CJKOaoNQL4Q8Ag7",
+      "title": "Vortex - Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273f1c04e395e02a2219fe4c255",
+      "album": "Vortex (Manu Pavez Remix)",
+      "release_date": "2025-04-21",
+      "popularity": 0,
+      "duration_ms": 440329,
+      "spotify_url": "https://open.spotify.com/track/7LI0644CJKOaoNQL4Q8Ag7"
     }
   ]
 }
