@@ -22,3 +22,6 @@ __pycache__/
 venv/
 env/
 *.pyc
+img/indexPERFIL.png
+img/press/
+img/bg-*.webm

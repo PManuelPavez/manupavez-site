@@ -3,14 +3,17 @@ import { getClinics } from "../data/content.js";
 import { sendLead } from "../data/leadMailer.js";
 
 export function initClinicas() {
-  const isPage = document.body.dataset.page === "clinicas";
-  if (!isPage) return;
+  const page = document.body.dataset.page;
+  const isClinicas = page === "clinicas";
+  const isAplicar = page === "aplicar";
+  if (!isClinicas && !isAplicar) return;
 
   initForm();
 
-  if (hasSupabase()) {
+  // La grilla de planes solo va en /clinicas — /aplicar no la necesita.
+  if (isClinicas && hasSupabase()) {
     loadClinics();
-  } else {
+  } else if (isClinicas) {
     console.warn("[clinicas] Supabase no configurado — listado de clínicas no disponible");
   }
 }
@@ -128,6 +131,15 @@ function initForm() {
     submitBtn.textContent = "Enviando";
 
     try {
+      // Origen del lead: página + campaña (para trackear IG vs directo)
+      const params = new URLSearchParams(window.location.search);
+      const page = document.body.dataset.page || "unknown";
+      const utmSource = params.get("utm_source") || "direct";
+      const utmMedium = params.get("utm_medium") || "";
+      const utmCampaign = params.get("utm_campaign") || "";
+      const origen = [`page:${page}`, `source:${utmSource}`, utmMedium && `medium:${utmMedium}`, utmCampaign && `campaign:${utmCampaign}`]
+        .filter(Boolean).join(" · ");
+
       // Envío directo al mail (FormSubmit) — sin API keys ni backend
       await sendLead(
         {
@@ -136,8 +148,9 @@ function initForm() {
           Nivel: data.level || "",
           Objetivo: data.goal || "",
           Mensaje: data.message || "",
+          Origen: origen,
         },
-        { subject: `Aplicación Frequency Lab — ${data.name || "sin nombre"}` }
+        { subject: `Aplicación Frequency Lab — ${data.name || "sin nombre"} [${utmSource}]` }
       );
 
       // Mostrar éxito

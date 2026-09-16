@@ -1,0 +1,47 @@
+/* =========================
+   MOBILE PERFORMANCE OPTIMIZATIONS
+   Reduce cost de GPU: backdrop-filter y will-change son las propiedades
+   más caras para el compositor. En mobile la mayoría es innecesaria y
+   quema batería + drop de FPS.
+   ========================= */
+
+@media (max-width: 720px) {
+  /* backdrop-filter: reemplazamos por bg más opaco (0 GPU cost vs blur)   */
+  .site-header.fixed,
+  .header-cta,
+  .mobile-nav,
+  .release-nav,
+  .hero-social a,
+  .cd-modal__backdrop {
+    -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+    background-color: rgba(5, 7, 17, 0.94) !important;
+  }
+
+  /* will-change: solo debería estar activo durante interacción.
+     En mobile lo desactivamos permanentemente (GSAP/JS lo aplica dinámico
+     durante drags/anim cuando corresponde). */
+  .track-card,
+  .track-card__cover img,
+  .release-progress__bar,
+  .labels-track,
+  .photo-strip-track,
+  .swiper-wrapper {
+    will-change: auto !important;
+  }
+}
+
+/* Marquee LATAM: pausar cuando NO está en viewport (ahorro CPU/GPU).
+   La clase la agrega JS con IntersectionObserver. */
+.supports-latam:not(.is-visible) .supports-latam__track {
+  animation-play-state: paused;
+}
+
+/* Reduced motion global: hace lo mismo pero por accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .supports-latam__track,
+  .labels-track,
+  .photo-strip-track {
+    animation: none !important;
+  }
+}

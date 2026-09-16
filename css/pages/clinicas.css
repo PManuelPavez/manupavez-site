@@ -23,7 +23,7 @@
   inset: -28px;                 /* evita que el blur deje bordes claros */
   background-size: cover;
   background-position: center 35%;
-  filter: blur(15px) brightness(0.42) saturate(1.05);
+  filter: blur(10px) brightness(0.42) saturate(1.05);
   transform: scale(1.08);
 }
 /* Tinte de marca: azul + teal sobre oscuro, para sentar la base */
@@ -114,7 +114,7 @@ body[data-page="clinicas"] h1{
 
 .lab-lead{
   font-size: clamp(1.2rem, 2.2vw, 1.6rem);
-  font-weight: 500;
+  font-weight: 600;
   opacity: .9;
 }
 
@@ -531,7 +531,7 @@ body[data-page="clinicas"] .section{
 }
 
 .lab-lead{
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.4;
 }
 
@@ -688,7 +688,7 @@ body[data-page="clinicas"] .section + .section { margin-top: 0; }
 
 .lab-form label {
   font-size: 0.68rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.55);

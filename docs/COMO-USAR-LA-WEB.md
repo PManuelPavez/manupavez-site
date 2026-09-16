@@ -37,6 +37,7 @@ Nunca mandes "manupavez.com" a secas. Mandá el link **específico** según el d
 | **Booker que pide "info"** | `manupavez.com/presskit.html` | La página de presskit tiene todo formal para descargar |
 | **Colega DJ / sello / artista** | `manupavez.com/bio.html` | La historia editorial, para networking humano |
 | **Amigo/fan/casual** | `manupavez.com` | La home entera es OK |
+| **🆕 Link de bio Instagram · aplicar al Lab** | **`manupavez.com/aplicar`** | Landing chica dedicada. Solo mini-hero + form + qué esperar. Cero distracciones. Trackea automático `utm_source=instagram`. |
 | **Mail cold outreach** | Firma con **los 3 links** al final: música · presskit · booking |
 
 ---
@@ -118,6 +119,26 @@ Sabés que la estrategia está funcionando cuando:
 - [ ] Tu Instagram creció por venir de esas fechas (tag + repost del venue)
 
 Si a los 90 días no ves 3 de esos 5 checks → el problema no es la web, es el **volumen del outreach**. Duplicalo.
+
+---
+
+## PARTE 6.5 · 🆕 LINK DE APLICACIÓN FREQUENCY LAB (para IG)
+
+**URL para el link de bio en Instagram:** `manupavez.com/aplicar`
+
+### Cómo funciona
+1. Cuando alguien clickea desde IG, aterriza en una **landing dedicada minimalista**: mini-hero + form 4 pasos + "qué pasa después".
+2. **Automáticamente** se le agrega `?utm_source=instagram&utm_medium=bio&utm_campaign=lab-apply` a la URL — quedas trackeando de dónde vino.
+3. Cuando llenan el form y aprietan enviar, el mail que te llega incluye una línea **"Origen: page:aplicar · source:instagram · medium:bio · campaign:lab-apply"** — así sabés que el lead vino de tu bio.
+4. Si alguien llega desde otro lado (ej. Google), el origen dirá `source:direct` o el UTM real que traía.
+
+### Para tu bio de IG
+- Reemplazá el link actual por: `manupavez.com/aplicar`
+- Historia con "Aplicá al Lab" → link sticker apuntando a esa URL
+- Reels con CTA "link en bio" → mismo URL
+
+### Ver los leads
+Los leads siguen llegando al mismo mail que ya usás para el form del Lab. La única diferencia es la **línea "Origen"** y el **subject** que ahora incluye `[instagram]` cuando vienen de IG.
 
 ---
 

@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>Aplicar al Frequency Lab — Manu Pavez</title>
+  <meta name="description" content="Mentoría 1:1 para DJs y productores. Trabajamos sobre tu proyecto real. Cupos limitados por trimestre." />
+  <meta name="robots" content="noindex,follow" />
+  <meta name="theme-color" content="#050711" />
+
+  <!-- Canonical apunta a la landing completa (evita duplicados) -->
+  <link rel="canonical" href="https://manupavez.com/clinicas.html" />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Aplicar al Frequency Lab" />
+  <meta property="og:description" content="Mentoría 1:1 para DJs y productores. Cupos limitados." />
+  <meta property="og:url" content="https://manupavez.com/aplicar" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://manupavez.com/logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Fuentes (compartidas con el resto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Estilos base + los específicos de clínicas (para el form multi-step) -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages/clinicas.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="css/mobile-perf.css" />
+
+  <!-- Estilos propios de esta landing chica -->
+  <style>
+    body[data-page="aplicar"] {
+      background: #050711;
+      color: #f9f9ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Sin nav grande — un header mínimo */
+    .apply-header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px clamp(16px, 4vw, 32px);
+      z-index: 5;
+    }
+    .apply-header__brand { line-height: 0; }
+    .apply-header__brand img { width: 32px; height: 32px; opacity: 0.9; }
+    .apply-header__more {
+      font-size: 0.7rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+      padding-bottom: 2px;
+    }
+    .apply-header__more:hover { color: #fff; border-color: #fff; }
+
+    /* Hero mínimo */
+    .apply-hero {
+      position: relative;
+      padding: clamp(90px, 15vh, 130px) clamp(20px, 5vw, 48px) clamp(28px, 4vw, 44px);
+      text-align: center;
+    }
+    .apply-hero__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(180deg, rgba(5, 7, 17, 0.55), rgba(5, 7, 17, 1)),
+        url("img/live/live8.jpg") center / cover no-repeat;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .apply-hero__inner {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .apply-eyebrow {
+      margin: 0 0 14px;
+      font-size: 0.72rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: #59c6ba;
+      font-weight: 600;
+    }
+    .apply-title {
+      margin: 0 0 18px;
+      font-family: "Archivo", system-ui, sans-serif;
+      font-size: clamp(2.1rem, 6.5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .apply-lead {
+      margin: 0 auto 22px;
+      max-width: 540px;
+      font-size: clamp(0.98rem, 1.5vw, 1.1rem);
+      line-height: 1.55;
+      color: rgba(249, 249, 255, 0.82);
+    }
+    .apply-points {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 14px;
+      max-width: 640px;
+      margin-inline: auto;
+    }
+    .apply-points li {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(89, 198, 186, 0.28);
+      background: rgba(89, 198, 186, 0.08);
+      font-size: 0.78rem;
+      color: #f0f5f4;
+    }
+    .apply-points li::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #59c6ba;
+    }
+
+    /* Form container */
+    .apply-form-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: clamp(28px, 4vw, 48px) clamp(16px, 4vw, 32px) 44px;
+    }
+
+    /* "Qué pasa después" */
+    .apply-after {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, 32px) 56px;
+      text-align: center;
+    }
+    .apply-after h3 {
+      margin: 0 0 12px;
+      font-size: 0.72rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: #59c6ba;
+    }
+    .apply-after__steps {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      counter-reset: after-step;
+    }
+    .apply-after__steps li {
+      counter-increment: after-step;
+      padding: 16px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(5, 7, 17, 0.6);
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: rgba(249, 249, 255, 0.82);
+      position: relative;
+    }
+    .apply-after__steps li::before {
+      content: counter(after-step);
+      display: block;
+      margin: 0 0 4px;
+      font-family: "Archivo", system-ui, sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.24em;
+      color: #59c6ba;
+      font-weight: 600;
+    }
+    @media (max-width: 520px) {
+      .apply-after__steps { grid-template-columns: 1fr; }
+    }
+
+    /* Footer micro */
+    .apply-footer {
+      padding: 22px 16px 30px;
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .apply-footer a { color: inherit; }
+
+    /* En esta landing SIEMPRE se ve el form (no dependemos del reveal de clínicas) */
+    body[data-page="aplicar"] [data-fade-up] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style>
+
+  <!-- Scripts (compartidos) -->
+  <script type="module" src="js/supabase-config.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+
+<body data-page="aplicar">
+
+  <header class="apply-header">
+    <a class="apply-header__brand" href="index.html" aria-label="Ir al sitio de Manu Pavez">
+      <img src="logos/CUBO BLANCO MP.png" alt="Manu Pavez" onerror="this.style.display='none'">
+    </a>
+    <a class="apply-header__more" href="clinicas.html">Ver más del Lab →</a>
+  </header>
+
+  <main>
+    <!-- HERO MINI -->
+    <section class="apply-hero">
+      <div class="apply-hero__bg" aria-hidden="true"></div>
+      <div class="apply-hero__inner">
+        <p class="apply-eyebrow">Frequency Lab · Mentoría 1:1</p>
+        <h1 class="apply-title">APLICAR AL LAB</h1>
+        <p class="apply-lead">
+          Trabajamos sobre <strong>tu proyecto real</strong> — no teoría genérica.
+          Terminás tracks, tomás decisiones con criterio y salís con dirección clara.
+        </p>
+
+        <ul class="apply-points">
+          <li>Cupos limitados por trimestre</li>
+          <li>Sesiones 1:1</li>
+          <li>Respuesta en 48hs</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FORM (mismo markup que clinicas.html — reutiliza CSS y JS) -->
+    <div class="apply-form-wrap">
+      <div class="lab-form-panel">
+        <div class="lab-form-panel__head">
+          <span class="lab-form-panel__tag">Aplicación al Lab</span>
+
+          <div class="form-progress" aria-live="polite">
+            <span class="form-progress__label">Paso <span id="step-number">1</span> <span class="form-progress__total">de 4</span></span>
+            <span class="form-progress-bar" aria-hidden="true" style="--progress: 25%"></span>
+          </div>
+        </div>
+
+        <form data-clinic-form class="lab-form" novalidate aria-label="Formulario de aplicación al Lab">
+
+          <!-- STEP 1 — identidad -->
+          <fieldset class="form-step is-active" data-step="1">
+            <div class="field">
+              <label for="name">Nombre</label>
+              <input id="name" name="name" type="text" required autocomplete="name" placeholder="Cómo te llamás">
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" required autocomplete="email" placeholder="tu@email.com">
+            </div>
+
+            <button type="button" data-next class="mp-btn primary">Continuar</button>
+          </fieldset>
+
+          <!-- STEP 2 — nivel -->
+          <fieldset class="form-step" data-step="2">
+            <div class="field">
+              <label>¿En qué nivel estás?</label>
+              <div class="cl-chips" role="radiogroup" aria-label="Nivel">
+                <input type="radio" id="level-p" name="level" value="principiante" required>
+                <label for="level-p">Principiante</label>
+
+                <input type="radio" id="level-i" name="level" value="intermedio">
+                <label for="level-i">Intermedio</label>
+
+                <input type="radio" id="level-a" name="level" value="avanzado">
+                <label for="level-a">Avanzado</label>
+              </div>
+            </div>
+
+            <div class="form-nav">
+              <button type="button" data-prev class="mp-btn ghost">Atrás</button>
+              <button type="button" data-next class="mp-btn primary">Continuar</button>
+            </div>
+          </fieldset>
+
+          <!-- STEP 3 — objetivo -->
+          <fieldset class="form-step" data-step="3">
+            <div class="field">
+              <label for="goal">¿Qué querés cambiar en tu música?</label>
+              <input id="goal" name="goal" type="text" placeholder="Terminar tracks, mejorar mezcla, encontrar identidad…">
+            </div>
+
+            <div class="form-nav">
+              <button type="button" data-prev class="mp-btn ghost">Atrás</button>
+              <button type="button" data-next class="mp-btn primary">Continuar</button>
+            </div>
+          </fieldset>
+
+          <!-- STEP 4 — mensaje + submit -->
+          <fieldset class="form-step" data-step="4">
+            <div class="field">
+              <label for="message">Contame en qué punto estás</label>
+              <textarea id="message" name="message" rows="4" placeholder="Dónde te sentís trabado hoy"></textarea>
+            </div>
+
+            <div class="form-nav">
+              <button type="button" data-prev class="mp-btn ghost">Atrás</button>
+              <button type="submit" class="mp-btn orange">Enviar aplicación</button>
+            </div>
+
+            <p class="form-error" data-form-error hidden role="alert"></p>
+          </fieldset>
+
+        </form>
+
+        <!-- Success state (oculto por defecto) -->
+        <div class="form-success" data-form-success hidden>
+          <div class="form-success__icon" aria-hidden="true"></div>
+          <h3>RECIBIDO</h3>
+          <p>Te respondo en menos de 48hs al mail que dejaste. Si querés adelantar algo, escribime directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUÉ PASA DESPUÉS -->
+    <section class="apply-after" aria-labelledby="after-title">
+      <h3 id="after-title">Qué pasa después</h3>
+      <ul class="apply-after__steps">
+        <li>Leo tu aplicación y te contesto por mail en menos de 48hs.</li>
+        <li>Coordinamos una llamada corta para conocernos y evaluar el fit.</li>
+        <li>Si hacemos click, arrancamos con las sesiones sobre tu proyecto.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="apply-footer">
+    © MANU PAVEZ · <a href="index.html">manupavez.com</a>
+  </footer>
+
+  <!-- UTM capture: si no viene ninguno, marcamos que llegó desde IG (link de bio). -->
+  <script>
+    (function () {
+      try {
+        var p = new URLSearchParams(window.location.search);
+        if (!p.has('utm_source')) {
+          p.set('utm_source', 'instagram');
+          p.set('utm_medium', 'bio');
+          p.set('utm_campaign', 'lab-apply');
+          var url = window.location.pathname + '?' + p.toString();
+          window.history.replaceState({}, '', url);
+        }
+      } catch (e) { /* no-op */ }
+    })();
+  </script>
+</body>
+</html>

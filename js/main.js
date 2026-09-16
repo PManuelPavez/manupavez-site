@@ -10,6 +10,7 @@ import { initContactForm } from "./features/forms.js";
 import { initStudentAuth } from "./features/auth.js";
 import { initCounters } from "./features/counters.js";
 import { initDetailsFocus } from "./features/detailsFocus.js";
+import { initViewportPause } from "./features/viewportPause.js";
 import { initHome } from "./pages/home.js";
 import { initPresskit } from "./pages/presskit.js";
 import { initClinicas } from "./pages/clinicas.js";
@@ -35,6 +36,7 @@ safeInit("contactForm", initContactForm);
 safeInit("studentAuth", initStudentAuth);
 safeInit("counters", initCounters);
 safeInit("detailsFocus", initDetailsFocus);
+safeInit("viewportPause", initViewportPause);
 safeInit("eventos", initEventos);
 
 // Inits que dependen de Supabase: esperar a que la config esté cargada (timeout: 5s)

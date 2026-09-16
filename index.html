@@ -31,7 +31,7 @@
   <!-- Tipografías -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
 
   <!-- Preconnect a plataformas para que los embeds carguen rápido -->
   <link rel="preconnect" href="https://open.spotify.com" crossorigin />
@@ -45,6 +45,7 @@
   <link rel="stylesheet" href="css/pages/home.css" />
   <link rel="stylesheet" href="css/responsive.css" />
   <link rel="stylesheet" href="css/scrollytelling.css" />
+  <link rel="stylesheet" href="css/mobile-perf.css" />
 
   <!-- Scrollytelling: smooth scroll (Lenis) + animaciones (GSAP/ScrollTrigger).
        Se cargan con defer ANTES de los módulos para que window.gsap/Lenis
@@ -136,7 +137,11 @@
     <!-- ============ HERO ============ -->
     <section id="inicio" class="hero" aria-labelledby="hero-title">
       <div class="hero-card">
-        <img class="hero-card-img" src="img/indexPERFIL.png" alt="Manu Pavez" decoding="async" fetchpriority="high" />
+        <picture>
+          <source srcset="img/indexPERFIL-m.webp" media="(max-width: 720px)" type="image/webp" />
+          <source srcset="img/indexPERFIL.webp" type="image/webp" />
+          <img class="hero-card-img" src="img/indexPERFIL.webp" alt="Manu Pavez" width="1600" height="893" decoding="async" fetchpriority="high" />
+        </picture>
         <span class="hero-card-veil" aria-hidden="true"></span>
 
         <p class="hero-eyebrow"><a href="bio.html">FREQUENCY STORYTELLER</a></p>
