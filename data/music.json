@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-21T11:39:24.707Z",
+  "updated_at": "2026-09-22T10:43:45.990Z",
   "artist": {
     "id": "1m15KTr2Qsf1JkdkBam27h",
     "name": "Manu Pavez",
@@ -89,16 +89,6 @@
       "spotify_url": "https://open.spotify.com/track/6RlzVo3GmzgSQ5TsEmRMGU"
     },
     {
-      "id": "6dNhy8TOsPu1fhJDSfeAQi",
-      "title": "Nadie - Manu Pavez Remix",
-      "artwork": "https://i.scdn.co/image/ab67616d0000b273e012d9e36f06911bd502ecc3",
-      "album": "Panacea",
-      "release_date": "2026-08-07",
-      "popularity": 3,
-      "duration_ms": 378483,
-      "spotify_url": "https://open.spotify.com/track/6dNhy8TOsPu1fhJDSfeAQi"
-    },
-    {
       "id": "6br0ZaKdl1fS2YWdF11xIc",
       "title": "655",
       "artwork": "https://i.scdn.co/image/ab67616d0000b27344c04ad9ea5031cca989e622",
@@ -109,12 +99,22 @@
       "spotify_url": "https://open.spotify.com/track/6br0ZaKdl1fS2YWdF11xIc"
     },
     {
+      "id": "6dNhy8TOsPu1fhJDSfeAQi",
+      "title": "Nadie - Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273e012d9e36f06911bd502ecc3",
+      "album": "Panacea",
+      "release_date": "2026-08-07",
+      "popularity": 3,
+      "duration_ms": 378483,
+      "spotify_url": "https://open.spotify.com/track/6dNhy8TOsPu1fhJDSfeAQi"
+    },
+    {
       "id": "2FhAKX5okvh5Nv1vNV56ED",
       "title": "Dawn in Port - Gaspar Aguilera & Manu Pavez",
       "artwork": "https://i.scdn.co/image/ab67616d0000b273e645e26c93fd032157365e5d",
       "album": "Dawn in Port",
       "release_date": "2023-10-20",
-      "popularity": 3,
+      "popularity": 2,
       "duration_ms": 487991,
       "spotify_url": "https://open.spotify.com/track/2FhAKX5okvh5Nv1vNV56ED"
     }
