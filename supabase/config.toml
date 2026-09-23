@@ -9,3 +9,9 @@ entrypoint = "./functions/send-lead-email/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/send-lead-email/*.html" ]
+
+[functions.notion-sync]
+enabled = true
+# Autenticación propia: secreto del cron (Vault) o JWT de un admin (ver index.ts)
+verify_jwt = false
+entrypoint = "./functions/notion-sync/index.ts"

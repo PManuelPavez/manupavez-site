@@ -609,6 +609,58 @@ button[type="submit"][aria-busy="true"]::after {
   .auth-form .mp-btn { width: 100%; }
 }
 
+/* Portal del alumno (sesiones sincronizadas desde Notion) */
+.auth-card:has([data-auth-loggedin]:not([hidden])) { max-width: 720px; }
+
+.portal-block + .portal-block { margin-top: 26px; }
+.portal-title {
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.portal-admin { margin: 0 0 18px; }
+
+.portal-sessions { display: grid; gap: 8px; text-align: left; }
+.portal-session {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+}
+.portal-session summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+.portal-session summary::-webkit-details-marker { display: none; }
+.portal-session summary::after {
+  content: "+";
+  margin-left: auto;
+  color: var(--color-text-muted);
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.portal-session[open] summary::after { transform: rotate(45deg); }
+.portal-session__num { font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.portal-session__date { font-size: 0.85rem; color: var(--color-text-muted); }
+.portal-session__body { padding: 0 16px 16px; }
+.portal-session__body h4 {
+  margin: 16px 0 8px;
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.portal-session__notes { margin: 0; white-space: pre-line; line-height: 1.6; }
+.portal-tasks, .portal-links { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.portal-tasks li.is-done { color: var(--color-text-muted); text-decoration: line-through; }
+.portal-tasks span { color: var(--color-accent-2); }
+.portal-links a { color: var(--color-accent-2); word-break: break-word; }
+
 
 /* =================== BOTÓN FLOTANTE VOLVER ARRIBA =================== */
 

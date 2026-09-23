@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Panel Lab — Manu Pavez</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://esm.sh; connect-src 'self' https://esm.sh https://psnprhzowknhfylvgcci.supabase.co wss://psnprhzowknhfylvgcci.supabase.co; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'" />
+  <meta name="theme-color" content="#050711" />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages/admin.css" />
+  <script type="module" src="js/supabase-config.js"></script>
+  <script type="module" src="js/pages/admin.js"></script>
+</head>
+<body data-page="admin">
+  <main class="admin" data-admin>
+    <header class="admin-head">
+      <div>
+        <p class="admin-kicker">Frequency Lab</p>
+        <h1>Panel de alumnos</h1>
+      </div>
+      <div class="admin-head__actions" data-admin-actions hidden>
+        <span class="admin-sync" data-sync-status>—</span>
+        <button type="button" class="mp-btn ghost small" data-sync>SINCRONIZAR NOTION</button>
+      </div>
+    </header>
+
+    <p class="admin-msg" data-admin-msg role="status" aria-live="polite">Verificando acceso…</p>
+
+    <div class="admin-table-wrap" data-admin-table hidden>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th scope="col">Alumno</th>
+            <th scope="col">Email de acceso</th>
+            <th scope="col">Acceso</th>
+            <th scope="col">Vence</th>
+            <th scope="col">Última sesión</th>
+            <th scope="col"><span class="sr-only">Acciones</span></th>
+          </tr>
+        </thead>
+        <tbody data-admin-rows></tbody>
+      </table>
+    </div>
+
+    <p class="admin-foot"><a href="clinicas.html#alumnos">← Volver al área de alumnos</a></p>
+  </main>
+</body>
+</html>
