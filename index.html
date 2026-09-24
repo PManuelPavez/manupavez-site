@@ -136,7 +136,9 @@
   <main id="main-content" tabindex="-1">
     <!-- ============ HERO ============ -->
     <section id="inicio" class="hero" aria-labelledby="hero-title">
-      <div class="hero-card">
+      <div class="hero-card" data-crt-zone>
+        <!-- Fondo CRT Warp (WebGL). La foto se funde encima con blend "lighten". -->
+        <div class="hero-crt" data-crt data-crt-color="#59c6ba" data-crt-bg="#050509" data-crt-brightness="0.75" data-crt-bloom="0.9" data-crt-speed="0.3" aria-hidden="true"></div>
         <picture>
           <source srcset="img/indexPERFIL-m.webp" media="(max-width: 720px)" type="image/webp" />
           <source srcset="img/indexPERFIL.webp" type="image/webp" />

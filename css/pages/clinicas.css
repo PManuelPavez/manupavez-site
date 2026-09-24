@@ -2189,3 +2189,109 @@ body[data-page="clinicas"] .section--light{
 body[data-page="clinicas"] .section--light .section-kicker{
   margin-bottom: 10px;
 }
+
+/* =========================================================
+   POPUP DE ENTRADA (js/features/entryGate.js)
+   Fondo de la página blureado (no overlay opaco), panel sobrio.
+   ========================================================= */
+html.gate-open { overflow: hidden; }
+
+.entry-gate {
+  /* El reset global le saca el margin:auto nativo al <dialog>: lo centramos explícito */
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+  width: min(440px, calc(100vw - 32px));
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  opacity: 0;
+  transform: translateY(14px) scale(0.985);
+  transition:
+    opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1),
+    transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.entry-gate::backdrop {
+  background: rgba(5, 5, 9, 0.28);
+  -webkit-backdrop-filter: blur(0px);
+          backdrop-filter: blur(0px);
+  transition: backdrop-filter 0.8s cubic-bezier(0.19, 1, 0.22, 1),
+              -webkit-backdrop-filter 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.entry-gate.is-in { opacity: 1; transform: none; }
+.entry-gate.is-in::backdrop {
+  -webkit-backdrop-filter: blur(16px) saturate(115%);
+          backdrop-filter: blur(16px) saturate(115%);
+}
+
+.entry-gate__panel {
+  padding: clamp(28px, 5vw, 40px) clamp(20px, 4vw, 32px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(5, 7, 17, 0.72);
+  text-align: center;
+}
+.entry-gate__kicker {
+  margin: 0 0 22px;
+  font-size: 0.72rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.entry-gate__actions { display: grid; gap: 12px; }
+.entry-gate__actions .mp-btn { width: 100%; justify-content: center; }
+
+.entry-gate__view[data-gate-view="pin"] { display: grid; gap: 14px; }
+.entry-gate__view[hidden] { display: none; }
+.entry-gate__label { font-size: 0.95rem; }
+.entry-gate__pin {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(4, 6, 15, 0.98);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 1.6rem;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em; /* compensa el tracking para que quede centrado */
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.entry-gate__pin:focus-visible {
+  outline: none;
+  border-color: rgba(89, 198, 186, 0.7);
+  box-shadow: 0 0 0 3px rgba(89, 198, 186, 0.18);
+}
+.entry-gate__note { min-height: 1.3em; margin: 0; font-size: 0.85rem; color: var(--color-text-muted); }
+.entry-gate__note.is-error { color: #ff8a8a; }
+.entry-gate__links {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.82rem;
+}
+.entry-gate__links button,
+.entry-gate__links a {
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+.entry-gate__links button:hover,
+.entry-gate__links a:hover { color: var(--color-text); }
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-gate, .entry-gate::backdrop { transition: none; }
+}
+
+/* Turnstile (anti-bots) dentro del popup y del login por email */
+.entry-gate__captcha:empty,
+.auth-turnstile:empty { display: none; }
+.auth-turnstile { margin-top: 12px; display: flex; justify-content: center; }

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shop — Frequency Lab</title>
+  <meta name="description" content="Sesiones individuales, mezcla, premaster y mastering con Manu Pavez." />
+  <meta name="robots" content="noindex,follow" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://esm.sh https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://esm.sh https://dolarapi.com https://psnprhzowknhfylvgcci.supabase.co wss://psnprhzowknhfylvgcci.supabase.co; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'" />
+  <meta name="theme-color" content="#050711" />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages/alumnos.css" />
+  <link rel="stylesheet" href="css/pages/shop.css" />
+  <script type="module" src="js/supabase-config.js"></script>
+  <script type="module" src="js/pages/shop.js"></script>
+</head>
+<body data-page="shop">
+  <header class="lab-top">
+    <a class="lab-top__brand" href="alumnos.html">
+      <img src="logos/CUBO%20BLANCO%20MP.png" alt="" width="26" height="26" />
+      <span>Frequency Lab</span>
+    </a>
+    <nav class="lab-top__nav" aria-label="Frequency Lab">
+      <a class="lab-top__link" href="shop.html" aria-current="page">SHOP</a>
+      <a class="lab-top__link" href="alumnos.html">MI ESPACIO</a>
+    </nav>
+  </header>
+
+  <main class="lab-main shop">
+    <p class="shop-banner" data-banner role="status" aria-live="polite" hidden></p>
+
+    <header class="shop-head">
+      <p class="shop-kicker">Frequency Lab</p>
+      <h1 class="shop-title">Sesiones y servicios</h1>
+      <p class="shop-lead">Trabajo puntual sobre tu música, 1:1. Pagás en pesos con MercadoPago, al dólar MEP del día.</p>
+    </header>
+
+    <div class="shop-grid" data-products>
+      <p class="muted">Cargando…</p>
+    </div>
+
+    <p class="shop-foot">¿Buscás algo a medida? Escribime a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a> y te armo un link con lo que necesites.</p>
+  </main>
+
+  <dialog class="shop-checkout" data-checkout aria-labelledby="checkout-title">
+    <form class="shop-checkout__panel" data-checkout-form novalidate>
+      <p class="shop-kicker">Tu compra</p>
+      <h2 id="checkout-title" class="shop-checkout__title" data-checkout-name></h2>
+      <p class="shop-checkout__price" data-checkout-price></p>
+
+      <label class="shop-field" data-qty-field hidden>
+        <span>Cantidad de tracks</span>
+        <input name="quantity" type="number" min="1" max="20" value="1" inputmode="numeric" />
+      </label>
+      <label class="shop-field">
+        <span>Nombre</span>
+        <input name="name" type="text" maxlength="120" autocomplete="name" required />
+      </label>
+      <label class="shop-field">
+        <span>Email</span>
+        <input name="email" type="email" maxlength="200" autocomplete="email" required />
+      </label>
+
+      <div class="shop-checkout__captcha" data-captcha></div>
+      <p class="shop-checkout__note" data-checkout-note role="status" aria-live="polite"></p>
+
+      <div class="shop-checkout__actions">
+        <button type="submit" class="mp-btn primary" data-pay>IR A PAGAR</button>
+        <button type="button" class="mp-btn ghost" data-close>CANCELAR</button>
+      </div>
+      <p class="shop-checkout__legal">El pago se hace en MercadoPago. El monto en pesos queda fijo al crear el pedido.</p>
+    </form>
+  </dialog>
+</body>
+</html>

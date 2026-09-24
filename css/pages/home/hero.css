@@ -26,19 +26,55 @@
   min-height: clamp(380px, 64vh, 780px);
   border-radius: clamp(18px, 2.4vw, 30px);
   overflow: hidden;
-  background: #05060c;
+  background: #050509;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  isolation: isolate; /* el blend de la foto queda contenido en la tarjeta */
 }
 
+/* Fondo CRT Warp. Fallback sin WebGL: resplandor teal estático (costo cero). */
+.hero-crt {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(60% 50% at 30% 70%, rgba(89, 198, 186, 0.16), transparent 70%),
+    radial-gradient(50% 45% at 75% 30%, rgba(49, 64, 151, 0.18), transparent 70%),
+    #050509;
+}
+.hero-crt .crt-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.25s cubic-bezier(0.19, 1, 0.22, 1);
+  /* La silueta queda limpia: el plasma vive en los bordes de la tarjeta */
+  -webkit-mask-image: radial-gradient(ellipse 34% 62% at 50% 38%, transparent 30%, #000 85%);
+          mask-image: radial-gradient(ellipse 34% 62% at 50% 38%, transparent 30%, #000 85%);
+}
+.hero-crt.crt-ready .crt-canvas { opacity: 0.55; }
+
+@media (max-width: 720px) {
+  .hero-crt .crt-canvas {
+    -webkit-mask-image: radial-gradient(ellipse 60% 48% at 50% 36%, transparent 30%, #000 88%);
+            mask-image: radial-gradient(ellipse 60% 48% at 50% 36%, transparent 30%, #000 88%);
+  }
+}
+
+/* La foto tiene fondo negro: con "lighten" el negro deja ver el plasma
+   y la silueta iluminada queda por encima. */
 .hero-card-img {
   position: absolute;
   inset: 0;
+  z-index: 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: 50% 22%;
   filter: contrast(1.04) brightness(0.96);
+  mix-blend-mode: lighten;
 }
+
+.hero-card-veil { z-index: 1; }
 
 /* Velo para que el nombre y el eyebrow se lean sobre la foto */
 .hero-card-veil {

@@ -1,0 +1,100 @@
+/* =================== /shop — SESIONES Y SERVICIOS ===================
+   Misma estética del espacio del alumno: monocromo, tarjetas sobrias,
+   un solo acento teal. El encabezado viene de alumnos.css. */
+
+.shop-head { max-width: 640px; margin: clamp(12px, 3vw, 28px) 0 clamp(24px, 4vw, 40px); }
+.shop-kicker {
+  margin: 0 0 8px;
+  font-size: 0.7rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.shop-title { margin: 0 0 12px; font-size: clamp(1.8rem, 5vw, 2.8rem); text-transform: uppercase; line-height: 1; }
+.shop-lead { margin: 0; color: var(--color-text-muted); line-height: 1.6; }
+
+.shop-banner {
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(89, 198, 186, 0.4);
+  background: rgba(89, 198, 186, 0.08);
+}
+.shop-banner[data-tone="error"] { border-color: rgba(255, 138, 138, 0.5); background: rgba(255, 138, 138, 0.06); }
+.shop-banner[data-tone="pendiente"] { border-color: rgba(240, 195, 107, 0.5); background: rgba(240, 195, 107, 0.06); }
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 16px;
+}
+.shop-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 20px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.025);
+  transition: border-color 0.6s cubic-bezier(0.19, 1, 0.22, 1), transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.shop-card:hover { border-color: rgba(89, 198, 186, 0.45); transform: translateY(-2px); }
+.shop-card[data-kind="plan"] { border-color: rgba(89, 198, 186, 0.35); }
+.shop-card__name { margin: 0; font-size: 1.05rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.shop-card__desc { margin: 0; color: var(--color-text-muted); line-height: 1.55; font-size: 0.92rem; }
+.shop-card__bottom { margin-top: auto; padding-top: 12px; display: grid; gap: 6px; }
+.shop-card__price { margin: 0; font-size: 1.35rem; font-weight: 600; }
+.shop-card__price span { font-size: 0.8rem; font-weight: 400; color: var(--color-text-muted); }
+.shop-card__ars { margin: 0 0 8px; font-size: 0.8rem; color: var(--color-accent-2); }
+.shop-card .mp-btn { width: 100%; }
+
+.shop-foot { margin: 32px 0 0; font-size: 0.88rem; color: var(--color-text-muted); }
+.shop-foot a { color: var(--color-accent-2); }
+
+/* Checkout */
+.shop-checkout {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+  width: min(440px, calc(100vw - 32px));
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+}
+.shop-checkout::backdrop {
+  background: rgba(5, 5, 9, 0.35);
+  -webkit-backdrop-filter: blur(14px);
+          backdrop-filter: blur(14px);
+}
+.shop-checkout__panel {
+  display: grid;
+  gap: 12px;
+  padding: clamp(24px, 5vw, 32px) clamp(18px, 4vw, 26px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  background: rgba(5, 7, 17, 0.94);
+}
+.shop-checkout__title { margin: 0; font-size: 1.3rem; text-transform: uppercase; }
+.shop-checkout__price { margin: 0 0 6px; color: var(--color-accent-2); }
+.shop-field { display: grid; gap: 6px; }
+.shop-field span { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-text-muted); }
+.shop-field input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(4, 6, 15, 0.98);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 16px;
+}
+.shop-field input:focus-visible { outline: none; border-color: rgba(89, 198, 186, 0.7); box-shadow: 0 0 0 3px rgba(89, 198, 186, 0.18); }
+.shop-field[hidden] { display: none; }
+.shop-checkout__captcha:empty { display: none; }
+.shop-checkout__note { min-height: 1.3em; margin: 0; font-size: 0.85rem; color: var(--color-text-muted); }
+.shop-checkout__note.is-error { color: #ff8a8a; }
+.shop-checkout__actions { display: grid; gap: 8px; }
+.shop-checkout__legal { margin: 4px 0 0; font-size: 0.75rem; color: var(--color-text-muted); text-align: center; }

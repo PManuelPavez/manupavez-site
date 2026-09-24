@@ -6,6 +6,8 @@
 //   PANEL DE CLINICAS - Frequency Lab            (página madre)
 //     └─ [Nombre del alumno]                      (subpágina = 1 alumno)
 //          └─ SESION N - FREQUENCY LAB [Nombre]  (subpágina o toggle = 1 sesión)
+// Además de las sesiones, se copia la página del alumno tal como está armada
+// (filas, columnas y secciones por título) para el portal.
 // Las bases de datos anidadas (ej. "Historial de Grabaciones 2.0") se ignoran.
 //
 // Secretos (Supabase → Edge Functions → Secrets):
@@ -127,9 +129,6 @@ function sessionTitle(b: Block): string | null {
   return toggleable ? blockText(b) || null : null;
 }
 
-const isContainer = (b: Block) =>
-  b.has_children && ["column_list", "column", "synced_block", "toggle", "callout"].includes(b.type);
-
 function toIsoDate(d: string | undefined | null): string | null {
   if (!d) return null;
   const m = d.match(/^(\d{4}-\d{2}-\d{2})/);
@@ -156,11 +155,51 @@ function safeUrl(u: unknown): string | null {
   }
 }
 
+// Todos los links de Fathom de una sesión (uno por minuto/punto del resumen)
+// se consolidan en uno solo por grabación: /calls/<id> o /share/<id>, sin query.
+function normalizeLink(raw: string, label: string): { url: string; label: string } {
+  try {
+    const u = new URL(raw);
+    if (/(^|\.)fathom\.video$/i.test(u.hostname)) {
+      const m = u.pathname.match(/^\/(calls|share)\/([^/?#]+)/);
+      if (m) return { url: `https://fathom.video/${m[1]}/${m[2]}`, label: "Ver grabación" };
+    }
+  } catch { /* se valida antes */ }
+  return { url: raw, label };
+}
+
+const fold = (s: string) =>
+  s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[:\s]+$/, "").trim();
+const isNextStepsTitle = (s: string) => fold(s) === "proximos pasos";
+const isUrlOnly = (s: string) => /^https?:\/\/\S+$/.test(s.trim());
+
+type Task = { text: string; done: boolean; depth: number; group: boolean };
+
+// En "Próximos pasos" Fathom agrupa por persona ("Facundo:", "Manuel:").
+// El alumno solo ve lo suyo: se descarta el grupo del mentor y todo lo que cuelga de él.
+const MENTOR_GROUP = /^manu(el)?(\s+pavez)?\s*:$/i;
+function dropMentorTasks(tasks: Task[]): Task[] {
+  const out: Task[] = [];
+  let skipDepth: number | null = null;
+  for (const t of tasks) {
+    if (skipDepth !== null) {
+      const endsSkip = t.depth < skipDepth || (t.depth === skipDepth && t.group);
+      if (!endsSkip) continue;
+      skipDepth = null;
+    }
+    if (t.group && MENTOR_GROUP.test(t.text.trim())) { skipDepth = t.depth; continue; }
+    out.push(t);
+  }
+  return out;
+}
+
 type Parsed = {
   notes: string[];
-  tasks: { text: string; done: boolean }[];
+  tasks: Task[];
   links: { url: string; label: string }[];
   date: string | null;
+  inNextSteps: boolean;   // estamos dentro de la sección "Próximos pasos"
+  sectionDepth: number;   // profundidad donde arrancó esa sección
 };
 
 async function parseContent(
@@ -170,31 +209,75 @@ async function parseContent(
   depth = 0,
 ): Promise<void> {
   const blocks = await notion.children(id);
-  const seen = new Set(out.links.map((l) => l.url));
   const addLink = (u: unknown, label: string) => {
-    const url = safeUrl(u);
-    if (!url || seen.has(url)) return;
+    const safe = safeUrl(u);
+    if (!safe) return;
     // Los archivos subidos a Notion tienen URLs firmadas que vencen en 1h: no sirven
-    if (/secure\.notion-static\.com|prod-files-secure|amazonaws\.com.*X-Amz/i.test(url)) return;
-    seen.add(url);
-    out.links.push({ url, label: (label || url).slice(0, 200) });
+    if (/secure\.notion-static\.com|prod-files-secure|amazonaws\.com.*X-Amz/i.test(safe)) return;
+    const link = normalizeLink(safe, (label || safe).slice(0, 200));
+    if (out.links.some((l) => l.url === link.url)) return;
+    out.links.push(link);
   };
 
   for (const b of blocks) {
     if (b.type === "child_database" || b.type === "child_page") continue;
     const v = b[b.type] || {};
     const text = blockText(b);
+    const isHeading = /^heading_[123]$/.test(b.type);
 
-    // Fecha: primera mención de fecha de Notion o dd/mm/aaaa en el texto
+    // Fecha (dato secundario): mención de fecha de Notion o dd/mm/aaaa en el texto
     if (!out.date) {
       const mention = (v.rich_text || []).find((t: any) => t.type === "mention" && t.mention?.type === "date");
       out.date = toIsoDate(mention?.mention?.date?.start) || (text ? parseDmy(text) : null);
     }
     for (const t of v.rich_text || []) if (t.href) addLink(t.href, t.plain_text);
 
+    // Resumen pegado como UN bloque con saltos de línea: se procesa línea por línea
+    if (["paragraph", "quote", "callout"].includes(b.type) && text.includes("\n")) {
+      for (const line of text.split("\n").map((l) => l.trim()).filter(Boolean)) {
+        if (isNextStepsTitle(line)) { out.inNextSteps = true; out.sectionDepth = depth; continue; }
+        if (out.inNextSteps) {
+          out.tasks.push({ text: line.slice(0, 500), done: false, depth: 0, group: line.endsWith(":") });
+        } else if (isUrlOnly(line)) {
+          addLink(line, "");
+        } else {
+          out.notes.push(line);
+        }
+      }
+      if (b.has_children && depth < 3) await parseContent(notion, b.id, out, depth + 1);
+      continue;
+    }
+
+    // Sección "Próximos pasos": empieza en ese título (heading o bloque de texto suelto)
+    // y termina en el próximo heading del mismo nivel o superior.
+    const isTextBlock = isHeading || ["paragraph", "quote", "callout", "toggle"].includes(b.type);
+    if (text && isNextStepsTitle(text) && isTextBlock) {
+      out.inNextSteps = true;
+      out.sectionDepth = depth;
+      // Título desplegable con los pasos adentro: la sección son sus hijos
+      if (b.has_children && depth < 3) {
+        out.sectionDepth = depth + 1;
+        await parseContent(notion, b.id, out, depth + 1);
+        out.inNextSteps = false;
+      }
+      continue;
+    }
+    if (out.inNextSteps && isHeading && depth <= out.sectionDepth) out.inNextSteps = false;
+
+    if (out.inNextSteps && text && !isHeading) {
+      out.tasks.push({
+        text: text.slice(0, 500),
+        done: b.type === "to_do" ? Boolean(v.checked) : false,
+        depth: Math.min(3, depth - out.sectionDepth),
+        group: text.endsWith(":"),
+      });
+      if (b.has_children && depth < 3) await parseContent(notion, b.id, out, depth + 1);
+      continue;
+    }
+
     switch (b.type) {
       case "to_do":
-        if (text) out.tasks.push({ text: text.slice(0, 500), done: Boolean(v.checked) });
+        if (text) out.tasks.push({ text: text.slice(0, 500), done: Boolean(v.checked), depth: 0, group: false });
         break;
       case "heading_1":
       case "heading_2":
@@ -209,7 +292,9 @@ async function parseContent(
       case "quote":
       case "callout":
       case "toggle":
-        if (text) out.notes.push(text);
+        // Un párrafo que es solo un link ya queda en "Ver grabación"
+        if (text && !isUrlOnly(text)) out.notes.push(text);
+        else if (text) addLink(text.trim(), "");
         break;
       case "bookmark":
       case "embed":
@@ -228,24 +313,190 @@ async function parseContent(
   }
 }
 
-// Busca sesiones dentro de la página del alumno (también dentro de columnas/toggles)
-async function findSessions(
-  notion: ReturnType<typeof notionClient>,
-  id: string,
-  depth = 0,
-): Promise<{ block: Block; title: string; number: number }[]> {
-  const found: { block: Block; title: string; number: number }[] = [];
-  for (const b of await notion.children(id)) {
-    if (b.type === "child_database") continue; // p.ej. "Historial de Grabaciones 2.0"
+// ───────────────────────── Página del alumno ─────────────────────────
+// Un solo recorrido de la página: encuentra las sesiones y, a la vez, arma el
+// "espejo" de la página (filas → columnas → secciones por título) para el portal.
+type DashItem =
+  | { t: "label" | "text"; text: string }
+  | { t: "bullet"; text: string; depth: number }
+  | { t: "task"; id: string; text: string; done: boolean; depth: number }
+  | { t: "link"; url: string; label: string; kind: "recording" | "link" }
+  | { t: "sessions" };
+type DashSection = { title: string; color: string | null; items: DashItem[] };
+type DashRow = { cols: DashSection[][] };
+type FoundSession = { block: Block; title: string; number: number };
+
+const stripEmoji = (s: string) =>
+  s.replace(/^[\p{Extended_Pictographic}\p{Emoji_Presentation}\uFE0F\u200D\s]+/u, "").trim();
+const isRecordingUrl = (u: string) => /^https:\/\/([a-z0-9-]+\.)?fathom\.video\//i.test(u);
+
+async function parseStudentPage(notion: ReturnType<typeof notionClient>, pageId: string) {
+  const sessions: FoundSession[] = [];
+  const rows: DashRow[] = [];
+
+  const newSection = (list: DashSection[], title = "", color: string | null = null) => {
+    const s: DashSection = { title, color, items: [] };
+    list.push(s);
+    return s;
+  };
+  const current = (list: DashSection[]) => list[list.length - 1] || newSection(list);
+
+  const pushLink = (list: DashSection[], raw: unknown, caption: string) => {
+    const url = safeUrl(raw);
+    if (!url || /secure\.notion-static\.com|prod-files-secure|amazonaws\.com.*X-Amz/i.test(url)) return;
+    const sec = current(list);
+    if (sec.items.some((i) => i.t === "link" && i.url === url)) return;
+    sec.items.push({ t: "link", url, label: caption.slice(0, 160), kind: isRecordingUrl(url) ? "recording" : "link" });
+  };
+
+  async function consume(b: Block, list: DashSection[], depth: number): Promise<void> {
+    if (b.type === "child_database") return; // p.ej. "Historial de Grabaciones 2.0" (Mateo)
     const title = sessionTitle(b);
     const m = title?.match(SESSION_RE);
     if (title && m) {
-      found.push({ block: b, title, number: Number(m[1]) });
+      sessions.push({ block: b, title, number: Number(m[1]) });
+      const sec = current(list);
+      if (!sec.items.some((i) => i.t === "sessions")) sec.items.push({ t: "sessions" });
+      return;
+    }
+    if (b.type === "child_page" || depth > 4) return;
+
+    const v = b[b.type] || {};
+    const text = blockText(b);
+    const kids = async (d: number) => {
+      if (b.has_children) for (const c of await notion.children(b.id)) await consume(c, list, d);
+    };
+
+    switch (b.type) {
+      case "heading_1":
+      case "heading_2":
+      case "heading_3": {
+        if (!text) return;
+        const color = String(v.color || "default").replace(/_background$/, "");
+        newSection(list, stripEmoji(text).slice(0, 120), color === "default" ? null : color);
+        await kids(depth); // título desplegable: su contenido es la sección
+        return;
+      }
+      case "column_list":
+      case "column":
+      case "synced_block":
+        await kids(depth);
+        return;
+      case "to_do":
+        // id = bloque de Notion: clave estable para que el alumno la marque desde la web
+        if (text) current(list).items.push({ t: "task", id: b.id, text: text.slice(0, 500), done: Boolean(v.checked), depth: Math.min(depth, 3) });
+        await kids(depth + 1);
+        return;
+      case "bulleted_list_item":
+      case "numbered_list_item":
+        if (text) current(list).items.push({ t: "bullet", text: text.slice(0, 1000), depth: Math.min(depth, 3) });
+        await kids(depth + 1);
+        return;
+      case "paragraph":
+      case "quote":
+      case "callout":
+      case "toggle":
+        for (const line of text.split("\n").map((l) => l.trim()).filter(Boolean)) {
+          if (isUrlOnly(line)) pushLink(list, line, "");
+          else if (line.length <= 60 && line.endsWith(":")) current(list).items.push({ t: "label", text: line.slice(0, -1) });
+          else current(list).items.push({ t: "text", text: line.slice(0, 2000) });
+        }
+        await kids(depth + 1);
+        return;
+      case "bookmark":
+      case "embed":
+      case "link_preview":
+        pushLink(list, v.url, plain(v.caption));
+        return;
+      case "video":
+      case "audio":
+      case "file":
+      case "pdf":
+        if (v.type === "external") pushLink(list, v.external?.url, plain(v.caption) || v.name || "");
+        return;
+    }
+  }
+
+  let full: DashSection[] | null = null;
+  for (const b of await notion.children(pageId)) {
+    if (b.type === "column_list") {
+      const cols: DashSection[][] = [];
+      for (const col of await notion.children(b.id)) {
+        const list: DashSection[] = [];
+        if (col.has_children) for (const c of await notion.children(col.id)) await consume(c, list, 0);
+        cols.push(list);
+      }
+      rows.push({ cols });
+      full = null;
       continue;
     }
-    if (isContainer(b) && depth < 2) found.push(...(await findSessions(notion, b.id, depth + 1)));
+    if (!full) {
+      full = [];
+      rows.push({ cols: [full] });
+    }
+    await consume(b, full, 0);
   }
-  return found;
+
+  // Fuera secciones vacías (p.ej. un título cuya base de datos se ignoró)
+  const clean = rows
+    .map((r) => ({ cols: r.cols.map((c) => c.filter((s) => s.items.length > 0)) }))
+    .filter((r) => r.cols.some((c) => c.length > 0));
+  return { sessions, rows: clean };
+}
+
+// Títulos de bookmarks: la API de Notion no los da. Se leen una vez de la página
+// enlazada (og:title) y quedan en caché en link_titles.
+const decodeEntities = (s: string) =>
+  s.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+
+async function fetchTitle(url: string): Promise<string | null> {
+  if (!url.startsWith("https://")) return null;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 4000);
+  try {
+    const res = await fetch(url, {
+      signal: ctrl.signal,
+      redirect: "follow",
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; manupavez-lab-sync)", Accept: "text/html" },
+    });
+    if (!res.ok || !(res.headers.get("content-type") || "").includes("text/html")) return null;
+    const html = (await res.text()).slice(0, 300_000);
+    const m =
+      html.match(/<meta[^>]+property=["']og:title["'][^>]*content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:title["']/i) ||
+      html.match(/<title[^>]*>([^<]+)<\/title>/i);
+    const title = m ? decodeEntities(m[1]).trim().slice(0, 160) : "";
+    // Títulos genéricos del sitio no aportan nada
+    return title && !/^(fathom|youtube|soundcloud)( video)?$/i.test(title) ? title : null;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function resolveLinkLabels(db: any, rows: DashRow[], budget: { left: number }) {
+  const links = rows.flatMap((r) => r.cols.flat().flatMap((s) => s.items)).filter((i): i is Extract<DashItem, { t: "link" }> => i.t === "link");
+  const pending = [...new Set(links.filter((l) => !l.label).map((l) => l.url))];
+  if (!pending.length) return;
+
+  const { data: cached } = await db.from("link_titles").select("url, title").in("url", pending);
+  const titles = new Map<string, string | null>((cached || []).map((c: any) => [c.url, c.title]));
+
+  for (const url of pending) {
+    if (titles.has(url) || budget.left <= 0) continue;
+    budget.left--;
+    const title = await fetchTitle(url);
+    titles.set(url, title);
+    await db.from("link_titles").upsert({ url, title, fetched_at: new Date().toISOString() });
+  }
+
+  for (const l of links) {
+    if (l.label) continue;
+    const t = titles.get(l.url);
+    if (t) l.label = t;
+    else l.label = l.kind === "recording" ? "Grabación" : new URL(l.url).hostname.replace(/^www\./, "");
+  }
 }
 
 // ───────────────────────── Handler ─────────────────────────
@@ -295,6 +546,7 @@ Deno.serve(async (req) => {
   const started = Date.now();
   const stats = { students: 0, sessions_seen: 0, sessions_updated: 0, notion_calls: 0, partial: false };
   const notion = notionClient(token);
+  const titleBudget = { left: 12 }; // títulos de links nuevos a buscar por corrida
 
   try {
     const panelId = Deno.env.get("NOTION_PANEL_PAGE_ID") || (await notion.findPanel());
@@ -318,7 +570,14 @@ Deno.serve(async (req) => {
         .from("sessions").select("notion_page_id, notion_last_edited").eq("student_id", student.id);
       const known = new Map((existing || []).map((s) => [s.notion_page_id, s.notion_last_edited]));
 
-      const sessions = await findSessions(notion, page.id);
+      const { sessions, rows } = await parseStudentPage(notion, page.id);
+      await resolveLinkLabels(db, rows, titleBudget);
+      const { error: dErr } = await db.from("student_dashboards").upsert(
+        { student_id: student.id, content: { rows }, notion_synced_at: new Date().toISOString() },
+        { onConflict: "student_id" },
+      );
+      if (dErr) throw dErr;
+
       let completed = true;
 
       for (const s of sessions) {
@@ -334,7 +593,7 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        const parsed: Parsed = { notes: [], tasks: [], links: [], date: null };
+        const parsed: Parsed = { notes: [], tasks: [], links: [], date: null, inNextSteps: false, sectionDepth: 0 };
         await parseContent(notion, s.block.id, parsed);
 
         const { error } = await db.from("sessions").upsert(
@@ -343,9 +602,11 @@ Deno.serve(async (req) => {
             notion_page_id: s.block.id,
             number: s.number,
             title: s.title.slice(0, 300),
-            session_date: parsed.date || parseDmy(s.title) || toIsoDate(s.block.created_time),
+            // Dato secundario: el orden lo da el número del título, nunca la fecha.
+            // Sin fecha en el contenido → null (la fecha de creación en Notion no es confiable).
+            session_date: parsed.date || parseDmy(s.title),
             notes: parsed.notes.join("\n").trim().slice(0, MAX_NOTES) || null,
-            tasks: parsed.tasks.slice(0, 100),
+            tasks: dropMentorTasks(parsed.tasks).slice(0, 100),
             links: parsed.links.slice(0, 50),
             notion_last_edited: edited,
             in_notion: true,

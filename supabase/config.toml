@@ -15,3 +15,27 @@ enabled = true
 # Autenticación propia: secreto del cron (Vault) o JWT de un admin (ver index.ts)
 verify_jwt = false
 entrypoint = "./functions/notion-sync/index.ts"
+
+[functions.pin-login]
+enabled = true
+# Público a propósito: el límite de intentos y la validación viven en la base (pin_login_attempt)
+verify_jwt = false
+entrypoint = "./functions/pin-login/index.ts"
+
+[functions.lab-notify]
+enabled = true
+# Solo la llama pg_cron con el secreto de Vault (ver index.ts)
+verify_jwt = false
+entrypoint = "./functions/lab-notify/index.ts"
+
+[functions.mp-checkout]
+enabled = true
+# Público (shop con Turnstile) + link de admin (JWT verificado adentro)
+verify_jwt = false
+entrypoint = "./functions/mp-checkout/index.ts"
+
+[functions.mp-webhook]
+enabled = true
+# Lo llama MercadoPago: se valida la firma x-signature y se re-consulta el pago
+verify_jwt = false
+entrypoint = "./functions/mp-webhook/index.ts"

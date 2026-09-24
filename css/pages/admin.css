@@ -84,3 +84,104 @@ body { background: var(--color-bg); color: var(--color-text); }
 .admin-pill--off { color: var(--color-text-muted); }
 
 .admin-foot { margin-top: 24px; font-size: 0.85rem; }
+
+/* Acceso por PIN */
+.admin-pinbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+}
+.admin-pinbar__security { margin: 0; font-size: 0.82rem; color: var(--color-text-muted); }
+.admin-pinbar__security.is-error { color: #f0c36b; }
+
+.admin-pin { display: flex; align-items: center; gap: 6px; }
+.admin-pin label { font-size: 0.82rem; color: var(--color-text-muted); white-space: nowrap; }
+.admin-pin input {
+  width: 9.5ch;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(4, 6, 15, 0.98);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+.admin-pin input:disabled { opacity: 0.4; }
+.admin-pin input:focus-visible { outline: none; border-color: rgba(89, 198, 186, 0.7); }
+.admin-pin__state { font-size: 0.78rem; color: var(--color-text-muted); }
+
+.admin-linkbtn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-accent-2);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Tracks que cargó el alumno */
+.admin-tracks { margin-top: 6px; font-size: 0.8rem; font-weight: 400; }
+.admin-tracks summary { cursor: pointer; color: var(--color-accent-2); }
+.admin-tracks ul { margin: 6px 0 0; padding-left: 1.1em; display: grid; gap: 4px; }
+.admin-tracks a { color: var(--color-text); overflow-wrap: anywhere; }
+.admin-tracks span { color: var(--color-text-muted); }
+
+/* Vista previa de la página del alumno */
+.admin-preview { display: inline-block; margin-top: 4px; font-size: 0.78rem; font-weight: 400; color: var(--color-accent-2); }
+
+/* Shop */
+.admin-section { margin-top: 48px; }
+.admin-h2 { margin: 0 0 8px; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.admin-h3 { margin: 32px 0 6px; font-size: 0.8rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--color-text-muted); }
+.admin-note { margin: 0 0 14px; font-size: 0.85rem; color: var(--color-text-muted); }
+.admin-note a { color: var(--color-accent-2); }
+
+.admin-price { display: flex; gap: 6px; align-items: center; }
+.admin-price input,
+.admin-linkform input,
+.admin-linkform select,
+.admin-linkresult input {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(4, 6, 15, 0.98);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.85rem;
+}
+.admin-price input { width: 10ch; }
+.admin-switch { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+.admin-switch input { accent-color: #59c6ba; width: 16px; height: 16px; }
+
+.admin-linkform {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  align-items: end;
+  padding: 16px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+}
+.admin-linkform label { display: grid; gap: 6px; font-size: 0.78rem; color: var(--color-text-muted); }
+.admin-linkform label[hidden] { display: none; }
+.admin-linkform__wide { grid-column: 1 / -1; }
+.admin-linkresult {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(89, 198, 186, 0.35);
+  border-radius: var(--radius-md);
+  background: rgba(89, 198, 186, 0.06);
+  font-size: 0.9rem;
+}
+.admin-linkresult p { margin: 0 0 10px; }
+.admin-linkresult__row { display: flex; gap: 8px; }
+.admin-linkresult__row input { flex: 1; min-width: 0; }
