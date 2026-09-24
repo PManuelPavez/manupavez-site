@@ -24,10 +24,10 @@ ARQUITECTURA (simplificada):
 NOTA: Songkick fue descartado (API cerrada). No se hace ninguna llamada a Songkick.
 
 Uso:
-    pip install -r requirements.txt
-    python automation.py          → SoundCloud + genera eventos.json (flujo completo)
-    python automation.py json     → SOLO genera eventos.json
-    python automation.py test     → SOLO prueba la conexión con la Web App
+    pip install -r scripts/fechas/requirements.txt   (todo desde la raíz del repo)
+    python scripts/fechas/automation.py          → SoundCloud + genera eventos.json (flujo completo)
+    python scripts/fechas/automation.py json     → SOLO genera eventos.json
+    python scripts/fechas/automation.py test     → SOLO prueba la conexión con la Web App
 """
 
 import os

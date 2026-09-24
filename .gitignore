@@ -25,3 +25,9 @@ env/
 img/indexPERFIL.png
 img/press/
 img/bg-*.webm
+
+# Supabase CLI (archivos locales de la herramienta)
+supabase/.temp/
+
+# Claude Code: preferencias locales de esta máquina
+.claude/settings.local.json

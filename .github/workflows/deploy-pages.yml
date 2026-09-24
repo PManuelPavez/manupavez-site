@@ -1,0 +1,69 @@
+name: Publicar sitio (GitHub Pages)
+
+# Publica SOLO lo que la web necesita. Antes, GitHub Pages servía el repo entero
+# (migraciones, funciones, docs internos, planillas) en manupavez.com/…
+#
+# Requisito (una vez): Settings → Pages → Build and deployment → Source: "GitHub Actions".
+
+on:
+  push:
+    branches: [main]
+  # Los commits del bot (sync de música/fechas) no disparan "push": se publica al terminar
+  workflow_run:
+    workflows: ["Sync music data", "Sync fechas (eventos.json)"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Armar _site solo con lo público
+        run: |
+          set -euo pipefail
+          mkdir _site
+          # Páginas + datos que la web lee
+          cp ./*.html CNAME eventos.json _site/
+          cp -R css js img logos data _site/
+          # Basura de macOS y duplicados PNG sin uso (la web usa las versiones .jpg)
+          find _site -name '.DS_Store' -delete
+          rm -f _site/img/fotos/slide1.png _site/img/fotos/slide2.png _site/img/fotos/slide3.png
+          # Sin Jekyll: se sirve tal cual (más rápido y predecible)
+          touch _site/.nojekyll
+          # Candado: nada interno puede terminar publicado
+          for p in supabase scripts docs .github .claude .env package.json; do
+            if [ -e "_site/$p" ]; then echo "::error::$p no debe publicarse"; exit 1; fi
+          done
+          echo "Publicando $(find _site -type f | wc -l) archivos ($(du -sh _site | cut -f1))"
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4

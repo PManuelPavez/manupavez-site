@@ -29,7 +29,7 @@
 // ⚠️ CLAVE COMPARTIDA — reemplazá este placeholder por tu clave real en el
 // editor de Apps Script. NO la subas a git. Debe coincidir EXACTAMENTE con
 // WEB_APP_API_KEY del archivo .env del script local.
-var API_KEY = "PEGA_ACA_TU_API_KEY_SECRETA";
+var API_KEY = "PEGAR_TU_CLAVE_ACA"; // la real vive SOLO en el editor de Apps Script (nunca en el repo)
 
 // Nombres de columnas (deben coincidir con las cabeceras de la hoja).
 var COL_ID = "ID";

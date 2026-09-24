@@ -76,6 +76,9 @@ Deno.serve(async (req) => {
 
   // Fuente de verdad: la API de MercadoPago, no el cuerpo de la notificación
   const res = await fetch(`https://api.mercadopago.com/v1/payments/${dataId}`, { headers: { Authorization: `Bearer ${token}` } });
+  // Pago inexistente (p. ej. el "Simular" del panel de MP): se ignora con 200.
+  // Si la firma pasó, el simulador muestra ✅ y confirma que MP_WEBHOOK_SECRET está bien.
+  if (res.status === 404) return ok({ ignored: "payment_not_found" });
   if (!res.ok) return ok({ error: "mp_unavailable" }, 502); // MP reintenta
   const pay = await res.json();
 

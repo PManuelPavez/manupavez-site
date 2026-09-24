@@ -21,12 +21,13 @@ jobs:
           python-version: "3.12"
 
       - name: Install deps
-        run: pip install -r requirements.txt
+        run: pip install -r scripts/fechas/requirements.txt
 
       - name: Generate eventos.json from Google Sheet
         env:
           WEB_APP_URL: ${{ secrets.WEB_APP_URL }}
-        run: python automation.py json
+        # Se corre desde la raíz: eventos.json se escribe en la raíz del sitio
+        run: python scripts/fechas/automation.py json
 
       - name: Commit if changed
         run: |

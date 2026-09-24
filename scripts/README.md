@@ -71,3 +71,17 @@ resto, editá `data-count-base` en los `.stat` de `index.html`, o integrá un se
 Para "monthly listeners" o conteo real de reproducciones se necesita:
 - Spotify for Artists (manual) o
 - API paga como Chartmetric / Songstats (~30–100 USD/mes)
+
+## fechas/ (Google Sheet → eventos.json)
+
+`fechas/automation.py` lee la planilla de fechas (vía la Web App de Apps Script) y genera
+`eventos.json` en la raíz del sitio. Lo corre a diario el workflow `sync-fechas`.
+
+```bash
+# siempre desde la raíz del repo (lee .env de ahí y escribe eventos.json ahí)
+pip install -r scripts/fechas/requirements.txt
+python scripts/fechas/automation.py json
+```
+
+`fechas/apps_script/Codigo.gs` es una **copia de referencia** del script que vive en Google.
+La `API_KEY` real se configura solo en el editor de Apps Script, nunca en el repo.
