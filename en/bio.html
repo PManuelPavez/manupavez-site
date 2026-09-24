@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Storyteller — Manu Pavez</title>
+  <meta name="description" content="The story behind Manu Pavez: Frequency Storyteller — Argentine progressive house DJ &amp; producer." />
+
+  <link rel="canonical" href="https://manupavez.com/en/bio.html" />
+  <link rel="alternate" hreflang="es" href="https://manupavez.com/bio.html" />
+  <link rel="alternate" hreflang="en" href="https://manupavez.com/en/bio.html" />
+  <link rel="alternate" hreflang="x-default" href="https://manupavez.com/bio.html" />
+  <link rel="icon" href="../logos/CUBO%20BLANCO%20MP.png" />
+
+  <!-- Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages/bio.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/scrollytelling.css">
+
+  <!-- Scrollytelling: smooth scroll (Lenis) + animaciones (GSAP/ScrollTrigger).
+       defer ANTES de los módulos para que window.gsap/Lenis existan al arrancar main.js. -->
+  <script defer src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/supabase-config.js"></script>
+  <script type="module" src="../js/main.js"></script>
+</head>
+
+<body data-page="bio">
+<header class="site-header fixed" role="banner">
+  <div class="header-inner">
+    <a class="brand" href="index.html#inicio" aria-label="Go to home">
+      <img src="../logos/CUBO BLANCO MP.png" alt="Manu Pavez" onerror="this.style.display='none'">
+    </a>
+
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="index.html#inicio">HOME</a></li>
+        <li><a href="index.html#musica">MUSIC</a></li>
+        <li><a href="bio.html" aria-current="page">ABOUT</a></li>
+        <li><a href="../presskit.html">PRESSKIT</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <a href="../bio.html" class="lang-switch" hreflang="es" lang="es" aria-label="Ver esta página en español">ES</a>
+      <a href="index.html#booking" class="header-cta">BOOKING</a>
+      <button class="menu-toggle" data-nav-toggle aria-controls="mobile-nav" aria-expanded="false" aria-label="Open mobile menu" type="button">
+        <span class="burger" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobile-nav" class="mobile-nav" data-nav-panel hidden aria-label="Mobile menu">
+    <ul class="mobile-nav-list">
+      <li><a href="index.html#inicio">HOME</a></li>
+      <li><a href="index.html#musica">MUSIC</a></li>
+      <li><a href="bio.html" aria-current="page">ABOUT</a></li>
+      <li><a href="../presskit.html">PRESSKIT</a></li>
+      <li><a href="index.html#booking">BOOKING</a></li>
+      <li><a href="../bio.html" hreflang="es" lang="es">ESPAÑOL</a></li>
+      <li><a href="mailto:manupavez22@gmail.com?subject=Manu%20Pavez%20-%20Contact/Booking%20(EN)" class="mobile-book">DIRECT EMAIL</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="story-page">
+  <!-- ============ INTRO ============ -->
+  <section class="bio-hero" aria-labelledby="bio-title">
+    <p class="bio-eyebrow">FREQUENCY STORYTELLER</p>
+    <h1 id="bio-title">MANU PAVEZ</h1>
+    <p class="bio-tagline">DJ &amp; producer — Pergamino, Argentina · b. 2001</p>
+
+    <ul class="bio-stats" aria-label="Quick facts">
+      <li><span>2020</span><small>First release</small></li>
+      <li><span>6+</span><small>International labels</small></li>
+      <li><span>∞</span><small>Hours in the studio</small></li>
+    </ul>
+  </section>
+
+  <!-- ============ STORY ============
+       Cada capítulo: texto + foto lado a lado (alternan de lado en desktop). -->
+  <section id="story-manu-pavez" class="mp-story">
+
+    <article class="bio-chapter" data-fade-up>
+      <div class="bio-chapter__text">
+        <span class="bio-chapter__num" aria-hidden="true">01</span>
+        <h2 class="bio-chapter__kicker">The origin</h2>
+        <p>
+          Pergamino, August 2001. Under a small-town sky, a kid starts imagining lights and
+          faders before he even knows what they're called. He moves from <strong>rap</strong> to
+          <strong>trap</strong>, and there he learns the one thing you never forget:
+          <em>how to measure the pulse of a phrase</em>, how to tell something through rhythm.
+          Those weren't detours. They were his first compass.
+        </p>
+      </div>
+      <figure class="bio-chapter__photo">
+        <img src="../img/live/live7.jpg" alt="Manu Pavez's hands on the CDJs" width="1066" height="1600" loading="lazy" decoding="async" style="object-position:center 40%">
+      </figure>
+    </article>
+
+    <article class="bio-chapter" data-fade-up>
+      <div class="bio-chapter__text">
+        <span class="bio-chapter__num" aria-hidden="true">02</span>
+        <h2 class="bio-chapter__kicker">The click</h2>
+        <p>
+          Then comes the turning point: what sounded like noise to many was
+          <strong>possibility</strong> to him. The <strong>post-Skrillex</strong> energy shows him
+          that a timbre can speak, and that music can break chains. That sense of wonder sticks
+          to his skin. He still feels it every time something clicks in a studio session.
+        </p>
+      </div>
+      <figure class="bio-chapter__photo">
+        <img src="../img/live/live2.jpg" alt="Manu Pavez playing live" width="1066" height="1600" loading="lazy" decoding="async" style="object-position:center 30%">
+      </figure>
+    </article>
+
+    <article class="bio-chapter" data-fade-up>
+      <div class="bio-chapter__text">
+        <span class="bio-chapter__num" aria-hidden="true">03</span>
+        <h2 class="bio-chapter__kicker">The lab</h2>
+        <p>
+          At <strong>19</strong> he opens <strong>Ableton</strong> and his room becomes a lab.
+          Endless loops, <strong>kicks</strong> searching for their place, <strong>basslines as
+          precise as breathing</strong> and melodies that tiptoe in. He realizes his job isn't
+          to mix: it's to <em>tell</em>. He develops his own grammar for speaking to the crowd
+          through the sound system. He calls it <strong>frequency storytelling</strong>.
+        </p>
+      </div>
+      <figure class="bio-chapter__photo">
+        <img src="../img/live/live3.jpg" alt="Manu Pavez in the booth" width="1066" height="1600" loading="lazy" decoding="async" style="object-position:center 45%">
+      </figure>
+    </article>
+
+    <article class="bio-chapter" data-fade-up>
+      <div class="bio-chapter__text">
+        <span class="bio-chapter__num" aria-hidden="true">04</span>
+        <h2 class="bio-chapter__kicker">Today</h2>
+        <p>
+          His tracks are released on respected <strong>progressive house</strong> labels:
+          <em>Sound Avenue, Mango Alley, Droid9 South America, 3rd Avenue, Coral Tide, Traful</em>.
+          He's been supported by <strong>Sahar Z, Graziano Raffa, Ezequiel Arias, John Cosani,
+          Hernán Cattáneo, Nick Warren</strong> and <strong>Mariano Mellino</strong>, and has shared
+          the booth with <strong>Roy Rosenfeld, Alex O&apos;Rion</strong> and <strong>Soundexile</strong>.
+        </p>
+        <p>
+          Every set is a journey: from an <strong>elegant warm-up</strong> to a <strong>hypnotic
+          peak time</strong>, never overdone, with <strong>tension that keeps building</strong>.
+          The mission is the same as on day one: <strong>leave a mark, first at home, then
+          around the world</strong>. Because once music finds its voice, geography becomes just
+          a starting point.
+        </p>
+      </div>
+      <figure class="bio-chapter__photo">
+        <img src="../img/live/live5.jpg" alt="Manu Pavez playing to the crowd" width="1066" height="1600" loading="lazy" decoding="async" style="object-position:center 55%">
+      </figure>
+    </article>
+
+    <footer class="bio-cta" data-fade-up>
+      <p class="bio-cta__line">Warm-ups &amp; opening sets · Worldwide</p>
+      <div class="bio-cta__actions">
+        <a class="mp-btn primary" href="index.html#booking">BOOK A DATE</a>
+        <a class="mp-btn ghost" href="../presskit.html">VIEW PRESSKIT</a>
+      </div>
+    </footer>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <img src="../logos/CUBO BLANCO MP.png" alt="Manu Pavez logo" class="footer-logo">
+
+    <div class="footer-social" aria-label="Social media">
+      <a href="https://www.instagram.com/manupavez_" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 2h9a5.5 5.5 0 0 1 5.5 5.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.75-.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>
+      </a>
+      <a href="https://open.spotify.com/artist/1m15KTr2Qsf1JkdkBam27h" target="_blank" rel="noopener" aria-label="Spotify">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2Zm4.4 14.6a.75.75 0 0 1-1 .3 8.3 8.3 0 0 0-8.8 0 .75.75 0 0 1-.8-1.3 9.8 9.8 0 0 1 10.4 0 .75.75 0 0 1 .2 1Zm1.3-2.7a.9.9 0 0 1-1.2.3 10.7 10.7 0 0 0-11.4 0 .9.9 0 1 1-.9-1.5 12.3 12.3 0 0 1 13.1 0 .9.9 0 0 1 .4 1.2Zm.2-2.8a1 1 0 0 1-1.3.4 13.4 13.4 0 0 0-13.8 0 1 1 0 0 1-.9-1.7 15.3 15.3 0 0 1 15.6 0 1 1 0 0 1 .4 1.3Z"/></svg>
+      </a>
+      <a href="https://youtube.com/@manupavez" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 8.2s-.2-1.5-.8-2.1a3.3 3.3 0 0 0-2.2-.8C16 5 12 5 12 5h0s-4 0-6.6.3a3.3 3.3 0 0 0-2.2.8c-.6.6-.8 2.1-.8 2.1S2 9.9 2 11.5v1c0 1.6.4 3.3.4 3.3s.2 1.5.8 2.1a3.3 3.3 0 0 0 2.2.8c1.6.1 6.6.3 6.6.3s4 0 6.6-.3a3.3 3.3 0 0 0 2.2-.8c.6-.6.8-2.1.8-2.1s.4-1.7.4-3.3v-1c0-1.6-.4-3.3-.4-3.3ZM9.8 14.7V9.3l5.4 2.7-5.4 2.7Z"/></svg>
+      </a>
+    </div>
+
+    <p>© 2026 MANU PAVEZ · ALL RIGHTS RESERVED</p>
+  </div>
+</footer>
+</body>
+</html>

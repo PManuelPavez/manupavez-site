@@ -37,7 +37,7 @@ jobs:
           mkdir _site
           # Páginas + datos que la web lee
           cp ./*.html CNAME eventos.json _site/
-          cp -R css js img logos data _site/
+          cp -R css js img logos data en _site/
           # Basura de macOS y duplicados PNG sin uso (la web usa las versiones .jpg)
           find _site -name '.DS_Store' -delete
           rm -f _site/img/fotos/slide1.png _site/img/fotos/slide2.png _site/img/fotos/slide3.png

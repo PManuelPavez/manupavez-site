@@ -1,3 +1,5 @@
+import { t } from "../core/i18n.js";
+
 export function escapeHtml(s = "") {
   return String(s)
     .replace(/&/g, "&amp;")
@@ -48,7 +50,7 @@ export function renderReleases(root, releases = []) {
 
       const tag = href ? "a" : "article";
       const attrs = href
-        ? `href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Escuchar ${title} en Spotify — se abre en una pestaña nueva"`
+        ? `href="${href}" target="_blank" rel="noopener noreferrer" aria-label="${t.listenOnSpotifyAria(title)}"`
         : "";
 
       return `
@@ -56,7 +58,7 @@ export function renderReleases(root, releases = []) {
           <div class="track-card__art">
             <span class="track-card__disc" aria-hidden="true"></span>
             <div class="track-card__cover">
-              ${safeCover ? `<img src="${safeCover}" alt="Portada — ${title}" width="320" height="320" loading="lazy" decoding="async" draggable="false">` : ""}
+              ${safeCover ? `<img src="${safeCover}" alt="${t.coverAlt(title)}" width="320" height="320" loading="lazy" decoding="async" draggable="false">` : ""}
             </div>
           </div>
           <h3 class="track-card__title">${title}</h3>
@@ -83,7 +85,7 @@ export function renderLiveSets(root, sets = []) {
       const detail = escapeHtml(s.detail || "");
       const preview = escapeHtml(s.preview_src || "");
       const url = escapeHtml(s.stream_url || "");
-      const listen = escapeHtml(s.listen_label || "Escuchar");
+      const listen = escapeHtml(s.listen_label || t.listen);
       const panelId = `live-set-panel-${idx}`;
 
       return `

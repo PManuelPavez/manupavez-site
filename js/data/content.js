@@ -1,4 +1,5 @@
 import { supabase, hasSupabase } from "./supabaseClient.js";
+import { locale, siteUrl, t } from "../core/i18n.js";
 
 function ensure() {
   if (!hasSupabase() || !supabase) throw new Error("Supabase no configurado");
@@ -74,7 +75,7 @@ function normalizePresskitItem(r) {
 
 async function fetchLocalJson(path) {
   try {
-    const res = await fetch(path, { cache: "no-cache" });
+    const res = await fetch(siteUrl(path), { cache: "no-cache" });
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -122,7 +123,7 @@ export async function getLiveSets() {
         city,
         date: formatSetDate(v.published),
         detail: (v.description || "").trim(),
-        listen_label: "Ver en YouTube",
+        listen_label: t.watchOnYouTube,
         stream_url: v.watch_url || (id ? `https://www.youtube.com/watch?v=${id}` : ""),
         preview_src: id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : "",
       };
@@ -148,7 +149,7 @@ function formatSetDate(iso) {
   if (!iso) return "";
   const d = new Date(iso);
   if (isNaN(d)) return "";
-  return d.toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" });
+  return d.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" });
 }
 
 // Videos desde data/youtube.json (YouTube RSS sync). Devuelve [] si no hay archivo.

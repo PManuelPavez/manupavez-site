@@ -1,4 +1,5 @@
 import { $ } from "../core/dom.js";
+import { locale, siteUrl, t } from "../core/i18n.js";
 
 /**
  * Fechas en vivo dinámicas.
@@ -33,7 +34,7 @@ function aDateLocal(fecha) {
 function formatearFecha(fecha) {
   const d = aDateLocal(fecha);
   if (!d) return esc(fecha);
-  return d.toLocaleDateString("es-AR", {
+  return d.toLocaleDateString(locale, {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -46,7 +47,7 @@ function plantillaEvento(ev) {
   const ciudad = esc(ev.ciudad);
   const cta = ev.tickets
     ? `<a class="mp-btn primary show-cta" href="${esc(ev.tickets)}" target="_blank" rel="noopener">TICKETS</a>`
-    : `<span class="muted show-soon">Próximamente</span>`;
+    : `<span class="muted show-soon">${t.comingSoon}</span>`;
 
   // OJO: NO ponemos la clase `reveal` acá porque la inyección ocurre DESPUÉS
   // del init de scrollytelling.js (que escanea `.reveal` al cargar la página).
@@ -112,13 +113,13 @@ export async function initEventos() {
 
   try {
     // cache:no-cache para tomar siempre el eventos.json más reciente.
-    const res = await fetch("eventos.json", { cache: "no-cache" });
+    const res = await fetch(siteUrl("eventos.json"), { cache: "no-cache" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
     const eventos = await res.json();
 
     if (!Array.isArray(eventos) || eventos.length === 0) {
-      cont.innerHTML = `<p class="muted">Pronto nuevas fechas. Seguime para no perderte ninguna.</p>`;
+      cont.innerHTML = `<p class="muted">${t.noShows}</p>`;
       return;
     }
 
@@ -128,7 +129,7 @@ export async function initEventos() {
     // registró en scrollytelling.js. Lo creamos acá explícitamente.
     revelarFilas(cont);
   } catch (error) {
-    cont.innerHTML = `<p class="muted">No se pudieron cargar las fechas por ahora.</p>`;
+    cont.innerHTML = `<p class="muted">${t.showsError}</p>`;
     console.error("[eventos]", error);
   }
 }

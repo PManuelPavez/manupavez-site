@@ -1,10 +1,12 @@
+import { locale, siteUrl } from "../core/i18n.js";
+
 // Counters animados on-scroll. Los valores dinámicos (followers/releases) se
 // toman de data/music.json (auto-sync Spotify); el resto son configurables en el HTML.
 export function initCounters() {
   const nodes = Array.from(document.querySelectorAll("[data-counter]"));
   if (!nodes.length) return;
 
-  const fmt = (n) => Math.round(n).toLocaleString("es-AR");
+  const fmt = (n) => Math.round(n).toLocaleString(locale);
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // Rellena targets dinámicos desde music.json (no bloquea si no existe)
@@ -83,7 +85,7 @@ async function hydrateDynamicTargets(nodes) {
 
 async function fetchJson(path) {
   try {
-    const res = await fetch(path, { cache: "no-cache" });
+    const res = await fetch(siteUrl(path), { cache: "no-cache" });
     return res.ok ? await res.json() : null;
   } catch {
     return null;

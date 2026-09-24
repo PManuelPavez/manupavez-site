@@ -1,5 +1,6 @@
 import { $, $$ } from "../core/dom.js";
 import { prefersReducedMotion } from "../core/motion.js";
+import { t } from "../core/i18n.js";
 
 export function initSliders() {
   initReleaseSlider();
@@ -336,7 +337,7 @@ export function initPresskitPhotoSlider() {
       const b = document.createElement("button");
       b.type = "button";
       b.className = "dot" + (i === current ? " is-active" : "");
-      b.setAttribute("aria-label", `Ver foto ${i + 1}`);
+      b.setAttribute("aria-label", t.viewPhoto(i + 1));
       b.addEventListener("click", () => {
         show(i);
         restart();

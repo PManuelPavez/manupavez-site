@@ -3,6 +3,7 @@
 // DENTRO de la sección de música (debajo del slider) donde el disco sale del
 // artwork y aparecen los links. NO oscurece la web: es parte de la página.
 import { prefersReducedMotion } from "../core/motion.js";
+import { t } from "../core/i18n.js";
 
 let panel, coverImg, titleEl, metaEl, linksEl, activeCard = null;
 
@@ -24,7 +25,7 @@ function build(host) {
   panel.innerHTML = `
     <div class="release-reveal__inner">
       <div class="release-reveal__content">
-        <button class="release-reveal__close" type="button" aria-label="Cerrar">
+        <button class="release-reveal__close" type="button" aria-label="${t.close}">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
         <div class="cd-stage">
@@ -72,7 +73,7 @@ function openFromCard(card) {
 
   if (img) {
     coverImg.src = img.currentSrc || img.src;
-    coverImg.alt = `Portada — ${title}`;
+    coverImg.alt = t.coverAlt(title);
   }
   titleEl.textContent = title;
   metaEl.textContent = meta;
@@ -108,13 +109,13 @@ function buildLinks(spotify) {
     a.rel = "noopener noreferrer";
     a.innerHTML = `
       <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2Zm4.4 14.6a.75.75 0 0 1-1 .3 8.3 8.3 0 0 0-8.8 0 .75.75 0 0 1-.8-1.3 9.8 9.8 0 0 1 10.4 0 .75.75 0 0 1 .2 1Zm1.3-2.7a.9.9 0 0 1-1.2.3 10.7 10.7 0 0 0-11.4 0 .9.9 0 1 1-.9-1.5 12.3 12.3 0 0 1 13.1 0 .9.9 0 0 1 .4 1.2Zm.2-2.8a1 1 0 0 1-1.3.4 13.4 13.4 0 0 0-13.8 0 1 1 0 0 1-.9-1.7 15.3 15.3 0 0 1 15.6 0 1 1 0 0 1 .4 1.3Z"/></svg>
-      <span>Escuchar en Spotify</span>`;
+      <span>${t.listenOnSpotify}</span>`;
     linksEl.appendChild(a);
   }
   if (!linksEl.childElementCount) {
     const p = document.createElement("p");
     p.className = "cd-link-empty";
-    p.textContent = "Próximamente en plataformas.";
+    p.textContent = t.comingToPlatforms;
     linksEl.appendChild(p);
   }
 }

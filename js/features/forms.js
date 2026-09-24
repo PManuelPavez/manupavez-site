@@ -1,4 +1,5 @@
 import { sendLead } from "../data/leadMailer.js";
+import { lang, t } from "../core/i18n.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -55,11 +56,11 @@ export function initContactForm() {
       if (!firstInvalid) firstInvalid = input;
     };
 
-    if (!name) fail(els.name, "Decime tu nombre.");
-    if (!email) fail(els.email, "Necesito un mail para responderte.");
-    else if (!EMAIL_RE.test(email)) fail(els.email, "Ese mail no parece válido.");
-    if (!type) fail(els.type, "Elegí un tipo de evento.");
-    if (!message) fail(els.message, "Contame un poco del evento.");
+    if (!name) fail(els.name, t.form.name);
+    if (!email) fail(els.email, t.form.email);
+    else if (!EMAIL_RE.test(email)) fail(els.email, t.form.emailInvalid);
+    if (!type) fail(els.type, t.form.type);
+    if (!message) fail(els.message, t.form.message);
 
     return firstInvalid;
   }
@@ -85,7 +86,7 @@ export function initContactForm() {
     const firstInvalid = validate(data, els);
     if (firstInvalid) {
       firstInvalid.focus();
-      setNote("Revisá los campos marcados.", true);
+      setNote(t.form.checkFields, true);
       return;
     }
 
@@ -93,7 +94,7 @@ export function initContactForm() {
     const originalLabel = submitBtn.textContent;
     submitBtn.setAttribute("aria-busy", "true");
     submitBtn.disabled = true;
-    setNote("Enviando…");
+    setNote(t.form.sending);
 
     // Envío directo al mail (FormSubmit) — sin API keys
     try {
@@ -103,8 +104,9 @@ export function initContactForm() {
           Email: data.email,
           "Tipo de evento": TYPE_LABELS[data.type] || data.type,
           Mensaje: data.message,
+          Idioma: lang === "en" ? "Inglés (web /en)" : "Español",
         },
-        { subject: `Booking / Contacto — ${data.name}` }
+        { subject: `${lang === "en" ? "[EN] " : ""}Booking / Contacto — ${data.name}` }
       );
       showSuccess();
       return;
@@ -114,7 +116,7 @@ export function initContactForm() {
 
     // Plan B: abrir el cliente de mail
     restoreButton(submitBtn, originalLabel);
-    setNote("No pude enviar automático. Te abro el mail como plan B.", true);
+    setNote(t.form.fallback, true);
     window.location.href = buildMailto(data);
   });
 
@@ -124,7 +126,7 @@ export function initContactForm() {
       successPanel.hidden = false;
       successPanel.scrollIntoView({ behavior: "smooth", block: "center" });
     } else {
-      setNote("¡Enviado! Te respondo a la brevedad.");
+      setNote(t.form.sent);
       form.reset();
     }
   }
@@ -137,7 +139,7 @@ export function initContactForm() {
 }
 
 function buildMailto({ name, email, type, message }) {
-  const subject = "Booking / Contacto - Manu Pavez";
+  const subject = `${lang === "en" ? "[EN] " : ""}Booking / Contacto - Manu Pavez`;
   const body = [
     `Nombre: ${name}`,
     `Email: ${email}`,

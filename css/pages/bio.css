@@ -105,107 +105,78 @@ body[data-page="bio"] .bio-hero h1::after {
   color: rgba(255, 255, 255, 0.55);
 }
 
-/* ============ STORY CARD ============ */
+/* ============ STORY: capítulos en filas (texto + foto) ============
+   Desktop: dos columnas que alternan de lado, unidas por un hilo vertical
+   con nodos (la historia "progresa"). Mobile: foto arriba, texto abajo. */
 
 body[data-page="bio"] .mp-story {
-  width: min(880px, 100%);
+  width: min(1080px, 100%);
   margin-inline: auto;
+  display: grid;
+  gap: clamp(56px, 9vw, 120px);
+}
 
-  padding: clamp(22px, 3vw, 44px);
-  border-radius: 24px;
+body[data-page="bio"] .bio-chapter {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 72px);
+}
 
-  background:
-    radial-gradient(860px 460px at 12% 0%, rgba(89, 198, 186, 0.10), transparent 60%),
-    radial-gradient(840px 560px at 100% 120%, rgba(49, 64, 151, 0.14), transparent 64%),
-    rgba(3, 5, 12, 0.94);
+/* Capítulos pares: foto a la izquierda */
+body[data-page="bio"] .bio-chapter:nth-of-type(even) .bio-chapter__photo {
+  order: -1;
+}
+body[data-page="bio"] .bio-chapter:nth-of-type(even) {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+}
 
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  box-shadow:
-    0 22px 60px rgba(0, 0, 0, 0.62),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-
+/* ---- Texto ---- */
+.bio-chapter__text {
   position: relative;
-  overflow: hidden;
+  max-width: 58ch;
 }
 
-body[data-page="bio"] .mp-story::before {
-  content: "";
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  top: 16px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(89, 198, 186, 0.55), rgba(49, 64, 151, 0.55), transparent);
-  opacity: 0.55;
-}
-
-/* ============ CHAPTERS ============ */
-
-.bio-chapter + .bio-chapter {
-  margin-top: clamp(28px, 4vw, 44px);
-}
-
-/* Fotos en vivo intercaladas en la historia */
-body[data-page="bio"] .bio-photo {
-  margin: clamp(32px, 6vw, 56px) 0;
-  border-radius: clamp(14px, 2vw, 20px);
-  overflow: hidden;
-  background: #05060c;
-  border: 1px solid var(--mp-border);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-  max-width: 460px;
-}
-
-body[data-page="bio"] .bio-photo--wide {
-  max-width: 100%;
-}
-
-body[data-page="bio"] .bio-photo img {
+.bio-chapter__num {
   display: block;
-  width: 100%;
-  height: auto;
-  transition: transform 0.6s var(--mp-ease-groove, ease);
-}
-
-body[data-page="bio"] .bio-photo:hover img {
-  transform: scale(1.03);
-}
-
-@media (max-width: 640px) {
-  body[data-page="bio"] .bio-photo { max-width: 100%; }
+  font-family: var(--font-primary);
+  font-size: clamp(3.2rem, 2rem + 4vw, 5.6rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(89, 198, 186, 0.45);
+  margin-bottom: 14px;
+  user-select: none;
 }
 
 .bio-chapter__kicker {
   font-family: var(--font-primary);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   letter-spacing: 0.42em;
   text-transform: uppercase;
   color: color-mix(in oklab, var(--mp-accent-2) 75%, white 25%);
-  margin-bottom: 12px;
-  position: relative;
-  padding-left: 18px;
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.bio-chapter__kicker::before {
+.bio-chapter__kicker::after {
   content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 8px;
+  flex: 0 0 48px;
   height: 1px;
-  background: currentColor;
+  background: linear-gradient(90deg, currentColor, transparent);
 }
 
 body[data-page="bio"] .bio-chapter p {
-  max-width: 72ch;
-  font-size: clamp(1.02rem, 0.98rem + 0.35vw, 1.16rem);
+  font-size: clamp(1.02rem, 0.98rem + 0.3vw, 1.14rem);
   line-height: 1.85;
-  color: rgba(233, 238, 245, 0.9);
+  color: rgba(233, 238, 245, 0.86);
   margin: 0;
 }
 
 body[data-page="bio"] .bio-chapter p + p {
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 body[data-page="bio"] .mp-story strong {
@@ -218,29 +189,85 @@ body[data-page="bio"] .mp-story em {
   font-style: italic;
 }
 
+/* ---- Foto (todas verticales: mismo formato 4:5 para que la grilla respire pareja) ---- */
+body[data-page="bio"] .bio-chapter__photo {
+  margin: 0;
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: clamp(14px, 2vw, 22px);
+  overflow: hidden;
+  background: #05060c;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55);
+}
+
+body[data-page="bio"] .bio-chapter__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--mp-ease-groove, ease);
+}
+
+/* Viñeta sutil para integrar la foto con el fondo oscuro */
+body[data-page="bio"] .bio-chapter__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(3, 5, 12, 0.45));
+  pointer-events: none;
+}
+
+body[data-page="bio"] .bio-chapter__photo:hover img {
+  transform: scale(1.03);
+}
+
 /* ============ CTA FOOTER ============ */
 
 .bio-cta {
-  margin-top: clamp(36px, 5vw, 56px);
-  padding-top: clamp(24px, 4vw, 36px);
+  text-align: center;
+  padding-top: clamp(40px, 6vw, 64px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bio-cta__line {
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 22px;
+}
+
+.bio-cta__actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 14px;
 }
 
-/* ============ MOBILE ============ */
+/* ============ MOBILE / TABLET ============ */
+
+@media (max-width: 760px) {
+  body[data-page="bio"] .bio-chapter,
+  body[data-page="bio"] .bio-chapter:nth-of-type(even) {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  /* Foto siempre arriba, más apaisada para no ocupar toda la pantalla */
+  body[data-page="bio"] .bio-chapter__photo {
+    order: -1;
+    aspect-ratio: 4 / 3;
+  }
+  .bio-chapter__text {
+    max-width: none;
+  }
+  .bio-chapter__num {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+}
 
 @media (max-width: 640px) {
-  body[data-page="bio"] .mp-story {
-    border-radius: 18px;
-    padding: 22px;
-  }
-  body[data-page="bio"] .mp-story::before {
-    left: 14px;
-    right: 14px;
-  }
   .bio-stats {
     gap: 8px;
   }
@@ -251,7 +278,7 @@ body[data-page="bio"] .mp-story em {
   .bio-stats li span {
     font-size: 1.2rem;
   }
-  .bio-cta {
+  .bio-cta__actions {
     flex-direction: column;
     align-items: stretch;
   }
@@ -263,10 +290,11 @@ body[data-page="bio"] .mp-story em {
 /* ============ MOTION ============ */
 
 @media (prefers-reduced-motion: reduce) {
-  body[data-page="bio"] .mp-story,
-  body[data-page="bio"] .bio-chapter {
+  body[data-page="bio"] .bio-chapter__photo img {
     transition: none !important;
-    transform: none !important;
+  }
+  body[data-page="bio"] .bio-chapter__photo:hover img {
+    transform: none;
   }
 }
 
@@ -278,68 +306,6 @@ body[data-page="bio"] .site-header .nav a.is-active {
 
 body[data-page="bio"] .site-header .nav a.is-active::after {
   transform: scaleX(1);
-}
-
-/* ============ TIMELINE DE CAPÍTULOS ============
-   Convierte la lista de capítulos en una línea de tiempo con nodos
-   luminosos: la historia "progresa" visualmente. Solo desde tablet+. */
-@media (min-width: 680px) {
-  body[data-page="bio"] .mp-story {
-    padding-left: clamp(42px, 6vw, 70px);
-  }
-
-  body[data-page="bio"] .bio-chapter {
-    position: relative;
-    padding-left: 30px;
-  }
-
-  /* Línea vertical que conecta los capítulos */
-  body[data-page="bio"] .bio-chapter::before {
-    content: "";
-    position: absolute;
-    left: 6px;
-    top: 6px;
-    bottom: calc(-1 * clamp(28px, 4vw, 44px));
-    width: 1px;
-    background: linear-gradient(180deg, rgba(89, 198, 186, 0.55), rgba(49, 64, 151, 0.22));
-  }
-  /* El último capítulo: la línea se desvanece (fin del relato) */
-  body[data-page="bio"] .bio-chapter:last-of-type::before {
-    background: linear-gradient(180deg, rgba(89, 198, 186, 0.5), transparent 85%);
-  }
-
-  /* Nodo luminoso, alineado con el kicker */
-  body[data-page="bio"] .bio-chapter::after {
-    content: "";
-    position: absolute;
-    left: 1px;
-    top: 5px;
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
-    background: var(--color-bg);
-    border: 2px solid var(--mp-accent-2);
-    box-shadow:
-      0 0 0 4px rgba(89, 198, 186, 0.10),
-      0 0 14px rgba(89, 198, 186, 0.5);
-  }
-
-  /* El kicker ya no necesita su guion: ahora manda el nodo */
-  body[data-page="bio"] .bio-chapter__kicker {
-    padding-left: 0;
-  }
-  body[data-page="bio"] .bio-chapter__kicker::before {
-    display: none;
-  }
-
-  /* Pulso sutil del nodo (electrónico, pero sobrio) */
-  body[data-page="bio"] .bio-chapter::after {
-    animation: bioNodePulse 3.6s var(--mp-ease-out, ease-in-out) infinite;
-  }
-  @keyframes bioNodePulse {
-    0%, 100% { box-shadow: 0 0 0 4px rgba(89, 198, 186, 0.08), 0 0 10px rgba(89, 198, 186, 0.35); }
-    50%      { box-shadow: 0 0 0 5px rgba(89, 198, 186, 0.14), 0 0 18px rgba(89, 198, 186, 0.6); }
-  }
 }
 
 /* Stats del hero: números con leve glow de acento (más "premium") */
@@ -365,9 +331,8 @@ body[data-page="bio"] .bio-hero h1::after {
   to   { background-position: -200% 0; }
 }
 
-/* Respetar reduced motion: sin pulsos ni shimmer */
+/* Respetar reduced motion: sin shimmer */
 @media (prefers-reduced-motion: reduce) {
-  body[data-page="bio"] .bio-chapter::after,
   body[data-page="bio"] .bio-hero h1::after {
     animation: none !important;
   }

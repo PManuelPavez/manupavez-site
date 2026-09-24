@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from "../core/motion.js";
+import { t } from "../core/i18n.js";
 
 /**
  * Slider del feed de Instagram (Swiper.js) con embeds OFICIALES de Instagram.
@@ -55,7 +56,7 @@ export function initIgSlider() {
           scrolling="no"
           allowtransparency="true"
           frameborder="0"
-          title="Publicación de Instagram"
+          title="${t.igPostTitle}"
         ></iframe>
       </div>`
     )
