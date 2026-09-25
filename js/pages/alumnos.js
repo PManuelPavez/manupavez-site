@@ -2,7 +2,7 @@
 // Sin sesión → login con PIN (+ Turnstile). Con sesión → su página del Lab.
 import { supabase, hasSupabase } from "../data/supabaseClient.js";
 import { mountPortal } from "../features/portal.js";
-import { loginWithPin } from "../features/pinLogin.js";
+import { loginWithPin, rememberPin } from "../features/pinLogin.js";
 import { mountTurnstile } from "../features/turnstile.js";
 
 const $ = (sel) => document.querySelector(sel);
@@ -58,7 +58,8 @@ async function showLogin() {
     submitBtn.disabled = true;
     say("Verificando…", false);
 
-    const result = await loginWithPin(input.value.trim(), await captcha.getToken());
+    const pin = input.value.trim();
+    const result = await loginWithPin(pin, await captcha.getToken());
     captcha.reset();
     busy = false;
     submitBtn.disabled = false;
@@ -69,6 +70,8 @@ async function showLogin() {
       say(result.message);
       return;
     }
+    // Ofrece guardar el PIN en Google/iCloud para autocompletarlo la próxima vez
+    await rememberPin(pin, { admin: result.redirect === "admin.html" });
     if (result.redirect === "admin.html") {
       location.href = "admin.html";
       return;

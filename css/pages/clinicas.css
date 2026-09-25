@@ -2295,3 +2295,56 @@ html.gate-open { overflow: hidden; }
 .entry-gate__captcha:empty,
 .auth-turnstile:empty { display: none; }
 .auth-turnstile { margin-top: 12px; display: flex; justify-content: center; }
+
+/* =========================================================
+   Botón ALUMNO del encabezado (solo /clinicas)
+   Brillante para que el alumno lo encuentre sin bajar, y visible
+   también en mobile (el resto de los CTA del header se esconden ahí).
+   ========================================================= */
+.site-header .header-cta.header-cta--alumno {
+  display: inline-flex !important;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  font-weight: 600;
+  color: #fff;
+  border-color: rgba(89, 198, 186, 0.9);
+  background-image: linear-gradient(135deg, #59c6ba 0%, #314097 100%) !important;
+  box-shadow: 0 0 0 1px rgba(89, 198, 186, 0.35), 0 0 18px rgba(89, 198, 186, 0.45);
+  animation: alumno-glow 2.8s ease-in-out infinite;
+}
+/* Reflejo que cruza el botón, lento (debajo del texto) */
+.site-header .header-cta.header-cta--alumno::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  transform: translateX(-130%);
+  animation: alumno-shine 3.6s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+  pointer-events: none;
+}
+.site-header .header-cta.header-cta--alumno:hover,
+.site-header .header-cta.header-cta--alumno:focus-visible {
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(89, 198, 186, 0.6), 0 0 28px rgba(89, 198, 186, 0.7);
+  transform: translateY(-1px);
+}
+.site-header .header-cta.header-cta--alumno:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+@keyframes alumno-glow {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(89, 198, 186, 0.35), 0 0 14px rgba(89, 198, 186, 0.35); }
+  50%      { box-shadow: 0 0 0 1px rgba(89, 198, 186, 0.6), 0 0 26px rgba(89, 198, 186, 0.65); }
+}
+@keyframes alumno-shine {
+  0%, 55% { transform: translateX(-130%); }
+  100%    { transform: translateX(130%); }
+}
+
+@media (max-width: 720px) {
+  .site-header .header-cta.header-cta--alumno { padding: 6px 12px; font-size: 0.68rem; letter-spacing: 0.18em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header .header-cta.header-cta--alumno,
+  .site-header .header-cta.header-cta--alumno::after { animation: none; }
+}

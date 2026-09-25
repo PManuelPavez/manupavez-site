@@ -2,7 +2,7 @@
 // Se arma desde JS: clinicas.html no cambia. La seguridad del PIN vive en el
 // servidor (Edge Function pin-login + límite de intentos en la base).
 import { supabase, hasSupabase } from "../data/supabaseClient.js";
-import { loginWithPin } from "./pinLogin.js";
+import { loginWithPin, rememberPin, PIN_ACCOUNT } from "./pinLogin.js";
 import { mountTurnstile } from "./turnstile.js";
 
 const DISMISS_KEY = "mp-gate-dismissed";
@@ -37,9 +37,11 @@ function build() {
       </div>
 
       <form class="entry-gate__view" data-gate-view="pin" hidden novalidate>
+        <!-- Usuario invisible: permite que Google/iCloud guarden y autocompleten el PIN -->
+        <input class="sr-only" type="text" name="username" autocomplete="username" value="${PIN_ACCOUNT}" tabindex="-1" aria-hidden="true" readonly />
         <label class="entry-gate__label" for="gate-pin">Ingresá tu código de acceso</label>
-        <input id="gate-pin" class="entry-gate__pin" type="text" inputmode="numeric"
-          autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="······" required />
+        <input id="gate-pin" name="password" class="entry-gate__pin" type="password" inputmode="numeric"
+          autocomplete="current-password" pattern="[0-9]{6}" maxlength="6" placeholder="······" required />
         <div class="entry-gate__captcha" data-gate-captcha></div>
         <p class="entry-gate__note" data-gate-note role="status" aria-live="polite"></p>
         <button type="submit" class="mp-btn primary" data-gate-submit>ENTRAR</button>
@@ -53,9 +55,25 @@ function build() {
   return dlg;
 }
 
+// Botón "ALUMNO" del encabezado: con sesión entra directo; sin sesión abre el PIN
+export async function openStudentAccess() {
+  const { data } = await supabase.auth.getSession();
+  if (data.session) { location.href = "alumnos.html"; return; }
+  if (document.querySelector("dialog.entry-gate[open]")) return; // ya está abierto
+  open("pin");
+}
+
 export function initEntryGate() {
   if (document.body.dataset.page !== "clinicas") return;
   if (!hasSupabase() || !supabase || typeof HTMLDialogElement !== "function") return;
+
+  // Sin JS el botón lleva a /alumnos (href); con JS abre el popup sin bajar por la página
+  document.querySelectorAll("[data-student-access]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      openStudentAccess();
+    });
+  });
 
   // Vuelta de un magic link, o ya eligió "aplicar": no interrumpir
   const hash = location.hash;
@@ -151,6 +169,7 @@ function open(initialView) {
     if (result.ok) {
       say("Listo, entrando…", false);
       remember();
+      await rememberPin(pin, { admin: result.redirect === "admin.html" });
       // El espacio del alumno vive aparte: sin el resto del sitio
       location.href = result.redirect;
       return;

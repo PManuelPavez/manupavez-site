@@ -35,8 +35,10 @@
       <p class="lab-login__kicker">Frequency Lab</p>
       <h1 id="login-title" class="lab-login__title">Tu espacio</h1>
       <form class="lab-login__form" data-pin-form novalidate>
+        <!-- Usuario invisible: permite que Google/iCloud guarden y autocompleten el PIN -->
+        <input class="sr-only" type="text" name="username" autocomplete="username" value="Frequency Lab" tabindex="-1" aria-hidden="true" readonly />
         <label for="pin">Ingresá tu código de acceso</label>
-        <input id="pin" class="lab-pin" type="text" inputmode="numeric" autocomplete="one-time-code"
+        <input id="pin" name="password" class="lab-pin" type="password" inputmode="numeric" autocomplete="current-password"
           pattern="[0-9]{6}" maxlength="6" placeholder="······" required />
         <div class="lab-login__captcha" data-captcha></div>
         <p class="lab-login__note" data-note role="status" aria-live="polite"></p>
