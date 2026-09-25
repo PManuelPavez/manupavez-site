@@ -121,6 +121,33 @@ function blockText(b: Block): string {
   return "";
 }
 
+// Texto con sus links (lo que en Notion es una palabra/URL con hipervínculo).
+// Se guardan tramos { text, href } para que la web los muestre clickeables.
+type Part = { text: string; href?: string };
+function richParts(rt: any[] = []): Part[] {
+  const parts: Part[] = [];
+  for (const t of rt) {
+    const text = t?.plain_text ?? "";
+    if (!text) continue;
+    const href = t?.href ? safeUrl(t.href) || undefined : undefined;
+    const last = parts[parts.length - 1];
+    if (last && last.href === href) last.text += text;
+    else parts.push(href ? { text, href } : { text });
+  }
+  return parts;
+}
+const withLinks = (b: Block): Part[] | undefined => {
+  const parts = richParts(b[b.type]?.rich_text);
+  return parts.some((p) => p.href) ? parts.slice(0, 60) : undefined;
+};
+// Archivos subidos a Notion: su URL firmada vence en 1 h, así que se guarda el
+// id del bloque y la web pide un link fresco al abrirlo (Edge Function notion-file).
+const isNotionHosted = (v: any) => v?.type === "file";
+const fileLabel = (b: Block) => {
+  const v = b[b.type] || {};
+  return (plain(v.caption) || v.name || decodeURIComponent(String(v.file?.url || "").split("?")[0].split("/").pop() || "") || "Archivo").slice(0, 160);
+};
+
 function sessionTitle(b: Block): string | null {
   if (b.type === "child_page") return b.child_page?.title?.trim() || null;
   const toggleable =
@@ -306,6 +333,9 @@ async function parseContent(
       case "file":
       case "pdf":
         if (v.type === "external") addLink(v.external?.url, plain(v.caption) || v.name || b.type);
+        else if (isNotionHosted(v) && !out.links.some((l) => l.url === `notion-file:${b.id}`)) {
+          out.links.push({ url: `notion-file:${b.id}`, label: fileLabel(b) });
+        }
         break;
     }
 
@@ -317,10 +347,11 @@ async function parseContent(
 // Un solo recorrido de la página: encuentra las sesiones y, a la vez, arma el
 // "espejo" de la página (filas → columnas → secciones por título) para el portal.
 type DashItem =
-  | { t: "label" | "text"; text: string }
-  | { t: "bullet"; text: string; depth: number }
-  | { t: "task"; id: string; text: string; done: boolean; depth: number }
+  | { t: "label" | "text"; text: string; parts?: Part[] }
+  | { t: "bullet"; text: string; depth: number; parts?: Part[] }
+  | { t: "task"; id: string; text: string; done: boolean; depth: number; parts?: Part[] }
   | { t: "link"; url: string; label: string; kind: "recording" | "link" }
+  | { t: "file"; id: string; label: string }
   | { t: "sessions" };
 type DashSection = { title: string; color: string | null; items: DashItem[] };
 type DashRow = { cols: DashSection[][] };
@@ -384,18 +415,25 @@ async function parseStudentPage(notion: ReturnType<typeof notionClient>, pageId:
         return;
       case "to_do":
         // id = bloque de Notion: clave estable para que el alumno la marque desde la web
-        if (text) current(list).items.push({ t: "task", id: b.id, text: text.slice(0, 500), done: Boolean(v.checked), depth: Math.min(depth, 3) });
+        if (text) current(list).items.push({ t: "task", id: b.id, text: text.slice(0, 500), done: Boolean(v.checked), depth: Math.min(depth, 3), parts: withLinks(b) });
         await kids(depth + 1);
         return;
       case "bulleted_list_item":
       case "numbered_list_item":
-        if (text) current(list).items.push({ t: "bullet", text: text.slice(0, 1000), depth: Math.min(depth, 3) });
+        if (text) current(list).items.push({ t: "bullet", text: text.slice(0, 1000), depth: Math.min(depth, 3), parts: withLinks(b) });
         await kids(depth + 1);
         return;
       case "paragraph":
       case "quote":
       case "callout":
-      case "toggle":
+      case "toggle": {
+        // Con links adentro ("CHESTER: https://…", "QSYY: <link>"): un solo ítem con sus tramos
+        const parts = withLinks(b);
+        if (parts && !isUrlOnly(text)) {
+          current(list).items.push({ t: "text", text: text.slice(0, 2000), parts });
+          await kids(depth + 1);
+          return;
+        }
         for (const line of text.split("\n").map((l) => l.trim()).filter(Boolean)) {
           if (isUrlOnly(line)) pushLink(list, line, "");
           else if (line.length <= 60 && line.endsWith(":")) current(list).items.push({ t: "label", text: line.slice(0, -1) });
@@ -403,6 +441,7 @@ async function parseStudentPage(notion: ReturnType<typeof notionClient>, pageId:
         }
         await kids(depth + 1);
         return;
+      }
       case "bookmark":
       case "embed":
       case "link_preview":
@@ -413,6 +452,7 @@ async function parseStudentPage(notion: ReturnType<typeof notionClient>, pageId:
       case "file":
       case "pdf":
         if (v.type === "external") pushLink(list, v.external?.url, plain(v.caption) || v.name || "");
+        else if (isNotionHosted(v)) current(list).items.push({ t: "file", id: b.id, label: fileLabel(b) });
         return;
     }
   }

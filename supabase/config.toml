@@ -39,3 +39,9 @@ enabled = true
 # Lo llama MercadoPago: se valida la firma x-signature y se re-consulta el pago
 verify_jwt = false
 entrypoint = "./functions/mp-webhook/index.ts"
+
+[functions.notion-file]
+enabled = true
+# JWT verificado adentro (alumno con acceso vigente o admin) + dueño del archivo
+verify_jwt = false
+entrypoint = "./functions/notion-file/index.ts"

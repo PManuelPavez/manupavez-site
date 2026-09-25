@@ -60,6 +60,28 @@ export async function deleteTrack(id) {
   if (error || !data?.length) throw new Error("No se pudo borrar el track.");
 }
 
+// Archivo subido a Notion: pide un link fresco (vence en 1 h) a la Edge Function,
+// que verifica que el archivo sea de este alumno (o que quien pide sea admin).
+const FILE_ERRORS = {
+  forbidden: "Tu acceso al Lab está pausado.",
+  not_found: "Ese archivo ya no está disponible. Avisale a Manu.",
+  unauthorized: "Tu sesión venció. Volvé a entrar con tu código.",
+};
+export async function getNotionFileUrl(blockId) {
+  const { data: { session } } = await ensure().auth.getSession();
+  if (!session) throw new Error(FILE_ERRORS.unauthorized);
+  const res = await fetch(`${window.MP_SUPABASE.url}/functions/v1/notion-file`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ block_id: blockId }),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok || !/^https:\/\//.test(String(body.url || ""))) {
+    throw new Error(FILE_ERRORS[body.error] || "No se pudo abrir el archivo. Probá de nuevo en un momento.");
+  }
+  return body.url;
+}
+
 // Misión marcada/desmarcada por el alumno (la base valida que sea suya)
 export async function setTaskCheck(taskKey, done) {
   const { error } = await ensure()
