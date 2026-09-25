@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-09-24T10:53:40.948Z",
+  "updated_at": "2026-09-25T10:56:06.898Z",
   "artist": {
     "id": "1m15KTr2Qsf1JkdkBam27h",
     "name": "Manu Pavez",
-    "followers": 584,
+    "followers": 585,
     "popularity": 8,
     "genres": [
       "progressive house",
@@ -44,7 +44,7 @@
       "artwork": "https://i.scdn.co/image/ab67616d0000b273f6bea111374cf0663535809f",
       "album": "24 Years Apart (Remixes, Pt. 2)",
       "release_date": "2024-03-11",
-      "popularity": 1,
+      "popularity": 0,
       "duration_ms": 476000,
       "spotify_url": "https://open.spotify.com/track/02oJhfqEGlVZqwFfax0tA9"
     },
@@ -54,7 +54,7 @@
       "artwork": "https://i.scdn.co/image/ab67616d0000b273a758764c2deb556ccb4aacfc",
       "album": "TERMOSFERE",
       "release_date": "2024-04-17",
-      "popularity": 5,
+      "popularity": 4,
       "duration_ms": 209777,
       "spotify_url": "https://open.spotify.com/track/1YKtA4sA4xXOISS2dPuBar"
     },
