@@ -2,7 +2,7 @@
 // Carga sus datos (RLS: solo ve lo suyo y con acceso vigente), lo dibuja con
 // portalView y maneja lo que el alumno puede hacer: subir/borrar tracks y
 // marcar misiones. Cada acción la valida la base; acá solo se refleja.
-import { getMyPortal, adminStudentPortal, addTrack, deleteTrack, setTaskCheck, membershipIsActive } from "../data/lab.js";
+import { getMyPortal, adminStudentPortal, addTrack, deleteTrack, setTaskCheck, membershipIsActive, getNotionFileUrl } from "../data/lab.js";
 import { renderPortal, renderTrackList, displayName, esc, safeHref } from "./portalView.js";
 
 // Link pegado sin "https://" (ej: soundcloud.com/…) → se completa. Solo https.
@@ -61,6 +61,27 @@ export async function mountPortal(container, { previewStudentId = null } = {}) {
   };
 
   container.addEventListener("click", async (e) => {
+    // Archivo subido a Notion: la pestaña se abre YA (si no, el bloqueador de popups la
+    // frena) y recibe el link fresco apenas llega. Funciona también en la vista previa.
+    const fileBtn = e.target.closest("[data-notion-file]");
+    if (fileBtn) {
+      if (fileBtn.getAttribute("aria-busy") === "true") return;
+      fileBtn.setAttribute("aria-busy", "true");
+      const win = window.open("", "_blank");
+      if (win) win.opener = null;
+      try {
+        const url = await getNotionFileUrl(fileBtn.dataset.notionFile);
+        if (win) win.location.href = url;
+        else location.href = url;
+      } catch (err) {
+        win?.close();
+        alert(err.message);
+      } finally {
+        fileBtn.removeAttribute("aria-busy");
+      }
+      return;
+    }
+
     if (readOnly) return;
     if (e.target.closest("[data-track-add]")) return toggleTrackForm(true);
     if (e.target.closest("[data-track-cancel]")) return toggleTrackForm(false);

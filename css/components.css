@@ -1401,3 +1401,25 @@ button.portal-check:focus-visible { outline: 2px solid var(--color-accent-2); ou
 button.portal-check[aria-checked="true"] { background: var(--color-accent-2); border-color: var(--color-accent-2); }
 button.portal-check:disabled { cursor: default; opacity: 0.75; }
 .portal-checklist li.is-done > span:last-child { color: var(--color-text-muted); text-decoration: line-through; }
+
+/* Links dentro del texto (tracks en Work in progress, referencias en misiones…) */
+.portal-inline-link {
+  color: var(--color-accent-2);
+  text-decoration: underline;
+  text-decoration-color: rgba(89, 198, 186, 0.45);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+  transition: text-decoration-color 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.portal-inline-link:hover { text-decoration-color: currentColor; }
+.portal-checklist .portal-inline-link { position: relative; z-index: 1; }
+
+/* Archivos subidos a Notion (botón con la misma pinta que un link) */
+button.portal-filecard {
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+button.portal-filecard[aria-busy="true"],
+button[data-notion-file][aria-busy="true"] { opacity: 0.6; cursor: progress; }

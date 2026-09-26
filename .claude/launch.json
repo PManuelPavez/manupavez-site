@@ -4,8 +4,22 @@
     {
       "name": "dev",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "5173"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "5173"
+      ],
       "port": 5173
+    },
+    {
+      "name": "nocache",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "/private/tmp/claude-501/-Users-manuelpavez-Documents-GitHub-manupavez-site/e37a18af-6327-41fa-8cf9-11decc865a61/scratchpad/nocache.py",
+        "5251",
+        "/Users/manuelpavez/Documents/GitHub/manupavez-site"
+      ],
+      "port": 5251
     }
   ]
 }

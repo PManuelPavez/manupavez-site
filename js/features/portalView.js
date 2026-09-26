@@ -32,6 +32,34 @@ function emphasize(s) {
   return m ? `<strong>${esc(m[1])}:</strong> ${esc(m[2])}` : esc(s);
 }
 
+// Texto con links de Notion ("CHESTER: https://…", "QSYY: <nombre con link>").
+// Si el texto del link es la URL misma, se muestra el sitio ("soundcloud.com ↗").
+function renderParts(parts) {
+  if (!Array.isArray(parts) || !parts.length) return null;
+  return parts.map((p) => {
+    const text = esc(p.text).replace(/\n/g, "<br>");
+    const href = p.href ? safeHref(p.href) : "";
+    if (!href) return text;
+    const isRawUrl = /^https?:\/\//i.test(String(p.text).trim());
+    const label = isRawUrl ? `${esc(new URL(href).hostname.replace(/^www\./, ""))} ↗` : text;
+    return `<a class="portal-inline-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  }).join("");
+}
+
+// Archivo subido a Notion: botón que pide un link fresco al tocarlo (ver portal.js)
+const isNotionFile = (url) => /^notion-file:[0-9a-f-]{32,36}$/i.test(String(url || ""));
+function renderFile(f) {
+  const ext = (String(f.label).match(/\.([a-z0-9]{2,5})$/i)?.[1] || "").toUpperCase();
+  return `
+    <button type="button" class="portal-linkcard portal-filecard" data-notion-file="${esc(f.id)}">
+      <span class="portal-linkcard__icon" aria-hidden="true">↓</span>
+      <span class="portal-linkcard__body">
+        <strong>${esc(f.label)}</strong>
+        <small>${ext ? `${esc(ext)} · ` : ""}Archivo · tocá para descargar</small>
+      </span>
+    </button>`;
+}
+
 // Notas de la sesión (texto plano del sync) → títulos, párrafos y listas
 function renderNotes(text) {
   let html = "";
@@ -75,8 +103,10 @@ function sessionSubtitle(title) {
 function renderSession(s, i) {
   const tasks = Array.isArray(s.tasks) ? s.tasks : [];
   const links = (Array.isArray(s.links) ? s.links : [])
-    .map((l) => ({ href: safeHref(l.url), label: l.label || "Ver grabación" }))
-    .filter((l) => l.href);
+    .map((l) => isNotionFile(l.url)
+      ? { file: String(l.url).slice("notion-file:".length), label: l.label || "Archivo" }
+      : { href: safeHref(l.url), label: l.label || "Ver grabación" })
+    .filter((l) => l.href || l.file);
   const date = fmtDate(s.session_date);
   const sub = sessionSubtitle(s.title);
   const empty = !s.notes && !tasks.length && !links.length;
@@ -91,7 +121,9 @@ function renderSession(s, i) {
       <div class="portal-session__body">
         ${links.length ? `
           <div class="portal-links">
-            ${links.map((l) => `<a class="mp-btn ghost small" href="${esc(l.href)}" target="_blank" rel="noopener noreferrer">${esc(l.label)} ↗</a>`).join("")}
+            ${links.map((l) => l.file
+              ? `<button type="button" class="mp-btn ghost small" data-notion-file="${esc(l.file)}">↓ ${esc(l.label)}</button>`
+              : `<a class="mp-btn ghost small" href="${esc(l.href)}" target="_blank" rel="noopener noreferrer">${esc(l.label)} ↗</a>`).join("")}
           </div>` : ""}
         ${s.notes ? `<div class="portal-notes">${renderNotes(s.notes)}</div>` : ""}
         ${tasks.length ? `
@@ -135,7 +167,7 @@ function renderTaskItem(g, checks, readOnly = false) {
     ? `<button type="button" class="portal-check" role="checkbox" aria-checked="${done}" data-task-key="${esc(g.id)}"
          aria-label="${esc(g.text)}"${byNotion ? ' disabled title="Marcada por Manu en Notion"' : readOnly ? " disabled" : ""}>${done ? "✓" : ""}</button>`
     : `<span class="portal-check" aria-hidden="true">${done ? "✓" : ""}</span>`;
-  return `<li class="${done ? "is-done" : ""}" data-depth="${depth}">${box}<span>${esc(g.text)}</span></li>`;
+  return `<li class="${done ? "is-done" : ""}" data-depth="${depth}">${box}<span>${renderParts(g.parts) ?? esc(g.text)}</span></li>`;
 }
 
 function renderItems(items, ctx) {
@@ -143,20 +175,22 @@ function renderItems(items, ctx) {
   let i = 0;
   while (i < items.length) {
     const it = items[i];
-    if (it.t === "bullet" || it.t === "task" || it.t === "link") {
+    if (it.t === "bullet" || it.t === "task" || it.t === "link" || it.t === "file") {
       const group = [];
       while (i < items.length && items[i].t === it.t) group.push(items[i++]);
       if (it.t === "bullet") {
-        html += `<ul class="portal-list">${group.map((g) => `<li data-depth="${Math.min(3, g.depth || 0)}">${emphasize(g.text)}</li>`).join("")}</ul>`;
+        html += `<ul class="portal-list">${group.map((g) => `<li data-depth="${Math.min(3, g.depth || 0)}">${renderParts(g.parts) ?? emphasize(g.text)}</li>`).join("")}</ul>`;
       } else if (it.t === "task") {
         html += `<ul class="portal-checklist">${group.map((g) => renderTaskItem(g, ctx.checks, ctx.readOnly)).join("")}</ul>`;
+      } else if (it.t === "file") {
+        html += `<div class="portal-linkgrid">${group.map(renderFile).join("")}</div>`;
       } else {
         html += `<div class="portal-linkgrid">${group.map(renderLink).join("")}</div>`;
       }
       continue;
     }
     if (it.t === "label") html += `<p class="portal-label">${esc(it.text)}</p>`;
-    else if (it.t === "text") html += `<p class="portal-text">${emphasize(it.text)}</p>`;
+    else if (it.t === "text") html += `<p class="portal-text">${renderParts(it.parts) ?? emphasize(it.text)}</p>`;
     else if (it.t === "sessions") html += renderSessions(ctx.sessions);
     i++;
   }
