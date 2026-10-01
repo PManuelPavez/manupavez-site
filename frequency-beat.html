@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Frequency Beat — El ADN de la música dance · Frequency Lab</title>
+  <meta name="description" content="Secuenciador educativo de Frequency Lab: armá un groove de House, Tech House, Progressive House o Techno y entendé por qué cada golpe va donde va." />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; connect-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'" />
+  <meta name="theme-color" content="#050509" />
+  <meta property="og:title" content="Frequency Beat — El ADN de la música dance" />
+  <meta property="og:description" content="Armá un groove y entendé por qué cada golpe va donde va." />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages/beat.css" />
+  <script type="module" src="js/pages/beat.js"></script>
+</head>
+<body data-page="beat">
+  <header class="beat-top">
+    <a class="beat-top__brand" href="clinicas.html">
+      <img src="logos/CUBO%20BLANCO%20MP.png" alt="" width="26" height="26" />
+      <span>Frequency Lab</span>
+    </a>
+    <a class="mp-btn ghost small" href="clinicas.html#reservar">QUIERO EMPEZAR</a>
+  </header>
+
+  <main class="beat-main">
+    <!-- Bienvenida: elegir género -->
+    <section class="beat-intro" data-intro aria-labelledby="beat-title">
+      <p class="beat-kicker">Frequency Lab</p>
+      <h1 id="beat-title" class="beat-title">Frequency Beat</h1>
+      <p class="beat-sub">El ADN de la música dance</p>
+      <p class="beat-quote" data-welcome></p>
+      <p class="beat-pick">Elegí un género para empezar</p>
+      <div class="beat-genre-list" data-genre-list><p class="beat-muted">Cargando…</p></div>
+      <p class="beat-muted beat-sound-note">Subí el volumen. En iPhone, sacá el modo silencio si no escuchás.</p>
+    </section>
+
+    <!-- Secuenciador -->
+    <section class="beat-seq" data-seq hidden aria-label="Secuenciador">
+      <div class="beat-genres" data-genre-chips role="group" aria-label="Género"></div>
+
+      <div class="beat-transport">
+        <button type="button" class="beat-play" data-play aria-pressed="false">
+          <span class="beat-play__icon" aria-hidden="true"></span><span data-play-label>PLAY</span>
+        </button>
+        <div class="beat-bpm">
+          <button type="button" class="beat-bpm__btn" data-bpm-step="-1" aria-label="Bajar tempo">−</button>
+          <label class="beat-bpm__read" for="bpm"><output data-bpm-value>124</output><span>BPM</span></label>
+          <button type="button" class="beat-bpm__btn" data-bpm-step="1" aria-label="Subir tempo">+</button>
+          <input id="bpm" class="beat-bpm__range" type="range" min="80" max="160" step="1" value="124" data-bpm-range />
+        </div>
+        <button type="button" class="mp-btn ghost small beat-clear" data-clear>CLEAR</button>
+      </div>
+
+      <div class="beat-grid" data-grid></div>
+
+      <div class="beat-caption" data-caption aria-live="polite">
+        <p data-caption-text>Tocá un casillero para encender un golpe. Tocá el nombre de un instrumento para entender por qué va donde va.</p>
+        <button type="button" class="beat-caption__more" data-caption-more hidden>LEER MÁS</button>
+      </div>
+
+      <aside class="beat-cta">
+        <p>Entender el patrón es el primer paso. Lo demás se trabaja en el Lab.</p>
+        <a class="mp-btn primary" href="clinicas.html#reservar">QUIERO EMPEZAR</a>
+      </aside>
+    </section>
+  </main>
+
+  <!-- Explicación de cada fila -->
+  <dialog class="beat-sheet" data-sheet aria-labelledby="sheet-title">
+    <div class="beat-sheet__panel">
+      <button type="button" class="beat-sheet__close" data-sheet-close aria-label="Cerrar">×</button>
+      <p class="beat-kicker" data-sheet-genre></p>
+      <h2 id="sheet-title" class="beat-sheet__title" data-sheet-title></h2>
+      <p class="beat-sheet__short" data-sheet-short></p>
+      <div class="beat-sheet__body" data-sheet-body></div>
+      <div class="beat-sheet__actions">
+        <button type="button" class="mp-btn primary small" data-sheet-pattern>VER EL PATRÓN</button>
+        <button type="button" class="mp-btn ghost small" data-sheet-listen>ESCUCHAR</button>
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>

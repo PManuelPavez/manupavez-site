@@ -1,0 +1,13 @@
+{
+  "nombre": "Techno",
+  "bpm": 132,
+  "filas": [
+    { "id": "kick",   "label": "KICK",   "sample": "kick.mp3",   "volumen": 1,    "patron": "x...x...x...x..." },
+    { "id": "clap",   "label": "CLAP",   "sample": "clap.mp3",   "volumen": 0.8,  "patron": "....x.......x..." },
+    { "id": "hat",    "label": "HI-HAT", "sample": "hat.mp3",    "volumen": 0.6,  "patron": "..x...x...x...x." },
+    { "id": "shaker", "label": "SHAKER", "sample": "shaker.mp3", "volumen": 0.45, "patron": "xxxxxxxxxxxxxxxx" },
+    { "id": "perc",   "label": "PERC",   "sample": "perc.mp3",   "volumen": 0.7,  "patron": "x..x..x...x..x.." },
+    { "id": "bass",   "label": "BASS",   "sample": "bass.mp3",   "volumen": 0.8,  "patron": ".xx..xx..xx..xx." },
+    { "id": "synth",  "label": "SYNTH",  "sample": "synth.mp3",  "volumen": 0.55, "patron": "...x.......x...." }
+  ]
+}

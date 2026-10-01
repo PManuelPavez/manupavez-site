@@ -2348,3 +2348,55 @@ html.gate-open { overflow: hidden; }
   .site-header .header-cta.header-cta--alumno,
   .site-header .header-cta.header-cta--alumno::after { animation: none; }
 }
+
+/* =========================================================
+   FLOTANTE → FREQUENCY BEAT (abajo a la izquierda; "volver arriba" va a la derecha)
+   ========================================================= */
+.beat-float {
+  position: fixed;
+  left: 16px;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 14; /* debajo del menú mobile */
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 88px);
+  padding: 10px 16px 10px 13px;
+  border: 1px solid rgba(89, 198, 186, 0.7);
+  border-radius: 999px;
+  background: rgba(5, 7, 17, 0.92);
+  color: var(--color-text);
+  font-family: var(--font-primary);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  text-decoration: none;
+  box-shadow: 0 0 18px rgba(89, 198, 186, 0.35);
+  animation: alumno-glow 2.8s ease-in-out infinite;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.beat-float:hover,
+.beat-float:focus-visible { background: rgba(89, 198, 186, 0.16); transform: translateY(-2px); }
+.beat-float:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.beat-float__eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; flex: none; }
+.beat-float__eq i {
+  display: block;
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--color-accent-2);
+  transform-origin: bottom;
+  animation: beat-float-eq 0.96s ease-in-out infinite;
+}
+.beat-float__eq i:nth-child(2) { animation-delay: -0.32s; }
+.beat-float__eq i:nth-child(3) { animation-delay: -0.64s; }
+@keyframes beat-float-eq {
+  0%, 100% { transform: scaleY(0.3); }
+  50%      { transform: scaleY(1); }
+}
+@media (max-width: 420px) {
+  .beat-float { font-size: 0.6rem; letter-spacing: 0.12em; padding: 9px 13px 9px 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beat-float, .beat-float__eq i { animation: none; }
+}
