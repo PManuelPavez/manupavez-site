@@ -185,3 +185,7 @@ body { background: var(--color-bg); color: var(--color-text); }
 .admin-linkresult p { margin: 0 0 10px; }
 .admin-linkresult__row { display: flex; gap: 8px; }
 .admin-linkresult__row input { flex: 1; min-width: 0; }
+
+/* Alta / edición de productos */
+.admin-linkform .admin-switch { display: inline-flex; align-self: end; color: var(--color-text); }
+.admin-table th [data-edit-product] { display: block; margin-top: 8px; }

@@ -217,7 +217,7 @@ export async function adminStudentPortal(studentId) {
 export async function adminListProducts() {
   const { data, error } = await ensure()
     .from("products")
-    .select("id, slug, name, kind, price_usd, unit, max_qty, active, sort")
+    .select("id, slug, name, description, kind, price_usd, unit, max_qty, active, sort")
     .order("sort");
   if (error) throw error;
   return data || [];
@@ -229,6 +229,30 @@ export async function adminUpdateProduct(id, { price_usd, active }) {
     .update({ price_usd, active, updated_at: new Date().toISOString() })
     .eq("id", id);
   if (error) throw new Error("No se pudo guardar el producto.");
+}
+
+// Alta / edición de un producto desde el panel. Los nuevos son siempre "service"
+// (los planes activan acceso al Lab: esos se crean a mano, no desde acá).
+const slugify = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 52) || "producto";
+
+export async function adminSaveProduct({ id, name, description, price_usd, unit, max_qty, active }) {
+  const sb = ensure();
+  const fields = { name, description: description || null, price_usd, unit, max_qty, active, updated_at: new Date().toISOString() };
+  if (id) {
+    const { error } = await sb.from("products").update(fields).eq("id", id);
+    if (error) throw new Error("No se pudo guardar el producto. Revisá los datos.");
+    return;
+  }
+  const { data: last } = await sb.from("products").select("sort").order("sort", { ascending: false }).limit(1).maybeSingle();
+  const base = slugify(name);
+  for (let n = 1; n <= 5; n++) {
+    const slug = n === 1 ? base : `${base}-${n}`;
+    const { error } = await sb.from("products").insert({ ...fields, slug, kind: "service", sort: (last?.sort ?? 0) + 10 });
+    if (!error) return;
+    if (error.code !== "23505") throw new Error("No se pudo crear el producto. Revisá los datos.");
+  }
+  throw new Error("Ya hay un producto con ese nombre. Probá con otro.");
 }
 
 export async function adminListOrders() {

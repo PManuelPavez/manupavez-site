@@ -7,7 +7,7 @@ import {
   isAdmin, adminListStudents, adminUpdateStudent, adminSetMembership,
   adminLastSync, adminRunSync, membershipIsActive,
   adminSetStudentPin, adminClearStudentPin, adminSetMyPin, adminPinOverview,
-  adminListProducts, adminUpdateProduct, adminListOrders, adminCreatePaymentLink,
+  adminListProducts, adminUpdateProduct, adminSaveProduct, adminListOrders, adminCreatePaymentLink,
 } from "../data/lab.js";
 
 const $ = (sel) => document.querySelector(sel);
@@ -254,7 +254,8 @@ let products = [];
 function renderProduct(p) {
   return `
     <tr data-product-id="${esc(p.id)}">
-      <th scope="row">${esc(p.name)}<small>${p.kind === "plan" ? "Activa el acceso al Lab 30 días" : "Servicio: te llega un mail para coordinar"}</small></th>
+      <th scope="row">${esc(p.name)}<small>${p.kind === "plan" ? "Activa el acceso al Lab 30 días" : "Servicio: te llega un mail para coordinar"}</small>
+        <button type="button" class="mp-btn ghost small" data-edit-product>EDITAR</button></th>
       <td>
         <form class="admin-price" data-price-form>
           <input type="number" step="0.01" min="1" max="100000" value="${p.price_usd ?? ""}" aria-label="Precio USD de ${esc(p.name)}" />
@@ -356,6 +357,65 @@ productsEl.addEventListener("submit", async (e) => {
     await loadShop();
   } catch (err) {
     say(err.message, true);
+  }
+});
+
+// Alta / edición de productos (mismo formulario: EDITAR lo carga con los datos del producto)
+const productForm = $("[data-product-form]");
+function resetProductForm() {
+  productForm.reset();
+  productForm.elements.namedItem("id").value = "";
+  $("[data-product-form-title]").textContent = "Nuevo producto";
+  $("[data-product-submit]").textContent = "CREAR PRODUCTO";
+  $("[data-product-cancel]").hidden = true;
+}
+productsEl.addEventListener("click", (e) => {
+  if (!e.target.closest("[data-edit-product]")) return;
+  const p = products.find((x) => x.id === e.target.closest("tr").dataset.productId);
+  if (!p) return;
+  const f = productForm.elements;
+  f.namedItem("id").value = p.id;
+  f.namedItem("name").value = p.name;
+  f.namedItem("price").value = p.price_usd ?? "";
+  f.namedItem("unit").value = p.unit;
+  f.namedItem("max_qty").value = p.max_qty;
+  f.namedItem("description").value = p.description || "";
+  f.namedItem("active").checked = p.active;
+  $("[data-product-form-title]").textContent = `Editar: ${p.name}`;
+  $("[data-product-submit]").textContent = "GUARDAR CAMBIOS";
+  $("[data-product-cancel]").hidden = false;
+  productForm.scrollIntoView({ behavior: "smooth", block: "center" });
+});
+$("[data-product-cancel]").addEventListener("click", resetProductForm);
+productForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = productForm.elements;
+  const name = f.namedItem("name").value.trim();
+  const price = Number(f.namedItem("price").value);
+  const maxQty = Math.round(Number(f.namedItem("max_qty").value) || 1);
+  if (name.length < 2) { say("Poné un nombre.", true); return; }
+  if (!Number.isFinite(price) || price <= 0) { say("Precio inválido.", true); return; }
+  if (maxQty < 1 || maxQty > 20) { say("El máximo por compra va de 1 a 20.", true); return; }
+  const btn = $("[data-product-submit]");
+  btn.disabled = true;
+  try {
+    const editing = Boolean(f.namedItem("id").value);
+    await adminSaveProduct({
+      id: f.namedItem("id").value || null,
+      name,
+      description: f.namedItem("description").value.trim(),
+      price_usd: Math.round(price * 100) / 100,
+      unit: f.namedItem("unit").value,
+      max_qty: maxQty,
+      active: f.namedItem("active").checked,
+    });
+    say(`${name}: ${editing ? "cambios guardados" : "producto creado"}.`);
+    resetProductForm();
+    await loadShop();
+  } catch (err) {
+    say(err.message, true);
+  } finally {
+    btn.disabled = false;
   }
 });
 

@@ -76,6 +76,27 @@
         </table>
       </div>
 
+      <h3 class="admin-h3" data-product-form-title>Nuevo producto</h3>
+      <p class="admin-note">Aparece en el shop apenas lo marcás como visible. Cuando alguien lo compra te llega un mail para coordinar la entrega.</p>
+      <form class="admin-linkform" data-product-form novalidate>
+        <input type="hidden" name="id" />
+        <label>Nombre <input name="name" type="text" minlength="2" maxlength="120" required autocomplete="off" /></label>
+        <label>Precio USD <input name="price" type="number" step="0.01" min="1" max="100000" required /></label>
+        <label>Se cobra por
+          <select name="unit">
+            <option value="unidad">unidad</option>
+            <option value="sesión">sesión</option>
+            <option value="track">track</option>
+            <option value="mes">mes</option>
+          </select>
+        </label>
+        <label>Máximo por compra <input name="max_qty" type="number" min="1" max="20" value="1" /></label>
+        <label class="admin-linkform__wide">Descripción (la ve el comprador) <input name="description" type="text" maxlength="600" autocomplete="off" /></label>
+        <label class="admin-switch"><input name="active" type="checkbox" checked /> Visible en el shop</label>
+        <button type="submit" class="mp-btn primary small" data-product-submit>CREAR PRODUCTO</button>
+        <button type="button" class="mp-btn ghost small" data-product-cancel hidden>CANCELAR</button>
+      </form>
+
       <h3 class="admin-h3">Link de pago con precio especial</h3>
       <p class="admin-note">Para un alumno o una persona puntual. El precio público no cambia. El link vence en 7 días.</p>
       <form class="admin-linkform" data-link-form novalidate>
