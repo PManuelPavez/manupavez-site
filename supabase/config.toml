@@ -45,3 +45,9 @@ enabled = true
 # JWT verificado adentro (alumno con acceso vigente o admin) + dueño del archivo
 verify_jwt = false
 entrypoint = "./functions/notion-file/index.ts"
+
+[functions.order-mark-paid]
+enabled = true
+# Solo admin: el JWT y profiles.is_admin se verifican adentro
+verify_jwt = false
+entrypoint = "./functions/order-mark-paid/index.ts"

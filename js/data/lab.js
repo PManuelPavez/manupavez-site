@@ -258,7 +258,7 @@ export async function adminSaveProduct({ id, name, description, price_usd, unit,
 export async function adminListOrders() {
   const { data, error } = await ensure()
     .from("orders")
-    .select("id, product_name, kind, buyer_name, buyer_email, source, price_usd, fx_mep, amount_ars, status, init_point, created_at, paid_at, expires_at, note")
+    .select("id, product_name, kind, student_id, buyer_name, buyer_email, source, price_usd, fx_mep, amount_ars, status, init_point, created_at, paid_at, expires_at, note, payment_method, manual_note")
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) throw error;
@@ -286,4 +286,22 @@ export async function adminCreatePaymentLink({ product_id, student_id, price_usd
   const body = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(CHECKOUT_ERRORS[body.error] || "No se pudo generar el link.");
   return body;
+}
+
+// Pago recibido por fuera de MercadoPago (transferencia / efectivo): lo procesa el servidor,
+// que también anula el link de MP de esa orden. Devuelve el resultado tal cual.
+export async function adminMarkOrderPaid({ order_id, student_id, method, note }) {
+  const { data: { session } } = await ensure().auth.getSession();
+  if (!session) return { result: "no_session" };
+  try {
+    const res = await fetch(`${window.MP_SUPABASE.url}/functions/v1/order-mark-paid`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ order_id, student_id: student_id || null, method, note }),
+    });
+    const body = await res.json().catch(() => ({}));
+    return body.result ? body : { result: body.error || "failed" };
+  } catch {
+    return { result: "network" };
+  }
 }

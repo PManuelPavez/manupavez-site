@@ -127,7 +127,22 @@ Deno.serve(async (req) => {
     await db.from("payment_events").delete().eq("id", eventId);
     return ok({ error: "fulfill_failed" }, 500);
   }
-  if (result?.result === "already_paid") return ok({ already_paid: true });
+  if (result?.result === "already_paid") {
+    // Ya estaba pagada a mano (transferencia/efectivo) y además entró por MercadoPago:
+    // el acceso NO se extiende dos veces (fulfill_paid_order corta antes), pero hay que devolver uno.
+    const { data: fresh } = await db.from("orders").select("payment_method").eq("id", order.id).maybeSingle();
+    const method = fresh?.payment_method || order.payment_method;
+    if (method && method !== "mercadopago") {
+      const label = { transferencia: "transferencia", efectivo: "efectivo", otro: "otro medio" }[method as string] || method;
+      await notifyAdmin(`Frequency Lab — ⚠ Pago duplicado: ${order.product_name} (${order.buyer_name})`,
+        `<div style="font-family:system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;line-height:1.55;color:#0a0a0a;max-width:560px">
+          <p><strong>Pago duplicado:</strong> la orden de <strong>${esc(order.buyer_name)}</strong> (${esc(order.product_name)}) ya estaba marcada como pagada por <strong>${esc(label)}</strong> y además entró un pago por MercadoPago (pago ${esc(pay.id)}).</p>
+          <p>Devolvé uno desde MercadoPago. El acceso no se extendió dos veces.</p>
+          <p><a href="https://manupavez.com/admin.html">Abrir el panel →</a></p>
+        </div>`);
+    }
+    return ok({ already_paid: true });
+  }
 
   const lines = [
     `<p><strong>${esc(order.buyer_name)}</strong> (${esc(order.buyer_email)}) pagó <strong>${esc(order.product_name)}</strong>.</p>`,

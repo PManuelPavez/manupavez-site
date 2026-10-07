@@ -8,6 +8,7 @@ import {
   adminLastSync, adminRunSync, membershipIsActive,
   adminSetStudentPin, adminClearStudentPin, adminSetMyPin, adminPinOverview,
   adminListProducts, adminUpdateProduct, adminSaveProduct, adminListOrders, adminCreatePaymentLink,
+  adminMarkOrderPaid,
 } from "../data/lab.js";
 
 const $ = (sel) => document.querySelector(sel);
@@ -250,6 +251,8 @@ const STATUS = {
   cancelled: ["Cancelado", "off"], expired: ["Vencido", "off"], refunded: ["Devuelto", "off"],
 };
 let products = [];
+let orders = [];
+const METHOD_LABEL = { mercadopago: "MercadoPago", transferencia: "Transferencia", efectivo: "Efectivo", otro: "Otro medio" };
 
 function renderProduct(p) {
   return `
@@ -277,14 +280,18 @@ function renderOrder(o) {
       <td>${esc(o.buyer_name)}<small>${esc(o.buyer_email)}</small></td>
       <td>${esc(o.product_name)}${o.source === "admin_link" ? "<small>Precio especial</small>" : ""}${o.note ? `<small>${esc(o.note)}</small>` : ""}</td>
       <td>${usd(o.price_usd)}<small>${ars(o.amount_ars)} · MEP ${esc(Number(o.fx_mep).toLocaleString("es-AR"))}</small></td>
-      <td><span class="admin-pill admin-pill--${cls}">${esc(label)}</span></td>
-      <td>${canCopy ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(o.init_point)}">COPIAR LINK</button>` : ""}</td>
+      <td><span class="admin-pill admin-pill--${cls}">${esc(label)}</span>${o.status === "paid" ? `<small>${esc(METHOD_LABEL[o.payment_method] || o.payment_method)}${o.manual_note ? ` · ${esc(o.manual_note)}` : ""}</small>` : ""}</td>
+      <td class="admin-actions">
+        ${canCopy ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(o.init_point)}">COPIAR LINK</button>` : ""}
+        ${o.status === "pending" || o.status === "expired" ? `<button type="button" class="mp-btn ghost small" data-markpaid-open="${esc(o.id)}">MARCAR COMO PAGADO</button>` : ""}
+      </td>
     </tr>`;
 }
 
 async function loadShop() {
-  const [prods, orders] = await Promise.all([adminListProducts(), adminListOrders()]);
+  const [prods, ords] = await Promise.all([adminListProducts(), adminListOrders()]);
   products = prods;
+  orders = ords;
   productsEl.innerHTML = prods.map(renderProduct).join("");
   ordersEl.innerHTML = orders.length
     ? orders.map(renderOrder).join("")
@@ -432,6 +439,102 @@ productsEl.addEventListener("change", async (e) => {
     box.checked = !box.checked;
     say(err.message, true);
   }
+});
+
+// ── Marcar como pagado (transferencia / efectivo) ──
+const markEl = $("[data-markpaid]");
+const markForm = $("[data-markpaid-form]");
+const markResult = $("[data-markpaid-result]");
+const markSubmit = $("[data-markpaid-submit]");
+let markingOrder = null;
+
+const MARK_MESSAGES = {
+  student_required: "Elegí el alumno para activarle el acceso.",
+  already_paid: "Esta orden ya estaba pagada.",
+  student_not_found: "No encontré ese alumno. Recargá la página.",
+  not_found: "No encontré esa orden. Recargá la página.",
+  invalid_method: "Elegí el medio de pago.",
+  unauthorized: "Tu sesión no tiene permisos de admin. Volvé a entrar con tu PIN.",
+  no_session: "Tu sesión se cerró. Volvé a entrar con tu PIN.",
+  network: "Sin conexión. Revisá tu internet y probá de nuevo.",
+};
+
+function openMarkPaid(order) {
+  markingOrder = order;
+  const isPlan = order.kind === "plan";
+  $("[data-markpaid-summary]").innerHTML =
+    `<strong>${esc(order.product_name)}</strong> · ${esc(order.buyer_name)} (${esc(order.buyer_email)})<br>` +
+    `Monto del pedido: <strong>${usd(order.price_usd)}</strong> = <strong>${ars(order.amount_ars)}</strong> (MEP ${esc(Number(order.fx_mep).toLocaleString("es-AR"))}). Comparalo con lo que te entró.`;
+  $("[data-markpaid-required]").textContent = isPlan ? "(obligatorio: le activa 30 días)" : "(opcional)";
+  const sel = markForm.elements.namedItem("student");
+  sel.innerHTML = `<option value="">${isPlan ? "Elegí el alumno…" : "Ninguno (no es alumno)"}</option>` +
+    students.map((s) => `<option value="${esc(s.id)}"${s.id === order.student_id ? " selected" : ""}>${esc(s.full_name)}</option>`).join("");
+  markForm.elements.namedItem("method").value = "transferencia";
+  markForm.elements.namedItem("note").value = "";
+  markResult.textContent = "";
+  markResult.className = "admin-markpaid__result";
+  markForm.hidden = false;
+  markEl.hidden = false;
+  markEl.scrollIntoView({ behavior: "smooth", block: "center" });
+  markEl.focus({ preventScroll: true });
+}
+
+function closeMarkPaid() {
+  markingOrder = null;
+  markEl.hidden = true;
+}
+
+ordersEl.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-markpaid-open]");
+  if (!btn) return;
+  const order = orders.find((o) => o.id === btn.dataset.markpaidOpen);
+  if (order) openMarkPaid(order);
+});
+$("[data-markpaid-cancel]").addEventListener("click", closeMarkPaid);
+
+markForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!markingOrder) return;
+  const f = markForm.elements;
+  const studentId = f.namedItem("student").value || null;
+  const show = (text, tone) => {
+    markResult.textContent = text;
+    markResult.className = `admin-markpaid__result is-${tone}`;
+  };
+  if (markingOrder.kind === "plan" && !studentId) { show(MARK_MESSAGES.student_required, "error"); f.namedItem("student").focus(); return; }
+
+  markSubmit.disabled = true;
+  show("Guardando…", "info");
+  const out = await adminMarkOrderPaid({
+    order_id: markingOrder.id,
+    student_id: studentId,
+    method: f.namedItem("method").value,
+    note: f.namedItem("note").value.trim(),
+  });
+  markSubmit.disabled = false;
+
+  if (out.result === "paid") {
+    let text = out.plan === "activated"
+      ? `Pagado. Acceso activo hasta el ${new Date(out.until).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit" })}.`
+      : "Pagado.";
+    if (out.mp_link_still_active) text += " No se pudo anular el link de MercadoPago: anulalo desde tu cuenta de MercadoPago.";
+    show(text, out.mp_link_still_active ? "warn" : "ok");
+    // La fila cambia al instante; la recarga completa (alumnos + pedidos) tarda unos segundos
+    Object.assign(markingOrder, {
+      status: "paid",
+      payment_method: f.namedItem("method").value,
+      manual_note: f.namedItem("note").value.trim() || null,
+    });
+    ordersEl.innerHTML = orders.map(renderOrder).join("");
+    markForm.hidden = true;
+    markingOrder = null;
+    await reloadAll().then(() => loadShop()).catch(() => {});
+    return;
+  }
+  const text = out.result === "invalid_status"
+    ? `Esta orden no se puede marcar como pagada (está ${STATUS[out.status]?.[0]?.toLowerCase() || out.status}).`
+    : MARK_MESSAGES[out.result] || "No se pudo marcar como pagado. Probá de nuevo.";
+  show(text, "error");
 });
 
 document.addEventListener("click", async (e) => {
