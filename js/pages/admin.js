@@ -8,6 +8,7 @@ import {
   adminLastSync, adminRunSync, membershipIsActive,
   adminSetStudentPin, adminClearStudentPin, adminSetMyPin, adminPinOverview,
   adminListProducts, adminUpdateProduct, adminSaveProduct, adminListOrders, adminCreatePaymentLink,
+  adminMarkOrderPaid, adminSetSessionDate,
 } from "../data/lab.js";
 
 const $ = (sel) => document.querySelector(sel);
@@ -21,6 +22,37 @@ const fmtDateOnly = (d) => {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Los links los cargan los alumnos: solo https, siempre escapados
 const safeHref = (u) => { try { const x = new URL(u); return x.protocol === "https:" ? x.href : ""; } catch { return ""; } };
+
+// Días desde una fecha (aaaa-mm-dd) hasta hoy, en Argentina
+function daysSince(isoDate) {
+  if (!isoDate) return null;
+  const today = new Date(Date.now() - 3 * 3600_000).toISOString().slice(0, 10);
+  return Math.round((Date.parse(today) - Date.parse(String(isoDate).slice(0, 10))) / 86400_000);
+}
+const agoLabel = (n) => (n == null ? "" : n <= 0 ? "hoy" : n === 1 ? "hace 1 día" : `hace ${n} días`);
+
+// Detalles abiertos (sesiones) que sobreviven a la recarga de la tabla
+const openSessions = new Set();
+
+function renderSessions(st) {
+  const list = st.sessions.list || [];
+  if (!list.length) return "";
+  return `
+    <details class="admin-sessions" data-sessions-of="${esc(st.id)}"${openSessions.has(st.id) ? " open" : ""}>
+      <summary>Ver sesiones (${list.length})</summary>
+      <ul>${list.map((s) => `
+        <li data-session-id="${esc(s.id)}">
+          <span class="admin-sessions__num">Sesión ${esc(s.number ?? "")}</span>
+          <form class="admin-sessions__form" data-session-date-form>
+            <input type="date" value="${esc(s.date || "")}" aria-label="Fecha de la sesión ${esc(s.number ?? "")}" />
+            <button type="submit" class="mp-btn ghost small">GUARDAR</button>
+          </form>
+          <small>${s.session_date_manual
+            ? `Fecha cargada a mano · <button type="button" class="admin-linkbtn" data-act="clear-session-date" data-session="${esc(s.id)}">usar la de Notion${s.session_date ? ` (${fmtDateOnly(s.session_date)})` : ""}</button>`
+            : s.session_date ? "Fecha automática (de Notion)" : "Sin fecha"}</small>
+        </li>`).join("")}</ul>
+    </details>`;
+}
 
 function renderTracks(tracks) {
   if (!tracks.length) return "";
@@ -73,6 +105,7 @@ function renderRow(st) {
       <th scope="row">${esc(st.full_name)}
         <small>${st.sessions.count} sesiones · ${st.missions.done}/${st.missions.total} misiones · ${st.tracks.length} tracks</small>
         <a class="admin-preview" href="alumnos.html?ver=${esc(st.id)}" target="_blank" rel="noopener">Ver su página →</a>
+        ${renderSessions(st)}
         ${renderTracks(st.tracks)}</th>
       <td>
         <form class="admin-email" data-email-form>
@@ -91,21 +124,45 @@ function renderRow(st) {
       </td>
       <td><span class="admin-pill admin-pill--${a.cls}">${a.text}</span></td>
       <td>${fmt(st.membership?.current_period_end)}</td>
-      <td>${last ? `Sesión ${esc(last.number)} · ${fmtDateOnly(last.session_date)}` : "—"}</td>
+      <td>${last ? `Sesión ${esc(last.number)} · ${fmtDateOnly(last.date)}${last.date ? `<small class="${daysSince(last.date) > 14 ? "admin-late" : ""}">${agoLabel(daysSince(last.date))}</small>` : ""}` : "—"}</td>
       <td class="admin-actions">
-        <button type="button" class="mp-btn primary small" data-act="extend">${active ? "+30 DÍAS" : "ACTIVAR 30 DÍAS"}</button>
-        ${active ? `<button type="button" class="mp-btn ghost small" data-act="revoke">REVOCAR</button>` : ""}
+        ${st.status === "active" ? `
+          <button type="button" class="mp-btn primary small" data-act="extend">${active ? "+30 DÍAS" : "ACTIVAR 30 DÍAS"}</button>
+          ${active ? `<button type="button" class="mp-btn ghost small" data-act="revoke">REVOCAR</button>` : ""}
+          <button type="button" class="admin-linkbtn admin-deactivate" data-act="deactivate">pasar a inactivo</button>`
+        : `<button type="button" class="mp-btn ghost small" data-act="reactivate">REACTIVAR</button>`}
       </td>
     </tr>`;
 }
 
 let students = [];
 
+// Activos arriba; inactivos en una sección plegada (no se borra nada de ellos)
+const inactiveToggle = $("[data-inactive-toggle]");
+const inactiveRowsEl = $("[data-admin-inactive]");
+const inactiveBtn = $("[data-toggle-inactive]");
+let showInactive = false;
+
+function paintInactiveToggle(count) {
+  inactiveToggle.hidden = count === 0;
+  inactiveRowsEl.hidden = !showInactive || count === 0;
+  inactiveBtn.textContent = `${showInactive ? "▾" : "▸"} Inactivos (${count})`;
+  inactiveBtn.setAttribute("aria-expanded", String(showInactive));
+}
+inactiveBtn.addEventListener("click", () => {
+  showInactive = !showInactive;
+  paintInactiveToggle(inactiveRowsEl.children.length);
+});
+
 async function loadStudents() {
   students = await adminListStudents();
-  rowsEl.innerHTML = students.length
-    ? students.map(renderRow).join("")
-    : `<tr><td colspan="7">Todavía no hay alumnos. Corré la sincronización con Notion.</td></tr>`;
+  const active = students.filter((s) => s.status === "active");
+  const inactive = students.filter((s) => s.status !== "active");
+  rowsEl.innerHTML = active.length
+    ? active.map(renderRow).join("")
+    : `<tr><td colspan="7">${students.length ? "No hay alumnos activos." : "Todavía no hay alumnos. Corré la sincronización con Notion."}</td></tr>`;
+  inactiveRowsEl.innerHTML = inactive.map(renderRow).join("");
+  paintInactiveToggle(inactive.length);
   tableWrap.hidden = false;
 }
 
@@ -138,7 +195,8 @@ function addDays(base, days) {
   return d.toISOString();
 }
 
-rowsEl.addEventListener("click", async (e) => {
+// Los eventos de las filas se escuchan en toda la tabla (activos e inactivos)
+tableWrap.addEventListener("click", async (e) => {
   const btn = e.target.closest("[data-act]");
   if (!btn) return;
   const id = btn.closest("tr")?.dataset.id;
@@ -154,6 +212,15 @@ rowsEl.addEventListener("click", async (e) => {
       const base = cur && new Date(cur) > new Date() && st.membership?.status === "active" ? cur : new Date();
       await adminSetMembership(id, { status: "active", current_period_end: addDays(base, 30) });
       say(`${st.full_name}: acceso activo hasta ${fmt(addDays(base, 30))}.`);
+    } else if (btn.dataset.act === "reactivate") {
+      await adminUpdateStudent(id, { status: "active" });
+      say(`${st.full_name}: vuelve a la lista de activos. Si va a tomar clases, activale el acceso.`);
+    } else if (btn.dataset.act === "deactivate") {
+      await adminUpdateStudent(id, { status: "inactive" });
+      say(`${st.full_name}: pasó a inactivos. Sus sesiones e historial quedan guardados.`);
+    } else if (btn.dataset.act === "clear-session-date") {
+      await adminSetSessionDate(btn.dataset.session, null);
+      say(`${st.full_name}: la sesión vuelve a usar la fecha de Notion.`);
     } else if (btn.dataset.act === "clear-pin") {
       if (!confirm(`¿Quitar el PIN de ${st.full_name}? Solo va a poder entrar con su email.`)) return;
       await adminClearStudentPin(id);
@@ -171,7 +238,34 @@ rowsEl.addEventListener("click", async (e) => {
   }
 });
 
-rowsEl.addEventListener("submit", async (e) => {
+// Recordar qué listas de sesiones están abiertas (la tabla se redibuja al guardar)
+tableWrap.addEventListener("toggle", (e) => {
+  const d = e.target.closest?.("[data-sessions-of]");
+  if (!d) return;
+  if (d.open) openSessions.add(d.dataset.sessionsOf);
+  else openSessions.delete(d.dataset.sessionsOf);
+}, true);
+
+tableWrap.addEventListener("submit", async (e) => {
+  const dateForm = e.target.closest("[data-session-date-form]");
+  if (dateForm) {
+    e.preventDefault();
+    const sessionId = dateForm.closest("[data-session-id]")?.dataset.sessionId;
+    const value = dateForm.querySelector("input").value; // aaaa-mm-dd o vacío
+    const btn = dateForm.querySelector("button");
+    btn.disabled = true;
+    try {
+      await adminSetSessionDate(sessionId, value || null);
+      say(value ? `Fecha guardada: ${fmtDateOnly(value)}.` : "Fecha borrada: vuelve a usar la de Notion.");
+      await reloadAll();
+    } catch (err) {
+      say(err.message, true);
+    } finally {
+      btn.disabled = false;
+    }
+    return;
+  }
+
   const pinForm = e.target.closest("[data-pin-form]");
   if (pinForm) {
     e.preventDefault();
@@ -250,6 +344,8 @@ const STATUS = {
   cancelled: ["Cancelado", "off"], expired: ["Vencido", "off"], refunded: ["Devuelto", "off"],
 };
 let products = [];
+let orders = [];
+const METHOD_LABEL = { mercadopago: "MercadoPago", transferencia: "Transferencia", efectivo: "Efectivo", otro: "Otro medio" };
 
 function renderProduct(p) {
   return `
@@ -277,21 +373,26 @@ function renderOrder(o) {
       <td>${esc(o.buyer_name)}<small>${esc(o.buyer_email)}</small></td>
       <td>${esc(o.product_name)}${o.source === "admin_link" ? "<small>Precio especial</small>" : ""}${o.note ? `<small>${esc(o.note)}</small>` : ""}</td>
       <td>${usd(o.price_usd)}<small>${ars(o.amount_ars)} · MEP ${esc(Number(o.fx_mep).toLocaleString("es-AR"))}</small></td>
-      <td><span class="admin-pill admin-pill--${cls}">${esc(label)}</span></td>
-      <td>${canCopy ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(o.init_point)}">COPIAR LINK</button>` : ""}</td>
+      <td><span class="admin-pill admin-pill--${cls}">${esc(label)}</span>${o.status === "paid" ? `<small>${esc(METHOD_LABEL[o.payment_method] || o.payment_method)}${o.manual_note ? ` · ${esc(o.manual_note)}` : ""}</small>` : ""}</td>
+      <td class="admin-actions">
+        ${canCopy ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(o.init_point)}">COPIAR LINK</button>` : ""}
+        ${o.status === "pending" || o.status === "expired" ? `<button type="button" class="mp-btn ghost small" data-markpaid-open="${esc(o.id)}">MARCAR COMO PAGADO</button>` : ""}
+      </td>
     </tr>`;
 }
 
 async function loadShop() {
-  const [prods, orders] = await Promise.all([adminListProducts(), adminListOrders()]);
+  const [prods, ords] = await Promise.all([adminListProducts(), adminListOrders()]);
   products = prods;
+  orders = ords;
   productsEl.innerHTML = prods.map(renderProduct).join("");
   ordersEl.innerHTML = orders.length
     ? orders.map(renderOrder).join("")
     : `<tr><td colspan="6">Todavía no hay pedidos.</td></tr>`;
 
   const prodSel = linkForm.elements.namedItem("product");
-  prodSel.innerHTML = prods.map((p) => `<option value="${esc(p.id)}">${esc(p.name)}${p.price_usd ? ` — ${usd(p.price_usd)} por ${esc(p.unit)}` : ""}</option>`).join("");
+  // También los ocultos del shop (ej. "EP listo para enviar"): se venden con link de admin
+  prodSel.innerHTML = prods.map((p) => `<option value="${esc(p.id)}">${esc(p.name)}${p.price_usd ? ` — ${usd(p.price_usd)} por ${esc(p.unit)}` : ""}${p.active ? "" : " (no visible en el shop)"}</option>`).join("");
   const stSel = linkForm.elements.namedItem("student");
   stSel.innerHTML = `<option value="">Otra persona (no es alumno)</option>` +
     students.filter((s) => s.email).map((s) => `<option value="${esc(s.id)}">${esc(s.full_name)}</option>`).join("");
@@ -432,6 +533,102 @@ productsEl.addEventListener("change", async (e) => {
     box.checked = !box.checked;
     say(err.message, true);
   }
+});
+
+// ── Marcar como pagado (transferencia / efectivo) ──
+const markEl = $("[data-markpaid]");
+const markForm = $("[data-markpaid-form]");
+const markResult = $("[data-markpaid-result]");
+const markSubmit = $("[data-markpaid-submit]");
+let markingOrder = null;
+
+const MARK_MESSAGES = {
+  student_required: "Elegí el alumno para activarle el acceso.",
+  already_paid: "Esta orden ya estaba pagada.",
+  student_not_found: "No encontré ese alumno. Recargá la página.",
+  not_found: "No encontré esa orden. Recargá la página.",
+  invalid_method: "Elegí el medio de pago.",
+  unauthorized: "Tu sesión no tiene permisos de admin. Volvé a entrar con tu PIN.",
+  no_session: "Tu sesión se cerró. Volvé a entrar con tu PIN.",
+  network: "Sin conexión. Revisá tu internet y probá de nuevo.",
+};
+
+function openMarkPaid(order) {
+  markingOrder = order;
+  const isPlan = order.kind === "plan";
+  $("[data-markpaid-summary]").innerHTML =
+    `<strong>${esc(order.product_name)}</strong> · ${esc(order.buyer_name)} (${esc(order.buyer_email)})<br>` +
+    `Monto del pedido: <strong>${usd(order.price_usd)}</strong> = <strong>${ars(order.amount_ars)}</strong> (MEP ${esc(Number(order.fx_mep).toLocaleString("es-AR"))}). Comparalo con lo que te entró.`;
+  $("[data-markpaid-required]").textContent = isPlan ? "(obligatorio: le activa 30 días)" : "(opcional)";
+  const sel = markForm.elements.namedItem("student");
+  sel.innerHTML = `<option value="">${isPlan ? "Elegí el alumno…" : "Ninguno (no es alumno)"}</option>` +
+    students.map((s) => `<option value="${esc(s.id)}"${s.id === order.student_id ? " selected" : ""}>${esc(s.full_name)}</option>`).join("");
+  markForm.elements.namedItem("method").value = "transferencia";
+  markForm.elements.namedItem("note").value = "";
+  markResult.textContent = "";
+  markResult.className = "admin-markpaid__result";
+  markForm.hidden = false;
+  markEl.hidden = false;
+  markEl.scrollIntoView({ behavior: "smooth", block: "center" });
+  markEl.focus({ preventScroll: true });
+}
+
+function closeMarkPaid() {
+  markingOrder = null;
+  markEl.hidden = true;
+}
+
+ordersEl.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-markpaid-open]");
+  if (!btn) return;
+  const order = orders.find((o) => o.id === btn.dataset.markpaidOpen);
+  if (order) openMarkPaid(order);
+});
+$("[data-markpaid-cancel]").addEventListener("click", closeMarkPaid);
+
+markForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!markingOrder) return;
+  const f = markForm.elements;
+  const studentId = f.namedItem("student").value || null;
+  const show = (text, tone) => {
+    markResult.textContent = text;
+    markResult.className = `admin-markpaid__result is-${tone}`;
+  };
+  if (markingOrder.kind === "plan" && !studentId) { show(MARK_MESSAGES.student_required, "error"); f.namedItem("student").focus(); return; }
+
+  markSubmit.disabled = true;
+  show("Guardando…", "info");
+  const out = await adminMarkOrderPaid({
+    order_id: markingOrder.id,
+    student_id: studentId,
+    method: f.namedItem("method").value,
+    note: f.namedItem("note").value.trim(),
+  });
+  markSubmit.disabled = false;
+
+  if (out.result === "paid") {
+    let text = out.plan === "activated"
+      ? `Pagado. Acceso activo hasta el ${new Date(out.until).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit" })}.`
+      : "Pagado.";
+    if (out.mp_link_still_active) text += " No se pudo anular el link de MercadoPago: anulalo desde tu cuenta de MercadoPago.";
+    show(text, out.mp_link_still_active ? "warn" : "ok");
+    // La fila cambia al instante; la recarga completa (alumnos + pedidos) tarda unos segundos
+    Object.assign(markingOrder, {
+      status: "paid",
+      payment_method: f.namedItem("method").value,
+      manual_note: f.namedItem("note").value.trim() || null,
+    });
+    ordersEl.innerHTML = orders.map(renderOrder).join("");
+    markForm.hidden = true;
+    markingOrder = null;
+    await reloadAll().then(() => loadShop()).catch(() => {});
+    return;
+  }
+  const text = out.result === "invalid_status"
+    ? `Esta orden no se puede marcar como pagada (está ${STATUS[out.status]?.[0]?.toLowerCase() || out.status}).`
+    : MARK_MESSAGES[out.result] || "No se pudo marcar como pagado. Probá de nuevo.";
+  show(text, "error");
 });
 
 document.addEventListener("click", async (e) => {

@@ -227,7 +227,13 @@ type Parsed = {
   date: string | null;
   inNextSteps: boolean;   // estamos dentro de la sección "Próximos pasos"
   sectionDepth: number;   // profundidad donde arrancó esa sección
+  fathomAt: string | null; // created_time del primer bloque con el link de Fathom (≈ día de la clase)
 };
+
+// Día en Argentina (UTC-3, sin horario de verano) de un timestamp de Notion
+const argDate = (iso: string | null | undefined): string | null =>
+  iso ? new Date(Date.parse(iso) - 3 * 3600_000).toISOString().slice(0, 10) : null;
+const hasFathom = (u: unknown) => /^https:\/\/([a-z0-9-]+\.)?fathom\.video\//i.test(String(u || ""));
 
 async function parseContent(
   notion: ReturnType<typeof notionClient>,
@@ -258,6 +264,12 @@ async function parseContent(
       out.date = toIsoDate(mention?.mention?.date?.start) || (text ? parseDmy(text) : null);
     }
     for (const t of v.rich_text || []) if (t.href) addLink(t.href, t.plain_text);
+
+    // Fecha de la sesión: cuándo se cargó el link de Fathom (bookmark o link dentro del texto)
+    if (!out.fathomAt && b.created_time &&
+        (hasFathom(v.url) || (v.rich_text || []).some((t: any) => hasFathom(t.href)) || (text && /fathom\.video\//i.test(text)))) {
+      out.fathomAt = b.created_time;
+    }
 
     // Resumen pegado como UN bloque con saltos de línea: se procesa línea por línea
     if (["paragraph", "quote", "callout"].includes(b.type) && text.includes("\n")) {
@@ -355,6 +367,42 @@ type DashItem =
   | { t: "sessions" };
 type DashSection = { title: string; color: string | null; items: DashItem[] };
 type DashRow = { cols: DashSection[][] };
+
+// ───────────────────────── Historial (solo admin) ─────────────────────────
+// De la página del alumno saca objetivos, diagnóstico, misiones y "Work in progress"
+// para guardar una foto cuando cambian y el registro de cada misión (mission_log).
+const sectionLines = (secs: DashSection[], re: RegExp) =>
+  secs.filter((s) => re.test(s.title || ""))
+    .flatMap((s) => s.items)
+    .filter((i): i is Extract<DashItem, { text: string }> => "text" in i && Boolean((i as any).text))
+    .map((i) => i.text.trim());
+
+async function sha256(text: string) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function saveHistory(db: any, studentId: string, rows: DashRow[]) {
+  const secs = rows.flatMap((r) => r.cols.flat());
+  const { data: checks } = await db.from("student_task_checks").select("task_key, done").eq("student_id", studentId);
+  const webDone = new Set((checks || []).filter((c: any) => c.done).map((c: any) => c.task_key));
+
+  const missions = secs.flatMap((s) => s.items)
+    .filter((i): i is Extract<DashItem, { t: "task" }> => i.t === "task" && Boolean(i.id))
+    .map((t) => ({ task_key: t.id, text: t.text.trim(), done: Boolean(t.done) || webDone.has(t.id) }));
+  const objectives = sectionLines(secs, /objetivos/i);
+  const diagnosis = sectionLines(secs, /diagn[oó]stico/i);
+  const wip = sectionLines(secs, /work\s*in\s*progress/i).join("\n");
+
+  const hash = await sha256(JSON.stringify({ objectives, diagnosis, missions, wip }));
+  const { error: sErr } = await db.rpc("save_dashboard_snapshot", {
+    p_student_id: studentId, p_hash: hash, p_objectives: objectives, p_diagnosis: diagnosis,
+    p_missions: missions, p_wip: wip, p_content: { rows },
+  });
+  if (sErr) throw sErr;
+  const { error: mErr } = await db.rpc("sync_mission_log", { p_student_id: studentId, p_missions: missions });
+  if (mErr) throw mErr;
+}
 type FoundSession = { block: Block; title: string; number: number };
 
 const stripEmoji = (s: string) =>
@@ -617,6 +665,8 @@ Deno.serve(async (req) => {
         { onConflict: "student_id" },
       );
       if (dErr) throw dErr;
+      // Historial: foto si cambió + registro de misiones (lo nuevo, lo cumplido, lo borrado)
+      await saveHistory(db, student.id, rows);
 
       let completed = true;
 
@@ -633,27 +683,33 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        const parsed: Parsed = { notes: [], tasks: [], links: [], date: null, inNextSteps: false, sectionDepth: 0 };
+        const parsed: Parsed = { notes: [], tasks: [], links: [], date: null, inNextSteps: false, sectionDepth: 0, fathomAt: null };
         await parseContent(notion, s.block.id, parsed);
 
-        const { error } = await db.from("sessions").upsert(
-          {
-            student_id: student.id,
-            notion_page_id: s.block.id,
-            number: s.number,
-            title: s.title.slice(0, 300),
-            // Dato secundario: el orden lo da el número del título, nunca la fecha.
-            // Sin fecha en el contenido → null (la fecha de creación en Notion no es confiable).
-            session_date: parsed.date || parseDmy(s.title),
-            notes: parsed.notes.join("\n").trim().slice(0, MAX_NOTES) || null,
-            tasks: dropMentorTasks(parsed.tasks).slice(0, 100),
-            links: parsed.links.slice(0, 50),
-            notion_last_edited: edited,
-            in_notion: true,
-            synced_at: new Date().toISOString(),
-          },
-          { onConflict: "notion_page_id" },
-        );
+        // El resumen nunca se pisa con vacío: si en Notion se borró el contenido (o el
+        // bookmark), se conserva lo que ya estaba guardado. Solo se envía lo que tiene datos.
+        const notes = parsed.notes.join("\n").trim().slice(0, MAX_NOTES);
+        const tasks = dropMentorTasks(parsed.tasks).slice(0, 100);
+        const links = parsed.links.slice(0, 50);
+        const row: Record<string, unknown> = {
+          student_id: student.id,
+          notion_page_id: s.block.id,
+          number: s.number,
+          title: s.title.slice(0, 300),
+          // El orden lo da el número del título; la fecha sirve para el seguimiento
+          // (días sin clase). Prioridad: cuándo se cargó el link de Fathom → fecha escrita
+          // en el contenido o el título → cuándo se creó la sesión en Notion.
+          // Si Manu carga una fecha manual (session_date_manual), esa gana en todos lados.
+          session_date: argDate(parsed.fathomAt) || parsed.date || parseDmy(s.title) || argDate(s.block.created_time),
+          notion_last_edited: edited,
+          in_notion: true,
+          synced_at: new Date().toISOString(),
+        };
+        if (notes) row.notes = notes;
+        if (tasks.length) row.tasks = tasks;
+        if (links.length) row.links = links;
+
+        const { error } = await db.from("sessions").upsert(row, { onConflict: "notion_page_id" });
         if (error) throw error;
         stats.sessions_updated++;
       }

@@ -189,3 +189,60 @@ body { background: var(--color-bg); color: var(--color-text); }
 /* Alta / edición de productos */
 .admin-linkform .admin-switch { display: inline-flex; align-self: end; color: var(--color-text); }
 .admin-table th [data-edit-product] { display: block; margin-top: 8px; }
+
+/* Alumnos inactivos (sección plegada) */
+.admin-inactive-toggle {
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.admin-inactive-toggle:hover { color: var(--color-text); }
+.admin-inactive tr { opacity: 0.6; }
+.admin-inactive tr:hover { opacity: 1; }
+.admin-deactivate { display: block; margin-top: 6px; font-size: 0.75rem; color: var(--color-text-muted); }
+
+/* Sesiones del alumno: fecha manual */
+.admin-sessions { margin-top: 6px; font-size: 0.8rem; font-weight: 400; }
+.admin-sessions summary { cursor: pointer; color: var(--color-accent-2); }
+.admin-sessions ul { margin: 8px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.admin-sessions li { display: grid; gap: 4px; }
+.admin-sessions__num { font-weight: 600; }
+.admin-sessions__form { display: flex; gap: 6px; align-items: center; }
+.admin-sessions__form input {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(4, 6, 15, 0.98);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.8rem;
+  color-scheme: dark;
+}
+.admin-late { color: #f0c36b; }
+
+/* Marcar como pagado (transferencia / efectivo) */
+.admin-markpaid {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid rgba(89, 198, 186, 0.35);
+  border-radius: var(--radius-md);
+  background: rgba(89, 198, 186, 0.04);
+}
+.admin-markpaid:focus { outline: none; }
+.admin-markpaid .admin-h3 { margin-top: 0; }
+.admin-markpaid__summary { margin: 0 0 14px; font-size: 0.9rem; line-height: 1.6; }
+.admin-markpaid .admin-linkform { border: 0; padding: 0; }
+.admin-markpaid .admin-linkform[hidden] { display: none; }
+.admin-markpaid label span { font-size: 0.72rem; }
+.admin-markpaid__result { min-height: 1.3em; margin: 12px 0 0; font-size: 0.9rem; }
+.admin-markpaid__result.is-ok { color: var(--color-accent-2); }
+.admin-markpaid__result.is-warn { color: #f0c36b; }
+.admin-markpaid__result.is-error { color: #ff8a8a; }
+.admin-markpaid__result.is-info { color: var(--color-text-muted); }
+.admin-actions .mp-btn { margin: 2px 0; }

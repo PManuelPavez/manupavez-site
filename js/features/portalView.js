@@ -271,6 +271,17 @@ export function renderPortal({ student, dashboard, sessions, tracks = [], checks
   const ctx = { sessions, tracks, checks, readOnly };
   // Copia: marcamos la sección "Work in progress" (la primera) para sumarle los tracks
   let rows = (dashboard?.rows || []).map((r) => ({ cols: r.cols.map((c) => c.map((s) => ({ ...s }))) }));
+
+  // "🎯 Objetivos" va siempre primero, a lo ancho, esté donde esté en Notion.
+  // Si la página no lo tiene, no se muestra nada en su lugar.
+  const objectives = rows.flatMap((r) => r.cols.flat()).find((s) => /objetivos/i.test(s.title || ""));
+  if (objectives) {
+    rows = rows
+      .map((r) => ({ cols: r.cols.map((c) => c.filter((s) => s !== objectives)) }))
+      .filter((r) => r.cols.some((c) => c.length));
+    rows = [{ cols: [[objectives]] }, ...rows];
+  }
+
   const wip = rows.flatMap((r) => r.cols.flat()).find((s) => isWipTitle(s.title));
   if (wip) wip.wip = true;
   else rows = [...rows, { cols: [[{ title: "Work in progress", color: "blue", items: [], wip: true }]] }];

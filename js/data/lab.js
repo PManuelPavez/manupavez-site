@@ -97,7 +97,7 @@ export async function adminListStudents() {
     sb.from("students")
       .select("id, full_name, email, user_id, status, memberships(status, current_period_end)")
       .order("full_name"),
-    sb.from("sessions").select("student_id, number, session_date").eq("in_notion", true),
+    sb.from("sessions").select("id, student_id, number, title, session_date, session_date_manual").eq("in_notion", true),
     sb.from("student_tracks").select("student_id, title, url, created_at").order("created_at", { ascending: false }),
     sb.from("student_dashboards").select("student_id, content"),
     sb.from("student_task_checks").select("student_id, task_key, done"),
@@ -113,24 +113,41 @@ export async function adminListStudents() {
   if (error) throw error;
   if (sErr) throw sErr;
 
+  // Por alumno: todas sus sesiones (por número) y la última. La fecha efectiva es la
+  // manual si está cargada; si no, la que trae el sync desde Notion.
   const byStudent = new Map();
-  for (const s of sessions || []) {
-    const cur = byStudent.get(s.student_id) || { count: 0, last: null };
+  for (const raw of sessions || []) {
+    const s = { ...raw, date: raw.session_date_manual || raw.session_date };
+    const cur = byStudent.get(s.student_id) || { count: 0, last: null, list: [] };
     cur.count++;
+    cur.list.push(s);
     if (!cur.last || (s.number ?? 0) > (cur.last.number ?? 0)) cur.last = s;
     byStudent.set(s.student_id, cur);
   }
+  for (const cur of byStudent.values()) cur.list.sort((a, b) => (b.number ?? 0) - (a.number ?? 0));
 
   return (students || []).map((st) => {
     const m = Array.isArray(st.memberships) ? st.memberships[0] : st.memberships;
     return {
       ...st,
       membership: m || null,
-      sessions: byStudent.get(st.id) || { count: 0, last: null },
+      sessions: byStudent.get(st.id) || { count: 0, last: null, list: [] },
       tracks: (tracks || []).filter((t) => t.student_id === st.id),
       missions: missions.get(st.id) || { total: 0, done: 0 },
     };
   });
+}
+
+// Fecha manual de una sesión (null = volver a la automática). RLS + privilegio por
+// columna: el admin solo puede tocar session_date_manual. Se confirma con select
+// porque si la base no deja actualizar no tira error, devuelve 0 filas.
+export async function adminSetSessionDate(sessionId, date) {
+  const { data, error } = await ensure()
+    .from("sessions")
+    .update({ session_date_manual: date || null })
+    .eq("id", sessionId)
+    .select("id");
+  if (error || !data?.length) throw new Error("No se pudo guardar la fecha.");
 }
 
 export async function adminUpdateStudent(id, patch) {
@@ -258,7 +275,7 @@ export async function adminSaveProduct({ id, name, description, price_usd, unit,
 export async function adminListOrders() {
   const { data, error } = await ensure()
     .from("orders")
-    .select("id, product_name, kind, buyer_name, buyer_email, source, price_usd, fx_mep, amount_ars, status, init_point, created_at, paid_at, expires_at, note")
+    .select("id, product_name, kind, student_id, buyer_name, buyer_email, source, price_usd, fx_mep, amount_ars, status, init_point, created_at, paid_at, expires_at, note, payment_method, manual_note")
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) throw error;
@@ -286,4 +303,22 @@ export async function adminCreatePaymentLink({ product_id, student_id, price_usd
   const body = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(CHECKOUT_ERRORS[body.error] || "No se pudo generar el link.");
   return body;
+}
+
+// Pago recibido por fuera de MercadoPago (transferencia / efectivo): lo procesa el servidor,
+// que también anula el link de MP de esa orden. Devuelve el resultado tal cual.
+export async function adminMarkOrderPaid({ order_id, student_id, method, note }) {
+  const { data: { session } } = await ensure().auth.getSession();
+  if (!session) return { result: "no_session" };
+  try {
+    const res = await fetch(`${window.MP_SUPABASE.url}/functions/v1/order-mark-paid`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ order_id, student_id: student_id || null, method, note }),
+    });
+    const body = await res.json().catch(() => ({}));
+    return body.result ? body : { result: body.error || "failed" };
+  } catch {
+    return { result: "network" };
+  }
 }
