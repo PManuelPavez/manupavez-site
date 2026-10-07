@@ -1,5 +1,4 @@
-import { hasSupabase } from "../data/supabaseClient.js";
-import { getClinics } from "../data/content.js";
+import { supabase, hasSupabase } from "../data/supabaseClient.js";
 import { sendLead } from "../data/leadMailer.js";
 
 export function initClinicas() {
@@ -196,38 +195,51 @@ function buildLabMailto(data = {}) {
 }
 
 // =========================
-// LOAD PLANES (desde content.js → tabla planes)
+// FORMATOS: mentorías del shop (tabla products)
+// El precio sale del shop: si cambia en el panel, cambia acá también.
 // =========================
+const usd = (n) => `$${Number(n).toLocaleString("es-AR", { maximumFractionDigits: 2 })} USD`;
+
 async function loadClinics() {
   const dynamicContainer = document.querySelector('[data-sb="clinics"]');
-  const precioEl = document.querySelector('[data-sb="precio-1-1"]');
 
   try {
-    const planes = await getClinics();
+    const { data: products } = await supabase
+      .from("products")
+      .select("slug, name, description, kind, category, price_usd, unit")
+      .eq("category", "mentorias")
+      .order("sort");
+    const mentorias = (products || []).filter((p) => p.price_usd);
 
-    // Actualizar precio del 1:1 estático si viene de Supabase
-    const plan11 = planes.find(p => p.titulo === "1:1 Mensual" && p.status === "disponible");
-    if (plan11 && plan11.precio && precioEl) {
-      precioEl.textContent = plan11.precio;
-    }
+    // Precio de la tarjeta principal (texto fijo en el HTML)
+    document.querySelectorAll("[data-product-price]").forEach((el) => {
+      const p = mentorias.find((x) => x.slug === el.dataset.productPrice);
+      if (p) el.textContent = usd(p.price_usd);
+    });
 
-    // Renderizar solo los planes adicionales (no el 1:1 que es estático)
-    const extras = planes.filter(p => p.titulo !== "1:1 Mensual");
-
+    // Las demás mentorías del shop (la Clásica ya está fija en el HTML)
+    const extras = mentorias
+      .filter((p) => !document.querySelector(`[data-product-price="${p.slug}"]`))
+      .map((p) => ({
+        titulo: p.name.replace(/^mentor[ií]a\s*1:1\s*[-–]\s*/i, ""),
+        badge: "Mentoría 1:1",
+        descripcion: p.description || "",
+        lead: "",
+        precio: usd(p.price_usd),
+        periodo: p.unit === "mes" ? "/ mes" : `/ ${p.unit}`,
+        features: [],
+        cupos_totales: 0,
+        cupos_activos: 0,
+        status: "disponible",
+        cta_texto: "Ver en el shop →",
+        cta_link: "shop.html#mentorias",
+      }));
     if (dynamicContainer) {
-      dynamicContainer.innerHTML = extras
-        .filter(p => p.status !== "cerrado")
-        .map(renderDynamicCard)
-        .join("");
+      dynamicContainer.innerHTML = extras.map(renderActiveCard).join("");
     }
   } catch (err) {
     console.error("[clinicas] Error cargando planes:", err);
   }
-}
-
-function renderDynamicCard(p) {
-  if (p.status === "proximamente") return renderSoonCard(p);
-  return renderActiveCard(p);
 }
 
 function renderActiveCard(p) {
@@ -274,20 +286,6 @@ function renderActiveCard(p) {
           </a>
         </div>
       </div>
-    </article>`;
-}
-
-function renderSoonCard(p) {
-  return `
-    <article class="format-card format-card--soon">
-      <header class="format-card__head">
-        <span class="format-card__badge format-card__badge--soon">${escapeHtml(p.badge || "Próximamente")}</span>
-        <h3 class="format-card__title format-card__title--soon">${escapeHtml(p.titulo)}</h3>
-      </header>
-      ${p.descripcion ? `<p class="format-card__text muted">${escapeHtml(p.descripcion)}</p>` : ""}
-      <a href="${escapeHtml(p.cta_link)}" class="mp-btn ghost format-card__cta">
-        ${escapeHtml(p.cta_texto)}
-      </a>
     </article>`;
 }
 

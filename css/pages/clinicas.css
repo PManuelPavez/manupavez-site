@@ -2400,3 +2400,74 @@ html.gate-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .beat-float, .beat-float__eq i { animation: none; }
 }
+
+/* =========================================================
+   Formatos ↔ shop, y acceso de alumnos con código
+   ========================================================= */
+.format-card__alt {
+  align-self: flex-start;
+  font-size: 0.85rem;
+  color: var(--mp-accent-2);
+  text-decoration: underline;
+  text-decoration-color: rgba(89, 198, 186, 0.45);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.3s ease, color 0.3s ease;
+}
+.format-card__alt:hover,
+.format-card__alt:focus-visible { color: #fff; text-decoration-color: currentColor; outline: none; }
+
+.formats-shop {
+  margin: clamp(22px, 3vw, 32px) auto 0;
+  max-width: 640px;
+  padding: 14px 18px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-md);
+  color: var(--mp-muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  text-align: center;
+}
+.formats-shop strong { color: var(--mp-text); font-weight: 600; }
+.formats-shop a {
+  color: var(--mp-accent-2);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(89, 198, 186, 0.45);
+  text-underline-offset: 4px;
+}
+.formats-shop a:hover { text-decoration-color: currentColor; }
+
+.auth-card__main { width: 100%; }
+.section-centered .auth-card__or { margin: 22px 0 0; font-size: 0.88rem; }
+/* En la tarjeta destacada (fondo claro) el link va en un tono que se lea */
+.format-card--featured .format-card__alt { color: #0b6f65; text-decoration-color: rgba(11, 111, 101, 0.45); }
+.format-card--featured .format-card__alt:hover,
+.format-card--featured .format-card__alt:focus-visible { color: #053d38; }
+
+/* =========================================================
+   RITMO VERTICAL ÚNICO (corrige el "doble padding")
+   Antes cada sección sumaba su padding de abajo + el de arriba de la
+   siguiente (+ márgenes sueltos): huecos de 120–180px. Ahora un solo
+   valor para todas, y las secciones con fondo propio (tarjetas) separadas
+   por margen, no por padding duplicado.
+   ========================================================= */
+body[data-page="clinicas"] main > .section {
+  --cl-gap: clamp(24px, 3.6vw, 40px);
+  padding-block: var(--cl-gap);
+  margin-block: 0;
+}
+body[data-page="clinicas"] main > .compare { margin-block: 0; }
+body[data-page="clinicas"] main > #reservar.section,
+body[data-page="clinicas"] main > #alumnos,
+body[data-page="clinicas"] main > #faq { padding-block: var(--cl-gap); }
+/* Hero: sin aire extra debajo de los botones */
+body[data-page="clinicas"] main > .lab-hero-section { padding-bottom: var(--cl-gap); }
+body[data-page="clinicas"] .lab-hero { margin-bottom: 0; }
+/* Bloques con fondo (claro, foto, banda CTA): mismo aire por fuera que el resto */
+body[data-page="clinicas"] main > .section--light,
+body[data-page="clinicas"] main > .has-photo-bg {
+  margin-block: 0;                       /* el aire lo dan las secciones vecinas */
+  padding-block: clamp(32px, 5vw, 56px);
+}
+/* Dos bloques con fondo seguidos: separados por un solo hueco */
+body[data-page="clinicas"] main > .section--light + .has-photo-bg { margin-top: calc(var(--cl-gap) * 2); }

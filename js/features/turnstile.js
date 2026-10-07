@@ -36,7 +36,7 @@ export async function mountTurnstile(el) {
     const ts = await load();
     widgetId = ts.render(el, {
       sitekey,
-      theme: "dark",
+      theme: document.documentElement.dataset.theme === "light" ? "light" : "dark",
       size: "flexible",
       callback: (t) => { token = t; failed = false; },
       "expired-callback": () => { token = ""; },

@@ -170,6 +170,20 @@ function renderTaskItem(g, checks, readOnly = false) {
   return `<li class="${done ? "is-done" : ""}" data-depth="${depth}">${box}<span>${renderParts(g.parts) ?? esc(g.text)}</span></li>`;
 }
 
+// Barra de avance de las misiones ("3 de 7"). <progress>: sin estilos en línea (CSP)
+export function progressLabel(done, total) {
+  return done === total ? `¡${total} de ${total}! Todo listo` : `${done} de ${total} cumplidas`;
+}
+function renderProgress(group, checks) {
+  const total = group.length;
+  const done = group.filter((g) => g.done || checks?.get(g.id) === true).length;
+  return `
+    <div class="portal-progress${done === total ? " is-complete" : ""}">
+      <progress max="${total}" value="${done}" aria-label="Misiones cumplidas"></progress>
+      <span data-progress-label>${progressLabel(done, total)}</span>
+    </div>`;
+}
+
 function renderItems(items, ctx) {
   let html = "";
   let i = 0;
@@ -181,7 +195,10 @@ function renderItems(items, ctx) {
       if (it.t === "bullet") {
         html += `<ul class="portal-list">${group.map((g) => `<li data-depth="${Math.min(3, g.depth || 0)}">${renderParts(g.parts) ?? emphasize(g.text)}</li>`).join("")}</ul>`;
       } else if (it.t === "task") {
-        html += `<ul class="portal-checklist">${group.map((g) => renderTaskItem(g, ctx.checks, ctx.readOnly)).join("")}</ul>`;
+        const list = `<ul class="portal-checklist">${group.map((g) => renderTaskItem(g, ctx.checks, ctx.readOnly)).join("")}</ul>`;
+        html += group.length > 1
+          ? `<div class="portal-missions" data-missions>${renderProgress(group, ctx.checks)}${list}</div>`
+          : list;
       } else if (it.t === "file") {
         html += `<div class="portal-linkgrid">${group.map(renderFile).join("")}</div>`;
       } else {
@@ -303,7 +320,7 @@ export function renderPortal({ student, dashboard, sessions, tracks = [], checks
         <div>
           <p class="portal-kicker">Tu espacio en Frequency Lab</p>
           <h3 class="portal-name">${esc(displayName(student.full_name))}</h3>
-          <p class="portal-meta">${esc(meta)}</p>
+          <p class="portal-meta" data-state="${isActive ? "active" : "paused"}">${esc(meta)}</p>
         </div>
         ${adminLink || ""}
       </header>

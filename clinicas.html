@@ -297,19 +297,19 @@
       <span class="section-kicker">Planes</span>
       <h2>FORMATOS DISPONIBLES</h2>
       <p class="muted formats-section__intro">
-        Un único formato activo, pensado para trabajar en serio. Cupos limitados.
+        Mentorías mensuales 1:1, pensadas para trabajar en serio. Cupos limitados.
       </p>
 
       <div class="clinics-grid formats-grid">
 
-        <!-- TARJETA PRINCIPAL: 1:1 MENSUAL (estática — precio dinámico) -->
+        <!-- TARJETA PRINCIPAL: MENTORÍA CLÁSICA (texto fijo — precio del shop, producto mentoria-mensual) -->
         <article class="format-card format-card--featured">
           <span class="format-card__flag">Disponible ahora</span>
 
           <div class="format-card__body">
             <header class="format-card__head">
               <span class="format-card__badge">Mentoría 1:1</span>
-              <h3 class="format-card__title">1:1 Mensual</h3>
+              <h3 class="format-card__title">1:1 Clásica</h3>
             </header>
 
             <p class="format-card__lead">
@@ -326,7 +326,7 @@
               <span class="format-card__includes-label">Incluye</span>
               <ul class="format-list">
                 <li>Sesión semanal de 1 hora (videollamada)</li>
-                <li>Espacio en Notion con seguimiento personalizado</li>
+                <li>Tu espacio privado en la web: misiones, resumen y grabación de cada sesión</li>
                 <li>Trabajo exclusivo sobre tu propio material</li>
                 <li>Acceso directo entre sesiones</li>
               </ul>
@@ -334,7 +334,7 @@
 
             <div class="format-card__footer">
               <div class="format-card__price">
-                <span class="format-card__amount" data-sb="precio-1-1">$40 USD</span>
+                <span class="format-card__amount" data-product-price="mentoria-mensual">$60 USD</span>
                 <span class="format-card__period">/ mes</span>
               </div>
 
@@ -346,14 +346,20 @@
               <a href="#reservar" class="mp-btn orange format-card__cta">
                 Aplicar al Lab →
               </a>
+              <a href="shop.html#mentorias" class="format-card__alt">o pagala directo en el shop →</a>
             </div>
           </div>
         </article>
 
-        <!-- PLANES DINÁMICOS (próximamente + futuros) -->
+        <!-- Otras mentorías del shop (ej. Tu primer EP) -->
         <div data-sb="clinics"></div>
 
       </div>
+
+      <p class="formats-shop">
+        ¿Buscás algo puntual? <strong>Clínicas sueltas, mezcla, premaster y mastering</strong> en el
+        <a href="shop.html">shop →</a>
+      </p>
     </section>
 
     <!-- QUIÉN TE GUÍA (autoridad) — debajo de Formatos -->
@@ -500,16 +506,16 @@
       <span class="section-kicker">Acceso privado</span>
       <h2 id="alumnos-title">ÁREA DE ALUMNOS</h2>
       <p class="muted">
-        Contenido exclusivo para quienes ya están dentro del Lab. El resto de la página es abierta;
-        esta sección se desbloquea con tu acceso.
+        Si ya estás dentro del Lab, entrá a tu espacio con tu código de acceso:
+        tus misiones, el resumen de cada sesión y tus tracks.
       </p>
 
       <div class="auth-card" data-auth>
         <!-- Estado: deslogueado -->
         <div data-auth-loggedout>
-          <p class="muted">
-            Si ya sos parte del Lab, ingresá con tu email y te mando un link de acceso.
-            Sin contraseñas.
+          <a class="mp-btn primary auth-card__main" href="alumnos.html">ENTRAR CON MI CÓDIGO →</a>
+          <p class="muted auth-card__or">
+            ¿No tenés tu código? Ingresá tu email y te mando un link de acceso.
           </p>
 
           <form class="auth-form" data-auth-form novalidate>
@@ -562,7 +568,12 @@
 
         <details class="faq-item">
           <summary>¿Cómo reservo?</summary>
-          <p>Completá el formulario de aplicación de esta página. Te respondo en menos de 48&nbsp;hs al mail que dejes.</p>
+          <p>Completá el formulario de aplicación de esta página. Te respondo en menos de 48&nbsp;hs al mail que dejes. Si ya lo hablamos, podés pagar directo en el <a href="shop.html">shop</a>.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>¿Cómo pago?</summary>
+          <p>En pesos, al dólar MEP del día: con MercadoPago (tarjeta de crédito, débito o dinero en cuenta) o por transferencia bancaria. El monto queda fijo al crear el pedido.</p>
         </details>
       </div>
     </section>

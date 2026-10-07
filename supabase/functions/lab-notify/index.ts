@@ -50,6 +50,24 @@ function findTaskText(content: any, id: string): string | null {
   return null;
 }
 
+// Secciones con 2+ misiones que quedaron TODAS cumplidas (Notion o tilde del alumno)
+// y que tocó alguna de las misiones de este lote → para festejarlo en el mail.
+function completedSections(content: any, checks: Map<string, boolean>, touched: Set<string>): string[] {
+  const out: string[] = [];
+  for (const row of content?.rows || []) {
+    for (const col of row.cols || []) {
+      for (const sec of col || []) {
+        const tasks = (sec.items || []).filter((i: any) => i.t === "task" && i.id);
+        if (tasks.length < 2 || !tasks.some((t: any) => touched.has(t.id))) continue;
+        if (tasks.every((t: any) => t.done || checks.get(t.id) === true)) {
+          out.push(String(sec.title || "Misiones").replace(/\s*\.$/, ""));
+        }
+      }
+    }
+  }
+  return out;
+}
+
 Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
@@ -106,6 +124,12 @@ Deno.serve(async (req) => {
     const { data: dash } = needsDash
       ? await db.from("student_dashboards").select("content").eq("student_id", studentId).maybeSingle()
       : { data: null };
+    let allDone: string[] = [];
+    if (needsDash) {
+      const { data: checkRows } = await db.from("student_task_checks").select("task_key, done").eq("student_id", studentId);
+      const checks = new Map((checkRows || []).map((c: any) => [c.task_key, c.done === true]));
+      allDone = completedSections(dash?.content, checks, new Set(tasks.map((e) => String(e.ref_id))));
+    }
 
     // ── Aviso al alumno: su mentoría vence pronto ──
     let expiringNote = "";
@@ -138,7 +162,8 @@ Deno.serve(async (req) => {
     if (lapsed.length) parts.push("quedó sin acceso");
     if (expiring.length) parts.push("la mentoría vence pronto");
     if (tracks.length) parts.push(`${tracks.length} ${tracks.length === 1 ? "track" : "tracks"}`);
-    if (tasks.length) parts.push(`${tasks.length} ${tasks.length === 1 ? "misión completada" : "misiones completadas"}`);
+    if (allDone.length) parts.push("🎉 cumplió todas sus misiones");
+    else if (tasks.length) parts.push(`${tasks.length} ${tasks.length === 1 ? "misión completada" : "misiones completadas"}`);
     const subject = `Frequency Lab — ${name}: ${parts.join(" · ")}`;
 
     const trackRows = tracks.map((e) => {
@@ -156,6 +181,7 @@ Deno.serve(async (req) => {
       ${lapsed.length ? `<h3 style="font-size:14px;margin:18px 0 8px">Sin acceso</h3><p><strong>${esc(name)} quedó sin acceso por falta de pago.</strong> Pasaron los 5 días de gracia.</p>` : ""}
       ${expiring.length ? `<h3 style="font-size:14px;margin:18px 0 8px">Vence pronto</h3>${expiringNote}` : ""}
       ${tracks.length ? `<h3 style="font-size:14px;margin:18px 0 8px">Subió ${tracks.length === 1 ? "un track" : "tracks"}</h3><ul style="padding-left:18px;margin:0">${trackRows}</ul>` : ""}
+      ${allDone.length ? `<p style="margin:18px 0 0;padding:12px 14px;border-radius:10px;background:#e9f7f5"><strong>🎉 Cumplió todas las misiones</strong> de ${allDone.map((t) => `«${esc(t)}»`).join(", ")}. Buen momento para darle la próxima tanda.</p>` : ""}
       ${tasks.length ? `<h3 style="font-size:14px;margin:18px 0 8px">Completó ${tasks.length === 1 ? "una misión" : "misiones"}</h3><ul style="padding-left:18px;margin:0">${taskRows}</ul>` : ""}
       <p style="margin-top:24px;font-size:13px"><a href="https://manupavez.com/admin.html">Abrir el panel de alumnos →</a></p>`);
 
