@@ -46,6 +46,12 @@ enabled = true
 verify_jwt = false
 entrypoint = "./functions/notion-file/index.ts"
 
+[functions.finance-sheet]
+enabled = true
+# Solo la llama pg_cron con el secreto de Vault (ver index.ts)
+verify_jwt = false
+entrypoint = "./functions/finance-sheet/index.ts"
+
 [functions.order-mark-paid]
 enabled = true
 # Solo admin: el JWT y profiles.is_admin se verifican adentro

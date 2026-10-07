@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Shop — Frequency Lab</title>
-  <meta name="description" content="Sesiones individuales, mezcla, premaster y mastering con Manu Pavez." />
+  <meta name="description" content="Mentorías, clínicas, mezcla, premaster y mastering con Manu Pavez. Pagás en pesos con MercadoPago o transferencia." />
   <meta name="robots" content="noindex,follow" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://esm.sh https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://esm.sh https://dolarapi.com https://psnprhzowknhfylvgcci.supabase.co wss://psnprhzowknhfylvgcci.supabase.co; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'" />
@@ -33,29 +33,65 @@
   <main class="lab-main shop">
     <p class="shop-banner" data-banner role="status" aria-live="polite" hidden></p>
 
-    <header class="shop-head">
-      <p class="shop-kicker">Frequency Lab</p>
-      <h1 class="shop-title">Sesiones y servicios</h1>
-      <p class="shop-lead">Trabajo puntual sobre tu música, 1:1. Pagás en pesos con MercadoPago, al dólar MEP del día.</p>
+    <header class="shop-hero">
+      <p class="shop-kicker">Frequency Lab · Shop</p>
+      <h1 class="shop-title">Tu música,<br /><span>al próximo nivel</span></h1>
+      <p class="shop-lead">Mentorías, clínicas 1:1 y mix &amp; master hechos por Manu Pavez. Pagás en pesos al dólar MEP del día, con MercadoPago o transferencia.</p>
+
+      <ul class="shop-trust" aria-label="Cómo funciona">
+        <li><span class="shop-trust__icon" aria-hidden="true">✓</span>Tarjeta protegida por MercadoPago</li>
+        <li><span class="shop-trust__icon" aria-hidden="true">$</span>Precio en pesos fijo al pedir</li>
+        <li><span class="shop-trust__icon" aria-hidden="true">✉</span>Coordinamos por mail</li>
+      </ul>
+
+      <div class="shop-pay" aria-label="Medios de pago">
+        <span class="shop-pay__label">Medios de pago</span>
+        <span class="shop-pay__logos">
+          <img src="img/pay/mercadopago.svg" alt="Mercado Pago" width="76" height="30" />
+          <img src="img/pay/visa.svg" alt="Visa" width="48" height="30" />
+          <img src="img/pay/mastercard.svg" alt="Mastercard" width="48" height="30" />
+          <img src="img/pay/amex.svg" alt="American Express" width="48" height="30" />
+          <img src="img/pay/transferencia.svg" alt="Transferencia bancaria" width="48" height="30" />
+        </span>
+      </div>
     </header>
 
-    <div class="shop-grid" data-products>
+    <nav class="shop-tabs" data-tabs aria-label="Secciones del shop" hidden></nav>
+
+    <div class="shop-sections" data-products>
       <p class="muted">Cargando…</p>
     </div>
 
-    <p class="shop-foot">¿Buscás algo a medida? Escribime a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a> y te armo un link con lo que necesites.</p>
+    <aside class="shop-custom">
+      <div>
+        <h2 class="shop-custom__title">¿Necesitás algo a medida?</h2>
+        <p>Escribime y te armo un link de pago con lo que necesites.</p>
+      </div>
+      <a class="mp-btn ghost" href="mailto:manupavez22@gmail.com">ESCRIBIME</a>
+    </aside>
   </main>
 
   <dialog class="shop-checkout" data-checkout aria-labelledby="checkout-title">
     <form class="shop-checkout__panel" data-checkout-form novalidate>
-      <p class="shop-kicker">Tu compra</p>
+      <button type="button" class="shop-checkout__x" data-close aria-label="Cerrar">×</button>
+      <p class="shop-kicker" data-checkout-section>Tu compra</p>
       <h2 id="checkout-title" class="shop-checkout__title" data-checkout-name></h2>
-      <p class="shop-checkout__price" data-checkout-price></p>
 
-      <label class="shop-field" data-qty-field hidden>
-        <span>Cantidad de tracks</span>
-        <input name="quantity" type="number" min="1" max="20" value="1" inputmode="numeric" />
-      </label>
+      <div class="shop-qty" data-qty-field hidden>
+        <span class="shop-qty__label">Cantidad de tracks</span>
+        <div class="shop-stepper">
+          <button type="button" data-step="-1" aria-label="Uno menos">−</button>
+          <input name="quantity" type="number" min="1" max="20" value="1" inputmode="numeric" aria-label="Cantidad de tracks" />
+          <button type="button" data-step="1" aria-label="Uno más">+</button>
+        </div>
+      </div>
+
+      <div class="shop-total">
+        <span>Total</span>
+        <strong data-checkout-price></strong>
+        <small data-checkout-ars></small>
+      </div>
+
       <label class="shop-field">
         <span>Nombre</span>
         <input name="name" type="text" maxlength="120" autocomplete="name" required />
@@ -65,15 +101,63 @@
         <input name="email" type="email" maxlength="200" autocomplete="email" required />
       </label>
 
+      <fieldset class="shop-methods">
+        <legend>¿Cómo querés pagar?</legend>
+        <label class="shop-method">
+          <input type="radio" name="method" value="mercadopago" checked />
+          <span class="shop-method__body">
+            <span class="shop-method__name">MercadoPago</span>
+            <span class="shop-method__hint">Tarjeta de crédito, débito o dinero en cuenta</span>
+            <span class="shop-method__logos">
+              <img src="img/pay/mercadopago.svg" alt="" width="58" height="23" />
+              <img src="img/pay/visa.svg" alt="" width="37" height="23" />
+              <img src="img/pay/mastercard.svg" alt="" width="37" height="23" />
+              <img src="img/pay/amex.svg" alt="" width="37" height="23" />
+            </span>
+          </span>
+        </label>
+        <label class="shop-method">
+          <input type="radio" name="method" value="transferencia" />
+          <span class="shop-method__body">
+            <span class="shop-method__name">Transferencia bancaria</span>
+            <span class="shop-method__hint">Desde tu banco o billetera, con alias o CBU</span>
+            <span class="shop-method__logos">
+              <img src="img/pay/transferencia.svg" alt="" width="37" height="23" />
+            </span>
+          </span>
+        </label>
+      </fieldset>
+
       <div class="shop-checkout__captcha" data-captcha></div>
       <p class="shop-checkout__note" data-checkout-note role="status" aria-live="polite"></p>
 
       <div class="shop-checkout__actions">
         <button type="submit" class="mp-btn primary" data-pay>IR A PAGAR</button>
-        <button type="button" class="mp-btn ghost" data-close>CANCELAR</button>
       </div>
-      <p class="shop-checkout__legal">El pago se hace en MercadoPago. El monto en pesos queda fijo al crear el pedido.</p>
+      <p class="shop-checkout__legal" data-checkout-legal>El monto en pesos queda fijo al crear el pedido.</p>
     </form>
+
+    <section class="shop-checkout__panel shop-transfer" data-transfer hidden aria-labelledby="transfer-title" tabindex="-1">
+      <button type="button" class="shop-checkout__x" data-close aria-label="Cerrar">×</button>
+      <p class="shop-kicker">Pedido <span data-t-code></span></p>
+      <h2 id="transfer-title" class="shop-checkout__title">Transferí para confirmar</h2>
+      <p class="shop-transfer__amount"><span data-t-amount></span><small data-t-detail></small></p>
+
+      <dl class="shop-transfer__data">
+        <div><dt>Alias</dt><dd><span data-t-alias></span><button type="button" class="shop-copy" data-copy-field="alias">COPIAR</button></dd></div>
+        <div><dt>CBU / CVU</dt><dd><span data-t-cbu></span><button type="button" class="shop-copy" data-copy-field="cbu">COPIAR</button></dd></div>
+        <div><dt>Titular</dt><dd data-t-holder></dd></div>
+        <div data-t-bank-row><dt>Banco</dt><dd data-t-bank></dd></div>
+      </dl>
+
+      <ol class="shop-transfer__steps">
+        <li>Transferí el <strong>monto exacto</strong> antes del <strong data-t-until></strong>.</li>
+        <li>Mandame el comprobante a <a href="mailto:manupavez22@gmail.com" data-t-mail>manupavez22@gmail.com</a> con el código <strong data-t-code2></strong>.</li>
+        <li>Lo confirmo y te escribo para arrancar.</li>
+      </ol>
+      <p class="shop-checkout__note" data-t-note role="status" aria-live="polite"></p>
+      <button type="button" class="mp-btn ghost" data-close>LISTO</button>
+    </section>
   </dialog>
 </body>
 </html>
