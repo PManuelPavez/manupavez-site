@@ -3,7 +3,8 @@
 // portalView y maneja lo que el alumno puede hacer: subir/borrar tracks y
 // marcar misiones. Cada acción la valida la base; acá solo se refleja.
 import { getMyPortal, adminStudentPortal, addTrack, deleteTrack, setTaskCheck, membershipIsActive, getNotionFileUrl } from "../data/lab.js";
-import { renderPortal, renderTrackList, displayName, esc, safeHref } from "./portalView.js";
+import { renderPortal, renderTrackList, displayName, esc, safeHref, progressLabel } from "./portalView.js";
+import { burst, toast } from "./celebrate.js";
 
 // Link pegado sin "https://" (ej: soundcloud.com/…) → se completa. Solo https.
 function normalizeTrackUrl(raw) {
@@ -96,8 +97,28 @@ export async function mountPortal(container, { previewStudentId = null } = {}) {
         box.setAttribute("aria-checked", String(on));
         box.textContent = on ? "✓" : "";
         li?.classList.toggle("is-done", on);
+        // Barra de avance de esa lista de misiones
+        const wrap = box.closest("[data-missions]");
+        if (wrap) {
+          const total = wrap.querySelectorAll(".portal-checklist > li").length;
+          const done = wrap.querySelectorAll(".portal-checklist > li.is-done").length;
+          wrap.querySelector("progress").value = done;
+          wrap.querySelector("[data-progress-label]").textContent = progressLabel(done, total);
+          wrap.querySelector(".portal-progress").classList.toggle("is-complete", done === total);
+        }
       };
       paint(next);
+      // Festejo: confetti chico por misión; grande + cartel al completar la lista
+      if (next) {
+        const wrap = box.closest("[data-missions]");
+        const allDone = wrap && wrap.querySelectorAll(".portal-checklist > li:not(.is-done)").length === 0;
+        if (allDone) {
+          burst(wrap.querySelector(".portal-progress") || box, "big");
+          toast("¡Misiones cumplidas! 🎉 Seguí así.");
+        } else {
+          burst(box);
+        }
+      }
       box.disabled = true;
       try {
         await setTaskCheck(key, next);

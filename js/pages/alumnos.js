@@ -88,6 +88,18 @@ async function showLogin() {
   setTimeout(() => input.focus(), 50);
 }
 
+// Modo claro / oscuro (el tema ya lo aplicó theme-boot.js antes de pintar)
+const themeBtn = $("[data-theme-toggle]");
+const paintThemeBtn = () => {
+  const light = window.labTheme?.get() === "light";
+  themeBtn.setAttribute("aria-label", light ? "Cambiar a modo oscuro" : "Cambiar a modo claro");
+};
+themeBtn?.addEventListener("click", () => {
+  window.labTheme?.set(window.labTheme.get() === "light" ? "dark" : "light");
+  paintThemeBtn();
+});
+if (themeBtn) paintThemeBtn();
+
 logoutBtn.addEventListener("click", async () => {
   logoutBtn.disabled = true;
   await supabase.auth.signOut();

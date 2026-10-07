@@ -118,3 +118,432 @@ body {
   color: #f0c36b;
   font-size: 0.88rem;
 }
+
+/* =================== ESPACIO DEL ALUMNO · TEMAS Y DINÁMICA ===================
+   Solo /alumnos (body[data-page="alumnos"]): el shop también carga este archivo
+   para el encabezado, pero no cambia de tema.
+   El tema lo decide js/theme-boot.js antes de pintar (html[data-theme]). */
+
+body[data-page="alumnos"] {
+  --lab-bg: #050509;
+  --lab-surface: rgba(255, 255, 255, 0.035);
+  --lab-surface-2: rgba(255, 255, 255, 0.025);
+  --lab-raised: rgba(4, 6, 15, 0.6);
+  --lab-line: rgba(255, 255, 255, 0.13);
+  --lab-line-2: rgba(255, 255, 255, 0.24);
+  --lab-text: #f9f9ff;
+  --lab-muted: rgba(242, 242, 255, 0.68);
+  --lab-accent: #59c6ba;
+  --lab-accent-soft: rgba(89, 198, 186, 0.1);
+  --lab-on-accent: #050509;
+  --lab-topbar: rgba(5, 5, 9, 0.82);
+  --lab-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 14px 34px rgba(0, 0, 0, 0.28);
+  --lab-shadow-hover: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 20px 44px rgba(0, 0, 0, 0.4);
+  --lab-danger: #ff8a8a;
+  --lab-ease: cubic-bezier(0.19, 1, 0.22, 1);
+
+  /* Los componentes compartidos leen estos: se adaptan solos al tema */
+  --color-bg: var(--lab-bg);
+  --color-text: var(--lab-text);
+  --color-text-muted: var(--lab-muted);
+  --color-accent-2: var(--lab-accent);
+  --color-border-soft: var(--lab-line);
+
+  background: var(--lab-bg);
+  color: var(--lab-text);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+:root[data-theme="light"] body[data-page="alumnos"] {
+  --lab-bg: #f3f4f8;
+  --lab-surface: #ffffff;
+  --lab-surface-2: #f8f9fb;
+  --lab-raised: #f5f6f9;
+  --lab-line: rgba(13, 18, 40, 0.13);
+  --lab-line-2: rgba(13, 18, 40, 0.24);
+  --lab-text: #0e1122;
+  --lab-muted: rgba(14, 17, 34, 0.6);
+  --lab-accent: #11877b;
+  --lab-accent-soft: rgba(17, 135, 123, 0.09);
+  --lab-on-accent: #ffffff;
+  --lab-topbar: rgba(243, 244, 248, 0.85);
+  --lab-shadow: 0 1px 2px rgba(13, 18, 40, 0.05), 0 8px 24px rgba(13, 18, 40, 0.06);
+  --lab-shadow-hover: 0 2px 4px rgba(13, 18, 40, 0.06), 0 16px 36px rgba(13, 18, 40, 0.1);
+  --lab-danger: #c2412d;
+  color-scheme: light;
+}
+:root[data-theme="dark"] body[data-page="alumnos"] { color-scheme: dark; }
+
+/* Encabezado */
+body[data-page="alumnos"] .lab-top {
+  background: var(--lab-topbar);
+  border-bottom-color: var(--lab-line);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+          backdrop-filter: saturate(1.4) blur(14px);
+}
+:root[data-theme="light"] body[data-page="alumnos"] .lab-top__brand img { filter: invert(1); }
+
+.lab-theme {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--lab-line-2, rgba(255, 255, 255, 0.2));
+  border-radius: 50%;
+  background: transparent;
+  color: var(--lab-text, #fff);
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.5s var(--lab-ease, ease);
+}
+.lab-theme:hover { border-color: var(--lab-accent); background: var(--lab-accent-soft); }
+.lab-theme:active { transform: scale(0.92); }
+.lab-theme:focus-visible { outline: 2px solid var(--lab-accent); outline-offset: 2px; }
+.lab-theme svg {
+  grid-area: 1 / 1;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: opacity 0.35s ease, transform 0.6s var(--lab-ease, ease);
+}
+.lab-theme__moon { fill: currentColor; stroke: none; }
+/* En oscuro se ofrece el sol (pasar a claro) y viceversa */
+:root:not([data-theme="light"]) .lab-theme__moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+:root[data-theme="light"] .lab-theme__sun { opacity: 0; transform: rotate(90deg) scale(0.5); }
+
+/* Botones en claro */
+:root[data-theme="light"] body[data-page="alumnos"] .mp-btn.ghost {
+  background: var(--lab-surface);
+  border-color: var(--lab-line-2);
+  color: var(--lab-text);
+}
+:root[data-theme="light"] body[data-page="alumnos"] .mp-btn.ghost:hover { border-color: var(--lab-accent); color: var(--lab-accent); }
+:root[data-theme="light"] body[data-page="alumnos"] .mp-btn:hover { box-shadow: var(--lab-shadow-hover); }
+
+/* Login */
+body[data-page="alumnos"] .lab-login {
+  border-color: var(--lab-line);
+  background: var(--lab-surface);
+  box-shadow: var(--lab-shadow);
+  animation: lab-rise 0.7s var(--lab-ease) both;
+}
+body[data-page="alumnos"] .lab-pin {
+  border-color: var(--lab-line-2);
+  background: var(--lab-raised);
+  color: var(--lab-text);
+}
+body[data-page="alumnos"] .lab-pin:focus-visible { border-color: var(--lab-accent); box-shadow: 0 0 0 3px var(--lab-accent-soft); }
+body[data-page="alumnos"] .lab-login__note.is-error { color: var(--lab-danger); }
+
+/* ── Portal ── */
+.lab-portal .portal { gap: 18px; }
+
+.lab-portal .portal-head {
+  padding: clamp(4px, 1vw, 10px) 0 22px;
+  border-bottom-color: var(--lab-line);
+  animation: lab-rise 0.7s var(--lab-ease) both;
+}
+.lab-portal .portal-name { font-size: clamp(1.7rem, 4.6vw, 2.6rem); letter-spacing: 0.01em; }
+.lab-portal .portal-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 6px 12px 6px 10px;
+  border: 1px solid var(--lab-line);
+  border-radius: 999px;
+  background: var(--lab-surface);
+  color: var(--lab-text);
+  font-size: 0.8rem;
+}
+.lab-portal .portal-meta::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lab-accent);
+  box-shadow: 0 0 0 4px var(--lab-accent-soft);
+}
+.lab-portal .portal-meta[data-state="paused"]::before { background: #e0a43a; box-shadow: 0 0 0 4px rgba(224, 164, 58, 0.15); }
+
+/* Entrada escalonada de las filas */
+.lab-portal .portal-row { animation: lab-rise 0.7s var(--lab-ease) both; }
+.lab-portal .portal-row:nth-child(2) { animation-delay: 0.05s; }
+.lab-portal .portal-row:nth-child(3) { animation-delay: 0.1s; }
+.lab-portal .portal-row:nth-child(4) { animation-delay: 0.15s; }
+.lab-portal .portal-row:nth-child(5) { animation-delay: 0.2s; }
+.lab-portal .portal-row:nth-child(n + 6) { animation-delay: 0.25s; }
+
+.lab-portal .portal-card {
+  padding: 20px clamp(16px, 2.6vw, 24px) 22px;
+  border-color: var(--lab-line);
+  background: var(--lab-surface);
+  box-shadow: var(--lab-shadow);
+  transition: border-color 0.5s var(--lab-ease), box-shadow 0.5s var(--lab-ease), background-color 0.35s ease;
+}
+.lab-portal .portal-card::before { height: 3px; opacity: 1; }
+.lab-portal .portal-card[data-color="none"] { --accent: var(--lab-line-2); }
+.lab-portal .portal-card__title { font-size: 0.76rem; font-weight: 700; margin-bottom: 16px; }
+
+/* En claro, los colores de Notion un poco más profundos para que se lean */
+:root[data-theme="light"] .lab-portal .portal-card[data-color="blue"]   { --accent: #3f63c4; }
+:root[data-theme="light"] .lab-portal .portal-card[data-color="red"]    { --accent: #c2503f; }
+:root[data-theme="light"] .lab-portal .portal-card[data-color="green"]  { --accent: #2f9363; }
+:root[data-theme="light"] .lab-portal .portal-card[data-color="orange"] { --accent: #c9781f; }
+:root[data-theme="light"] .lab-portal .portal-card[data-color="yellow"] { --accent: #b09618; }
+:root[data-theme="light"] .lab-portal .portal-card[data-color="brown"]  { --accent: #8c6142; }
+:root[data-theme="light"] .lab-portal .portal-card[data-color="purple"] { --accent: #7553c4; }
+:root[data-theme="light"] .lab-portal .portal-card[data-color="pink"]   { --accent: #c04f8d; }
+:root[data-theme="light"] .lab-portal .portal-card[data-color="gray"]   { --accent: #6b7178; }
+
+.lab-portal .portal-notes strong,
+.lab-portal .portal-list strong,
+.lab-portal .portal-text strong { color: var(--lab-text); }
+
+/* Misiones */
+.lab-portal .portal-missions { display: grid; gap: 14px; }
+.portal-progress { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; }
+.portal-progress progress {
+  width: 100%;
+  height: 6px;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--lab-line);
+  -webkit-appearance: none;
+          appearance: none;
+}
+.portal-progress progress::-webkit-progress-bar { background: var(--lab-line); border-radius: 999px; }
+.portal-progress progress::-webkit-progress-value { background: var(--accent, var(--lab-accent)); border-radius: 999px; transition: width 0.6s var(--lab-ease); }
+.portal-progress progress::-moz-progress-bar { background: var(--accent, var(--lab-accent)); border-radius: 999px; }
+.portal-progress span { font-size: 0.74rem; color: var(--lab-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.portal-progress.is-complete span { color: var(--lab-accent); font-weight: 600; }
+
+.lab-portal .portal-checklist { gap: 4px; }
+.lab-portal .portal-checklist li {
+  grid-template-columns: 22px 1fr;
+  gap: 12px;
+  margin-inline: -8px;
+  padding: 8px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+.lab-portal .portal-checklist li:has(button.portal-check:not(:disabled)):hover { background: var(--lab-surface-2); }
+.lab-portal .portal-check {
+  width: 22px;
+  height: 22px;
+  margin-top: 0;
+  border: 1.5px solid var(--lab-line-2);
+  border-radius: 7px;
+  color: var(--lab-on-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.lab-portal .portal-checklist li.is-done .portal-check,
+.lab-portal button.portal-check[aria-checked="true"] {
+  background: var(--accent, var(--lab-accent));
+  border-color: var(--accent, var(--lab-accent));
+  animation: lab-pop 0.45s var(--lab-ease);
+}
+.lab-portal button.portal-check:hover:not(:disabled) { border-color: var(--accent, var(--lab-accent)); }
+.lab-portal .portal-checklist li > span:last-child { transition: color 0.3s ease; }
+.lab-portal .portal-checklist li.is-done > span:last-child { text-decoration-color: var(--lab-line-2); }
+
+/* Links, archivos y tracks */
+.lab-portal .portal-linkcard {
+  border-color: var(--lab-line);
+  background: var(--lab-raised);
+  color: var(--lab-text);
+}
+.lab-portal .portal-linkcard:hover { border-color: var(--accent, var(--lab-accent)); transform: translateY(-2px); box-shadow: var(--lab-shadow); }
+.lab-portal .portal-linkcard__icon { background: var(--lab-accent-soft); color: var(--accent, var(--lab-accent)); }
+.lab-portal .portal-inline-link { color: var(--lab-accent); text-decoration-color: var(--lab-line-2); }
+.lab-portal .portal-track__del:hover,
+.lab-portal .portal-track__del:focus-visible { color: var(--lab-danger); border-color: var(--lab-danger); }
+.lab-portal .portal-trackform { border-color: var(--lab-line); background: var(--lab-raised); animation: lab-rise 0.45s var(--lab-ease) both; }
+.lab-portal .portal-trackform input { border-color: var(--lab-line-2); background: var(--lab-surface); color: var(--lab-text); }
+.lab-portal .portal-trackform input:focus-visible { border-color: var(--lab-accent); box-shadow: 0 0 0 3px var(--lab-accent-soft); }
+.lab-portal .portal-trackform__note.is-error { color: var(--lab-danger); }
+
+/* Sesiones */
+.lab-portal .portal-session {
+  border-color: var(--lab-line);
+  background: var(--lab-raised);
+  transition: border-color 0.4s var(--lab-ease), background-color 0.35s ease;
+}
+.lab-portal .portal-session:hover { border-color: var(--lab-line-2); }
+.lab-portal .portal-session[open] { border-color: var(--lab-line-2); background: var(--lab-surface-2); }
+.lab-portal .portal-session summary { padding: 15px 16px; border-radius: 12px; }
+.lab-portal .portal-session summary::after {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--lab-line);
+  border-radius: 50%;
+  font-size: 1rem;
+  line-height: 1;
+  align-self: center;
+}
+.lab-portal .portal-session__date {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--lab-accent-soft);
+  color: var(--lab-accent);
+  font-variant-numeric: tabular-nums;
+}
+.lab-portal .portal-session[open] .portal-session__body { animation: lab-rise 0.5s var(--lab-ease) both; }
+.lab-portal .portal-notes h5,
+.lab-portal .portal-nextsteps h5 { color: var(--lab-accent); }
+.lab-portal .portal-nextsteps { background: var(--lab-accent-soft); border-color: var(--lab-line); }
+.lab-portal .portal-tasks span { color: var(--lab-accent); }
+
+/* Material del Lab */
+.material-card { padding: 14px 0; border-top: 1px solid var(--lab-line); }
+.material-card:first-of-type { padding-top: 0; border-top: 0; }
+.material-card__title { margin: 0 0 6px; font-size: 1rem; }
+.material-card__desc { margin: 0 0 10px; font-size: 0.9rem; }
+.material-text { margin: 0; line-height: 1.6; white-space: pre-line; }
+.material-embed { position: relative; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
+.material-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* Vista previa del admin y acceso pausado */
+:root[data-theme="light"] .portal-preview { color: #9a6a12; border-color: rgba(154, 106, 18, 0.5); }
+body[data-page="alumnos"] .lab-portal .portal-paused {
+  padding: clamp(24px, 5vw, 36px);
+  border: 1px solid var(--lab-line);
+  border-radius: var(--radius-lg);
+  background: var(--lab-surface);
+  box-shadow: var(--lab-shadow);
+  animation: lab-rise 0.7s var(--lab-ease) both;
+}
+
+/* Al cambiar de tema, que las tarjetas acompañen suave */
+body[data-page="alumnos"] .portal-card,
+body[data-page="alumnos"] .portal-session,
+body[data-page="alumnos"] .portal-linkcard,
+body[data-page="alumnos"] .lab-top { transition-property: background-color, border-color, box-shadow, color, transform; transition-duration: 0.35s; }
+
+/* ── Grilla y cuadros bien marcados ── */
+.lab-portal .portal-row { gap: 18px; align-items: stretch; }
+.lab-portal .portal-col { display: flex; flex-direction: column; gap: 18px; }
+.lab-portal .portal-col > .portal-card:last-child { flex: 1; }   /* cuadros de una fila a la misma altura */
+.lab-portal .portal-card { border-width: 1px; border-style: solid; }
+.lab-portal .portal-card__title {
+  margin: -2px 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--lab-line);
+}
+.lab-portal .portal-label { color: var(--lab-muted); font-weight: 600; }
+
+/* ── Lo clickeable se ve clickeable (y lo que no, no) ── */
+body[data-page="alumnos"] a,
+body[data-page="alumnos"] button,
+body[data-page="alumnos"] summary { -webkit-tap-highlight-color: transparent; }
+body[data-page="alumnos"] :is(a, button, summary, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--lab-accent);
+  outline-offset: 3px;
+}
+body[data-page="alumnos"] button:not(:disabled),
+body[data-page="alumnos"] summary { cursor: pointer; }
+
+/* Links dentro del texto: subrayado claro siempre, más fuerte al pasar */
+.lab-portal .portal-inline-link,
+.lab-portal .portal-paused a,
+.lab-login__alt a {
+  color: var(--lab-accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: color-mix(in srgb, var(--lab-accent) 45%, transparent);
+  text-underline-offset: 3px;
+}
+.lab-portal .portal-inline-link:hover,
+.lab-portal .portal-paused a:hover,
+.lab-login__alt a:hover { text-decoration-color: currentColor; }
+
+/* Tarjetas de link / archivo / track: borde visible + flecha que indica "abrir" */
+.lab-portal .portal-linkcard {
+  grid-template-columns: 36px 1fr auto;
+  border-color: var(--lab-line-2);
+  cursor: pointer;
+}
+.lab-portal .portal-linkcard::after {
+  content: "↗";
+  align-self: center;
+  color: var(--lab-muted);
+  font-size: 0.95rem;
+  transition: transform 0.3s var(--lab-ease), color 0.3s ease;
+}
+.lab-portal .portal-filecard::after { content: "↓"; }
+.lab-portal .portal-linkcard:hover { background: var(--lab-surface-2); }
+.lab-portal .portal-linkcard:hover::after { color: var(--accent, var(--lab-accent)); transform: translate(2px, -2px); }
+.lab-portal .portal-filecard:hover::after { transform: translateY(2px); }
+.lab-portal .portal-linkcard:active { transform: translateY(0) scale(0.99); }
+.lab-portal .portal-track .portal-linkcard { padding-right: 52px; }
+.lab-portal .portal-track .portal-linkcard::after { display: none; }
+.lab-portal .portal-track__del { border-color: var(--lab-line); background: var(--lab-surface); }
+
+/* Sesiones: toda la fila es el botón */
+.lab-portal .portal-session summary { transition: background-color 0.25s ease; }
+.lab-portal .portal-session summary:hover { background: var(--lab-surface-2); }
+.lab-portal .portal-session summary:hover::after { border-color: var(--lab-accent); color: var(--lab-accent); }
+.lab-portal .portal-session[open] summary { border-bottom: 1px solid var(--lab-line); border-radius: 12px 12px 0 0; margin-bottom: 14px; }
+
+/* Casillas de misión: más área para tocar */
+.lab-portal button.portal-check { position: relative; }
+.lab-portal button.portal-check::before { content: ""; position: absolute; inset: -9px; }
+.lab-portal button.portal-check:disabled { opacity: 1; cursor: default; }
+
+/* Botones del portal (ADD TRACK, grabaciones…): estado presionado */
+body[data-page="alumnos"] .mp-btn:active { transform: translateY(0) scale(0.98); }
+
+/* ── Festejo al cumplir misiones (js/features/celebrate.js) ── */
+.celebrate-layer { position: fixed; inset: 0; z-index: 60; pointer-events: none; overflow: hidden; }
+.celebrate-bit { position: fixed; width: 8px; height: 12px; border-radius: 2px; will-change: transform, opacity; }
+.celebrate-toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  margin: 0;
+  padding: 12px 20px;
+  border: 1px solid var(--lab-accent);
+  border-radius: 999px;
+  background: var(--lab-surface);
+  color: var(--lab-text);
+  box-shadow: var(--lab-shadow-hover);
+  font-weight: 600;
+  white-space: nowrap;
+  transform: translate(-50%, 140%);
+  opacity: 0;
+  transition: transform 0.5s var(--lab-ease), opacity 0.4s ease;
+}
+:root:not([data-theme="light"]) .celebrate-toast { background: #0d1422; }
+.celebrate-toast.is-in { transform: translate(-50%, 0); opacity: 1; }
+.celebrate-toast.is-out { transform: translate(-50%, 140%); opacity: 0; }
+.portal-progress.is-complete progress { animation: lab-glow 1.2s ease 1; }
+@keyframes lab-glow {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  40% { box-shadow: 0 0 0 4px var(--lab-accent-soft); }
+}
+
+@keyframes lab-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes lab-pop {
+  0% { transform: scale(0.7); }
+  60% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-page="alumnos"] *,
+  body[data-page="alumnos"] *::before,
+  body[data-page="alumnos"] *::after { animation: none !important; transition-duration: 0.01ms !important; }
+}
