@@ -8,7 +8,7 @@ import {
   adminLastSync, adminRunSync, membershipIsActive,
   adminSetStudentPin, adminClearStudentPin, adminSetMyPin, adminPinOverview,
   adminListProducts, adminUpdateProduct, adminSaveProduct, adminListOrders, adminCreatePaymentLink,
-  adminMarkOrderPaid,
+  adminMarkOrderPaid, adminSetSessionDate,
 } from "../data/lab.js";
 
 const $ = (sel) => document.querySelector(sel);
@@ -22,6 +22,37 @@ const fmtDateOnly = (d) => {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Los links los cargan los alumnos: solo https, siempre escapados
 const safeHref = (u) => { try { const x = new URL(u); return x.protocol === "https:" ? x.href : ""; } catch { return ""; } };
+
+// Días desde una fecha (aaaa-mm-dd) hasta hoy, en Argentina
+function daysSince(isoDate) {
+  if (!isoDate) return null;
+  const today = new Date(Date.now() - 3 * 3600_000).toISOString().slice(0, 10);
+  return Math.round((Date.parse(today) - Date.parse(String(isoDate).slice(0, 10))) / 86400_000);
+}
+const agoLabel = (n) => (n == null ? "" : n <= 0 ? "hoy" : n === 1 ? "hace 1 día" : `hace ${n} días`);
+
+// Detalles abiertos (sesiones) que sobreviven a la recarga de la tabla
+const openSessions = new Set();
+
+function renderSessions(st) {
+  const list = st.sessions.list || [];
+  if (!list.length) return "";
+  return `
+    <details class="admin-sessions" data-sessions-of="${esc(st.id)}"${openSessions.has(st.id) ? " open" : ""}>
+      <summary>Ver sesiones (${list.length})</summary>
+      <ul>${list.map((s) => `
+        <li data-session-id="${esc(s.id)}">
+          <span class="admin-sessions__num">Sesión ${esc(s.number ?? "")}</span>
+          <form class="admin-sessions__form" data-session-date-form>
+            <input type="date" value="${esc(s.date || "")}" aria-label="Fecha de la sesión ${esc(s.number ?? "")}" />
+            <button type="submit" class="mp-btn ghost small">GUARDAR</button>
+          </form>
+          <small>${s.session_date_manual
+            ? `Fecha cargada a mano · <button type="button" class="admin-linkbtn" data-act="clear-session-date" data-session="${esc(s.id)}">usar la de Notion${s.session_date ? ` (${fmtDateOnly(s.session_date)})` : ""}</button>`
+            : s.session_date ? "Fecha automática (de Notion)" : "Sin fecha"}</small>
+        </li>`).join("")}</ul>
+    </details>`;
+}
 
 function renderTracks(tracks) {
   if (!tracks.length) return "";
@@ -74,6 +105,7 @@ function renderRow(st) {
       <th scope="row">${esc(st.full_name)}
         <small>${st.sessions.count} sesiones · ${st.missions.done}/${st.missions.total} misiones · ${st.tracks.length} tracks</small>
         <a class="admin-preview" href="alumnos.html?ver=${esc(st.id)}" target="_blank" rel="noopener">Ver su página →</a>
+        ${renderSessions(st)}
         ${renderTracks(st.tracks)}</th>
       <td>
         <form class="admin-email" data-email-form>
@@ -92,21 +124,45 @@ function renderRow(st) {
       </td>
       <td><span class="admin-pill admin-pill--${a.cls}">${a.text}</span></td>
       <td>${fmt(st.membership?.current_period_end)}</td>
-      <td>${last ? `Sesión ${esc(last.number)} · ${fmtDateOnly(last.session_date)}` : "—"}</td>
+      <td>${last ? `Sesión ${esc(last.number)} · ${fmtDateOnly(last.date)}${last.date ? `<small class="${daysSince(last.date) > 14 ? "admin-late" : ""}">${agoLabel(daysSince(last.date))}</small>` : ""}` : "—"}</td>
       <td class="admin-actions">
-        <button type="button" class="mp-btn primary small" data-act="extend">${active ? "+30 DÍAS" : "ACTIVAR 30 DÍAS"}</button>
-        ${active ? `<button type="button" class="mp-btn ghost small" data-act="revoke">REVOCAR</button>` : ""}
+        ${st.status === "active" ? `
+          <button type="button" class="mp-btn primary small" data-act="extend">${active ? "+30 DÍAS" : "ACTIVAR 30 DÍAS"}</button>
+          ${active ? `<button type="button" class="mp-btn ghost small" data-act="revoke">REVOCAR</button>` : ""}
+          <button type="button" class="admin-linkbtn admin-deactivate" data-act="deactivate">pasar a inactivo</button>`
+        : `<button type="button" class="mp-btn ghost small" data-act="reactivate">REACTIVAR</button>`}
       </td>
     </tr>`;
 }
 
 let students = [];
 
+// Activos arriba; inactivos en una sección plegada (no se borra nada de ellos)
+const inactiveToggle = $("[data-inactive-toggle]");
+const inactiveRowsEl = $("[data-admin-inactive]");
+const inactiveBtn = $("[data-toggle-inactive]");
+let showInactive = false;
+
+function paintInactiveToggle(count) {
+  inactiveToggle.hidden = count === 0;
+  inactiveRowsEl.hidden = !showInactive || count === 0;
+  inactiveBtn.textContent = `${showInactive ? "▾" : "▸"} Inactivos (${count})`;
+  inactiveBtn.setAttribute("aria-expanded", String(showInactive));
+}
+inactiveBtn.addEventListener("click", () => {
+  showInactive = !showInactive;
+  paintInactiveToggle(inactiveRowsEl.children.length);
+});
+
 async function loadStudents() {
   students = await adminListStudents();
-  rowsEl.innerHTML = students.length
-    ? students.map(renderRow).join("")
-    : `<tr><td colspan="7">Todavía no hay alumnos. Corré la sincronización con Notion.</td></tr>`;
+  const active = students.filter((s) => s.status === "active");
+  const inactive = students.filter((s) => s.status !== "active");
+  rowsEl.innerHTML = active.length
+    ? active.map(renderRow).join("")
+    : `<tr><td colspan="7">${students.length ? "No hay alumnos activos." : "Todavía no hay alumnos. Corré la sincronización con Notion."}</td></tr>`;
+  inactiveRowsEl.innerHTML = inactive.map(renderRow).join("");
+  paintInactiveToggle(inactive.length);
   tableWrap.hidden = false;
 }
 
@@ -139,7 +195,8 @@ function addDays(base, days) {
   return d.toISOString();
 }
 
-rowsEl.addEventListener("click", async (e) => {
+// Los eventos de las filas se escuchan en toda la tabla (activos e inactivos)
+tableWrap.addEventListener("click", async (e) => {
   const btn = e.target.closest("[data-act]");
   if (!btn) return;
   const id = btn.closest("tr")?.dataset.id;
@@ -155,6 +212,15 @@ rowsEl.addEventListener("click", async (e) => {
       const base = cur && new Date(cur) > new Date() && st.membership?.status === "active" ? cur : new Date();
       await adminSetMembership(id, { status: "active", current_period_end: addDays(base, 30) });
       say(`${st.full_name}: acceso activo hasta ${fmt(addDays(base, 30))}.`);
+    } else if (btn.dataset.act === "reactivate") {
+      await adminUpdateStudent(id, { status: "active" });
+      say(`${st.full_name}: vuelve a la lista de activos. Si va a tomar clases, activale el acceso.`);
+    } else if (btn.dataset.act === "deactivate") {
+      await adminUpdateStudent(id, { status: "inactive" });
+      say(`${st.full_name}: pasó a inactivos. Sus sesiones e historial quedan guardados.`);
+    } else if (btn.dataset.act === "clear-session-date") {
+      await adminSetSessionDate(btn.dataset.session, null);
+      say(`${st.full_name}: la sesión vuelve a usar la fecha de Notion.`);
     } else if (btn.dataset.act === "clear-pin") {
       if (!confirm(`¿Quitar el PIN de ${st.full_name}? Solo va a poder entrar con su email.`)) return;
       await adminClearStudentPin(id);
@@ -172,7 +238,34 @@ rowsEl.addEventListener("click", async (e) => {
   }
 });
 
-rowsEl.addEventListener("submit", async (e) => {
+// Recordar qué listas de sesiones están abiertas (la tabla se redibuja al guardar)
+tableWrap.addEventListener("toggle", (e) => {
+  const d = e.target.closest?.("[data-sessions-of]");
+  if (!d) return;
+  if (d.open) openSessions.add(d.dataset.sessionsOf);
+  else openSessions.delete(d.dataset.sessionsOf);
+}, true);
+
+tableWrap.addEventListener("submit", async (e) => {
+  const dateForm = e.target.closest("[data-session-date-form]");
+  if (dateForm) {
+    e.preventDefault();
+    const sessionId = dateForm.closest("[data-session-id]")?.dataset.sessionId;
+    const value = dateForm.querySelector("input").value; // aaaa-mm-dd o vacío
+    const btn = dateForm.querySelector("button");
+    btn.disabled = true;
+    try {
+      await adminSetSessionDate(sessionId, value || null);
+      say(value ? `Fecha guardada: ${fmtDateOnly(value)}.` : "Fecha borrada: vuelve a usar la de Notion.");
+      await reloadAll();
+    } catch (err) {
+      say(err.message, true);
+    } finally {
+      btn.disabled = false;
+    }
+    return;
+  }
+
   const pinForm = e.target.closest("[data-pin-form]");
   if (pinForm) {
     e.preventDefault();
@@ -298,7 +391,8 @@ async function loadShop() {
     : `<tr><td colspan="6">Todavía no hay pedidos.</td></tr>`;
 
   const prodSel = linkForm.elements.namedItem("product");
-  prodSel.innerHTML = prods.map((p) => `<option value="${esc(p.id)}">${esc(p.name)}${p.price_usd ? ` — ${usd(p.price_usd)} por ${esc(p.unit)}` : ""}</option>`).join("");
+  // También los ocultos del shop (ej. "EP listo para enviar"): se venden con link de admin
+  prodSel.innerHTML = prods.map((p) => `<option value="${esc(p.id)}">${esc(p.name)}${p.price_usd ? ` — ${usd(p.price_usd)} por ${esc(p.unit)}` : ""}${p.active ? "" : " (no visible en el shop)"}</option>`).join("");
   const stSel = linkForm.elements.namedItem("student");
   stSel.innerHTML = `<option value="">Otra persona (no es alumno)</option>` +
     students.filter((s) => s.email).map((s) => `<option value="${esc(s.id)}">${esc(s.full_name)}</option>`).join("");

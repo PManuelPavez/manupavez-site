@@ -97,7 +97,7 @@ export async function adminListStudents() {
     sb.from("students")
       .select("id, full_name, email, user_id, status, memberships(status, current_period_end)")
       .order("full_name"),
-    sb.from("sessions").select("student_id, number, session_date").eq("in_notion", true),
+    sb.from("sessions").select("id, student_id, number, title, session_date, session_date_manual").eq("in_notion", true),
     sb.from("student_tracks").select("student_id, title, url, created_at").order("created_at", { ascending: false }),
     sb.from("student_dashboards").select("student_id, content"),
     sb.from("student_task_checks").select("student_id, task_key, done"),
@@ -113,24 +113,41 @@ export async function adminListStudents() {
   if (error) throw error;
   if (sErr) throw sErr;
 
+  // Por alumno: todas sus sesiones (por número) y la última. La fecha efectiva es la
+  // manual si está cargada; si no, la que trae el sync desde Notion.
   const byStudent = new Map();
-  for (const s of sessions || []) {
-    const cur = byStudent.get(s.student_id) || { count: 0, last: null };
+  for (const raw of sessions || []) {
+    const s = { ...raw, date: raw.session_date_manual || raw.session_date };
+    const cur = byStudent.get(s.student_id) || { count: 0, last: null, list: [] };
     cur.count++;
+    cur.list.push(s);
     if (!cur.last || (s.number ?? 0) > (cur.last.number ?? 0)) cur.last = s;
     byStudent.set(s.student_id, cur);
   }
+  for (const cur of byStudent.values()) cur.list.sort((a, b) => (b.number ?? 0) - (a.number ?? 0));
 
   return (students || []).map((st) => {
     const m = Array.isArray(st.memberships) ? st.memberships[0] : st.memberships;
     return {
       ...st,
       membership: m || null,
-      sessions: byStudent.get(st.id) || { count: 0, last: null },
+      sessions: byStudent.get(st.id) || { count: 0, last: null, list: [] },
       tracks: (tracks || []).filter((t) => t.student_id === st.id),
       missions: missions.get(st.id) || { total: 0, done: 0 },
     };
   });
+}
+
+// Fecha manual de una sesión (null = volver a la automática). RLS + privilegio por
+// columna: el admin solo puede tocar session_date_manual. Se confirma con select
+// porque si la base no deja actualizar no tira error, devuelve 0 filas.
+export async function adminSetSessionDate(sessionId, date) {
+  const { data, error } = await ensure()
+    .from("sessions")
+    .update({ session_date_manual: date || null })
+    .eq("id", sessionId)
+    .select("id");
+  if (error || !data?.length) throw new Error("No se pudo guardar la fecha.");
 }
 
 export async function adminUpdateStudent(id, patch) {
