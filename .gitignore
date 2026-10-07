@@ -31,3 +31,6 @@ supabase/.temp/
 
 # Claude Code: preferencias locales de esta máquina
 .claude/settings.local.json
+
+# Apps Script con la clave real (se pega a mano en Google, nunca se commitea)
+apps_script/*.local.gs

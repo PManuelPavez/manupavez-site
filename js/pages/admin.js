@@ -346,11 +346,12 @@ const STATUS = {
 let products = [];
 let orders = [];
 const METHOD_LABEL = { mercadopago: "MercadoPago", transferencia: "Transferencia", efectivo: "Efectivo", otro: "Otro medio" };
+const CATEGORY_LABEL = { mentorias: "Mentorías", clinicas: "Clínicas", mixmaster: "Mix & Master", otros: "Otros" };
 
 function renderProduct(p) {
   return `
     <tr data-product-id="${esc(p.id)}">
-      <th scope="row">${esc(p.name)}<small>${p.kind === "plan" ? "Activa el acceso al Lab 30 días" : "Servicio: te llega un mail para coordinar"}</small>
+      <th scope="row">${esc(p.name)}<small>${esc(CATEGORY_LABEL[p.category] || "Otros")} · ${p.kind === "plan" ? "Activa el acceso al Lab 30 días" : "Servicio: te llega un mail para coordinar"}</small>
         <button type="button" class="mp-btn ghost small" data-edit-product>EDITAR</button></th>
       <td>
         <form class="admin-price" data-price-form>
@@ -373,7 +374,7 @@ function renderOrder(o) {
       <td>${esc(o.buyer_name)}<small>${esc(o.buyer_email)}</small></td>
       <td>${esc(o.product_name)}${o.source === "admin_link" ? "<small>Precio especial</small>" : ""}${o.note ? `<small>${esc(o.note)}</small>` : ""}</td>
       <td>${usd(o.price_usd)}<small>${ars(o.amount_ars)} · MEP ${esc(Number(o.fx_mep).toLocaleString("es-AR"))}</small></td>
-      <td><span class="admin-pill admin-pill--${cls}">${esc(label)}</span>${o.status === "paid" ? `<small>${esc(METHOD_LABEL[o.payment_method] || o.payment_method)}${o.manual_note ? ` · ${esc(o.manual_note)}` : ""}</small>` : ""}</td>
+      <td><span class="admin-pill admin-pill--${cls}">${esc(label)}</span>${o.status === "paid" ? `<small>${esc(METHOD_LABEL[o.payment_method] || o.payment_method)}${o.manual_note ? ` · ${esc(o.manual_note)}` : ""}</small>` : o.payment_method === "transferencia" ? `<small>Eligió transferencia · código ${esc(o.id.slice(0, 8).toUpperCase())}</small>` : ""}</td>
       <td class="admin-actions">
         ${canCopy ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(o.init_point)}">COPIAR LINK</button>` : ""}
         ${o.status === "pending" || o.status === "expired" ? `<button type="button" class="mp-btn ghost small" data-markpaid-open="${esc(o.id)}">MARCAR COMO PAGADO</button>` : ""}
@@ -479,6 +480,7 @@ productsEl.addEventListener("click", (e) => {
   f.namedItem("name").value = p.name;
   f.namedItem("price").value = p.price_usd ?? "";
   f.namedItem("unit").value = p.unit;
+  f.namedItem("category").value = p.category || "otros";
   f.namedItem("max_qty").value = p.max_qty;
   f.namedItem("description").value = p.description || "";
   f.namedItem("active").checked = p.active;
@@ -505,6 +507,7 @@ productForm.addEventListener("submit", async (e) => {
       id: f.namedItem("id").value || null,
       name,
       description: f.namedItem("description").value.trim(),
+      category: f.namedItem("category").value,
       price_usd: Math.round(price * 100) / 100,
       unit: f.namedItem("unit").value,
       max_qty: maxQty,

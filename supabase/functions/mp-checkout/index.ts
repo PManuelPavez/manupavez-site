@@ -3,11 +3,15 @@
 //
 // Dos caminos:
 //  · mode "shop"       → compra pública al precio de catálogo (Turnstile obligatorio si está configurado).
+//                        method "transferencia" → orden sin MercadoPago: devuelve los datos bancarios
+//                        y avisa a Manu; él la marca como pagada desde el panel.
 //  · mode "admin_link" → el admin genera un link con PRECIO ESPECIAL para un alumno/servicio
 //                        (requiere JWT de admin). El precio público no se toca.
 //
 // El monto en ARS sale del dólar MEP consultado ACÁ, en el servidor, y queda fijo en la orden.
 // Secretos: MP_ACCESS_TOKEN (obligatorio para cobrar), TURNSTILE_SECRET_KEY, SITE_URL (opcional).
+// Transferencia: TRANSFER_ALIAS, TRANSFER_CBU, TRANSFER_HOLDER (obligatorios), TRANSFER_BANK (opcional).
+// Aviso a Manu: RESEND_API_KEY, LAB_FROM_EMAIL, LAB_TO_EMAIL (opcionales).
 
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
@@ -22,6 +26,30 @@ function cors(req: Request) {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Vary": "Origin",
   };
+}
+
+const esc = (v: unknown) =>
+  String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+// Datos bancarios (secretos de Supabase: no están en el código ni en la página)
+function transferInfo() {
+  const alias = Deno.env.get("TRANSFER_ALIAS")?.trim();
+  const cbu = Deno.env.get("TRANSFER_CBU")?.trim();
+  const holder = Deno.env.get("TRANSFER_HOLDER")?.trim();
+  if (!alias || !cbu || !holder) return null;
+  return { alias, cbu, holder, bank: Deno.env.get("TRANSFER_BANK")?.trim() || null };
+}
+
+async function notifyAdmin(subject: string, html: string) {
+  const key = Deno.env.get("RESEND_API_KEY");
+  if (!key) return;
+  const from = Deno.env.get("LAB_FROM_EMAIL") || "Frequency Lab <onboarding@resend.dev>";
+  const to = (Deno.env.get("LAB_TO_EMAIL") || "manupavez22@gmail.com").split(",").map((s) => s.trim()).filter(Boolean);
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ from, to, subject, html }),
+  }).catch(() => {});
 }
 
 async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
@@ -85,8 +113,12 @@ Deno.serve(async (req) => {
   if (mode === "admin_link" && !isAdmin) return json({ error: "unauthorized" }, 401);
   if (mode === "shop" && !(await verifyTurnstile(String(body.captcha || ""), ip))) return json({ error: "captcha" }, 403);
 
+  // Medio de pago: transferencia solo desde el shop (el link de admin es siempre MercadoPago)
+  const method = mode === "shop" && body.method === "transferencia" ? "transferencia" : "mercadopago";
+  const bank = method === "transferencia" ? transferInfo() : null;
+  if (method === "transferencia" && !bank) return json({ error: "transfer_not_configured" }, 503);
   const token = Deno.env.get("MP_ACCESS_TOKEN");
-  if (!token) return json({ error: "payments_not_configured" }, 503);
+  if (method === "mercadopago" && !token) return json({ error: "payments_not_configured" }, 503);
 
   // Producto
   const productQuery = db.from("products").select("id, slug, name, kind, price_usd, active, unit, max_qty");
@@ -155,12 +187,29 @@ Deno.serve(async (req) => {
     fx_mep: mep,
     amount_ars: amountArs,
     note,
+    payment_method: method,
     created_by: mode === "admin_link" ? userId : null,
     expires_at: new Date(Date.now() + (mode === "admin_link" ? 7 : 3) * 86400_000).toISOString(),
   }).select("id, expires_at").single();
   if (oErr || !order) {
     console.error("[mp-checkout] order", oErr?.message);
     return json({ error: "order_failed" }, 500);
+  }
+
+  if (method === "transferencia") {
+    const code = order.id.slice(0, 8).toUpperCase();
+    const money = (n: number) => `$${Math.round(n).toLocaleString("es-AR")}`;
+    await notifyAdmin(`Frequency Lab — Pedido por transferencia: ${product.name} (${buyerName})`,
+      `<div style="font-family:system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;line-height:1.55;color:#0a0a0a;max-width:560px">
+        <p><strong>${esc(buyerName)}</strong> (${esc(buyerEmail)}) eligió pagar <strong>${esc(quantity > 1 ? `${product.name} ×${quantity}` : product.name)}</strong> por transferencia.</p>
+        <p>Monto: <strong>${money(amountArs)}</strong> (USD ${priceUsd} · MEP ${mep}) · código <strong>${code}</strong></p>
+        <p>Cuando veas la transferencia, marcalo como pagado en el panel${product.kind === "plan" ? " (eso le activa los 30 días)" : ""}.</p>
+        <p><a href="https://manupavez.com/admin.html">Abrir el panel →</a></p>
+      </div>`);
+    return json({
+      order_id: order.id, method, code, amount_ars: amountArs, fx_mep: mep, price_usd: priceUsd, quantity,
+      expires_at: order.expires_at, transfer: bank,
+    });
   }
 
   const site = Deno.env.get("SITE_URL") || "https://manupavez.com";
