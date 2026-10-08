@@ -417,19 +417,49 @@ body[data-page="shop"] { --teal: #59c6ba; --teal-soft: rgba(89, 198, 186, 0.12);
   .shop-card, .shop-card:hover { transition: none; transform: none; }
 }
 
-/* Transferencia: medio recomendado */
+/* Transferencia: medio prioritario, con brillo */
 .shop-method__tag {
-  display: inline-block;
-  margin-left: 6px;
-  padding: 2px 8px;
+  justify-self: start;
+  margin-bottom: 4px;
+  padding: 3px 10px;
   border-radius: 999px;
-  background: var(--teal-soft);
-  color: var(--teal);
-  font-size: 0.62rem;
-  font-weight: 600;
+  background: linear-gradient(120deg, #59c6ba, #8fa3ff);
+  color: #051014;
+  font-size: 0.64rem;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  vertical-align: 2px;
+}
+.shop-method--star .shop-method__body {
+  position: relative;   /* recorta el reflejo dentro de la tarjeta */
+  overflow: hidden;
+  border-color: rgba(89, 198, 186, 0.7);
+  animation: shop-glow 2.6s ease-in-out infinite;
+}
+.shop-method--star .shop-method__body::before { top: 46px; }   /* el círculo baja por la etiqueta */
+/* Reflejo que cruza la tarjeta */
+.shop-method--star .shop-method__body::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.14) 50%, transparent 65%);
+  transform: translateX(-100%);
+  animation: shop-shine 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+.shop-method--star input:checked + .shop-method__body { background: rgba(89, 198, 186, 0.14); }
+@keyframes shop-glow {
+  0%, 100% { box-shadow: 0 0 18px rgba(89, 198, 186, 0.15); }
+  50% { box-shadow: 0 0 0 3px rgba(89, 198, 186, 0.22), 0 0 28px rgba(89, 198, 186, 0.35); }
+}
+@keyframes shop-shine {
+  0%, 55% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shop-method--star .shop-method__body { animation: none; box-shadow: 0 0 0 3px rgba(89, 198, 186, 0.22); }
+  .shop-method--star .shop-method__body::after { display: none; }
 }
 
 /* Tarjeta abierta desde un link directo (?comprar=…) */
