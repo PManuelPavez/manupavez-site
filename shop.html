@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Shop — Frequency Lab</title>
-  <meta name="description" content="Mentorías, clínicas, mezcla, premaster y mastering con Manu Pavez. Pagás en pesos por transferencia o con MercadoPago." />
+  <meta name="description" content="Mentorías, clínicas, mezcla, premaster y mastering con Manu Pavez. Pagás en pesos por transferencia o con tarjeta de crédito." />
   <meta name="robots" content="noindex,follow" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://esm.sh https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://esm.sh https://dolarapi.com https://psnprhzowknhfylvgcci.supabase.co wss://psnprhzowknhfylvgcci.supabase.co; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'" />
@@ -36,11 +36,11 @@
     <header class="shop-hero">
       <p class="shop-kicker">Frequency Lab · Shop</p>
       <h1 class="shop-title">Tu música,<br /><span>al próximo nivel</span></h1>
-      <p class="shop-lead">Mentorías, clínicas 1:1 y mix &amp; master hechos por Manu Pavez. Pagás en pesos al dólar MEP del día, por transferencia o con MercadoPago.</p>
+      <p class="shop-lead">Mentorías, clínicas 1:1 y mix &amp; master hechos por Manu Pavez. Pagás en pesos al dólar MEP del día, por transferencia o con tarjeta de crédito.</p>
 
       <ul class="shop-trust" aria-label="Cómo funciona">
         <li><span class="shop-trust__icon" aria-hidden="true">⇄</span>Transferencia con alias o CBU</li>
-        <li><span class="shop-trust__icon" aria-hidden="true">✓</span>Tarjeta protegida por MercadoPago</li>
+        <li><span class="shop-trust__icon" aria-hidden="true">✓</span>Tarjeta de crédito vía MercadoPago</li>
         <li><span class="shop-trust__icon" aria-hidden="true">$</span>Precio en pesos fijo al pedir</li>
         <li><span class="shop-trust__icon" aria-hidden="true">✉</span>Coordinamos por mail</li>
       </ul>
@@ -104,10 +104,11 @@
 
       <fieldset class="shop-methods">
         <legend>¿Cómo querés pagar?</legend>
-        <label class="shop-method">
+        <label class="shop-method shop-method--star">
           <input type="radio" name="method" value="transferencia" checked />
           <span class="shop-method__body">
-            <span class="shop-method__name">Transferencia bancaria <span class="shop-method__tag">Recomendado</span></span>
+            <span class="shop-method__tag">⚡ Prioridad</span>
+            <span class="shop-method__name">Transferencia bancaria</span>
             <span class="shop-method__hint">Desde tu banco o billetera, con alias o CBU</span>
             <span class="shop-method__logos">
               <img src="img/pay/transferencia.svg" alt="" width="37" height="23" />
@@ -117,8 +118,8 @@
         <label class="shop-method">
           <input type="radio" name="method" value="mercadopago" />
           <span class="shop-method__body">
-            <span class="shop-method__name">MercadoPago</span>
-            <span class="shop-method__hint">Tarjeta de crédito, débito o dinero en cuenta</span>
+            <span class="shop-method__name">Tarjeta de crédito</span>
+            <span class="shop-method__hint">Solo si querés pagar con tarjeta de crédito · vía MercadoPago</span>
             <span class="shop-method__logos">
               <img src="img/pay/mercadopago.svg" alt="" width="58" height="23" />
               <img src="img/pay/visa.svg" alt="" width="37" height="23" />
