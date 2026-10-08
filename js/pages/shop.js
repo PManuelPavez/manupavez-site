@@ -164,10 +164,10 @@ function updatePrice() {
 
 function updateMethod() {
   const transfer = method() === "transferencia";
-  payBtn.textContent = transfer ? "VER DATOS PARA TRANSFERIR" : "IR A MERCADOPAGO";
+  payBtn.textContent = transfer ? "VER DATOS PARA TRANSFERIR" : "PAGAR CON TARJETA";
   $("[data-checkout-legal]").textContent = transfer
     ? "Te muestro el alias y el CBU. El monto en pesos queda fijo al crear el pedido."
-    : "El pago se hace en MercadoPago. El monto en pesos queda fijo al crear el pedido.";
+    : "El pago con tarjeta se hace en MercadoPago. El monto en pesos queda fijo al crear el pedido.";
 }
 
 async function openCheckout(slug) {
