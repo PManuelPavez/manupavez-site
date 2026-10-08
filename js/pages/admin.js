@@ -346,13 +346,18 @@ const STATUS = {
 let products = [];
 let orders = [];
 const METHOD_LABEL = { mercadopago: "MercadoPago", transferencia: "Transferencia", efectivo: "Efectivo", otro: "Otro medio" };
+// Link directo a cada producto (para landings): abre el shop con el checkout listo
+const SHOP_LINK = "https://manupavez.com/shop.html?comprar=";
 const CATEGORY_LABEL = { mentorias: "Mentorías", clinicas: "Clínicas", mixmaster: "Mix & Master", otros: "Otros" };
 
 function renderProduct(p) {
   return `
     <tr data-product-id="${esc(p.id)}">
       <th scope="row">${esc(p.name)}<small>${esc(CATEGORY_LABEL[p.category] || "Otros")} · ${p.kind === "plan" ? "Activa el acceso al Lab 30 días" : "Servicio: te llega un mail para coordinar"}</small>
-        <button type="button" class="mp-btn ghost small" data-edit-product>EDITAR</button></th>
+        <button type="button" class="mp-btn ghost small" data-edit-product>EDITAR</button>
+        ${p.active && p.price_usd
+          ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(SHOP_LINK + encodeURIComponent(p.slug))}" title="Abre el shop con este producto listo para pagar">COPIAR LINK DIRECTO</button>`
+          : `<small>Sin link directo: no está visible en el shop</small>`}</th>
       <td>
         <form class="admin-price" data-price-form>
           <input type="number" step="0.01" min="1" max="100000" value="${p.price_usd ?? ""}" aria-label="Precio USD de ${esc(p.name)}" />
