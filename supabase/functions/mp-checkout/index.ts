@@ -167,6 +167,26 @@ Deno.serve(async (req) => {
       .eq("buyer_email", buyerEmail).eq("status", "pending")
       .gt("created_at", new Date(Date.now() - 3600_000).toISOString());
     if ((count || 0) >= 3) return json({ error: "too_many_orders" }, 429);
+
+    // Pedido repetido (volvió a tocar "pagar" con lo mismo en los últimos 30 min):
+    // se devuelve el pedido que ya existe en vez de crear otro.
+    const { data: prev } = await db.from("orders")
+      .select("id, expires_at, amount_ars, fx_mep, price_usd, init_point")
+      .eq("buyer_email", buyerEmail).eq("product_id", product.id).eq("quantity", quantity)
+      .eq("payment_method", method).eq("status", "pending").eq("source", "shop")
+      .gt("created_at", new Date(Date.now() - 30 * 60_000).toISOString())
+      .gt("expires_at", new Date().toISOString())
+      .order("created_at", { ascending: false }).limit(1).maybeSingle();
+    if (prev && method === "transferencia") {
+      return json({
+        order_id: prev.id, method, code: prev.id.slice(0, 8).toUpperCase(), amount_ars: Number(prev.amount_ars),
+        fx_mep: Number(prev.fx_mep), price_usd: Number(prev.price_usd), quantity, expires_at: prev.expires_at,
+        transfer: bank, reused: true,
+      });
+    }
+    if (prev?.init_point) {
+      return json({ order_id: prev.id, init_point: prev.init_point, amount_ars: Number(prev.amount_ars), fx_mep: Number(prev.fx_mep), price_usd: Number(prev.price_usd), quantity, reused: true });
+    }
   }
 
   const mep = await fetchMep();

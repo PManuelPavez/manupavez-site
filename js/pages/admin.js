@@ -79,10 +79,15 @@ const pinSecurity = $("[data-pin-security]");
 
 let pinInfo = { students_with_pin: [], admin_pin: false, failures_1h: 0, global_locked: false };
 
+// Aviso flotante abajo: se ve desde cualquier sección. Los que no son error se van solos.
+let sayTimer = 0;
 function say(text, isError = false) {
+  clearTimeout(sayTimer);
   msg.textContent = text;
   msg.classList.toggle("is-error", isError);
+  msg.classList.toggle("is-toast", Boolean(text));
   msg.hidden = !text;
+  if (text && !isError) sayTimer = setTimeout(() => say(""), 6000);
 }
 
 function accessLabel(st) {
@@ -128,7 +133,7 @@ function renderRow(st) {
       <td class="admin-actions">
         ${st.status === "active" ? `
           <button type="button" class="mp-btn primary small" data-act="extend">${active ? "+30 DÍAS" : "ACTIVAR 30 DÍAS"}</button>
-          ${active ? `<button type="button" class="mp-btn ghost small" data-act="revoke">REVOCAR</button>` : ""}
+          ${active ? `<button type="button" class="mp-btn danger small" data-act="revoke">REVOCAR</button>` : ""}
           <button type="button" class="admin-linkbtn admin-deactivate" data-act="deactivate">pasar a inactivo</button>`
         : `<button type="button" class="mp-btn ghost small" data-act="reactivate">REACTIVAR</button>`}
       </td>
@@ -350,23 +355,28 @@ const METHOD_LABEL = { mercadopago: "MercadoPago", transferencia: "Transferencia
 const SHOP_LINK = "https://manupavez.com/shop.html?comprar=";
 const CATEGORY_LABEL = { mentorias: "Mentorías", clinicas: "Clínicas", mixmaster: "Mix & Master", otros: "Otros" };
 
+// Fila simple: nombre + ojo (visible en el shop) + lápiz (editar). El resto vive en el editor.
 function renderProduct(p) {
+  const visible = Boolean(p.active && p.price_usd);
   return `
-    <tr data-product-id="${esc(p.id)}">
-      <th scope="row">${esc(p.name)}<small>${esc(CATEGORY_LABEL[p.category] || "Otros")} · ${p.kind === "plan" ? "Activa el acceso al Lab 30 días" : "Servicio: te llega un mail para coordinar"}</small>
-        <button type="button" class="mp-btn ghost small" data-edit-product>EDITAR</button>
-        ${p.active && p.price_usd
-          ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(SHOP_LINK + encodeURIComponent(p.slug))}" title="Abre el shop con este producto listo para pagar">COPIAR LINK DIRECTO</button>`
-          : `<small>Sin link directo: no está visible en el shop</small>`}</th>
-      <td>
-        <form class="admin-price" data-price-form>
-          <input type="number" step="0.01" min="1" max="100000" value="${p.price_usd ?? ""}" aria-label="Precio USD de ${esc(p.name)}" />
-          <button type="submit" class="mp-btn ghost small">GUARDAR</button>
-        </form>
-      </td>
-      <td>por ${esc(p.unit)}${p.max_qty > 1 ? ` <small>(hasta ${p.max_qty})</small>` : ""}</td>
-      <td><label class="admin-switch"><input type="checkbox" data-active ${p.active ? "checked" : ""} ${p.price_usd ? "" : "disabled"} /> ${p.active && p.price_usd ? "Sí" : "No"}</label></td>
-    </tr>`;
+    <li class="admin-product${visible ? "" : " is-hidden"}" data-product-id="${esc(p.id)}">
+      <div class="admin-product__info">
+        <strong>${esc(p.name)}</strong>
+        <small>${esc(CATEGORY_LABEL[p.category] || "Otros")} · ${p.price_usd ? `${usd(p.price_usd)} por ${esc(p.unit)}` : "sin precio"}</small>
+      </div>
+      <button type="button" class="admin-icon${visible ? " is-on" : ""}" data-toggle-visible
+        aria-pressed="${visible}" ${p.price_usd ? "" : "disabled"}
+        title="${p.price_usd ? (visible ? "Visible en el shop · tocá para ocultarlo" : "Oculto · tocá para mostrarlo en el shop") : "Ponele precio para poder mostrarlo"}"
+        aria-label="${visible ? "Ocultar" : "Mostrar"} ${esc(p.name)} en el shop">
+        <svg viewBox="0 0 24 24" aria-hidden="true">${visible
+          ? '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>'
+          : '<path d="M3 3l18 18M10.6 5.1A9.8 9.8 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.6 9.6 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/>'}</svg>
+        <span>${visible ? "VISIBLE" : "OCULTO"}</span>
+      </button>
+      <button type="button" class="admin-icon" data-edit-product title="Editar" aria-label="Editar ${esc(p.name)}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="M14 6l4 4"/></svg>
+      </button>
+    </li>`;
 }
 
 function renderOrder(o) {
@@ -382,8 +392,8 @@ function renderOrder(o) {
       <td><span class="admin-pill admin-pill--${cls}">${esc(label)}</span>${o.status === "paid" ? `<small>${esc(METHOD_LABEL[o.payment_method] || o.payment_method)}${o.manual_note ? ` · ${esc(o.manual_note)}` : ""}</small>` : o.payment_method === "transferencia" ? `<small>Eligió transferencia · código ${esc(o.id.slice(0, 8).toUpperCase())}</small>` : ""}</td>
       <td class="admin-actions">
         ${canCopy ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(o.init_point)}">COPIAR LINK</button>` : ""}
-        ${o.status === "pending" || o.status === "expired" ? `<button type="button" class="mp-btn ghost small" data-markpaid-open="${esc(o.id)}">MARCAR COMO PAGADO</button>` : ""}
-        ${o.status === "pending" ? `<button type="button" class="mp-btn ghost small" data-cancel-order="${esc(o.id)}">CANCELAR</button>` : ""}
+        ${o.status === "pending" || o.status === "expired" ? `<button type="button" class="mp-btn ok small" data-markpaid-open="${esc(o.id)}">MARCAR COMO PAGADO</button>` : ""}
+        ${o.status === "pending" ? `<button type="button" class="mp-btn danger small" data-cancel-order="${esc(o.id)}">CANCELAR</button>` : ""}
       </td>
     </tr>`;
 }
@@ -392,7 +402,8 @@ async function loadShop() {
   const [prods, ords] = await Promise.all([adminListProducts(), adminListOrders()]);
   products = prods;
   orders = ords;
-  productsEl.innerHTML = prods.map(renderProduct).join("");
+  closeProductEditor();
+  productsEl.innerHTML = prods.length ? prods.map(renderProduct).join("") : `<li class="admin-product">Todavía no hay productos.</li>`;
   ordersEl.innerHTML = orders.length
     ? orders.map(renderOrder).join("")
     : `<tr><td colspan="6">Todavía no hay pedidos.</td></tr>`;
@@ -451,51 +462,67 @@ linkForm.addEventListener("submit", async (e) => {
   }
 });
 
-productsEl.addEventListener("submit", async (e) => {
-  const form = e.target.closest("[data-price-form]");
-  if (!form) return;
-  e.preventDefault();
-  const id = form.closest("tr").dataset.productId;
-  const p = products.find((x) => x.id === id);
-  const price = Number(form.querySelector("input").value);
-  if (!Number.isFinite(price) || price <= 0) { say("Precio inválido.", true); return; }
+// Alta / edición de productos: el lápiz abre el editor debajo de la fila; "+ NUEVO", al final de la lista
+const productForm = $("[data-product-form]");
+const productEditor = $("[data-product-editor]");
+const productEditorHome = $("[data-product-editor-home]");
+const productCopyBtn = $("[data-product-copy]");
+function closeProductEditor() {
+  productForm.reset();
+  productForm.elements.namedItem("id").value = "";
+  productEditor.hidden = true;
+  productEditorHome.append(productEditor);
+  productsEl.querySelectorAll(".is-editing").forEach((el) => el.classList.remove("is-editing"));
+}
+function openProductEditor(p, row) {
+  closeProductEditor();
+  const f = productForm.elements;
+  if (p) {
+    f.namedItem("id").value = p.id;
+    f.namedItem("name").value = p.name;
+    f.namedItem("price").value = p.price_usd ?? "";
+    f.namedItem("unit").value = p.unit;
+    f.namedItem("category").value = p.category || "otros";
+    f.namedItem("max_qty").value = p.max_qty;
+    f.namedItem("description").value = p.description || "";
+    f.namedItem("active").checked = p.active;
+  }
+  $("[data-product-form-title]").textContent = p ? `Editar: ${p.name}` : "Nuevo producto";
+  $("[data-product-submit]").textContent = p ? "GUARDAR CAMBIOS" : "CREAR PRODUCTO";
+  const canLink = Boolean(p?.active && p?.price_usd);
+  productCopyBtn.hidden = !canLink;
+  if (canLink) productCopyBtn.dataset.copy = SHOP_LINK + encodeURIComponent(p.slug);
+  if (row) { row.classList.add("is-editing"); row.after(productEditor); }
+  productEditor.hidden = false;
+  productEditor.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  f.namedItem("name").focus({ preventScroll: true });
+}
+productsEl.addEventListener("click", async (e) => {
+  const row = e.target.closest("[data-product-id]");
+  const p = row && products.find((x) => x.id === row.dataset.productId);
+  if (!p) return;
+
+  if (e.target.closest("[data-edit-product]")) {
+    if (row.classList.contains("is-editing")) closeProductEditor();
+    else openProductEditor(p, row);
+    return;
+  }
+
+  const eye = e.target.closest("[data-toggle-visible]");
+  if (!eye) return;
+  const next = !(p.active && p.price_usd);
+  eye.disabled = true;
   try {
-    await adminUpdateProduct(id, { price_usd: Math.round(price * 100) / 100, active: p.active });
-    say(`${p.name}: precio actualizado a ${usd(price)}.`);
+    await adminUpdateProduct(p.id, { price_usd: p.price_usd, active: next });
+    say(`${p.name}: ${next ? "visible" : "oculto"} en el shop.`);
     await loadShop();
   } catch (err) {
+    eye.disabled = false;
     say(err.message, true);
   }
 });
-
-// Alta / edición de productos (mismo formulario: EDITAR lo carga con los datos del producto)
-const productForm = $("[data-product-form]");
-function resetProductForm() {
-  productForm.reset();
-  productForm.elements.namedItem("id").value = "";
-  $("[data-product-form-title]").textContent = "Nuevo producto";
-  $("[data-product-submit]").textContent = "CREAR PRODUCTO";
-  $("[data-product-cancel]").hidden = true;
-}
-productsEl.addEventListener("click", (e) => {
-  if (!e.target.closest("[data-edit-product]")) return;
-  const p = products.find((x) => x.id === e.target.closest("tr").dataset.productId);
-  if (!p) return;
-  const f = productForm.elements;
-  f.namedItem("id").value = p.id;
-  f.namedItem("name").value = p.name;
-  f.namedItem("price").value = p.price_usd ?? "";
-  f.namedItem("unit").value = p.unit;
-  f.namedItem("category").value = p.category || "otros";
-  f.namedItem("max_qty").value = p.max_qty;
-  f.namedItem("description").value = p.description || "";
-  f.namedItem("active").checked = p.active;
-  $("[data-product-form-title]").textContent = `Editar: ${p.name}`;
-  $("[data-product-submit]").textContent = "GUARDAR CAMBIOS";
-  $("[data-product-cancel]").hidden = false;
-  productForm.scrollIntoView({ behavior: "smooth", block: "center" });
-});
-$("[data-product-cancel]").addEventListener("click", resetProductForm);
+$("[data-product-new]").addEventListener("click", () => openProductEditor(null, null));
+$("[data-product-cancel]").addEventListener("click", closeProductEditor);
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = productForm.elements;
@@ -520,27 +547,11 @@ productForm.addEventListener("submit", async (e) => {
       active: f.namedItem("active").checked,
     });
     say(`${name}: ${editing ? "cambios guardados" : "producto creado"}.`);
-    resetProductForm();
     await loadShop();
   } catch (err) {
     say(err.message, true);
   } finally {
     btn.disabled = false;
-  }
-});
-
-productsEl.addEventListener("change", async (e) => {
-  const box = e.target.closest("[data-active]");
-  if (!box) return;
-  const id = box.closest("tr").dataset.productId;
-  const p = products.find((x) => x.id === id);
-  try {
-    await adminUpdateProduct(id, { price_usd: p.price_usd, active: box.checked });
-    say(`${p.name}: ${box.checked ? "visible" : "oculto"} en el shop.`);
-    await loadShop();
-  } catch (err) {
-    box.checked = !box.checked;
-    say(err.message, true);
   }
 });
 
@@ -676,6 +687,8 @@ document.addEventListener("click", async (e) => {
   }
 });
 
+msg.addEventListener("click", () => { if (msg.classList.contains("is-toast")) say(""); });
+
 async function boot() {
   if (!hasSupabase() || !supabase) { say("Supabase no configurado.", true); return; }
   const { data: { session } } = await supabase.auth.getSession();
@@ -689,6 +702,7 @@ async function boot() {
   actions.hidden = false;
   pinbar.hidden = false;
   shopEl.hidden = false;
+  $("[data-admin-nav]").hidden = false;
   // El shop usa la lista de alumnos (selector del link de pago): primero alumnos
   await Promise.all([
     reloadAll().then(() => loadShop()).catch((e) => console.error("[admin]", e)),

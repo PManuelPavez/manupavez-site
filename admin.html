@@ -31,134 +31,162 @@
 
     <p class="admin-msg" data-admin-msg role="status" aria-live="polite">Verificando acceso…</p>
 
-    <section class="admin-pinbar" data-admin-pinbar hidden aria-label="Acceso por PIN">
-      <form class="admin-pin" data-my-pin-form>
-        <label for="my-pin">Mi PIN de admin</label>
-        <input id="my-pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="6" pattern="[0-9]{6}" placeholder="6 números" required />
-        <button type="submit" class="mp-btn ghost small">GUARDAR</button>
-        <span class="admin-pin__state" data-my-pin-state></span>
-      </form>
-      <p class="admin-pinbar__security" data-pin-security></p>
-    </section>
+    <nav class="admin-nav" data-admin-nav hidden aria-label="Secciones del panel">
+      <a href="#alumnos">Alumnos</a>
+      <a href="#pedidos">Pedidos</a>
+      <a href="#productos">Productos y servicios</a>
+      <a href="#link-especial">Link especial</a>
+      <a href="#mi-acceso">Mi acceso</a>
+    </nav>
 
-    <div class="admin-table-wrap" data-admin-table hidden>
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th scope="col">Alumno</th>
-            <th scope="col">Email de acceso</th>
-            <th scope="col">PIN</th>
-            <th scope="col">Acceso</th>
-            <th scope="col">Vence</th>
-            <th scope="col">Última sesión</th>
-            <th scope="col"><span class="sr-only">Acciones</span></th>
-          </tr>
-        </thead>
-        <tbody data-admin-rows></tbody>
-        <tbody data-inactive-toggle hidden>
-          <tr><td colspan="7"><button type="button" class="admin-inactive-toggle" data-toggle-inactive aria-expanded="false">Inactivos</button></td></tr>
-        </tbody>
-        <tbody class="admin-inactive" data-admin-inactive hidden></tbody>
-      </table>
-    </div>
-
-    <section class="admin-section" data-admin-shop hidden aria-labelledby="shop-title">
-      <h2 id="shop-title" class="admin-h2">Shop</h2>
-      <p class="admin-note">Precios en USD. Al comprar se cobra en pesos al dólar MEP del momento, que queda fijo en el pedido. <a href="shop.html" target="_blank" rel="noopener">Ver el shop →</a></p>
-
+    <!-- ── ALUMNOS ── -->
+    <section class="admin-block" id="alumnos" data-admin-table hidden aria-labelledby="alumnos-title">
+      <header class="admin-block__head">
+        <h2 id="alumnos-title" class="admin-block__title">Alumnos</h2>
+      </header>
       <div class="admin-table-wrap">
         <table class="admin-table">
           <thead>
             <tr>
-              <th scope="col">Producto</th>
-              <th scope="col">Precio USD</th>
-              <th scope="col">Unidad</th>
-              <th scope="col">Visible en el shop</th>
-            </tr>
-          </thead>
-          <tbody data-products></tbody>
-        </table>
-      </div>
-
-      <h3 class="admin-h3" data-product-form-title>Nuevo producto</h3>
-      <p class="admin-note">Aparece en el shop apenas lo marcás como visible. Cuando alguien lo compra te llega un mail para coordinar la entrega.</p>
-      <form class="admin-linkform" data-product-form novalidate>
-        <input type="hidden" name="id" />
-        <label>Nombre <input name="name" type="text" minlength="2" maxlength="120" required autocomplete="off" /></label>
-        <label>Precio USD <input name="price" type="number" step="0.01" min="1" max="100000" required /></label>
-        <label>Se cobra por
-          <select name="unit">
-            <option value="unidad">unidad</option>
-            <option value="sesión">sesión</option>
-            <option value="track">track</option>
-            <option value="mes">mes</option>
-          </select>
-        </label>
-        <label>Sección del shop
-          <select name="category">
-            <option value="mentorias">Mentorías</option>
-            <option value="clinicas">Clínicas</option>
-            <option value="mixmaster">Mix &amp; Master</option>
-            <option value="otros">Otros</option>
-          </select>
-        </label>
-        <label>Máximo por compra <input name="max_qty" type="number" min="1" max="20" value="1" /></label>
-        <label class="admin-linkform__wide">Descripción (la ve el comprador) <input name="description" type="text" maxlength="600" autocomplete="off" /></label>
-        <label class="admin-switch"><input name="active" type="checkbox" checked /> Visible en el shop</label>
-        <button type="submit" class="mp-btn primary small" data-product-submit>CREAR PRODUCTO</button>
-        <button type="button" class="mp-btn ghost small" data-product-cancel hidden>CANCELAR</button>
-      </form>
-
-      <h3 class="admin-h3">Link de pago con precio especial</h3>
-      <p class="admin-note">Para un alumno o una persona puntual. El precio público no cambia. El link vence en 7 días.</p>
-      <form class="admin-linkform" data-link-form novalidate>
-        <label>Producto <select name="product" required></select></label>
-        <label>Para <select name="student"><option value="">Otra persona (no es alumno)</option></select></label>
-        <label data-other>Nombre <input name="name" type="text" maxlength="120" autocomplete="off" /></label>
-        <label data-other>Email <input name="email" type="email" maxlength="200" autocomplete="off" /></label>
-        <label>Cantidad <input name="quantity" type="number" min="1" max="20" value="1" /></label>
-        <label>Precio total USD <input name="price" type="number" step="0.01" min="1" max="100000" required /></label>
-        <label class="admin-linkform__wide">Nota (opcional) <input name="note" type="text" maxlength="500" autocomplete="off" /></label>
-        <button type="submit" class="mp-btn primary small">GENERAR LINK</button>
-      </form>
-      <div class="admin-linkresult" data-link-result hidden></div>
-
-      <h3 class="admin-h3">Pedidos</h3>
-      <div class="admin-table-wrap">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th scope="col">Fecha</th>
-              <th scope="col">Comprador</th>
-              <th scope="col">Producto</th>
-              <th scope="col">Precio</th>
-              <th scope="col">Estado</th>
+              <th scope="col">Alumno</th>
+              <th scope="col">Email de acceso</th>
+              <th scope="col">PIN</th>
+              <th scope="col">Acceso</th>
+              <th scope="col">Vence</th>
+              <th scope="col">Última sesión</th>
               <th scope="col"><span class="sr-only">Acciones</span></th>
             </tr>
           </thead>
-          <tbody data-orders></tbody>
+          <tbody data-admin-rows></tbody>
+          <tbody data-inactive-toggle hidden>
+            <tr><td colspan="7"><button type="button" class="admin-inactive-toggle" data-toggle-inactive aria-expanded="false">Inactivos</button></td></tr>
+          </tbody>
+          <tbody class="admin-inactive" data-admin-inactive hidden></tbody>
         </table>
       </div>
+    </section>
 
-      <div class="admin-markpaid" data-markpaid hidden role="region" aria-labelledby="markpaid-title" tabindex="-1">
-        <h3 id="markpaid-title" class="admin-h3">Marcar como pagado</h3>
-        <p class="admin-markpaid__summary" data-markpaid-summary></p>
-        <form class="admin-linkform" data-markpaid-form novalidate>
-          <label>Alumno <span data-markpaid-required></span>
-            <select name="student"></select>
-          </label>
-          <label>Medio
-            <select name="method">
-              <option value="transferencia" selected>Transferencia</option>
-              <option value="efectivo">Efectivo</option>
-              <option value="otro">Otro</option>
-            </select>
-          </label>
-          <label class="admin-linkform__wide">Nota (opcional) <input name="note" type="text" maxlength="500" autocomplete="off" placeholder="Ej: Transferencia Galicia 02/10" /></label>
-          <button type="submit" class="mp-btn primary small" data-markpaid-submit>CONFIRMAR PAGO</button>
-          <button type="button" class="mp-btn ghost small" data-markpaid-cancel>CANCELAR</button>
+    <div data-admin-shop hidden>
+      <!-- ── PEDIDOS ── -->
+      <section class="admin-block" id="pedidos" aria-labelledby="pedidos-title">
+        <header class="admin-block__head">
+          <h2 id="pedidos-title" class="admin-block__title">Pedidos</h2>
+        </header>
+        <p class="admin-note">Los de MercadoPago se marcan solos. Los de transferencia los marcás vos cuando ves la plata en el banco.</p>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col">Comprador</th>
+                <th scope="col">Producto</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Estado</th>
+                <th scope="col"><span class="sr-only">Acciones</span></th>
+              </tr>
+            </thead>
+            <tbody data-orders></tbody>
+          </table>
+        </div>
+
+        <div class="admin-markpaid" data-markpaid hidden role="region" aria-labelledby="markpaid-title" tabindex="-1">
+          <h3 id="markpaid-title" class="admin-h3">Marcar como pagado</h3>
+          <p class="admin-markpaid__summary" data-markpaid-summary></p>
+          <form class="admin-linkform" data-markpaid-form novalidate>
+            <label>Alumno <span data-markpaid-required></span>
+              <select name="student"></select>
+            </label>
+            <label>Medio
+              <select name="method">
+                <option value="transferencia" selected>Transferencia</option>
+                <option value="efectivo">Efectivo</option>
+                <option value="otro">Otro</option>
+              </select>
+            </label>
+            <label class="admin-linkform__wide">Nota (opcional) <input name="note" type="text" maxlength="500" autocomplete="off" placeholder="Ej: Transferencia Galicia 02/10" /></label>
+            <button type="submit" class="mp-btn ok small" data-markpaid-submit>CONFIRMAR PAGO</button>
+            <button type="button" class="mp-btn ghost small" data-markpaid-cancel>CERRAR</button>
+          </form>
+          <p class="admin-markpaid__result" data-markpaid-result role="status" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <!-- ── PRODUCTOS Y SERVICIOS ── -->
+      <section class="admin-block" id="productos" aria-labelledby="productos-title">
+        <header class="admin-block__head">
+          <h2 id="productos-title" class="admin-block__title">Productos y servicios</h2>
+          <button type="button" class="mp-btn primary small" data-product-new>+ NUEVO</button>
+        </header>
+        <p class="admin-note">Precios en USD; se cobran en pesos al dólar MEP del momento. El ojo lo muestra u oculta en el shop; el lápiz lo edita. <a href="shop.html" target="_blank" rel="noopener">Ver el shop →</a></p>
+        <ul class="admin-products" data-products></ul>
+
+        <div data-product-editor-home>
+          <div class="admin-editor" data-product-editor hidden>
+            <h3 class="admin-h3" data-product-form-title>Nuevo producto</h3>
+            <form class="admin-linkform" data-product-form novalidate>
+              <input type="hidden" name="id" />
+              <label>Nombre <input name="name" type="text" minlength="2" maxlength="120" required autocomplete="off" /></label>
+              <label>Precio USD <input name="price" type="number" step="0.01" min="1" max="100000" required /></label>
+              <label>Se cobra por
+                <select name="unit">
+                  <option value="unidad">unidad</option>
+                  <option value="sesión">sesión</option>
+                  <option value="track">track</option>
+                  <option value="mes">mes</option>
+                </select>
+              </label>
+              <label>Sección del shop
+                <select name="category">
+                  <option value="mentorias">Mentorías</option>
+                  <option value="clinicas">Clínicas</option>
+                  <option value="mixmaster">Mix &amp; Master</option>
+                  <option value="otros">Otros</option>
+                </select>
+              </label>
+              <label>Máximo por compra <input name="max_qty" type="number" min="1" max="20" value="1" /></label>
+              <label class="admin-linkform__wide">Descripción (la ve el comprador) <input name="description" type="text" maxlength="600" autocomplete="off" /></label>
+              <label class="admin-switch"><input name="active" type="checkbox" checked /> Visible en el shop</label>
+              <button type="submit" class="mp-btn ok small" data-product-submit>CREAR PRODUCTO</button>
+              <button type="button" class="mp-btn ghost small" data-product-cancel>CERRAR</button>
+              <button type="button" class="mp-btn ghost small" data-product-copy hidden title="Abre el shop con este producto listo para pagar">COPIAR LINK DIRECTO</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── LINK ESPECIAL ── -->
+      <section class="admin-block" id="link-especial" aria-labelledby="link-title">
+        <header class="admin-block__head">
+          <h2 id="link-title" class="admin-block__title">Link de pago especial</h2>
+        </header>
+        <p class="admin-note">Para un alumno o una persona puntual. El precio público no cambia. El link vence en 7 días.</p>
+        <form class="admin-linkform" data-link-form novalidate>
+          <label>Producto <select name="product" required></select></label>
+          <label>Para <select name="student"><option value="">Otra persona (no es alumno)</option></select></label>
+          <label data-other>Nombre <input name="name" type="text" maxlength="120" autocomplete="off" /></label>
+          <label data-other>Email <input name="email" type="email" maxlength="200" autocomplete="off" /></label>
+          <label>Cantidad <input name="quantity" type="number" min="1" max="20" value="1" /></label>
+          <label>Precio total USD <input name="price" type="number" step="0.01" min="1" max="100000" required /></label>
+          <label class="admin-linkform__wide">Nota (opcional) <input name="note" type="text" maxlength="500" autocomplete="off" /></label>
+          <button type="submit" class="mp-btn primary small">GENERAR LINK</button>
         </form>
-        <p class="admin-markpaid__result" data-markpaid-result role="status" aria-live="polite"></p>
+        <div class="admin-linkresult" data-link-result hidden></div>
+      </section>
+    </div>
+
+    <!-- ── MI ACCESO ── -->
+    <section class="admin-block" id="mi-acceso" data-admin-pinbar hidden aria-labelledby="acceso-title">
+      <header class="admin-block__head">
+        <h2 id="acceso-title" class="admin-block__title">Mi acceso</h2>
+      </header>
+      <div class="admin-pinbar">
+        <form class="admin-pin" data-my-pin-form>
+          <label for="my-pin">Mi PIN de admin</label>
+          <input id="my-pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="6" pattern="[0-9]{6}" placeholder="6 números" required />
+          <button type="submit" class="mp-btn ghost small">GUARDAR</button>
+          <span class="admin-pin__state" data-my-pin-state></span>
+        </form>
+        <p class="admin-pinbar__security" data-pin-security></p>
       </div>
     </section>
 
