@@ -188,7 +188,8 @@ body { background: var(--color-bg); color: var(--color-text); }
 
 /* Alta / edición de productos */
 .admin-linkform .admin-switch { display: inline-flex; align-self: end; color: var(--color-text); }
-.admin-table th [data-edit-product] { display: block; margin-top: 8px; }
+.admin-table th [data-edit-product],
+.admin-table th[scope="row"] [data-copy] { display: block; margin-top: 8px; }
 
 /* Alumnos inactivos (sección plegada) */
 .admin-inactive-toggle {

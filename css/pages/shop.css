@@ -416,3 +416,21 @@ body[data-page="shop"] { --teal: #59c6ba; --teal-soft: rgba(89, 198, 186, 0.12);
 @media (prefers-reduced-motion: reduce) {
   .shop-card, .shop-card:hover { transition: none; transform: none; }
 }
+
+/* Transferencia: medio recomendado */
+.shop-method__tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--teal-soft);
+  color: var(--teal);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  vertical-align: 2px;
+}
+
+/* Tarjeta abierta desde un link directo (?comprar=…) */
+.shop-card.is-linked { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-soft); }

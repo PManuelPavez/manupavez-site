@@ -88,7 +88,7 @@ function renderCard(p, featured) {
   const quick = QUICK_QTY.filter((n) => n <= maxQty(p));
   const tag = p.kind === "plan" ? `<span class="shop-card__tag">Acceso al Lab · 30 días</span>` : "";
   return `
-    <article class="shop-card${featured ? " shop-card--featured" : ""}" data-slug="${esc(p.slug)}" data-kind="${esc(p.kind)}">
+    <article class="shop-card${featured ? " shop-card--featured" : ""}" id="p-${esc(p.slug)}" data-slug="${esc(p.slug)}" data-kind="${esc(p.kind)}">
       ${tag}
       <h3 class="shop-card__name">${esc(p.name)}</h3>
       ${p.description ? `<p class="shop-card__desc">${esc(p.description)}</p>` : ""}
@@ -321,6 +321,36 @@ async function boot() {
   if (error) throw error;
   products = (data || []).filter((p) => p.price_usd);
   render();
+  openFromLink();
+}
+
+// Link directo a un paquete (para landings): shop.html?comprar=<slug>[&cantidad=3]
+// Lleva a su tarjeta y abre el checkout. Los parámetros se limpian de la URL.
+function openFromLink() {
+  const params = new URLSearchParams(location.search);
+  const slug = params.get("comprar");
+  if (!slug) return;
+  params.delete("comprar");
+  const qty = params.get("cantidad");
+  params.delete("cantidad");
+  const rest = params.toString();
+  history.replaceState(null, "", location.pathname + (rest ? `?${rest}` : "") + location.hash);
+
+  const p = products.find((x) => x.slug === slug);
+  if (!p) {
+    banner.textContent = "Ese servicio no está disponible en este momento. Mirá las opciones de abajo o escribime.";
+    banner.dataset.tone = "pendiente";
+    banner.hidden = false;
+    return;
+  }
+  if (qty) chosenQty.set(p.slug, clampQty(p, qty));
+  const card = document.getElementById(`p-${p.slug}`);
+  if (card) {
+    if (maxQty(p) > 1) setCardQty(card, chosenQty.get(p.slug) || 1);
+    card.scrollIntoView({ block: "center" });
+    card.classList.add("is-linked");
+  }
+  openCheckout(p.slug);
 }
 
 boot().catch((err) => {
