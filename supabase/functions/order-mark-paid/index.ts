@@ -6,6 +6,9 @@
 //    para que no puedan pagar dos veces. Si MP falla, se sigue igual y se avisa.
 // 3. mark_order_paid_manual(): pagada + si es la mentoría, activa/extiende 30 días.
 //
+// Con action "cancel": anula el link de MP y pasa la orden pendiente a cancelada
+// (pedidos hechos por error o duplicados). No toca accesos.
+//
 // Secretos: MP_ACCESS_TOKEN (para anular el link).
 
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
@@ -22,6 +25,25 @@ function cors(req: Request) {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Vary": "Origin",
   };
+}
+
+// Vence el link de MercadoPago de la orden. Devuelve true si el link sigue vivo (MP falló).
+async function expireMpLink(preferenceId: string | null): Promise<boolean> {
+  if (!preferenceId) return false;
+  const token = Deno.env.get("MP_ACCESS_TOKEN");
+  if (!token) return true;
+  try {
+    const res = await fetch(`https://api.mercadopago.com/checkout/preferences/${encodeURIComponent(preferenceId)}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ expires: true, expiration_date_to: new Date().toISOString() }),
+    });
+    if (!res.ok) console.error("[order-mark-paid] mp", res.status, (await res.text().catch(() => "")).slice(0, 200));
+    return !res.ok;
+  } catch (e) {
+    console.error("[order-mark-paid] mp", (e as Error).message);
+    return true;
+  }
 }
 
 Deno.serve(async (req) => {
@@ -56,30 +78,25 @@ Deno.serve(async (req) => {
   const { data: order } = await db.from("orders").select("id, status, kind, student_id, mp_preference_id").eq("id", orderId).maybeSingle();
   if (!order) return json({ result: "not_found" }, 404);
 
+  if (body.action === "cancel") {
+    if (order.status === "paid") return json({ result: "already_paid" });
+    if (order.status !== "pending") return json({ result: "invalid_status", status: order.status });
+    const stillActive = await expireMpLink(order.mp_preference_id);
+    // Solo si sigue pendiente: si el webhook la pagó mientras tanto, no se pisa
+    const { data: rows, error: cErr } = await db.from("orders").update({ status: "cancelled" })
+      .eq("id", orderId).eq("status", "pending").select("id");
+    if (cErr) { console.error("[order-mark-paid] cancel", cErr.message); return json({ error: "failed" }, 500); }
+    if (!rows?.length) return json({ result: "already_paid" });
+    return json({ result: "cancelled", mp_link_still_active: stillActive });
+  }
+
   // Validar ANTES de tocar MercadoPago: si algo falta, el link de pago sigue vivo
   if (order.status === "paid") return json({ result: "already_paid" });
   if (!["pending", "expired"].includes(order.status)) return json({ result: "invalid_status", status: order.status });
   if (order.kind === "plan" && !studentId && !order.student_id) return json({ result: "student_required" });
 
   // Anular el link de MercadoPago ANTES de marcar pagada (así no queda una ventana para pagar dos veces)
-  let mpLinkStillActive = false;
-  if (order.mp_preference_id && order.status === "pending") {
-    const token = Deno.env.get("MP_ACCESS_TOKEN");
-    try {
-      const res = token
-        ? await fetch(`https://api.mercadopago.com/checkout/preferences/${encodeURIComponent(order.mp_preference_id)}`, {
-            method: "PUT",
-            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ expires: true, expiration_date_to: new Date().toISOString() }),
-          })
-        : null;
-      mpLinkStillActive = !res?.ok;
-      if (res && !res.ok) console.error("[order-mark-paid] mp", res.status, (await res.text().catch(() => "")).slice(0, 200));
-    } catch (e) {
-      mpLinkStillActive = true;
-      console.error("[order-mark-paid] mp", (e as Error).message);
-    }
-  }
+  const mpLinkStillActive = order.status === "pending" ? await expireMpLink(order.mp_preference_id) : false;
 
   const { data: result, error } = await db.rpc("mark_order_paid_manual", {
     p_order_id: orderId,

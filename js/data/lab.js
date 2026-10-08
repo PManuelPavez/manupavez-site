@@ -322,3 +322,20 @@ export async function adminMarkOrderPaid({ order_id, student_id, method, note })
     return { result: "network" };
   }
 }
+
+// Cancela un pedido pendiente (hecho por error o duplicado) y anula su link de MercadoPago.
+export async function adminCancelOrder(order_id) {
+  const { data: { session } } = await ensure().auth.getSession();
+  if (!session) return { result: "no_session" };
+  try {
+    const res = await fetch(`${window.MP_SUPABASE.url}/functions/v1/order-mark-paid`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "cancel", order_id }),
+    });
+    const body = await res.json().catch(() => ({}));
+    return body.result ? body : { result: body.error || "failed" };
+  } catch {
+    return { result: "network" };
+  }
+}

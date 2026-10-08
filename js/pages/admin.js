@@ -8,7 +8,7 @@ import {
   adminLastSync, adminRunSync, membershipIsActive,
   adminSetStudentPin, adminClearStudentPin, adminSetMyPin, adminPinOverview,
   adminListProducts, adminUpdateProduct, adminSaveProduct, adminListOrders, adminCreatePaymentLink,
-  adminMarkOrderPaid, adminSetSessionDate,
+  adminMarkOrderPaid, adminCancelOrder, adminSetSessionDate,
 } from "../data/lab.js";
 
 const $ = (sel) => document.querySelector(sel);
@@ -383,6 +383,7 @@ function renderOrder(o) {
       <td class="admin-actions">
         ${canCopy ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(o.init_point)}">COPIAR LINK</button>` : ""}
         ${o.status === "pending" || o.status === "expired" ? `<button type="button" class="mp-btn ghost small" data-markpaid-open="${esc(o.id)}">MARCAR COMO PAGADO</button>` : ""}
+        ${o.status === "pending" ? `<button type="button" class="mp-btn ghost small" data-cancel-order="${esc(o.id)}">CANCELAR</button>` : ""}
       </td>
     </tr>`;
 }
@@ -586,7 +587,30 @@ function closeMarkPaid() {
   markEl.hidden = true;
 }
 
-ordersEl.addEventListener("click", (e) => {
+ordersEl.addEventListener("click", async (e) => {
+  const cancelBtn = e.target.closest("[data-cancel-order]");
+  if (cancelBtn) {
+    const order = orders.find((o) => o.id === cancelBtn.dataset.cancelOrder);
+    if (!order) return;
+    if (!confirm(`¿Cancelar el pedido de ${order.buyer_name} (${order.product_name}, ${ars(order.amount_ars)})?\n\nSe anula su link de pago y ya no se puede marcar como pagado.`)) return;
+    cancelBtn.disabled = true;
+    const out = await adminCancelOrder(order.id);
+    if (out.result === "cancelled") {
+      order.status = "cancelled";
+      ordersEl.innerHTML = orders.map(renderOrder).join("");
+      say(out.mp_link_still_active
+        ? `Pedido de ${order.buyer_name} cancelado, pero no se pudo anular el link de MercadoPago: anulalo desde tu cuenta de MercadoPago.`
+        : `Pedido de ${order.buyer_name} cancelado.`, Boolean(out.mp_link_still_active));
+      return;
+    }
+    cancelBtn.disabled = false;
+    say(out.result === "already_paid"
+      ? "Ese pedido ya está pagado: no se puede cancelar. Si hay que devolver la plata, hacelo desde MercadoPago."
+      : out.result === "invalid_status"
+        ? `Ese pedido ya no está pendiente (está ${STATUS[out.status]?.[0]?.toLowerCase() || out.status}).`
+        : MARK_MESSAGES[out.result] || "No se pudo cancelar. Probá de nuevo.", true);
+    return;
+  }
   const btn = e.target.closest("[data-markpaid-open]");
   if (!btn) return;
   const order = orders.find((o) => o.id === btn.dataset.markpaidOpen);
