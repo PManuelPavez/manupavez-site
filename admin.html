@@ -145,6 +145,11 @@
               </label>
               <label>Máximo por compra <input name="max_qty" type="number" min="1" max="20" value="1" /></label>
               <label class="admin-linkform__wide">Descripción (la ve el comprador) <input name="description" type="text" maxlength="600" autocomplete="off" /></label>
+              <label class="admin-linkform__wide">Qué incluye (uno por línea; empezá con * el que va destacado)
+                <textarea name="features" rows="4" maxlength="1500" placeholder="* Estrategia y seguimiento de envío a sellos&#10;4 sesiones 1:1 sobre tus temas"></textarea></label>
+              <label class="admin-linkform__wide">Aclaración (letra chica, opcional) <input name="fine_print" type="text" maxlength="400" autocomplete="off" /></label>
+              <label>Desde cuántas unidades baja el precio <input name="volume_min_qty" type="number" min="2" max="20" placeholder="Sin descuento" /></label>
+              <label>Precio USD por unidad con descuento <input name="volume_price" type="number" step="0.01" min="1" max="100000" placeholder="Ej: 5" /></label>
               <label class="admin-switch"><input name="active" type="checkbox" checked /> Visible en el shop</label>
               <button type="submit" class="mp-btn ok small" data-product-submit>CREAR PRODUCTO</button>
               <button type="button" class="mp-btn ghost small" data-product-cancel>CERRAR</button>

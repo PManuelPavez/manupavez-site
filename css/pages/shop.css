@@ -173,6 +173,36 @@ body[data-page="shop"] { --teal: #59c6ba; --teal-soft: rgba(89, 198, 186, 0.12);
 .shop-card__name { margin: 0; font-size: 1.08rem; letter-spacing: 0.05em; text-transform: uppercase; line-height: 1.25; }
 .shop-card--featured .shop-card__name { font-size: clamp(1.15rem, 2.6vw, 1.35rem); }
 .shop-card__desc { margin: 0; color: var(--color-text-muted); line-height: 1.6; font-size: 0.92rem; }
+/* Lo que incluye cada plan */
+.shop-card__highlight {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 2px 0 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(89, 198, 186, 0.55);
+  border-radius: 12px;
+  background: var(--teal-soft);
+  color: var(--color-text);
+  font-weight: 600;
+  line-height: 1.45;
+}
+.shop-card__highlight span { color: var(--teal); }
+.shop-card__features { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; font-size: 0.9rem; line-height: 1.5; }
+.shop-card__features li { position: relative; padding-left: 20px; }
+.shop-card__features li::before { content: "✓"; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
+.shop-card__volume {
+  align-self: flex-start;
+  margin: 0;
+  padding: 6px 12px;
+  border: 1px dashed rgba(89, 198, 186, 0.6);
+  border-radius: 999px;
+  color: var(--teal);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.shop-card__fine { margin: 0; font-size: 0.78rem; line-height: 1.5; color: var(--color-text-muted); }
+
 .shop-card__bottom { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 4px; }
 .shop-card__price { margin: 0; font-size: 1.5rem; font-weight: 700; font-family: var(--font-primary); }
 .shop-card__price span { font-size: 0.8rem; font-weight: 400; font-family: var(--font-secondary); color: var(--color-text-muted); }
@@ -464,3 +494,95 @@ body[data-page="shop"] { --teal: #59c6ba; --teal-soft: rgba(89, 198, 186, 0.12);
 
 /* Tarjeta abierta desde un link directo (?comprar=…) */
 .shop-card.is-linked { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-soft); }
+
+/* =================== Color: violeta + verde ===================
+   Capa final de acentos. No cambia la estructura del shop:
+   verde = confirmar / incluido / pesos, violeta = destacado / energía. */
+body[data-page="shop"] {
+  --violet: #a67cff;
+  --violet-soft: rgba(166, 124, 255, 0.14);
+  --green: #3ee69a;
+  --green-soft: rgba(62, 230, 154, 0.12);
+  --grad: linear-gradient(120deg, var(--green), var(--violet));
+}
+
+/* Hero: suma un brillo violeta y verde */
+.shop-hero {
+  background:
+    radial-gradient(90% 120% at 100% 0%, rgba(166, 124, 255, 0.28), transparent 55%),
+    radial-gradient(80% 110% at 0% 100%, rgba(62, 230, 154, 0.16), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+}
+
+/* Pestañas de sección */
+.shop-tab:hover, .shop-tab:focus-visible { border-color: var(--violet); background: var(--violet-soft); }
+
+/* Encabezado de cada sección: número violeta y línea degradé */
+.shop-section__num { color: var(--violet); }
+.shop-section__title {
+  background: var(--grad);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Tarjetas */
+.shop-card:hover { border-color: rgba(166, 124, 255, 0.55); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(166, 124, 255, 0.15); }
+.shop-card__features li::before { color: var(--green); }
+.shop-card__ars { color: var(--green); }
+.shop-card__price {
+  background: var(--grad);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.shop-card__price span { -webkit-text-fill-color: var(--color-text-muted); }
+
+/* Planes: el primero en verde, el segundo (Lanzar) en violeta */
+.shop-grid--featured .shop-card--featured:nth-child(odd) {
+  border-color: rgba(62, 230, 154, 0.4);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(62, 230, 154, 0.14), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+}
+.shop-grid--featured .shop-card--featured:nth-child(odd) .shop-card__tag { background: var(--green-soft); color: var(--green); }
+.shop-grid--featured .shop-card--featured:nth-child(even) {
+  border-color: rgba(166, 124, 255, 0.5);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(166, 124, 255, 0.2), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+}
+.shop-grid--featured .shop-card--featured:nth-child(even) .shop-card__tag { background: var(--violet-soft); color: var(--violet); }
+
+/* El diferencial destacado (envío a sellos) */
+.shop-card__highlight {
+  border-color: rgba(166, 124, 255, 0.7);
+  background: linear-gradient(120deg, rgba(166, 124, 255, 0.2), rgba(62, 230, 154, 0.08));
+  box-shadow: 0 0 24px rgba(166, 124, 255, 0.18);
+}
+.shop-card__highlight span { color: var(--violet); }
+
+/* Descuento por cantidad */
+.shop-card__volume { border-color: rgba(62, 230, 154, 0.7); background: var(--green-soft); color: var(--green); }
+
+/* Cantidad */
+.shop-chip:hover { border-color: rgba(166, 124, 255, 0.6); }
+.shop-chip[aria-pressed="true"] { border-color: var(--violet); background: var(--violet-soft); color: #d9c7ff; }
+.shop-stepper button:hover { background: var(--violet-soft); }
+
+/* Botones de compra: degradé verde → violeta */
+body[data-page="shop"] .mp-btn.primary {
+  background: linear-gradient(120deg, #22b97a, #7b52e0);
+  color: #fff;
+}
+body[data-page="shop"] .mp-btn.primary:hover { box-shadow: 0 10px 28px rgba(123, 82, 224, 0.4); }
+body[data-page="shop"] .shop-card .mp-btn.ghost:hover { border-color: var(--green); background: var(--green-soft); }
+
+/* Checkout */
+.shop-total small, .shop-transfer__amount span { color: var(--green); }
+.shop-method input:checked + .shop-method__body { border-color: var(--violet); background: var(--violet-soft); }
+.shop-method input:checked + .shop-method__body::before { border-color: var(--violet); box-shadow: inset 0 0 0 4px rgba(7, 9, 20, 1), inset 0 0 0 8px var(--violet); }
+.shop-copy { border-color: rgba(62, 230, 154, 0.6); color: var(--green); }
+.shop-copy:hover { background: var(--green-soft); }
+.shop-title span { background: var(--grad); -webkit-background-clip: text; background-clip: text; }
+.shop-method__tag { background: var(--grad); color: #0b0716; }

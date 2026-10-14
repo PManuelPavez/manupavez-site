@@ -74,12 +74,29 @@ async function loadMep() {
 const qtyLabel = (p) => (p.unit === "track" ? "¿Cuántos tracks?" : "Cantidad");
 const maxQty = (p) => Math.max(1, p.max_qty || 1);
 const clampQty = (p, n) => Math.max(1, Math.min(maxQty(p), Math.floor(Number(n) || 1)));
+// Precio por unidad según la cantidad (ej. master: USD 8, o USD 5 desde 3 tracks). El servidor aplica lo mismo.
+const hasVolume = (p) => Boolean(p.volume_min_qty && p.volume_price_usd);
+const unitPrice = (p, qty) => Number(hasVolume(p) && qty >= p.volume_min_qty ? p.volume_price_usd : p.price_usd);
+const unitWord = (p, n) => (p.unit === "track" && n !== 1 ? "tracks" : p.unit);
+const volumeLine = (p) => `${usd(p.price_usd)} por ${esc(p.unit)} · ${usd(p.volume_price_usd)} por ${esc(p.unit)} desde ${p.volume_min_qty} ${esc(unitWord(p, p.volume_min_qty))}`;
 
 function priceBlock(p, qty) {
-  const total = p.price_usd * qty;
+  const unit = unitPrice(p, qty);
+  const total = unit * qty;
   return `
     <p class="shop-card__price">${usd(total)}${qty > 1 ? "" : ` <span>por ${esc(p.unit)}</span>`}</p>
-    <p class="shop-card__ars">${qty > 1 ? `${qty} × ${usd(p.price_usd)}` : ""}${qty > 1 && mep ? " · " : ""}${mep ? `≈ ${ars(total * mep)} hoy` : ""}</p>`;
+    <p class="shop-card__ars">${qty > 1 ? `${qty} × ${usd(unit)}` : ""}${qty > 1 && mep ? " · " : ""}${mep ? `≈ ${ars(total * mep)} hoy` : ""}</p>`;
+}
+
+// Lo que incluye (planes): el ítem destacado va primero y con más peso visual
+function featuresBlock(p) {
+  const list = Array.isArray(p.features) ? p.features.filter((f) => f?.text) : [];
+  if (!list.length) return "";
+  const top = list.filter((f) => f.highlight);
+  const rest = list.filter((f) => !f.highlight);
+  return `
+    ${top.map((f) => `<p class="shop-card__highlight"><span aria-hidden="true">★</span>${esc(f.text)}</p>`).join("")}
+    ${rest.length ? `<ul class="shop-card__features">${rest.map((f) => `<li>${esc(f.text)}</li>`).join("")}</ul>` : ""}`;
 }
 
 function renderCard(p, featured) {
@@ -92,6 +109,9 @@ function renderCard(p, featured) {
       ${tag}
       <h3 class="shop-card__name">${esc(p.name)}</h3>
       ${p.description ? `<p class="shop-card__desc">${esc(p.description)}</p>` : ""}
+      ${featuresBlock(p)}
+      ${hasVolume(p) ? `<p class="shop-card__volume">${volumeLine(p)}</p>` : ""}
+      ${p.fine_print ? `<p class="shop-card__fine">${esc(p.fine_print)}</p>` : ""}
       ${multi ? `
         <div class="shop-card__qty" role="group" aria-label="${esc(qtyLabel(p))}">
           <span class="shop-card__qty-label">${esc(qtyLabel(p))}</span>
@@ -156,10 +176,14 @@ const method = () => form.elements.namedItem("method").value;
 function updatePrice() {
   if (!current) return;
   const qty = clampQty(current, qtyInput.value);
-  const total = current.price_usd * qty;
+  const unit = unitPrice(current, qty);
+  const total = unit * qty;
   $("[data-checkout-price]").textContent = usd(total);
+  const hint = hasVolume(current) && qty < current.volume_min_qty
+    ? ` · desde ${current.volume_min_qty} ${unitWord(current, current.volume_min_qty)}: ${usd(current.volume_price_usd)} c/u`
+    : "";
   $("[data-checkout-ars]").textContent =
-    `${qty > 1 ? `${qty} × ${usd(current.price_usd)}` : `por ${current.unit}`}${mep ? ` · ≈ ${ars(total * mep)} al MEP de hoy` : ""}`;
+    `${qty > 1 ? `${qty} × ${usd(unit)}` : `por ${current.unit}`}${mep ? ` · ≈ ${ars(total * mep)} al MEP de hoy` : ""}${hint}`;
 }
 
 function updateMethod() {
@@ -315,7 +339,7 @@ async function boot() {
     return;
   }
   const [{ data, error }] = await Promise.all([
-    supabase.from("products").select("slug, name, description, kind, category, price_usd, unit, max_qty").order("sort"),
+    supabase.from("products").select("slug, name, description, kind, category, price_usd, unit, max_qty, features, fine_print, volume_min_qty, volume_price_usd").order("sort"),
     loadMep(),
   ]);
   if (error) throw error;

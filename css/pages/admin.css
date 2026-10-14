@@ -149,6 +149,7 @@ body { background: var(--color-bg); color: var(--color-text); }
 .admin-price input,
 .admin-linkform input,
 .admin-linkform select,
+.admin-linkform textarea,
 .admin-linkresult input {
   padding: 8px 12px;
   border-radius: 999px;
@@ -331,6 +332,7 @@ body[data-page="admin"] { overflow-x: clip; }
 .admin-price input,
 .admin-linkform input,
 .admin-linkform select,
+.admin-linkform textarea,
 .admin-linkresult input,
 .admin-sessions__form input {
   border-color: var(--a-line-2);
@@ -582,3 +584,5 @@ body[data-page="admin"] { overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
   .admin *, .admin *::before { animation: none !important; transition-duration: 0.01ms !important; }
 }
+
+.admin-linkform textarea { border-radius: 14px; resize: vertical; min-height: 96px; line-height: 1.5; }

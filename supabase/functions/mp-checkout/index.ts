@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
   if (method === "mercadopago" && !token) return json({ error: "payments_not_configured" }, 503);
 
   // Producto
-  const productQuery = db.from("products").select("id, slug, name, kind, price_usd, active, unit, max_qty");
+  const productQuery = db.from("products").select("id, slug, name, kind, price_usd, active, unit, max_qty, volume_min_qty, volume_price_usd");
   const { data: product } = mode === "admin_link"
     ? await productQuery.eq("id", String(body.product_id || "")).maybeSingle()
     : await productQuery.eq("slug", String(body.product || "")).maybeSingle();
@@ -132,8 +132,11 @@ Deno.serve(async (req) => {
   const quantity = Math.floor(Number(body.quantity ?? 1));
   if (!Number.isFinite(quantity) || quantity < 1 || quantity > (product.max_qty || 1)) return json({ error: "invalid_quantity" }, 400);
 
-  // Precio: el del catálogo × cantidad, o el total especial que define el admin (sin tocar el público)
-  let priceUsd = Math.round(Number(product.price_usd) * quantity * 100) / 100;
+  // Precio: el del catálogo × cantidad (con el precio por volumen si llega a la cantidad mínima),
+  // o el total especial que define el admin (sin tocar el público)
+  const volume = product.volume_min_qty && product.volume_price_usd && quantity >= product.volume_min_qty;
+  const unitUsd = Number(volume ? product.volume_price_usd : product.price_usd);
+  let priceUsd = Math.round(unitUsd * quantity * 100) / 100;
   if (mode === "admin_link") {
     const custom = Number(body.price_usd);
     if (!Number.isFinite(custom) || custom <= 0 || custom > 100000) return json({ error: "invalid_price" }, 400);

@@ -362,7 +362,7 @@ function renderProduct(p) {
     <li class="admin-product${visible ? "" : " is-hidden"}" data-product-id="${esc(p.id)}">
       <div class="admin-product__info">
         <strong>${esc(p.name)}</strong>
-        <small>${esc(CATEGORY_LABEL[p.category] || "Otros")} · ${p.price_usd ? `${usd(p.price_usd)} por ${esc(p.unit)}` : "sin precio"}</small>
+        <small>${esc(CATEGORY_LABEL[p.category] || "Otros")} · ${p.price_usd ? `${usd(p.price_usd)} por ${esc(p.unit)}` : "sin precio"}${p.volume_min_qty ? ` · ${usd(p.volume_price_usd)} desde ${p.volume_min_qty}` : ""}${p.kind === "plan" ? " · activa el acceso al Lab" : ""}</small>
       </div>
       <button type="button" class="admin-icon${visible ? " is-on" : ""}" data-toggle-visible
         aria-pressed="${visible}" ${p.price_usd ? "" : "disabled"}
@@ -423,7 +423,9 @@ function syncLinkForm() {
   const qty = linkForm.elements.namedItem("quantity");
   qty.max = p?.max_qty || 1;
   if (Number(qty.value) > Number(qty.max)) qty.value = qty.max;
-  if (p?.price_usd) linkForm.elements.namedItem("price").value = (p.price_usd * Number(qty.value || 1)).toFixed(2);
+  const n = Number(qty.value || 1);
+  const unit = p?.volume_min_qty && n >= p.volume_min_qty ? p.volume_price_usd : p?.price_usd;
+  if (unit) linkForm.elements.namedItem("price").value = (unit * n).toFixed(2);
   const isStudent = Boolean(linkForm.elements.namedItem("student").value);
   linkForm.querySelectorAll("[data-other]").forEach((el) => { el.hidden = isStudent; });
 }
@@ -486,6 +488,10 @@ function openProductEditor(p, row) {
     f.namedItem("max_qty").value = p.max_qty;
     f.namedItem("description").value = p.description || "";
     f.namedItem("active").checked = p.active;
+    f.namedItem("features").value = (p.features || []).map((x) => `${x.highlight ? "* " : ""}${x.text}`).join("\n");
+    f.namedItem("fine_print").value = p.fine_print || "";
+    f.namedItem("volume_min_qty").value = p.volume_min_qty ?? "";
+    f.namedItem("volume_price").value = p.volume_price_usd ?? "";
   }
   $("[data-product-form-title]").textContent = p ? `Editar: ${p.name}` : "Nuevo producto";
   $("[data-product-submit]").textContent = p ? "GUARDAR CAMBIOS" : "CREAR PRODUCTO";
@@ -532,6 +538,13 @@ productForm.addEventListener("submit", async (e) => {
   if (name.length < 2) { say("Poné un nombre.", true); return; }
   if (!Number.isFinite(price) || price <= 0) { say("Precio inválido.", true); return; }
   if (maxQty < 1 || maxQty > 20) { say("El máximo por compra va de 1 a 20.", true); return; }
+  const volMin = f.namedItem("volume_min_qty").value ? Math.round(Number(f.namedItem("volume_min_qty").value)) : null;
+  const volPrice = f.namedItem("volume_price").value ? Number(f.namedItem("volume_price").value) : null;
+  if ((volMin === null) !== (volPrice === null)) { say("Para el descuento por cantidad completá los dos campos (o dejá los dos vacíos).", true); return; }
+  if (volMin !== null && (volMin < 2 || volMin > 20 || !(volPrice > 0) || volPrice >= price)) { say("Descuento inválido: desde 2 a 20 unidades y un precio menor al normal.", true); return; }
+  if (volMin !== null && volMin > maxQty) { say("El descuento empieza en más unidades que el máximo por compra: subí el máximo.", true); return; }
+  const features = f.namedItem("features").value.split("\n").map((l) => l.trim()).filter(Boolean).slice(0, 12)
+    .map((l) => (l.startsWith("*") ? { text: l.replace(/^\*\s*/, "").slice(0, 200), highlight: true } : { text: l.slice(0, 200), highlight: false }));
   const btn = $("[data-product-submit]");
   btn.disabled = true;
   try {
@@ -545,6 +558,10 @@ productForm.addEventListener("submit", async (e) => {
       unit: f.namedItem("unit").value,
       max_qty: maxQty,
       active: f.namedItem("active").checked,
+      features,
+      fine_print: f.namedItem("fine_print").value.trim(),
+      volume_min_qty: volMin,
+      volume_price_usd: volPrice === null ? null : Math.round(volPrice * 100) / 100,
     });
     say(`${name}: ${editing ? "cambios guardados" : "producto creado"}.`);
     await loadShop();
