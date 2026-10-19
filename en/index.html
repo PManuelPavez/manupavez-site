@@ -184,29 +184,18 @@
 
     <!-- ============ STATS / EN NÚMEROS ============ -->
     <section class="section stats reveal section-centered tone-light" aria-label="Manu Pavez in numbers">
-      <!--
-        Counters. Auto (tiempo real) vía data/*.json:
-          - followers  → seguidores de Spotify (data/music.json)
-          - plays      → reproducciones de YouTube (data/youtube.json)
-        data-count-base = números reales que NO se pueden automatizar gratis
-        (Spotify plays/oyentes, SoundCloud plays/seguidores). Editalos a mano cuando cambien:
-          · Spotify: +150.000 plays · 20.000 oyentes/año
-          · SoundCloud: +70.000 plays · 989 seguidores
-        El total mostrado = base + lo que suma solo (Spotify followers / YouTube views).
-      -->
+      <!-- Números fijos: editalos a mano cuando cambien (data-count-to). -->
       <div class="stats-grid">
         <div class="stat">
-          <span class="stat-num" data-counter data-count-to="6" data-count-suffix="+">0</span>
+          <span class="stat-num" data-counter data-count-to="7" data-count-suffix="+">0</span>
           <span class="stat-label">Years behind the decks</span>
         </div>
         <div class="stat">
-          <!-- base 1556 (Spotify) + seguidores SoundCloud (auto) -->
-          <span class="stat-num" data-counter data-count-source="followers" data-count-base="1556" data-count-suffix="+">0</span>
+          <span class="stat-num" data-counter data-count-to="3521" data-count-suffix="+">0</span>
           <span class="stat-label">Total followers</span>
         </div>
         <div class="stat">
-          <!-- base 271.022 (Spotify 150k + SoundCloud 70k) + views YouTube (auto) -->
-          <span class="stat-num" data-counter data-count-source="plays" data-count-base="271022" data-count-suffix="+">0</span>
+          <span class="stat-num" data-counter data-count-to="492000" data-count-suffix="+">0</span>
           <span class="stat-label">Total plays</span>
         </div>
         <div class="stat">
@@ -216,20 +205,6 @@
       </div>
     </section>
 
-    <!-- ============ CREDENCIALES: Supported by ============ -->
-    <section id="creds" class="section creds reveal" aria-label="Credentials">
-      <!-- Support internacional destacado (arriba, siempre visible) -->
-      <div class="creds-hero">
-        <span class="creds-hero__label">Supported by</span>
-        <div class="creds-hero__chips">
-          <span class="stage-chip stage-chip--hero">Nick Warren</span>
-          <span class="stage-chip stage-chip--hero">Sahar Z</span>
-          <span class="stage-chip">DJ Ruby</span>
-          <span class="stage-chip">Fortycats</span>
-          <span class="stage-chip">JFR</span>
-        </div>
-      </div>
-    </section>
 
     <!-- ============ MÚSICA · RELEASES ============ -->
     <section id="musica" class="section releases" aria-labelledby="musica-title">
@@ -302,15 +277,18 @@
         </div>
       </div>
 
-      <!-- Marquesina: quiénes respaldaron / compartieron cabina -->
+      <!-- Marquesinas: con quién compartió cabina / dónde tocó -->
       <div class="booking-marquee" aria-hidden="true">
-        <div class="booking-marquee__track"><span>★ Nick Warren · Sahar Z · DJ Ruby · Alex O'Rion · Roy Rosenfeld · Soundexile · Graziano Raffa · Ezequiel Arias</span><span>★ Nick Warren · Sahar Z · DJ Ruby · Alex O'Rion · Roy Rosenfeld · Soundexile · Graziano Raffa · Ezequiel Arias</span></div>
+        <div class="booking-marquee__track"><span><b>Shared the booth with</b> ★ Alex O'Rion · Graziano Raffa · Mayro · Emi Galvan · Soundexile · Roy Rosenfeld ★</span><span><b>Shared the booth with</b> ★ Alex O'Rion · Graziano Raffa · Mayro · Emi Galvan · Soundexile · Roy Rosenfeld ★</span></div>
       </div>
-      <p class="sr-only">His sound has been supported by Nick Warren, Sahar Z and DJ Ruby. He has shared the booth with Alex O'Rion, Roy Rosenfeld, Soundexile, Graziano Raffa and Ezequiel Arias.</p>
+      <div class="booking-marquee booking-marquee--cities" aria-hidden="true">
+        <div class="booking-marquee__track"><span><b>Played in</b> ✦ Rosario · Buenos Aires · Chacabuco · Junín · Pergamino · Villa Gesell · Pinamar ✦</span><span><b>Played in</b> ✦ Rosario · Buenos Aires · Chacabuco · Junín · Pergamino · Villa Gesell · Pinamar ✦</span></div>
+      </div>
+      <p class="sr-only">He has shared the booth with Alex O'Rion, Graziano Raffa, Mayro, Emi Galvan, Soundexile and Roy Rosenfeld. He has played in Rosario, Buenos Aires, Chacabuco, Junín, Pergamino, Villa Gesell and Pinamar.</p>
 
       <div class="booking-flyer__bar">
         <ul class="booking-stats">
-          <li><span class="booking-stats__num" data-counter data-count-source="plays" data-count-base="271022" data-count-suffix="+">0</span><span class="booking-stats__label">plays</span></li>
+          <li><span class="booking-stats__num" data-counter data-count-to="492000" data-count-suffix="+">0</span><span class="booking-stats__label">plays</span></li>
           <li><span class="booking-stats__num" data-counter data-count-to="6" data-count-suffix="+">0</span><span class="booking-stats__label">international labels</span></li>
           <li><span class="booking-stats__num">24–48&nbsp;h</span><span class="booking-stats__label">reply time</span></li>
         </ul>

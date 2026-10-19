@@ -229,3 +229,16 @@
 .hero-card-video.is-switching { opacity: 0; }
 .hero-card picture .hero-card-img { transition: opacity 1.2s ease; }
 .hero-card.has-video picture .hero-card-img { opacity: 0; }
+
+/* Segunda franja: ciudades, en petróleo y en sentido contrario */
+.booking-marquee__track b { font-family: var(--font-mono); font-weight: 500; font-size: 0.6em; letter-spacing: 0.04em; vertical-align: 0.25em; margin-right: 0.6rem; }
+.booking-marquee--cities {
+  background: var(--c-ink-2);
+  color: var(--c-sand);
+  border-top: 0;
+}
+.booking-marquee--cities .booking-marquee__track {
+  animation-direction: reverse;
+  animation-duration: 44s;
+}
+.booking-marquee--cities .booking-marquee__track b { color: var(--c-lime); }
