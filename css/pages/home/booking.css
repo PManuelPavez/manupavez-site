@@ -52,7 +52,7 @@
 }
 .booking-flyer #booking-title {
   margin: 0 0 16px;
-  font-size: clamp(3.4rem, 1.6rem + 8vw, 9rem);
+  font-size: clamp(2.72rem, 1.2rem + 5.28vw, 6.12rem);
   font-weight: 900;
   line-height: 0.84;
   letter-spacing: 0;
@@ -87,7 +87,7 @@
 .booking-stats__num {
   font-family: var(--font-primary);
   font-weight: 900;
-  font-size: clamp(2rem, 1.3rem + 2.2vw, 3.2rem);
+  font-size: clamp(1.6rem, 0.98rem + 1.45vw, 2.18rem);
   line-height: 0.9;
   white-space: nowrap;
   color: #fff;
@@ -203,8 +203,9 @@
     background: linear-gradient(to top, var(--c-ink) 0%, rgba(16, 35, 42, 0.6) 45%, transparent 75%);
   }
   .booking-flyer__bar { grid-template-columns: minmax(0, 1fr); }
-  .booking-stats { justify-content: space-between; gap: 12px; }
-  .booking-stats__num { font-size: clamp(1.6rem, 1rem + 3vw, 2rem); }
+  .booking-stats { justify-content: space-between; gap: 10px; }
+  .booking-stats li { min-width: 0; }
+  .booking-stats__num { font-size: clamp(1.35rem, 0.9rem + 2.6vw, 1.7rem); }
   .booking-facts dd { white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) {

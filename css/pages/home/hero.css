@@ -52,6 +52,8 @@
           mask-image: radial-gradient(ellipse 34% 62% at 50% 38%, transparent 30%, #000 85%);
 }
 .hero-crt.crt-ready .crt-canvas { opacity: 0.55; }
+/* Con el video andando, el plasma queda de fondo: que no tape la imagen */
+.hero-card.has-video .hero-crt.crt-ready .crt-canvas { opacity: 0.08; }
 
 @media (max-width: 720px) {
   .hero-crt .crt-canvas {
@@ -140,7 +142,7 @@
   text-align: center;
   font-family: var(--font-primary);
   font-weight: 700;
-  font-size: clamp(2.6rem, 13vw, 11rem);
+  font-size: clamp(2.08rem, 8.58vw, 7.48rem);
   line-height: 0.88;
   letter-spacing: -0.02em;
   text-transform: uppercase;
@@ -222,4 +224,95 @@
 
 @keyframes hero-in {
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* =================== Logo del hero con glitch ===================
+   <h1 class="hero-name hero-logo"> lleva el logo (img) y dos "canales" de
+   color que usan el mismo logo como máscara. Movimiento suave constante +
+   ráfagas de glitch cada pocos segundos (con duraciones distintas para que
+   no se sienta un loop). Sin movimiento si el sistema pide reducirlo. */
+.hero-logo { line-height: 0; text-shadow: none; }
+.hero-logo__mark {
+  position: relative;
+  display: block;
+  width: clamp(260px, 84vw, 1080px);
+  aspect-ratio: 1744 / 256;
+  margin-inline: auto;
+  filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.5));
+}
+.hero-logo__img,
+.hero-logo__ch {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hero-logo__img { display: block; object-fit: contain; }
+.hero-logo__ch {
+  -webkit-mask: url("../../../logos/mp-logo.webp") center / contain no-repeat;
+          mask: url("../../../logos/mp-logo.webp") center / contain no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+}
+.hero-logo__ch--a { background: var(--c-teal, #59c6ba); }
+.hero-logo__ch--b { background: var(--c-lime, #e9ff6b); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-logo__mark { animation: mpLogoFloat 7s ease-in-out infinite; }
+  .hero-logo__img  { animation: mpLogoIn 1.1s steps(1) 0.34s backwards, mpLogoJitter 5.3s steps(1) 2s infinite; }
+  .hero-logo__ch--a { animation: mpLogoChA 5.3s steps(1) 2s infinite, mpLogoChIn 1.1s steps(1) 0.34s; }
+  .hero-logo__ch--b { animation: mpLogoChB 6.7s steps(1) 2.6s infinite, mpLogoChIn 1.1s steps(1) 0.4s; }
+  .hero-logo:hover .hero-logo__img { animation-duration: 1.1s, 0.9s; }
+  .hero-logo:hover .hero-logo__ch--a { animation-duration: 0.9s, 1.1s; }
+  .hero-logo:hover .hero-logo__ch--b { animation-duration: 1.2s, 1.1s; }
+}
+
+/* Movimiento constante: flota y respira apenas */
+@keyframes mpLogoFloat {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(0, -6px, 0) scale(1.012); }
+}
+
+/* Entrada: aparece "rompiéndose" en franjas */
+@keyframes mpLogoIn {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; clip-path: inset(0 0 72% 0); transform: translateX(-3%); }
+  22%  { clip-path: inset(40% 0 30% 0); transform: translateX(2%); }
+  34%  { clip-path: inset(0 0 0 0); transform: translateX(-1%) skewX(-8deg); }
+  46%  { opacity: 0.4; transform: none; }
+  58%  { opacity: 1; clip-path: inset(62% 0 0 0); }
+  70%  { clip-path: inset(0); transform: translateX(1%); }
+  100% { opacity: 1; clip-path: none; transform: none; }
+}
+@keyframes mpLogoChIn {
+  0%, 60% { opacity: 0.6; transform: translateX(-2.5%); }
+  30%     { transform: translateX(2%); }
+  100%    { opacity: 0; transform: none; }
+}
+
+/* Ráfagas: tranquilo la mayor parte del tiempo, cortes al final del ciclo */
+@keyframes mpLogoJitter {
+  0%, 86%, 100% { transform: none; clip-path: none; }
+  87% { transform: translateX(-1.4%) skewX(-6deg); clip-path: inset(0 0 55% 0); }
+  88% { transform: translateX(1.8%); clip-path: inset(48% 0 0 0); }
+  89% { transform: translateX(-0.6%); clip-path: inset(18% 0 30% 0); }
+  90% { transform: none; clip-path: none; }
+  95% { transform: translateX(0.8%) skewX(4deg); }
+  96% { transform: none; }
+}
+@keyframes mpLogoChA {
+  0%, 86%, 92%, 100% { opacity: 0; transform: none; clip-path: none; }
+  87% { opacity: 0.95; transform: translate(-2.2%, -2%); clip-path: inset(8% 0 52% 0); }
+  88% { opacity: 0.95; transform: translate(2.6%, 1%); clip-path: inset(55% 0 12% 0); }
+  89% { opacity: 0.8;  transform: translate(-1.2%, 0); clip-path: inset(30% 0 40% 0); }
+  95% { opacity: 0.7;  transform: translate(-1.6%, 0); clip-path: inset(0 0 70% 0); }
+  96% { opacity: 0; }
+}
+@keyframes mpLogoChB {
+  0%, 84%, 91%, 100% { opacity: 0; transform: none; clip-path: none; }
+  85% { opacity: 0.85; transform: translate(2.4%, 2%); clip-path: inset(60% 0 4% 0); }
+  86% { opacity: 0.85; transform: translate(-2%, -1%); clip-path: inset(12% 0 60% 0); }
+  88% { opacity: 0.7;  transform: translate(1.4%, 0); clip-path: inset(38% 0 34% 0); }
+  90% { opacity: 0; }
 }

@@ -182,7 +182,7 @@ function setupBuy(ev, rrpp) {
       const { body } = await callCheckout({
         action: "buy", tier_id: ev.current.id, quantity: qty,
         first_name: v("first_name"), last_name: v("last_name"), phone: v("phone"), email: v("email"),
-        rrpp: v("rrpp"), attendees, captcha: await captcha.getToken(),
+        rrpp: v("rrpp"), attendees, fans: form.fans.checked, captcha: await captcha.getToken(),
       });
       if (body.init_point) {
         btn.textContent = "Abriendo Mercado Pago…";
@@ -237,7 +237,7 @@ function setupWaitlist() {
     btn.disabled = true;
     try {
       captcha ||= await mountTurnstile($("[data-captcha-wait]"));
-      const { body } = await callCheckout({ action: "waitlist", name: v("name"), phone: v("phone"), email: v("email"), captcha: await captcha.getToken() });
+      const { body } = await callCheckout({ action: "waitlist", name: v("name"), phone: v("phone"), email: v("email"), fans: form.fans.checked, captcha: await captcha.getToken() });
       if (body.ok) {
         form.replaceWith(Object.assign(document.createElement("p"), { className: "pg-ok", textContent: "¡Listo! Te avisamos apenas haya entradas." }));
         return;

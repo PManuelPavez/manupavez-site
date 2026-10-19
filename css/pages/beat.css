@@ -60,7 +60,7 @@ body {
 }
 .beat-title {
   margin: 0;
-  font-size: clamp(2rem, 8vw, 3.6rem);
+  font-size: clamp(1.6rem, 5.28vw, 2.45rem);
   letter-spacing: 0.12em;
   line-height: 1.05;
 }
@@ -465,4 +465,269 @@ html:has(.beat-sheet[open]) { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   .beat-sheet[open] { animation: none; }
+}
+
+/* =====================================================================
+   SKIN "ABLETON" — solo el secuenciador (.beat-seq)
+   Grises planos como Live, encabezados de pista con color de clip, regla
+   de compás, play verde, cabezal naranja y la ayuda como la Info View.
+   ===================================================================== */
+.beat-seq {
+  --abl-bg: #1b1b1b;        /* fondo de la ventana */
+  --abl-panel: #262626;     /* paneles */
+  --abl-panel-2: #303030;
+  --abl-cell: #3a3a3a;      /* casillero */
+  --abl-cell-alt: #333333;  /* casillero en tiempos 2 y 4 (sombreado alterno) */
+  --abl-line: #121212;
+  --abl-text: #d6d6d6;
+  --abl-muted: #8f8f8f;
+  --abl-accent: #ff9f2e;    /* naranja de selección / cabezal */
+  --abl-play: #3fd46a;      /* verde del play */
+  --clip-0: #ff5a4f; --clip-1: #ffa62b; --clip-2: #f4e04d; --clip-3: #7fe36a;
+  --clip-4: #3ccfd6; --clip-5: #5b8cff; --clip-6: #b880ff; --clip-7: #ff7ac8;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--abl-line);
+  border-radius: 6px;
+  background: var(--abl-bg);
+  color: var(--abl-text);
+  font-family: "Helvetica Neue", Arial, var(--font-secondary), sans-serif;
+  overflow: clip; /* clip (no hidden) para que la ayuda "sticky" siga pegada abajo en celular */
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* Géneros = pestañas / escenas */
+.beat-seq .beat-genres {
+  margin: 0;
+  padding: 8px;
+  gap: 4px;
+  background: var(--abl-panel);
+  border-bottom: 1px solid var(--abl-line);
+}
+.beat-seq .beat-chip {
+  padding: 7px 12px;
+  border: 1px solid var(--abl-line);
+  border-radius: 2px;
+  background: var(--abl-panel-2);
+  color: var(--abl-muted);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+.beat-seq .beat-chip[aria-pressed="true"] {
+  border-color: var(--abl-line);
+  background: var(--abl-accent);
+  color: #1b1b1b;
+}
+
+/* Transporte = barra de control de Live */
+.beat-seq .beat-transport {
+  gap: 8px;
+  padding: 8px;
+  border: 0;
+  border-bottom: 1px solid var(--abl-line);
+  border-radius: 0;
+  background: var(--abl-panel);
+}
+.beat-seq .beat-play {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--abl-line);
+  border-radius: 2px;
+  background: var(--abl-panel-2);
+  color: var(--abl-text);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.beat-seq .beat-play[aria-pressed="true"] { background: var(--abl-play); color: #102414; }
+.beat-seq .beat-play[aria-pressed="true"] .beat-play__icon { background: currentColor; }
+.beat-seq .beat-bpm { gap: 4px; }
+.beat-seq .beat-bpm__btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--abl-line);
+  border-radius: 2px;
+  background: var(--abl-panel-2);
+  color: var(--abl-text);
+  font-size: 0.95rem;
+}
+.beat-seq .beat-bpm__read {
+  min-width: 96px;
+  padding: 5px 8px;
+  border: 1px solid var(--abl-line);
+  border-radius: 2px;
+  background: #121212;
+  justify-content: center;
+}
+.beat-seq .beat-bpm__read output {
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--abl-accent);
+}
+.beat-seq .beat-bpm__read span { font-size: 0.62rem; letter-spacing: 0.06em; color: var(--abl-muted); }
+.beat-seq .beat-bpm__range { accent-color: var(--abl-accent); }
+.beat-seq .beat-clear {
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--abl-line);
+  border-radius: 2px;
+  background: var(--abl-panel-2);
+  color: var(--abl-text);
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.beat-seq .beat-clear:hover { background: #3a3a3a; }
+
+/* Cabecera del clip (como la barra de título de un clip MIDI) */
+.beat-clip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--clip-1);
+  color: #1b1b1b;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+.beat-clip__led { width: 8px; height: 8px; border-radius: 1px; background: #1b1b1b; opacity: 0.75; }
+.beat-clip__len { margin-left: auto; font-weight: 500; opacity: 0.75; }
+
+/* Grilla = editor de notas */
+.beat-seq .beat-grid {
+  --step-h: 34px;
+  gap: 0;
+  padding: 0;
+  background: var(--abl-line);
+}
+.beat-seq .beat-block { gap: 1px; background: var(--abl-line); }
+.beat-seq .beat-row { gap: 1px; background: var(--abl-line); }
+.beat-seq .beat-steps { gap: 1px; }
+
+/* Color de clip por fila (la 1ª es la regla), sin estilos inline: la página tiene CSP */
+.beat-seq .beat-block > .beat-row:nth-child(8n + 2) { --clip: var(--clip-0); }
+.beat-seq .beat-block > .beat-row:nth-child(8n + 3) { --clip: var(--clip-1); }
+.beat-seq .beat-block > .beat-row:nth-child(8n + 4) { --clip: var(--clip-2); }
+.beat-seq .beat-block > .beat-row:nth-child(8n + 5) { --clip: var(--clip-3); }
+.beat-seq .beat-block > .beat-row:nth-child(8n + 6) { --clip: var(--clip-4); }
+.beat-seq .beat-block > .beat-row:nth-child(8n + 7) { --clip: var(--clip-5); }
+.beat-seq .beat-block > .beat-row:nth-child(8n + 8) { --clip: var(--clip-6); }
+.beat-seq .beat-block > .beat-row:nth-child(8n + 9) { --clip: var(--clip-7); }
+
+/* Encabezado de pista: tira de color + nombre, como en Live */
+.beat-seq .beat-label {
+  position: relative;
+  height: var(--step-h);
+  padding: 0 6px 0 12px;
+  background: var(--abl-panel-2);
+  color: var(--abl-text);
+  font-family: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.beat-seq .beat-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--clip, var(--abl-accent));
+}
+.beat-seq .beat-label__i {
+  width: 15px;
+  height: 15px;
+  border: 1px solid #555;
+  border-radius: 2px;
+  color: var(--abl-muted);
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+.beat-seq .beat-label:hover .beat-label__i,
+.beat-seq .beat-label:focus-visible .beat-label__i { background: var(--abl-accent); border-color: var(--abl-accent); color: #1b1b1b; }
+.beat-seq .beat-label--ruler { height: 20px; background: var(--abl-panel); }
+.beat-seq .beat-label--ruler::before { display: none; }
+
+/* Regla de compás */
+.beat-seq .beat-row--ruler .beat-steps { background: var(--abl-panel); }
+.beat-seq .beat-tick {
+  height: 20px;
+  padding-left: 3px;
+  border-left: 1px solid #444;
+  background: var(--abl-panel);
+  color: var(--abl-muted);
+  font-family: inherit;
+  font-size: 0.6rem;
+  line-height: 20px;
+  text-align: left;
+}
+.beat-seq .beat-tick.is-beat { border-left-color: #8a8a8a; color: var(--abl-text); font-family: inherit; }
+.beat-seq .beat-tick.is-now { background: var(--abl-accent); color: #1b1b1b; }
+
+/* Casilleros: sombreado alterno por tiempo, notas del color de la pista */
+.beat-seq .beat-step {
+  border: 0;
+  border-radius: 0;
+  background: var(--abl-cell);
+  transition: background 0.06s linear, filter 0.06s linear;
+}
+.beat-seq .beat-steps > .beat-step:nth-child(n+5):nth-child(-n+8):not([aria-pressed="true"]):not(.is-now):not(:hover) { background: var(--abl-cell-alt); }
+.beat-seq .beat-step.is-beat { box-shadow: inset 1px 0 0 #555; }
+.beat-seq .beat-step:hover { background: #474747; }
+.beat-seq .beat-step[aria-pressed="true"] {
+  background: var(--clip, var(--abl-accent));
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+.beat-seq .beat-step.is-now { background: #4d4d4d; }
+.beat-seq .beat-step.is-now[aria-pressed="true"] {
+  background: var(--clip, var(--abl-accent));
+  filter: brightness(1.35);
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+@media (min-width: 700px) {
+  .beat-seq .beat-grid { gap: 1px; --step-h: 38px; }
+}
+
+/* Ayuda = Info View de Live (abajo a la izquierda) */
+.beat-seq .beat-caption {
+  margin: 0;
+  padding: 10px 12px;
+  border: 0;
+  border-top: 1px solid var(--abl-line);
+  border-radius: 0;
+  background: var(--abl-panel);
+}
+.beat-seq .beat-caption p { font-size: 0.85rem; color: var(--abl-text); }
+.beat-seq .beat-caption strong { font-family: inherit; font-size: 0.8rem; font-weight: 700; letter-spacing: 0; color: var(--abl-accent); }
+.beat-seq .beat-caption__more { color: var(--abl-accent); font-family: inherit; font-weight: 700; letter-spacing: 0.04em; }
+@media (max-width: 699px) {
+  .beat-seq .beat-caption { margin: 0; border-top: 1px solid var(--abl-accent); background: #1f1f1f; }
+}
+
+.beat-seq .beat-cta {
+  margin: 0;
+  padding: 14px 12px;
+  border-top: 1px solid var(--abl-line);
+  background: var(--abl-bg);
+}
+.beat-seq .beat-cta p { color: var(--abl-muted); font-size: 0.85rem; }
+
+/* Panel de explicación con los mismos grises */
+.beat-sheet { background: #262626; color: #d6d6d6; }
+.beat-sheet__short { color: #ff9f2e; }
+.beat-sheet__body p { color: #a8a8a8; }
+.beat-sheet__close { border-radius: 2px; border-color: #121212; background: #303030; }
+@media (max-width: 699px) {
+  .beat-seq .beat-grid { --label-w: 74px; }
+  .beat-seq .beat-label { padding: 0 4px 0 9px; font-size: 0.6rem; }
+  .beat-seq .beat-label__i { width: 13px; height: 13px; font-size: 0.52rem; }
 }

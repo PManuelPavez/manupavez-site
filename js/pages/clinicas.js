@@ -1,5 +1,6 @@
 import { supabase, hasSupabase } from "../data/supabaseClient.js";
 import { sendLead } from "../data/leadMailer.js";
+import { track } from "../core/analytics.js";
 
 export function initClinicas() {
   const page = document.body.dataset.page;
@@ -139,6 +140,9 @@ function initForm() {
       const origen = [`page:${page}`, `source:${utmSource}`, utmMedium && `medium:${utmMedium}`, utmCampaign && `campaign:${utmCampaign}`]
         .filter(Boolean).join(" · ");
 
+      // Guarda la aplicación para el mail de seguimiento (lab-apply). Si falla, no frena el envío.
+      saveLabLead({ ...data, source: origen });
+
       // Envío directo al mail (FormSubmit) — sin API keys ni backend
       await sendLead(
         {
@@ -153,6 +157,7 @@ function initForm() {
       );
 
       // Mostrar éxito
+      track(`lab-aplicacion-${page}`);
       form.hidden = true;
       const progressWrap = document.querySelector(".form-progress");
       const introEl = document.querySelector(".form-intro");
@@ -177,6 +182,18 @@ function initForm() {
   });
 
   setProgress(0);
+}
+
+// lab_leads vía Edge Function (la tabla no acepta inserts públicos). keepalive: llega aunque se navegue.
+function saveLabLead(d) {
+  const url = window.MP_SUPABASE?.url;
+  if (!url) return;
+  fetch(`${url}/functions/v1/lab-apply`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: d.name, email: d.email, level: d.level, goal: d.goal, message: d.message, source: d.source }),
+    keepalive: true,
+  }).catch(() => {});
 }
 
 // Fallback: arma un mailto con los datos de la aplicación al Lab.

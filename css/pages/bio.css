@@ -42,7 +42,7 @@ body[data-page="bio"] .story-page::before {
 
 body[data-page="bio"] .bio-hero h1 {
   font-family: var(--font-primary);
-  font-size: clamp(2.4rem, 1.4rem + 4vw, 4.4rem);
+  font-size: clamp(1.92rem, 1.05rem + 2.64vw, 2.99rem);
   letter-spacing: 0.22em;
   line-height: 1;
   margin: 0 auto 14px;
@@ -140,7 +140,7 @@ body[data-page="bio"] .bio-chapter:nth-of-type(even) {
 .bio-chapter__num {
   display: block;
   font-family: var(--font-primary);
-  font-size: clamp(3.2rem, 2rem + 4vw, 5.6rem);
+  font-size: clamp(2.56rem, 1.5rem + 2.64vw, 3.81rem);
   line-height: 0.9;
   letter-spacing: 0.02em;
   color: transparent;

@@ -116,6 +116,7 @@ async function selectGenre(id, btn) {
   const sameRows = rows.length && rows.map((r) => r.id).join() === g.filas.map((f) => f.id).join();
   rows = g.filas;
   if (!sameRows) renderGrid();
+  $("[data-clip-name]").textContent = `${g.nombre} Groove`;
   setBpm(Number(g.bpm) || 124);
 
   document.querySelectorAll("[data-genre-chips] [data-genre]").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.genre === id)));
@@ -139,7 +140,8 @@ function renderGrid() {
         <span class="beat-label beat-label--ruler"></span>
         <div class="beat-steps">${Array.from({ length: 8 }, (_, i) => {
           const s = half * 8 + i;
-          return `<span class="beat-tick${s % 4 === 0 ? " is-beat" : ""}">${s % 4 === 0 ? s / 4 + 1 : "·"}</span>`;
+          // Regla como la de Live: 1 · 1.2 · 1.3 · 1.4 (un compás de semicorcheas)
+          return `<span class="beat-tick${s % 4 === 0 ? " is-beat" : ""}">${s === 0 ? "1" : s % 4 === 0 ? `1.${s / 4 + 1}` : ""}</span>`;
         }).join("")}</div>
       </div>
       ${rows.map((r) => `

@@ -4,6 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Frequency Beat — El ADN de la música dance · Frequency Lab</title>
+  <link rel="canonical" href="https://manupavez.com/frequency-beat.html" />
+  <meta property="og:site_name" content="Manu Pavez" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://manupavez.com/frequency-beat.html" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:image" content="https://manupavez.com/img/og/og-lab.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="description" content="Secuenciador educativo de Frequency Lab: armá un groove de House, Tech House, Progressive House o Techno y entendé por qué cada golpe va donde va." />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; connect-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'" />
@@ -11,7 +20,7 @@
   <meta property="og:title" content="Frequency Beat — El ADN de la música dance" />
   <meta property="og:description" content="Armá un groove y entendé por qué cada golpe va donde va." />
   <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=JetBrains+Mono:wght@400;500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/pages/beat.css" />
@@ -59,6 +68,9 @@
         <button type="button" class="mp-btn ghost small beat-clear" data-clear>CLEAR</button>
       </div>
 
+      <div class="beat-clip" aria-hidden="true">
+        <span class="beat-clip__led"></span><span data-clip-name>Groove</span><span class="beat-clip__len">1 Bar · 1/16</span>
+      </div>
       <div class="beat-grid" data-grid></div>
 
       <div class="beat-caption" data-caption aria-live="polite">

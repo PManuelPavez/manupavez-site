@@ -21,7 +21,7 @@ h1, h2, h3, h4 {
 
 .section h2,
 .section h2[data-animate="heading"] {
-  font-size: clamp(2.4rem, 1.4rem + 4.2vw, 4.6rem);
+  font-size: clamp(1.92rem, 1.05rem + 2.77vw, 3.13rem);
   font-weight: 900;
   letter-spacing: 0;
   line-height: 0.9;
@@ -177,7 +177,7 @@ h3,
 .stat-num {
   font-family: var(--font-primary);
   font-weight: 900;
-  font-size: clamp(2.8rem, 1.6rem + 3.6vw, 4.8rem);
+  font-size: clamp(2.24rem, 1.2rem + 2.38vw, 3.26rem);
   letter-spacing: 0;
   background: none;
   -webkit-text-fill-color: currentColor;
@@ -233,7 +233,7 @@ input, select, textarea {
 }
 @media (max-width: 760px) {
   .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; }
-  .stat-num { font-size: clamp(2.2rem, 1.2rem + 5vw, 3rem); }
+  .stat-num { font-size: clamp(1.76rem, 0.9rem + 3.3vw, 2.04rem); }
 }
 
 /* =====================================================================
@@ -250,7 +250,7 @@ body[data-page="bio"] .story-page { padding-top: 0; }
   margin-bottom: clamp(32px, 5vw, 64px);
 }
 body[data-page="bio"] .bio-hero h1 {
-  font-size: clamp(4rem, 2rem + 10vw, 10rem);
+  font-size: clamp(3.2rem, 1.5rem + 6.6vw, 6.8rem);
   font-weight: 900;
   letter-spacing: 0;
   line-height: 0.85;
@@ -288,7 +288,7 @@ body[data-page="bio"] .bio-hero h1::after {
   min-width: 0;
 }
 body[data-page="bio"] .bio-stats li span {
-  font-size: clamp(2rem, 1.4rem + 2vw, 3rem);
+  font-size: clamp(1.6rem, 1.05rem + 1.32vw, 2.04rem);
   font-weight: 900;
   letter-spacing: 0;
   color: inherit;
@@ -313,14 +313,14 @@ body[data-page="bio"] .bio-stats li span {
    CLÍNICAS / APLICAR (Frequency Lab conserva su naranja y su bloque claro)
    ===================================================================== */
 body[data-page="clinicas"] h1 {
-  font-size: clamp(3.6rem, 1.6rem + 9vw, 8.5rem);
+  font-size: clamp(2.88rem, 1.2rem + 5.94vw, 5.78rem);
   font-weight: 900;
   letter-spacing: 0;
   line-height: 0.85;
 }
 body[data-page="clinicas"] .section h2,
 body[data-page="clinicas"] .section h2[data-animate="heading"] {
-  font-size: clamp(2.2rem, 1.3rem + 3.6vw, 4rem);
+  font-size: clamp(1.76rem, 0.98rem + 2.38vw, 2.72rem);
   font-weight: 900;
   letter-spacing: 0;
   line-height: 0.9;
@@ -338,14 +338,14 @@ body[data-page="clinicas"] .section h2[data-animate="heading"]::after { left: 50
   letter-spacing: 0.04em !important;
 }
 @media (max-width: 480px) {
-  body[data-page="clinicas"] h1 { letter-spacing: 0; font-size: clamp(3rem, 15vw, 4.2rem); }
+  body[data-page="clinicas"] h1 { letter-spacing: 0; font-size: clamp(2.4rem, 9.9vw, 2.86rem); }
 }
 
 /* =====================================================================
    FREQUENCY BEAT · ALUMNOS
    ===================================================================== */
 .beat-title {
-  font-size: clamp(3.4rem, 1.6rem + 7vw, 7rem) !important;
+  font-size: clamp(2.72rem, 1.2rem + 4.62vw, 4.76rem) !important;
   font-weight: 900;
   letter-spacing: 0 !important;
   line-height: 0.85;
@@ -378,7 +378,7 @@ body[data-page="clinicas"] .section h2[data-animate="heading"]::after { left: 50
 .lab-compact__photo img { width: 100%; height: 100%; min-height: 280px; object-fit: cover; }
 .lab-compact__text { grid-area: text; padding-top: clamp(22px, 3vw, 40px); padding-right: clamp(18px, 3vw, 36px); }
 .lab-compact__cta { grid-area: cta; justify-self: start; margin-bottom: clamp(22px, 3vw, 40px); }
-#lab.lab-compact h2 { font-size: clamp(2.2rem, 1.4rem + 2.6vw, 3.4rem); font-weight: 900; }
+#lab.lab-compact h2 { font-size: clamp(1.76rem, 1.05rem + 1.72vw, 2.31rem); font-weight: 900; }
 @media (max-width: 760px) {
   .lab-compact__card {
     grid-template-columns: 1fr;
@@ -477,7 +477,7 @@ body[data-page="clinicas"] .section h2[data-animate="heading"]::after { left: 50
 .mp-bleed__head h1,
 body[data-page] .mp-bleed__head h1 {
   margin: 0 0 16px;
-  font-size: clamp(3.6rem, 1.6rem + 9vw, 10rem) !important;
+  font-size: clamp(2.88rem, 1.2rem + 5.94vw, 6.8rem) !important;
   font-weight: 900;
   line-height: 0.84;
   letter-spacing: 0 !important;
@@ -522,7 +522,7 @@ body[data-page] .mp-bleed__head h1 {
   margin-block: 0 22px;
   font-family: var(--font-primary);
   font-weight: 900;
-  font-size: clamp(2.6rem, 1.4rem + 5vw, 6rem);
+  font-size: clamp(2.08rem, 1.05rem + 3.3vw, 4.08rem);
   line-height: 0.86;
   text-transform: uppercase;
 }
@@ -538,7 +538,7 @@ body[data-page] .mp-bleed__head h1 {
 .bio-cta.mp-band .bio-cta__line {
   font-family: var(--font-primary);
   letter-spacing: 0 !important;
-  font-size: clamp(2.6rem, 1.4rem + 5vw, 6rem);
+  font-size: clamp(2.08rem, 1.05rem + 3.3vw, 4.08rem);
   color: var(--c-ink);
   text-transform: uppercase;
 }
@@ -556,7 +556,7 @@ body[data-page="clinicas"] .lab-author--flyer {
 .lab-author--flyer .mp-bleed__head { padding-top: 40px; }
 body[data-page="clinicas"] .lab-author--flyer h2 {
   margin: 0 0 16px;
-  font-size: clamp(3rem, 1.6rem + 6vw, 7rem);
+  font-size: clamp(2.4rem, 1.2rem + 3.96vw, 4.76rem);
   line-height: 0.86;
   color: #fff;
 }
@@ -621,7 +621,7 @@ body[data-page="bio"] .bio-chapter:nth-of-type(even) .bio-chapter__text { justif
 body[data-page="bio"] .bio-chapter p { color: rgba(241, 236, 224, 0.92); text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35); }
 body[data-page="bio"] .bio-chapter__num {
   font-weight: 900;
-  font-size: clamp(4rem, 2rem + 6vw, 8rem);
+  font-size: clamp(3.2rem, 1.5rem + 3.96vw, 5.44rem);
   -webkit-text-stroke: 1px rgba(233, 255, 107, 0.7);
 }
 @media (max-width: 760px) {
@@ -656,7 +656,7 @@ body[data-page="clinicas"] .lab-hero.lab-bleed {
 /* Alumnos · encabezado editorial del ingreso */
 .lab-login__kicker { font-family: var(--font-mono); letter-spacing: 0.04em; text-transform: none; }
 .lab-login__title {
-  font-size: clamp(2.8rem, 1.8rem + 5vw, 4.4rem);
+  font-size: clamp(2.24rem, 1.35rem + 3.3vw, 2.99rem);
   font-weight: 900;
   line-height: 0.86;
 }
@@ -667,4 +667,91 @@ body[data-page="clinicas"] .lab-hero.lab-bleed {
   height: 4px;
   margin: 14px auto 0;
   background: currentColor;
+}
+
+/* ---------- Alta a la lista de fans ("Avisame de nuevas fechas") ---------- */
+.mp-signup {
+  width: min(720px, 100%);
+  margin: clamp(28px, 4vw, 44px) auto 0;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid var(--color-border-soft);
+  border-top: 3px solid var(--c-lime);
+  border-radius: 6px;
+  background: var(--c-ink-2);
+  text-align: left;
+}
+.mp-signup__title {
+  margin: 0 0 6px;
+  font-family: var(--font-primary);
+  font-weight: 900;
+  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: #fff;
+}
+.mp-signup__lead { margin: 0 0 16px; color: var(--color-text-muted); }
+.mp-signup__row { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto; gap: 10px; }
+.mp-signup input {
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--color-text);
+  font: inherit;
+}
+.mp-signup input:focus-visible { outline: 2px solid var(--c-lime); outline-offset: 1px; }
+.mp-signup .mp-btn { min-height: 48px; white-space: nowrap; }
+.mp-signup__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.mp-signup__note { margin: 10px 0 0; font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-text-muted); }
+.mp-signup.is-done .mp-signup__note { color: var(--c-lime); }
+@media (max-width: 640px) {
+  .mp-signup__row { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* =====================================================================
+   TIPOGRAFÍA · Archivo (grotesca tipo Helvetica)
+   Se carga hasta 700: los 800/900 del resto del CSS caen en la negrita 700,
+   que es la más sobria. Títulos apenas más cerrados; etiquetas en mayúscula.
+   ===================================================================== */
+h1, h2, h3,
+.mp-band__title,
+.booking-stats__num,
+.press-stats__num,
+.stat-num,
+.mp-marquee__track span {
+  letter-spacing: -0.015em !important;
+}
+.mp-bleed__head h1,
+body[data-page] .mp-bleed__head h1,
+.booking-flyer #booking-title,
+.mp-band__title,
+body[data-page="bio"] .bio-hero h1,
+body[data-page="clinicas"] h1,
+.beat-title {
+  letter-spacing: -0.025em !important;
+  line-height: 0.92 !important;
+}
+[class*="kicker"],
+[class*="eyebrow"],
+.mp-marquee__track b,
+.booking-stats__label,
+.press-stats__label,
+.mp-facts,
+.form-field label {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.08em !important;
+}
+[class*="kicker"],
+[class*="eyebrow"] { font-size: 0.72rem; }
+.mp-facts dt, .mp-facts .k,
+.booking-facts dt { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; }
+.booking-facts dd, .mp-facts dd, .mp-facts .v { text-transform: none; letter-spacing: 0 !important; }
+.mp-btn, .header-cta { font-weight: 600; letter-spacing: 0.08em; }
+@media (max-width: 640px) {
+  .booking-stats,
+  .press-stats { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px !important; }
+  .booking-stats__label,
+  .press-stats__label { font-size: 0.6rem; letter-spacing: 0.04em !important; overflow-wrap: anywhere; }
 }
