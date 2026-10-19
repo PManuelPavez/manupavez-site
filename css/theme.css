@@ -1,0 +1,424 @@
+/* =====================================================================
+   THEME · Dirección C — contraste partido (oct 2026)
+   Capa final compartida: tipografía editorial, bloques arena/petróleo,
+   etiquetas mono y botones rectos. Se carga después del CSS de cada
+   página (en shop, antes de shop.css para respetar sus acentos).
+   Tokens en :root de base.css.
+   ===================================================================== */
+
+/* ---------- Tipografía ---------- */
+body {
+  font-family: var(--font-secondary);
+  letter-spacing: 0;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-primary);
+  font-weight: 800;
+  letter-spacing: 0.005em;
+  line-height: 0.95;
+}
+
+.section h2,
+.section h2[data-animate="heading"] {
+  font-size: clamp(2.4rem, 1.4rem + 4.2vw, 4.6rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.9;
+  padding-bottom: 0;
+  margin-bottom: 1.1rem;
+}
+
+/* El subrayado degradé pasa a ser una barra lima corta */
+.section h2[data-animate="heading"]::after {
+  left: 0;
+  bottom: -10px;
+  width: 44px;
+  height: 4px;
+  border-radius: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: var(--c-lime);
+}
+.section h2[data-animate="heading"].is-animated::after,
+.reveal.is-visible h2[data-animate="heading"]::after,
+[data-fade-up].is-visible h2[data-animate="heading"]::after {
+  transform: scaleX(1);
+}
+.section-centered h2[data-animate="heading"]::after {
+  left: 50%;
+  margin-left: -22px;
+  transform-origin: center;
+}
+
+h3,
+.subsection-title {
+  font-family: var(--font-primary);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+.subsection-title {
+  font-size: clamp(1.3rem, 1rem + 1vw, 1.8rem);
+}
+
+.muted,
+.section .muted {
+  letter-spacing: 0;
+  line-height: 1.6;
+}
+
+/* ---------- Etiquetas chicas: mono, sin espaciado militar ---------- */
+[class*="kicker"],
+[class*="eyebrow"],
+[class*="__label"],
+.stat-label,
+.form-field label,
+.nav a,
+.mobile-nav a,
+.lang-switch,
+.local-time {
+  font-family: var(--font-mono) !important;
+  letter-spacing: 0.04em !important;
+  font-weight: 500;
+}
+[class*="kicker"],
+[class*="eyebrow"] {
+  font-size: 0.78rem;
+  color: var(--c-teal);
+}
+
+/* ---------- Botones: rectos, mono, lima como primario ---------- */
+.mp-btn,
+.header-cta,
+.btn-ghost {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  border-radius: 4px;
+}
+.mp-btn.primary,
+.mp-btn.mp-btn--accent {
+  background: var(--c-lime);
+  color: var(--c-ink);
+  border-color: var(--c-lime);
+}
+.hero .mp-btn.primary { color: var(--c-ink); }
+.mp-btn.primary:hover,
+.mp-btn.mp-btn--accent:hover {
+  background: #f3ffa6;
+  box-shadow: none;
+}
+.mp-btn.ghost,
+.mp-btn.mp-btn--ghost {
+  background: transparent;
+  border-color: rgba(241, 236, 224, 0.6);
+  color: var(--color-text);
+}
+.mp-btn:hover { box-shadow: none; }
+
+/* ---------- Header y footer ---------- */
+.site-header {
+  background: rgba(16, 35, 42, 0.86);
+  border-bottom: 1px solid var(--color-border-soft);
+}
+.site-header.scrolled {
+  background: rgba(16, 35, 42, 0.97);
+  box-shadow: none;
+}
+.site-footer {
+  background: var(--c-ink-2);
+  border-top: 1px solid var(--color-border-soft);
+  margin-top: 0;
+}
+
+/* La rayita centrada entre secciones sobra: el ritmo lo dan los bloques */
+.section + .section::before { display: none; }
+
+/* ---------- Bloque claro (arena) a sangre completa ----------
+   Uso: agregar .tone-light a una .section (o cualquier bloque). */
+.tone-light {
+  --color-text: var(--c-sand-ink);
+  --color-text-muted: var(--c-sand-muted);
+  --color-border-soft: rgba(16, 35, 42, 0.18);
+  --mp-text: var(--c-sand-ink);
+  --mp-muted: var(--c-sand-muted);
+  --mp-border: rgba(16, 35, 42, 0.18);
+  background: var(--c-sand);
+  box-shadow: 0 0 0 100vmax var(--c-sand);
+  clip-path: inset(0 -100vmax);
+  color: var(--c-sand-ink);
+}
+.tone-light :is(h1, h2, h3, h4, p, li, strong, label, span) { color: inherit; }
+.tone-light .muted,
+.tone-light p { color: var(--c-sand-muted); }
+.tone-light [class*="kicker"],
+.tone-light [class*="eyebrow"] { color: #0b6f65; }
+.tone-light a:not(.mp-btn) { color: #0b6f65; }
+.tone-light .mp-btn.primary {
+  background: var(--c-ink);
+  border-color: var(--c-ink);
+  color: var(--c-lime);
+}
+.tone-light .mp-btn.ghost {
+  border-color: var(--c-ink);
+  color: var(--c-ink);
+}
+.tone-light h2[data-animate="heading"]::after { background: var(--c-ink); }
+
+/* ---------- Stats: sin tarjetas, números grandes con línea arriba ---------- */
+.stat {
+  background: none;
+  border: 0;
+  border-top: 2px solid currentColor;
+  border-radius: 0;
+  padding: 16px 4px 4px;
+  text-align: left;
+}
+.stat-num {
+  font-family: var(--font-primary);
+  font-weight: 900;
+  font-size: clamp(2.8rem, 1.6rem + 3.6vw, 4.8rem);
+  letter-spacing: 0;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: inherit;
+}
+.stat-label {
+  font-size: 0.78rem;
+  text-transform: none;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Formularios ---------- */
+input, select, textarea {
+  font-family: var(--font-secondary);
+}
+
+/* Bloque oscuro dentro de uno claro (restaura los tokens oscuros) */
+.tone-dark,
+.tone-light .tone-dark {
+  --color-text: #f1ece0;
+  --color-text-muted: rgba(232, 226, 212, 0.78);
+  --color-border-soft: rgba(232, 226, 212, 0.16);
+  --mp-text: #f1ece0;
+  --mp-muted: rgba(232, 226, 212, 0.78);
+  --mp-border: rgba(232, 226, 212, 0.16);
+  color: var(--color-text);
+}
+.tone-light .tone-dark :is(p, label, span, li) { color: inherit; }
+
+/* ---------- Encabezados de sección: alineados a la izquierda ---------- */
+.section-head { text-align: left; }
+.section-head h2[data-animate="heading"] { margin-inline: 0; }
+
+/* =====================================================================
+   HOME
+   ===================================================================== */
+.hero-name {
+  font-family: var(--font-primary);
+  font-weight: 900;
+  letter-spacing: -0.005em;
+}
+
+/* Booking sobre arena: el pitch suelto, el formulario en bloque petróleo */
+.tone-light .booking-shell {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding-inline: 0;
+}
+.tone-light .booking-card {
+  background: var(--c-ink);
+  border: 0;
+  border-radius: 6px;
+}
+.tone-light .booking-points li::before {
+  border-radius: 0;
+  background: var(--c-ink);
+  box-shadow: none;
+}
+.tone-light .booking-highlight {
+  background: rgba(16, 35, 42, 0.06);
+  border: 0;
+  border-left: 3px solid var(--c-ink);
+  border-radius: 0;
+}
+.tone-light .booking-direct a {
+  color: var(--c-ink);
+  border-bottom-color: var(--c-ink);
+}
+
+.live-sets__card,
+.lab-compact__card,
+.creds-hero {
+  border-radius: 6px;
+  box-shadow: none;
+}
+.tone-light .tone-dark .mp-btn.primary {
+  background: var(--c-lime);
+  border-color: var(--c-lime);
+  color: var(--c-ink);
+}
+@media (max-width: 760px) {
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; }
+  .stat-num { font-size: clamp(2.2rem, 1.2rem + 5vw, 3rem); }
+}
+
+/* =====================================================================
+   BIO
+   ===================================================================== */
+body[data-page="bio"] .story-page::before { display: none; }
+body[data-page="bio"] .story-page { padding-top: var(--header-height); }
+
+.bio-hero.tone-light {
+  width: 100%;
+  max-width: 1120px;
+  text-align: left;
+  padding-block: clamp(36px, 6vw, 80px);
+  margin-bottom: clamp(32px, 5vw, 64px);
+}
+body[data-page="bio"] .bio-hero h1 {
+  font-size: clamp(4rem, 2rem + 10vw, 10rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.85;
+  text-shadow: none;
+  margin: 0 0 18px;
+}
+body[data-page="bio"] .bio-hero h1::after {
+  margin: 18px 0 0;
+  width: 64px;
+  height: 5px;
+  background: var(--c-ink);
+  animation: none;
+}
+.bio-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+.bio-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 640px;
+  margin: 0;
+}
+.bio-stats li {
+  align-items: flex-start;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 2px solid currentColor;
+  border-radius: 0;
+  background: none;
+  backdrop-filter: none;
+  min-width: 0;
+}
+body[data-page="bio"] .bio-stats li span {
+  font-size: clamp(2rem, 1.4rem + 2vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  color: inherit;
+  text-shadow: none;
+}
+.bio-stats li small {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+.bio-chapter__num { font-weight: 900; }
+.bio-cta__line {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+.bio-cta { border-top-color: var(--color-border-soft); }
+.tone-light small { color: var(--c-sand-muted); }
+
+/* =====================================================================
+   CLÍNICAS / APLICAR (Frequency Lab conserva su naranja y su bloque claro)
+   ===================================================================== */
+body[data-page="clinicas"] h1 {
+  font-size: clamp(3.6rem, 1.6rem + 9vw, 8.5rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.85;
+}
+body[data-page="clinicas"] .section h2,
+body[data-page="clinicas"] .section h2[data-animate="heading"] {
+  font-size: clamp(2.2rem, 1.3rem + 3.6vw, 4rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.9;
+}
+body[data-page="clinicas"] .section h2[data-animate="heading"]::after { left: 50%; margin-left: -22px; }
+.lab-ambient { opacity: 0.35; }
+.lab-hero::after { display: none; }
+.section-kicker,
+.cta-band__kicker,
+.entry-gate__kicker,
+.lab-hero-eyebrow,
+.form-progress,
+.lab-form label {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em !important;
+}
+@media (max-width: 480px) {
+  body[data-page="clinicas"] h1 { letter-spacing: 0; font-size: clamp(3rem, 15vw, 4.2rem); }
+}
+
+/* =====================================================================
+   PRESSKIT
+   ===================================================================== */
+body[data-page="presskit"] main.presskit > section {
+  border-radius: 6px;
+  border: 1px solid var(--color-border-soft);
+  background: var(--c-ink-2);
+  box-shadow: none;
+}
+body[data-page="presskit"] main.presskit > section.tone-light {
+  background: var(--c-sand);
+  border-color: transparent;
+  box-shadow: none;
+  clip-path: none;
+}
+body[data-page="presskit"] .presskit .bio h1 {
+  font-size: clamp(3.4rem, 1.8rem + 6vw, 7rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.85;
+}
+body[data-page="presskit"] .presskit .bio h1::after {
+  width: 56px;
+  height: 5px;
+  border-radius: 0;
+  background: var(--c-ink);
+}
+body[data-page="presskit"] .presskit h2 {
+  letter-spacing: 0.01em;
+  font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.2rem);
+}
+body[data-page="presskit"] .presskit .bio p:first-of-type::first-letter { color: var(--c-ink); }
+
+/* =====================================================================
+   FREQUENCY BEAT · ALUMNOS
+   ===================================================================== */
+.beat-title {
+  font-size: clamp(3.4rem, 1.6rem + 7vw, 7rem) !important;
+  font-weight: 900;
+  letter-spacing: 0 !important;
+  line-height: 0.85;
+}
+.beat-sub,
+.beat-top__brand,
+.lab-top__brand {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em !important;
+}
+.beat-pick { border-radius: 4px; }
+.tone-light .bio-stats li small { color: var(--c-sand-muted); overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .bio-stats li small { font-size: 0.64rem; }
+}

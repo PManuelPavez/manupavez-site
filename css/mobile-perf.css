@@ -15,7 +15,7 @@
   .cd-modal__backdrop {
     -webkit-backdrop-filter: none !important;
             backdrop-filter: none !important;
-    background-color: rgba(5, 7, 17, 0.94) !important;
+    background-color: rgba(16, 35, 42, 0.94) !important;
   }
 
   /* will-change: solo debería estar activo durante interacción.

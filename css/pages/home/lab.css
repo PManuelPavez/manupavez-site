@@ -17,7 +17,7 @@
   border: 1px solid var(--mp-border);
   background:
     radial-gradient(120% 120% at 0% 0%, rgba(89, 198, 186, 0.10), transparent 60%),
-    rgba(8, 10, 20, 0.85);
+    rgba(23, 50, 59, 0.85);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
 }
 

@@ -15,7 +15,7 @@
   margin-inline: auto;
   border-radius: clamp(18px, 2.4vw, 28px);
   overflow: hidden;
-  background: #000;
+  background: var(--c-ink-2);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
 }
@@ -264,7 +264,7 @@
 }
 .live-sets__row.is-open .live-sets__icon::before,
 .live-sets__row.is-open .live-sets__icon::after {
-  background: #000;
+  background: var(--c-ink-2);
 }
 
 /* Panel desplegable */

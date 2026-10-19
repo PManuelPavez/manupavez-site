@@ -86,7 +86,7 @@ body[data-page="bio"] .bio-hero h1::after {
   padding: 14px 22px;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(5, 7, 17, 0.6);
+  background: rgba(16, 35, 42, 0.6);
   backdrop-filter: blur(8px);
   min-width: 120px;
 }
@@ -196,7 +196,7 @@ body[data-page="bio"] .bio-chapter__photo {
   aspect-ratio: 4 / 5;
   border-radius: clamp(14px, 2vw, 22px);
   overflow: hidden;
-  background: #05060c;
+  background: #10232a;
   border: 1px solid rgba(255, 255, 255, 0.10);
   box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55);
 }

@@ -26,7 +26,7 @@
   min-height: clamp(380px, 64vh, 780px);
   border-radius: clamp(18px, 2.4vw, 30px);
   overflow: hidden;
-  background: #050509;
+  background: #10232a;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
   isolation: isolate; /* el blend de la foto queda contenido en la tarjeta */
 }
@@ -39,7 +39,7 @@
   background:
     radial-gradient(60% 50% at 30% 70%, rgba(89, 198, 186, 0.16), transparent 70%),
     radial-gradient(50% 45% at 75% 30%, rgba(49, 64, 151, 0.18), transparent 70%),
-    #050509;
+    #10232a;
 }
 .hero-crt .crt-canvas {
   display: block;
@@ -180,7 +180,7 @@
   padding: 0;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(5, 7, 17, 0.55);
+  background: rgba(16, 35, 42, 0.55);
   color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   font-size: 0.72rem;
@@ -190,7 +190,7 @@
 }
 .hero-social a svg { width: clamp(16px, 2vw, 20px); height: clamp(16px, 2vw, 20px); display: block; }
 .hero-social a:hover {
-  color: #050509;
+  color: #10232a;
   background: #fff;
   border-color: #fff;
   transform: translateY(-2px);

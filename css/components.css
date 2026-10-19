@@ -46,7 +46,7 @@
 }
 
 .mp-btn.ghost {
-  background: rgba(5, 7, 17, 0.88);
+  background: rgba(16, 35, 42, 0.88);
   border-color: rgba(255, 255, 255, 0.78);
   color: #ffffff;
 }
@@ -133,7 +133,7 @@
 .spotify-btn {
   background: #1db954;
   border-color: #1db954;
-  color: #050509;
+  color: #10232a;
 }
 
 /* Beatport */
@@ -386,7 +386,7 @@
   margin-top: 20px;
   padding: 18px 18px 20px;
   border-radius: var(--radius-lg);
-  background: rgba(5, 7, 17, 0.98);
+  background: rgba(16, 35, 42, 0.98);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -506,7 +506,7 @@ button[type="submit"][aria-busy="true"]::after {
   max-width: 520px;
   margin: 20px auto 0;
   border-radius: var(--radius-lg);
-  background: rgba(5, 7, 17, 0.6);
+  background: rgba(16, 35, 42, 0.6);
   border: 1px solid rgba(89, 198, 186, 0.25);
   animation: mp-reveal 0.5s var(--mp-ease-out, ease) both;
 }
@@ -565,7 +565,7 @@ button[type="submit"][aria-busy="true"]::after {
   margin: 24px auto 0;
   padding: 28px 24px;
   border-radius: var(--radius-lg);
-  background: rgba(5, 7, 17, 0.7);
+  background: rgba(16, 35, 42, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -728,7 +728,7 @@ button[type="submit"][aria-busy="true"]::after {
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 5px;
   font-size: 0.72rem;
-  color: #050509;
+  color: #10232a;
 }
 .portal-checklist li.is-done .portal-check { background: var(--color-accent-2); border-color: var(--color-accent-2); }
 .portal-checklist li.is-done span:nth-child(2) { color: var(--color-text-muted); text-decoration: line-through; }
@@ -837,7 +837,7 @@ button[type="submit"][aria-busy="true"]::after {
   height: 40px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.4);
-  background: rgba(5, 7, 17, 0.9);
+  background: rgba(16, 35, 42, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -858,7 +858,7 @@ button[type="submit"][aria-busy="true"]::after {
 
 .scroll-top:hover {
   background: #ffffff;
-  color: #050509;
+  color: #10232a;
 }
 
 
@@ -868,7 +868,7 @@ button[type="submit"][aria-busy="true"]::after {
   position: relative;
   margin-top: 18px;
   border-radius: var(--radius-lg);
-  background: rgba(5, 7, 17, 0.96);
+  background: rgba(16, 35, 42, 0.96);
   border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 18px 18px 20px;
   overflow: hidden;
@@ -927,7 +927,7 @@ button[type="submit"][aria-busy="true"]::after {
   height: 34px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.3);
-  background: rgba(5, 5, 9, 0.95);
+  background: rgba(16, 35, 42, 0.95);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -943,7 +943,7 @@ button[type="submit"][aria-busy="true"]::after {
 .media-nav:hover {
   transform: translateY(-50%) translateY(-1px);
   background: #ffffff;
-  color: #050509;
+  color: #10232a;
   border-color: #ffffff;
 }
 
@@ -998,7 +998,7 @@ button[type="submit"][aria-busy="true"]::after {
 .stat {
   padding: 26px 16px;
   border-radius: var(--radius-lg);
-  background: rgba(5, 7, 17, 0.6);
+  background: rgba(16, 35, 42, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -1158,13 +1158,13 @@ button[type="submit"][aria-busy="true"]::after {
 }
 
 .mp-btn.mp-btn--ghost{ /* equivalente a .ghost */
-  background: rgba(5, 7, 17, 0.88);
+  background: rgba(16, 35, 42, 0.88);
   border-color: rgba(255, 255, 255, 0.78);
   color: #fff;
 }
 
 .mp-btn.mp-btn--danger{
-  background: color-mix(in oklab, var(--mp-danger) 28%, rgba(5, 7, 17, 0.88));
+  background: color-mix(in oklab, var(--mp-danger) 28%, rgba(16, 35, 42, 0.88));
   border-color: color-mix(in oklab, var(--mp-danger) 55%, var(--mp-border));
   color: #fff;
 }
@@ -1392,7 +1392,7 @@ button.portal-check {
   font: inherit;
   font-size: 0.72rem;
   line-height: 1;
-  color: #050509;
+  color: #10232a;
   cursor: pointer;
   transition: background-color 0.4s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.4s cubic-bezier(0.19, 1, 0.22, 1);
 }

@@ -35,7 +35,7 @@
   <!-- Tipografías -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=JetBrains+Mono:wght@400;500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <!-- Preconnect a plataformas para que los embeds carguen rápido -->
   <link rel="preconnect" href="https://open.spotify.com" crossorigin />
@@ -50,6 +50,7 @@
   <link rel="stylesheet" href="../css/responsive.css" />
   <link rel="stylesheet" href="../css/scrollytelling.css" />
   <link rel="stylesheet" href="../css/mobile-perf.css" />
+  <link rel="stylesheet" href="../css/theme.css" />
 
   <!-- Scrollytelling: smooth scroll (Lenis) + animaciones (GSAP/ScrollTrigger).
        Se cargan con defer ANTES de los módulos para que window.gsap/Lenis
@@ -195,7 +196,7 @@
     </section>
 
     <!-- ============ STATS / EN NÚMEROS ============ -->
-    <section class="section stats reveal section-centered" aria-label="Manu Pavez in numbers">
+    <section class="section stats reveal section-centered tone-light" aria-label="Manu Pavez in numbers">
       <!--
         Counters. Auto (tiempo real) vía data/*.json:
           - followers  → seguidores de Spotify (data/music.json)
@@ -410,7 +411,7 @@
     </section>
 
     <!-- ============ BOOKING ============ -->
-    <section id="booking" class="section booking booking--featured reveal" aria-labelledby="booking-title">
+    <section id="booking" class="section booking booking--featured reveal tone-light" aria-labelledby="booking-title">
       <div class="booking-shell">
         <div class="booking-intro">
           <p class="booking-eyebrow">+ Booking · Worldwide</p>
@@ -438,7 +439,7 @@
           </p>
         </div>
 
-        <div class="booking-card">
+        <div class="booking-card tone-dark">
           <form id="contact-form" class="contact-form" action="#" method="post" novalidate>
             <div class="form-grid">
               <div class="form-field">

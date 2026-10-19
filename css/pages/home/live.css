@@ -4,7 +4,7 @@
   margin-top: 18px;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: rgba(5, 7, 17, 0.94);
+  background: rgba(16, 35, 42, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -69,7 +69,7 @@
   height: 34px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(5, 7, 17, 0.9);
+  background: rgba(16, 35, 42, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,7 +91,7 @@
 
 .media-nav:hover {
   background: #ffffff;
-  color: #050509;
+  color: #10232a;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.75);
   transform: translateY(-50%) translateY(-1px);
 }

@@ -23,7 +23,7 @@
   <!-- Fuentes (compartidas con el resto) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=JetBrains+Mono:wght@400;500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <!-- Estilos base + los específicos de clínicas (para el form multi-step) -->
   <link rel="stylesheet" href="css/base.css" />
@@ -32,11 +32,12 @@
   <link rel="stylesheet" href="css/pages/clinicas.css" />
   <link rel="stylesheet" href="css/responsive.css" />
   <link rel="stylesheet" href="css/mobile-perf.css" />
+  <link rel="stylesheet" href="css/theme.css" />
 
   <!-- Estilos propios de esta landing chica -->
   <style>
     body[data-page="aplicar"] {
-      background: #050711;
+      background: var(--c-ink);
       color: #f9f9ff;
       min-height: 100vh;
       overflow-x: hidden;
@@ -76,7 +77,7 @@
       inset: 0;
       z-index: 0;
       background:
-        linear-gradient(180deg, rgba(5, 7, 17, 0.55), rgba(5, 7, 17, 1)),
+        linear-gradient(180deg, rgba(16, 35, 42, 0.55), rgba(16, 35, 42, 1)),
         url("img/live/live8.jpg") center / cover no-repeat;
       opacity: 0.9;
       pointer-events: none;
@@ -97,7 +98,7 @@
     }
     .apply-title {
       margin: 0 0 18px;
-      font-family: "Archivo", system-ui, sans-serif;
+      font-family: var(--font-primary);
       font-size: clamp(2.1rem, 6.5vw, 3.6rem);
       font-weight: 700;
       line-height: 1;
@@ -175,7 +176,7 @@
       padding: 16px 12px;
       border-radius: 14px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(5, 7, 17, 0.6);
+      background: rgba(16, 35, 42, 0.6);
       font-size: 0.82rem;
       line-height: 1.5;
       color: rgba(249, 249, 255, 0.82);
@@ -185,7 +186,7 @@
       content: counter(after-step);
       display: block;
       margin: 0 0 4px;
-      font-family: "Archivo", system-ui, sans-serif;
+      font-family: var(--font-primary);
       font-size: 0.7rem;
       letter-spacing: 0.24em;
       color: #59c6ba;

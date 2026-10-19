@@ -8,20 +8,33 @@
 }
 
 :root {
-  --font-primary: "Archivo", system-ui, sans-serif;
-  --font-secondary: "DM Sans", system-ui, sans-serif;
+  /* Dirección C · contraste partido (oct 2026) */
+  --font-primary: "Big Shoulders Display", "Arial Narrow", system-ui, sans-serif;
+  --font-secondary: "Work Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 
-  --color-bg: #050509;
-  --color-surface: #050711;
-  --color-surface-soft: #050711f0;
-  --color-border-soft: rgba(255, 255, 255, 0.1);
-  --color-text: #f9f9ff;
-  --color-text-muted: rgba(242, 242, 255, 0.82);
+  /* Paleta: petróleo (oscuro) + arena (claro) + turquesa + lima señal */
+  --c-ink: #10232a;
+  --c-ink-2: #17323b;
+  --c-ink-3: #21424d;
+  --c-sand: #e8e2d4;
+  --c-sand-2: #d9d1bf;
+  --c-sand-ink: #10232a;
+  --c-sand-muted: #4a5a5c;
+  --c-teal: #59c6ba;
+  --c-lime: #e9ff6b;
+
+  --color-bg: var(--c-ink);
+  --color-surface: var(--c-ink-2);
+  --color-surface-soft: #17323bf0;
+  --color-border-soft: rgba(232, 226, 212, 0.16);
+  --color-text: #f1ece0;
+  --color-text-muted: rgba(232, 226, 212, 0.78);
   --color-accent: #314097;
   --color-accent-2: #59c6ba;
 
-  --radius-lg: 22px;
-  --radius-md: 16px;
+  --radius-lg: 8px;
+  --radius-md: 6px;
 
   --header-height: 72px;
 }
@@ -32,10 +45,7 @@ html {
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 0 -20%, rgba(89, 198, 186, 0.08), transparent 60%),
-    radial-gradient(circle at 120% 120%, rgba(49, 64, 151, 0.12), transparent 65%),
-    var(--color-bg);
+  background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-secondary);
   font-size: 17px;
@@ -62,7 +72,9 @@ h2,
 h3,
 h4 {
   font-family: var(--font-primary);
-  letter-spacing: 0.18em;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
   text-transform: uppercase;
 }
 
@@ -104,7 +116,7 @@ strong {
 
   /* Typography */
   --mp-font-sans: var(--font-secondary);
-  --mp-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --mp-font-mono: var(--font-mono);
 
   /* Type scale (fluid con clamp) */
   --mp-text-xs: clamp(0.78rem, 0.75rem + 0.15vw, 0.86rem);
@@ -217,7 +229,7 @@ body{
   z-index: 9999;
   padding: 10px 12px;
   border-radius: 12px;
-  background: rgba(5, 7, 17, 0.92);
+  background: rgba(16, 35, 42, 0.95);
   border: 1px solid color-mix(in oklab, var(--mp-border) 75%, white 10%);
   color: var(--mp-text);
   transform: translateY(-140%);

@@ -16,7 +16,7 @@
   background:
     radial-gradient(120% 120% at 0% 0%, rgba(89, 198, 186, 0.10), transparent 55%),
     radial-gradient(120% 120% at 100% 100%, rgba(49, 64, 151, 0.18), transparent 55%),
-    rgba(8, 10, 20, 0.92);
+    rgba(23, 50, 59, 0.92);
   border: 1px solid var(--mp-border);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
 }
@@ -101,7 +101,7 @@
 
 /* Columna derecha: card con el form */
 .booking-card {
-  background: rgba(5, 7, 17, 0.7);
+  background: rgba(16, 35, 42, 0.7);
   border: 1px solid var(--mp-border);
   border-radius: clamp(16px, 2vw, 22px);
   padding: clamp(20px, 3vw, 32px);

@@ -99,7 +99,7 @@ body[data-page="shop"] { --teal: #59c6ba; --teal-soft: rgba(89, 198, 186, 0.12);
   padding: 10px 16px;
   overflow-x: auto;
   scrollbar-width: none;
-  background: rgba(5, 5, 9, 0.97);
+  background: rgba(16, 35, 42, 0.97);
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
 }
@@ -295,7 +295,7 @@ body[data-page="shop"] { --teal: #59c6ba; --teal-soft: rgba(89, 198, 186, 0.12);
   overscroll-behavior: contain;
 }
 .shop-checkout::backdrop {
-  background: rgba(5, 5, 9, 0.5);
+  background: rgba(16, 35, 42, 0.5);
   -webkit-backdrop-filter: blur(14px);
           backdrop-filter: blur(14px);
 }

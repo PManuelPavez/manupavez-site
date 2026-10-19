@@ -66,7 +66,7 @@
   height: 44px;
   border-radius: 999px;
   border: 1px solid var(--mp-border);
-  background: rgba(5, 7, 17, 0.85);
+  background: rgba(16, 35, 42, 0.85);
   backdrop-filter: blur(10px);
   display: inline-flex;
   align-items: center;
@@ -82,7 +82,7 @@
 .release-nav.next { right: -10px; }
 .release-nav:hover {
   background: #fff;
-  color: #050509;
+  color: #10232a;
   border-color: #fff;
 }
 .release-nav:disabled { opacity: 0.3; cursor: default; }

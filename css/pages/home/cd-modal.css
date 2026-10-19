@@ -38,14 +38,14 @@
   place-items: center;
   border-radius: 50%;
   border: 1px solid var(--mp-border);
-  background: rgba(5, 7, 17, 0.5);
+  background: rgba(16, 35, 42, 0.5);
   color: #fff;
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.4s ease 0.2s, background 0.2s ease, transform 0.2s ease;
 }
 .release-reveal.is-open .release-reveal__close { opacity: 1; }
-.release-reveal__close:hover { background: #fff; color: #050509; transform: scale(1.05); }
+.release-reveal__close:hover { background: #fff; color: #10232a; transform: scale(1.05); }
 
 /* Escenario: tapa (cover) + disco */
 .cd-stage {

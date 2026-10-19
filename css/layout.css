@@ -8,8 +8,8 @@
   padding-block: 16px;
   background: linear-gradient(
     to bottom,
-    rgba(5, 7, 17, 0.9),
-    rgba(5, 7, 17, 0.7),
+    rgba(16, 35, 42, 0.9),
+    rgba(16, 35, 42, 0.7),
     transparent
   );
   backdrop-filter: blur(12px);
@@ -21,7 +21,7 @@
 }
 
 .site-header.scrolled {
-  background: rgba(5, 7, 17, 0.97);
+  background: rgba(16, 35, 42, 0.97);
   padding-block: 10px;
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.85);
 }
@@ -116,7 +116,7 @@
   text-transform: uppercase;
   text-decoration: none;
   color: #ffffff;
-  background: rgba(5, 7, 17, 0.7);
+  background: rgba(16, 35, 42, 0.7);
   white-space: nowrap;
   transition:
     background-color 0.2s ease,
@@ -127,7 +127,7 @@
 
 .header-cta:hover {
   background: #ffffff;
-  color: #050509;
+  color: #10232a;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.8);
   transform: translateY(-1px);
 }
@@ -211,7 +211,7 @@
   position: fixed;
   inset-inline: 0;
   top: var(--header-height);
-  background: rgba(5, 7, 17, 0.98);
+  background: rgba(16, 35, 42, 0.98);
   backdrop-filter: blur(18px);
   padding: 18px 16px 24px;
   display: flex;

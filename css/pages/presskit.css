@@ -6,7 +6,7 @@
 body[data-page="presskit"] main.presskit{
   --pk-gap: 22px;
   --pk-pad: clamp(18px, 2.4vw, 28px);
-  --pk-card: rgba(5, 7, 17, 0.92);
+  --pk-card: rgba(16, 35, 42, 0.92);
 
   position: relative;
   isolation: isolate;
@@ -104,7 +104,7 @@ body[data-page="presskit"] .presskit .slides{
   overflow: hidden;
 
   border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(5, 7, 17, 0.96);
+  background: rgba(16, 35, 42, 0.96);
 
   /* look “premium” */
   box-shadow: var(--mp-shadow-2);
@@ -285,7 +285,7 @@ body[data-page="presskit"] .highlight-grid{
 body[data-page="presskit"] .highlight-grid li{
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(5,7,17,0.55);
+  background: rgba(16, 35, 42,0.55);
   box-shadow: var(--mp-shadow-1);
   padding: 14px 14px;
   display: grid;
@@ -333,7 +333,7 @@ body[data-page="presskit"] .support-chips .chip{
   padding: 0.45rem 0.7rem;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(5,7,17,0.45);
+  background: rgba(16, 35, 42,0.45);
   color: var(--mp-text);
   font-size: var(--mp-text-xs);
   letter-spacing: 0.12em;
@@ -356,7 +356,7 @@ body[data-page="presskit"] .support-logos .logo{
   padding: 10px 12px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(5,7,17,0.45);
+  background: rgba(16, 35, 42,0.45);
   box-shadow: var(--mp-shadow-1);
   opacity: 0.78;
   filter: grayscale(1) contrast(1.05);
@@ -397,7 +397,7 @@ body[data-page="presskit"] .support-logos .logo{
    ========================= */
 
 body[data-page="presskit"]{
-  --pk-card: rgba(5, 7, 17, 0.92);
+  --pk-card: rgba(16, 35, 42, 0.92);
   --pk-border: rgba(255,255,255,0.12);
   --pk-shadow-1: var(--mp-shadow-1, 0 22px 40px rgba(0,0,0,.55));
   --pk-shadow-2: var(--mp-shadow-2, 0 28px 60px rgba(0,0,0,.65));
@@ -521,7 +521,7 @@ body[data-page="presskit"] .presskit .slides{
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(5, 7, 17, 0.96);
+  background: rgba(16, 35, 42, 0.96);
   box-shadow: var(--pk-shadow-2);
   min-height: 320px;
 }

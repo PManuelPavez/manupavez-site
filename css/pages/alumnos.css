@@ -17,7 +17,7 @@ body {
   gap: 12px;
   padding: 14px clamp(16px, 4vw, 40px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(5, 5, 9, 0.92);
+  background: rgba(16, 35, 42, 0.92);
 }
 .lab-top__brand {
   display: inline-flex;
@@ -52,7 +52,7 @@ body {
   padding: clamp(28px, 5vw, 40px) clamp(20px, 4vw, 32px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-lg);
-  background: rgba(5, 7, 17, 0.72);
+  background: rgba(16, 35, 42, 0.72);
   text-align: center;
 }
 .lab-login__kicker {
@@ -125,7 +125,7 @@ body {
    El tema lo decide js/theme-boot.js antes de pintar (html[data-theme]). */
 
 body[data-page="alumnos"] {
-  --lab-bg: #050509;
+  --lab-bg: #10232a;
   --lab-surface: rgba(255, 255, 255, 0.035);
   --lab-surface-2: rgba(255, 255, 255, 0.025);
   --lab-raised: rgba(4, 6, 15, 0.6);
@@ -135,8 +135,8 @@ body[data-page="alumnos"] {
   --lab-muted: rgba(242, 242, 255, 0.68);
   --lab-accent: #59c6ba;
   --lab-accent-soft: rgba(89, 198, 186, 0.1);
-  --lab-on-accent: #050509;
-  --lab-topbar: rgba(5, 5, 9, 0.82);
+  --lab-on-accent: #10232a;
+  --lab-topbar: rgba(16, 35, 42, 0.82);
   --lab-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 14px 34px rgba(0, 0, 0, 0.28);
   --lab-shadow-hover: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 20px 44px rgba(0, 0, 0, 0.4);
   --lab-danger: #ff8a8a;

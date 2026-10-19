@@ -18,7 +18,7 @@ body {
   padding: 14px clamp(16px, 4vw, 40px);
   padding-top: max(14px, env(safe-area-inset-top));
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(5, 5, 9, 0.92);
+  background: rgba(16, 35, 42, 0.92);
 }
 .beat-top__brand {
   display: inline-flex;
@@ -104,7 +104,7 @@ body {
   padding: 16px 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-md);
-  background: rgba(5, 7, 17, 0.72);
+  background: rgba(16, 35, 42, 0.72);
   color: var(--color-text);
   cursor: pointer;
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
@@ -165,7 +165,7 @@ body {
   padding: 12px 14px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-md);
-  background: rgba(5, 7, 17, 0.72);
+  background: rgba(16, 35, 42, 0.72);
 }
 .beat-play {
   display: inline-flex;
@@ -176,7 +176,7 @@ body {
   border: 0;
   border-radius: 999px;
   background: var(--color-accent-2);
-  color: #050509;
+  color: #10232a;
   font-family: var(--font-primary);
   font-size: 0.82rem;
   letter-spacing: 0.2em;
@@ -400,14 +400,14 @@ html:has(.beat-sheet[open]) { overflow: hidden; }
   padding: 0;
   border: 0;
   border-radius: 22px 22px 0 0;
-  background: #0a0c18;
+  background: #17323b;
   color: var(--color-text);
   box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.5);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 .beat-sheet[open] { animation: beat-sheet-up 0.35s cubic-bezier(0.19, 1, 0.22, 1); }
-.beat-sheet::backdrop { background: rgba(5, 5, 9, 0.55); backdrop-filter: blur(4px); }
+.beat-sheet::backdrop { background: rgba(16, 35, 42, 0.55); backdrop-filter: blur(4px); }
 @keyframes beat-sheet-up { from { transform: translateY(40px); opacity: 0; } }
 
 .beat-sheet__panel {
