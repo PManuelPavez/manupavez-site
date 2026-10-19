@@ -220,4 +220,10 @@
 
 /* Video del hero (opcional): cuando carga, reemplaza la foto */
 .hero-card-video[hidden] { display: none; }
-.hero-card.has-video picture .hero-card-img { display: none; }
+.hero-card-video {
+  object-position: 50% 45%;
+  animation: heroVideoIn 1.2s ease both;
+}
+@keyframes heroVideoIn { from { opacity: 0; } to { opacity: 1; } }
+.hero-card picture .hero-card-img { transition: opacity 1.2s ease; }
+.hero-card.has-video picture .hero-card-img { opacity: 0; }
