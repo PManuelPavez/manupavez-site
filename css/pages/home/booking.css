@@ -120,6 +120,17 @@
   font-size: 1rem;
   white-space: nowrap;
 }
+.booking-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.booking-flyer .booking-presskit {
+  padding: 12px 24px;
+  font-size: 0.85rem;
+  text-align: center;
+  white-space: nowrap;
+}
 .booking-flyer .booking-open[aria-expanded="true"] {
   background: transparent;
   color: var(--c-lime);
@@ -164,6 +175,14 @@
   line-height: 1;
   cursor: pointer;
 }
+.form-success__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.form-success__actions .mp-btn { flex: 1 1 200px; text-align: center; }
 .booking-direct {
   margin: 18px 0 0;
   font-size: 0.9rem;
@@ -174,7 +193,8 @@
 /* --- Responsive --- */
 @media (max-width: 1080px) {
   .booking-flyer__bar { grid-template-columns: 1fr 1fr; }
-  .booking-flyer .booking-open { grid-column: 1 / -1; width: 100%; }
+  .booking-actions { grid-column: 1 / -1; }
+  .booking-flyer .booking-open { width: 100%; }
 }
 @media (max-width: 640px) {
   .booking-flyer__media { min-height: 520px; }
