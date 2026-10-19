@@ -291,6 +291,21 @@
       <h3 class="subsection-title">Próximas fechas</h3>
       <!-- Fechas dinámicas: se cargan desde /eventos.json (ver js/features/eventos.js) -->
       <div class="shows-list" data-eventos aria-live="polite"></div>
+
+      <!-- Lista de fans: alta con consentimiento (js/features/fanSignup.js → Edge Function fans-subscribe) -->
+      <form class="mp-signup" data-fan-signup novalidate>
+        <p class="mp-signup__title">Avisame de nuevas fechas</p>
+        <p class="mp-signup__lead">Dejá tu mail y te escribo cuando haya fecha cerca tuyo. Nada más.</p>
+        <div class="mp-signup__row">
+          <label class="sr-only" for="fan-email-es">Tu mail</label>
+          <input id="fan-email-es" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="200" placeholder="Tu mail" />
+          <label class="sr-only" for="fan-city-es">Ciudad (opcional)</label>
+          <input id="fan-city-es" name="city" type="text" autocomplete="address-level2" maxlength="80" placeholder="Ciudad (opcional)" />
+          <input class="mp-signup__trap" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button type="submit" class="mp-btn primary">AVISAME</button>
+        </div>
+        <p class="mp-signup__note" data-fan-note role="status" aria-live="polite">Podés darte de baja cuando quieras.</p>
+      </form>
     </section>
 
     <!-- ============ BOOKING ============ -->

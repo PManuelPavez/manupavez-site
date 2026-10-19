@@ -288,6 +288,21 @@
       <h3 class="subsection-title">Upcoming dates</h3>
       <!-- Fechas dinámicas: se cargan desde /eventos.json (ver js/features/eventos.js) -->
       <div class="shows-list" data-eventos aria-live="polite"></div>
+
+      <!-- Lista de fans: alta con consentimiento (js/features/fanSignup.js → Edge Function fans-subscribe) -->
+      <form class="mp-signup" data-fan-signup novalidate>
+        <p class="mp-signup__title">Get notified about new dates</p>
+        <p class="mp-signup__lead">Leave your email and I'll write when there's a date near you. That's it.</p>
+        <div class="mp-signup__row">
+          <label class="sr-only" for="fan-email-en">Your email</label>
+          <input id="fan-email-en" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="200" placeholder="Your email" />
+          <label class="sr-only" for="fan-city-en">City (optional)</label>
+          <input id="fan-city-en" name="city" type="text" autocomplete="address-level2" maxlength="80" placeholder="City (optional)" />
+          <input class="mp-signup__trap" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button type="submit" class="mp-btn primary">NOTIFY ME</button>
+        </div>
+        <p class="mp-signup__note" data-fan-note role="status" aria-live="polite">You can unsubscribe anytime.</p>
+      </form>
     </section>
 
     <!-- ============ BOOKING ============ -->

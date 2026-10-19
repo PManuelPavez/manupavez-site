@@ -668,3 +668,43 @@ body[data-page="clinicas"] .lab-hero.lab-bleed {
   margin: 14px auto 0;
   background: currentColor;
 }
+
+/* ---------- Alta a la lista de fans ("Avisame de nuevas fechas") ---------- */
+.mp-signup {
+  width: min(720px, 100%);
+  margin: clamp(28px, 4vw, 44px) auto 0;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid var(--color-border-soft);
+  border-top: 3px solid var(--c-lime);
+  border-radius: 6px;
+  background: var(--c-ink-2);
+  text-align: left;
+}
+.mp-signup__title {
+  margin: 0 0 6px;
+  font-family: var(--font-primary);
+  font-weight: 900;
+  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: #fff;
+}
+.mp-signup__lead { margin: 0 0 16px; color: var(--color-text-muted); }
+.mp-signup__row { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto; gap: 10px; }
+.mp-signup input {
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--color-text);
+  font: inherit;
+}
+.mp-signup input:focus-visible { outline: 2px solid var(--c-lime); outline-offset: 1px; }
+.mp-signup .mp-btn { min-height: 48px; white-space: nowrap; }
+.mp-signup__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.mp-signup__note { margin: 10px 0 0; font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-text-muted); }
+.mp-signup.is-done .mp-signup__note { color: var(--c-lime); }
+@media (max-width: 640px) {
+  .mp-signup__row { grid-template-columns: minmax(0, 1fr); }
+}

@@ -4,6 +4,7 @@
 //  · action "buy"      → reserva el stock 15 min (RPC ticket_reserve, atómica) y crea el link de
 //                        MercadoPago Checkout Pro por el total en ARS. Precio = el de la tanda, sin recargos.
 //  · action "waitlist" → guarda en waitlist (solo si no hay tanda a la venta).
+//  · fans: true         → además suma a la lista de fans (casilla marcada en la página).
 //
 // Público, con Turnstile. Va aparte de mp-checkout para no tocar el shop del Lab.
 // Secretos: MP_ACCESS_TOKEN, TURNSTILE_SECRET_KEY, SITE_URL (opcional).
@@ -41,6 +42,12 @@ async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
   }
 }
 
+// Lista de fans: solo si la persona marcó la casilla. Si falla, la compra sigue igual.
+async function addFan(db: any, f: { email: string; name: string; phone: string; source: string; event: string }) {
+  const { error } = await db.rpc("fan_upsert", { p_email: f.email, p_name: f.name, p_phone: f.phone, p_city: "", p_source: f.source, p_event_slug: f.event });
+  if (error) console.error("[tickets-checkout] fan_upsert", error.message);
+}
+
 const clean = (v: unknown, max = 60) => String(v ?? "").replace(/\s+/g, " ").trim().slice(0, max);
 const validName = (s: string) => s.length >= 1 && NAME_RE.test(s);
 
@@ -76,6 +83,7 @@ Deno.serve(async (req) => {
     if (pub?.current) return json({ error: "on_sale" }, 409);
     const { error } = await db.from("waitlist").upsert({ event_id: ev.id, name, phone, email }, { onConflict: "event_id,email", ignoreDuplicates: true });
     if (error) return json({ error: "waitlist_failed" }, 500);
+    if (body.fans === true) await addFan(db, { email, name, phone, source: "waitlist", event: ev.slug });
     return json({ ok: true });
   }
 
@@ -120,6 +128,7 @@ Deno.serve(async (req) => {
     return json({ error: "reserve_failed" }, 500);
   }
   if (r.error) return json(r, 409);
+  if (body.fans === true) await addFan(db, { email, name: `${first} ${last}`, phone, source: "tickets", event: ev.slug });
 
   const site = Deno.env.get("SITE_URL") || "https://manupavez.com";
   const back = (estado: string) => `${site}/pergamino.html?pago=${estado}&orden=${r.order_id}`;

@@ -1,5 +1,6 @@
 import { sendLead } from "../data/leadMailer.js";
 import { lang, t } from "../core/i18n.js";
+import { track } from "../core/analytics.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -121,6 +122,7 @@ export function initContactForm() {
   });
 
   function showSuccess() {
+    track("booking-enviado");
     if (successPanel) {
       form.hidden = true;
       successPanel.hidden = false;

@@ -69,3 +69,21 @@ enabled = true
 # Lo llama MercadoPago: se valida la firma x-signature y se re-consulta el pago
 verify_jwt = false
 entrypoint = "./functions/tickets-webhook/index.ts"
+
+[functions.lab-apply]
+enabled = true
+# Público (formularios de /aplicar y /clinicas): campo trampa + límites por mail/día
+verify_jwt = false
+entrypoint = "./functions/lab-apply/index.ts"
+
+[functions.lab-followup]
+enabled = true
+# Solo pg_cron (secreto de Vault lab_notify_secret)
+verify_jwt = false
+entrypoint = "./functions/lab-followup/index.ts"
+
+[functions.fans-subscribe]
+enabled = true
+# Público ("Avisame de nuevas fechas"): campo trampa
+verify_jwt = false
+entrypoint = "./functions/fans-subscribe/index.ts"

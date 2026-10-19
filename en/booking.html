@@ -40,6 +40,7 @@
   <link rel="stylesheet" href="../css/theme.css" />
   <link rel="stylesheet" href="../css/pages/booking.css" />
 
+  <script src="../js/supabase-config.js"></script>
   <script type="module" src="../js/pages/booking.js"></script>
 </head>
 
@@ -92,6 +93,24 @@
             <a class="mp-btn ghost booking-presskit" href="../presskit.html">VIEW PRESSKIT</a>
           </div>
         </div>
+      </div>
+
+
+      <!-- Calendario de fechas libres (js/features/bookingCalendar.js; días ocupados en Supabase) -->
+      <div class="bk-cal" data-busy-cal hidden>
+        <div class="bk-cal__head">
+          <div>
+            <p class="booking-eyebrow">Open dates</p>
+            <p class="bk-cal__lead">Tap an open day and the request starts with that date.</p>
+          </div>
+          <div class="bk-cal__nav">
+            <button type="button" class="bk-cal__btn" data-cal-prev>‹</button>
+            <span class="bk-cal__month" data-cal-month></span>
+            <button type="button" class="bk-cal__btn" data-cal-next>›</button>
+          </div>
+        </div>
+        <div class="bk-cal__grid" data-cal-grid></div>
+        <p class="bk-cal__legend"><span class="bk-cal__dot is-free"></span>open <span class="bk-cal__dot is-busy"></span>booked</p>
       </div>
 
       <div id="booking-panel" class="booking-panel" data-booking-panel hidden>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Darte de baja — Manu Pavez</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#10232a" />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=JetBrains+Mono:wght@400;500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/theme.css" />
+  <style>
+    body { min-height: 100svh; display: grid; place-items: center; padding: 24px 16px; background: var(--c-ink); }
+    .bj { width: min(520px, 100%); }
+    .bj__k { margin: 0 0 10px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--c-lime); }
+    .bj h1 { margin: 0 0 14px; font-size: clamp(2.6rem, 1.6rem + 5vw, 4.4rem); font-weight: 900; line-height: 0.86; color: #fff; }
+    .bj p { color: rgba(241, 236, 224, 0.85); margin: 0 0 20px; }
+  </style>
+  <script src="js/supabase-config.js"></script>
+</head>
+<body>
+  <main class="bj">
+    <p class="bj__k">Lista de fans</p>
+    <h1 data-title>UN SEGUNDO…</h1>
+    <p data-text>Estamos procesando tu baja.</p>
+    <a class="mp-btn ghost" href="index.html">IR A MANUPAVEZ.COM</a>
+  </main>
+  <script>
+    // Baja con el link del mail: baja.html?t=<token>. Sin login; el token solo sirve para darse de baja.
+    (async function () {
+      var title = document.querySelector("[data-title]");
+      var text = document.querySelector("[data-text]");
+      var done = function (t, p) { title.textContent = t; text.textContent = p; };
+      var token = new URLSearchParams(location.search).get("t") || "";
+      var cfg = window.MP_SUPABASE || {};
+      if (!/^[0-9a-f-]{36}$/i.test(token) || !cfg.url) return done("LINK INCOMPLETO", "Abrí el link tal cual llegó en el mail, o respondé ese mail y te doy de baja a mano.");
+      try {
+        var res = await fetch(cfg.url + "/rest/v1/rpc/fan_unsubscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", apikey: cfg.anonKey, Authorization: "Bearer " + cfg.anonKey },
+          body: JSON.stringify({ p_token: token }),
+        });
+        var ok = res.ok && (await res.json()) === true;
+        if (ok) done("LISTO", "Ya no vas a recibir avisos de fechas. Si algún día querés volver, anotate de nuevo desde la web.");
+        else done("NO TE ENCONTRAMOS", "Puede que ya te hayas dado de baja. Si te sigue llegando algo, respondé el mail y lo resuelvo.");
+      } catch (e) {
+        done("NO SE PUDO", "Parece que no hay conexión. Probá de nuevo en un rato.");
+      }
+    })();
+  </script>
+</body>
+</html>

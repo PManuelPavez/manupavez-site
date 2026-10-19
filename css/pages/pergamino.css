@@ -203,6 +203,11 @@ a { color: inherit; }
 .pg-rrpp input { text-transform: uppercase; letter-spacing: 0.08em; }
 
 .pg-hint { font-size: 13px; color: var(--pg-muted); }
+
+/* Casilla de la lista de fans (opcional) */
+.pg-form label.pg-check { display: flex; align-items: flex-start; gap: 10px; color: var(--pg-text, #f8eeee); font-size: 14px; line-height: 1.4; cursor: pointer; }
+.pg-form .pg-check input { width: 20px; min-height: 0; height: 20px; flex: none; margin: 1px 0 0; padding: 0; accent-color: var(--pg-accent); }
+.pg-check em { display: block; font-style: normal; font-size: 12px; color: var(--pg-muted); }
 .pg-center { text-align: center; }
 .pg-error { color: var(--pg-bad); font-weight: 600; font-size: 15px; }
 .pg-ok { color: var(--pg-ok); font-weight: 600; }
