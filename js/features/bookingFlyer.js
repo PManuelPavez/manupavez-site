@@ -15,7 +15,9 @@ export function initHeroVideo() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   const card = video.closest(".hero-card");
-  let index = Math.floor(Math.random() * list.length);
+  // Si el script de arranque del HTML ya le puso src, seguimos desde ese video.
+  const booted = video.getAttribute("src") && Number.isInteger(Number(video.dataset.index));
+  let index = booted ? Number(video.dataset.index) : Math.floor(Math.random() * list.length);
   video.loop = list.length === 1;
 
   const play = () => video.play().catch(() => {});
@@ -25,14 +27,15 @@ export function initHeroVideo() {
     video.load();
   };
 
-  video.addEventListener("canplay", () => {
+  const show = () => {
     if (video.hidden) {
       video.hidden = false;
       card?.classList.add("has-video");
     }
     video.classList.remove("is-switching");
     play();
-  });
+  };
+  video.addEventListener("canplay", show);
 
   video.addEventListener("ended", () => {
     video.classList.add("is-switching");
@@ -56,7 +59,8 @@ export function initHeroVideo() {
     if (document.visibilityState === "visible" && !video.hidden && video.paused) play();
   });
 
-  load(index);
+  if (!booted) load(index);
+  else if (video.readyState >= 3) show(); // ya estaba listo antes de que cargara este JS
 }
 
 export function initBookingPanel() {
