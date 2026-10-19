@@ -53,7 +53,7 @@
 }
 .hero-crt.crt-ready .crt-canvas { opacity: 0.55; }
 /* Con el video andando, el plasma queda de fondo: que no tape la imagen */
-.hero-card.has-video .hero-crt.crt-ready .crt-canvas { opacity: 0.18; }
+.hero-card.has-video .hero-crt.crt-ready .crt-canvas { opacity: 0.08; }
 
 @media (max-width: 720px) {
   .hero-crt .crt-canvas {
