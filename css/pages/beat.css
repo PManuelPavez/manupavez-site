@@ -60,7 +60,7 @@ body {
 }
 .beat-title {
   margin: 0;
-  font-size: clamp(2rem, 8vw, 3.6rem);
+  font-size: clamp(1.6rem, 5.28vw, 2.45rem);
   letter-spacing: 0.12em;
   line-height: 1.05;
 }
@@ -564,7 +564,8 @@ html:has(.beat-sheet[open]) { overflow: hidden; }
   justify-content: center;
 }
 .beat-seq .beat-bpm__read output {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
   font-size: 1.05rem;
   font-weight: 500;
   color: var(--abl-accent);

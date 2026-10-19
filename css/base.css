@@ -9,9 +9,9 @@
 
 :root {
   /* Dirección C · contraste partido (oct 2026) */
-  --font-primary: "Big Shoulders Display", "Arial Narrow", system-ui, sans-serif;
-  --font-secondary: "Work Sans", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --font-primary: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-secondary: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif; /* etiquetas: misma familia, más chica */
 
   /* Paleta: petróleo (oscuro) + arena (claro) + turquesa + lima señal */
   --c-ink: #10232a;

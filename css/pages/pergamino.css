@@ -12,8 +12,8 @@
   --pg-ok: #9fe3b4;
   --pg-bad: #ffb3a8;
   --pg-radius: 16px;
-  --font-title: "Big Shoulders Display", "Arial Narrow", system-ui, sans-serif;
-  --font-body: "Work Sans", system-ui, sans-serif;
+  --font-title: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color-scheme: dark;
 }
 

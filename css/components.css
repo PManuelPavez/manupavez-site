@@ -1005,7 +1005,7 @@ button[type="submit"][aria-busy="true"]::after {
 .stat-num {
   display: block;
   font-family: var(--font-primary);
-  font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3rem);
+  font-size: clamp(1.52rem, 0.9rem + 1.72vw, 2.04rem);
   line-height: 1;
   letter-spacing: 0.02em;
   background: var(--mp-grad-accent, linear-gradient(120deg, #59c6ba, #314097));

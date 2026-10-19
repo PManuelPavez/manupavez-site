@@ -248,7 +248,7 @@ body[data-page="alumnos"] .lab-login__note.is-error { color: var(--lab-danger); 
   border-bottom-color: var(--lab-line);
   animation: lab-rise 0.7s var(--lab-ease) both;
 }
-.lab-portal .portal-name { font-size: clamp(1.7rem, 4.6vw, 2.6rem); letter-spacing: 0.01em; }
+.lab-portal .portal-name { font-size: clamp(1.36rem, 3.04vw, 1.77rem); letter-spacing: 0.01em; }
 .lab-portal .portal-meta {
   display: inline-flex;
   align-items: center;

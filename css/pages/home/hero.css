@@ -142,7 +142,7 @@
   text-align: center;
   font-family: var(--font-primary);
   font-weight: 700;
-  font-size: clamp(2.6rem, 13vw, 11rem);
+  font-size: clamp(2.08rem, 8.58vw, 7.48rem);
   line-height: 0.88;
   letter-spacing: -0.02em;
   text-transform: uppercase;

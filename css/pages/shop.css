@@ -30,7 +30,7 @@ body[data-page="shop"] { --teal: #59c6ba; --teal-soft: rgba(89, 198, 186, 0.12);
 }
 .shop-title {
   margin: 0 0 16px;
-  font-size: clamp(2rem, 7vw, 3.6rem);
+  font-size: clamp(1.6rem, 4.62vw, 2.45rem);
   line-height: 0.98;
   text-transform: uppercase;
   letter-spacing: 0.01em;

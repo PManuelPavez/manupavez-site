@@ -41,7 +41,7 @@ body[data-page="presskit"] .press-bio {
 }
 body[data-page="presskit"] .press-bio h2 {
   margin: 0 0 clamp(18px, 2.4vw, 28px);
-  font-size: clamp(2.6rem, 1.4rem + 5vw, 5.6rem);
+  font-size: clamp(2.08rem, 1.05rem + 3.3vw, 3.81rem);
   font-weight: 900;
   line-height: 0.86;
 }
@@ -70,7 +70,7 @@ body[data-page="presskit"] .press-facts {
 }
 body[data-page="presskit"] .press-facts h2 {
   margin: 0 0 clamp(20px, 3vw, 36px);
-  font-size: clamp(2.6rem, 1.4rem + 5vw, 5.6rem);
+  font-size: clamp(2.08rem, 1.05rem + 3.3vw, 3.81rem);
   font-weight: 900;
   line-height: 0.86;
 }
@@ -86,7 +86,7 @@ body[data-page="presskit"] .press-facts h2 {
 .press-stats__num {
   font-family: var(--font-primary);
   font-weight: 900;
-  font-size: clamp(2.4rem, 1.4rem + 3vw, 4rem);
+  font-size: clamp(1.92rem, 1.05rem + 1.98vw, 2.72rem);
   line-height: 0.9;
   color: var(--c-lime);
   white-space: nowrap;
@@ -171,7 +171,7 @@ body[data-page="presskit"] .press-labels {
 @media (max-width: 760px) {
   body[data-page="presskit"] .press-facts { grid-template-columns: minmax(0, 1fr); }
   .press-stats { justify-content: space-between; gap: 12px; }
-  .press-stats__num { font-size: clamp(2rem, 1rem + 5vw, 2.6rem); }
+  .press-stats__num { font-size: clamp(1.6rem, 0.75rem + 3.3vw, 1.77rem); }
   .presskit-bleed .mp-bleed__actions .mp-btn { flex: 1 1 100%; text-align: center; }
   .mp-facts .v { overflow-wrap: anywhere; }
 }

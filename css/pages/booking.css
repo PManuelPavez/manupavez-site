@@ -38,7 +38,7 @@ body[data-page="booking"] {
 body[data-page="booking"] .booking-flyer { margin-top: 0; }
 .bk-flyer .booking-flyer__media { min-height: 60svh; }
 .bk-flyer .booking-flyer__head { padding-top: 72px; }
-.bk-flyer #booking-title { font-size: clamp(3.2rem, 1.4rem + 9vw, 9rem); }
+.bk-flyer #booking-title { font-size: clamp(2.56rem, 1.05rem + 5.94vw, 6.12rem); }
 .bk-video { object-position: 50% 40%; }
 
 /* Botones: principal grande + WhatsApp y presskit lado a lado */
