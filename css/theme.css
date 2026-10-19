@@ -607,3 +607,62 @@ body[data-page="clinicas"] .lab-author--flyer .lab-author__lead {
   margin: clamp(22px, 3vw, 36px) auto 0;
 }
 .lab-author--flyer .section-kicker { display: block; text-align: left; margin: 0 0 12px; }
+
+/* Bio · capítulos: el texto va encima de su foto, desenfocada y oscurecida.
+   Cada capítulo es un panel a sangre; alternan texto a izquierda/derecha. */
+body[data-page="bio"] .mp-story { width: 100%; gap: 0; }
+body[data-page="bio"] .bio-chapter,
+body[data-page="bio"] .bio-chapter:nth-of-type(even) {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  min-height: clamp(520px, 88vh, 860px);
+  margin-inline: calc(50% - 50vw);
+  padding: clamp(56px, 8vw, 110px) max(16px, calc((100vw - 1120px) / 2));
+  overflow: hidden;
+}
+body[data-page="bio"] .bio-chapter__photo,
+body[data-page="bio"] .bio-chapter:nth-of-type(even) .bio-chapter__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  order: 0;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+body[data-page="bio"] .bio-chapter__photo img,
+body[data-page="bio"] .bio-chapter__photo:hover img {
+  filter: blur(8px) brightness(0.78) saturate(1.2);
+  transform: scale(1.12);
+}
+body[data-page="bio"] .bio-chapter__photo::after {
+  background:
+    linear-gradient(90deg, rgba(16, 35, 42, 0.62) 0%, rgba(16, 35, 42, 0.1) 70%),
+    linear-gradient(to bottom, var(--c-ink) 0%, transparent 18%, transparent 82%, var(--c-ink) 100%);
+}
+body[data-page="bio"] .bio-chapter:nth-of-type(even) .bio-chapter__photo::after {
+  background:
+    linear-gradient(270deg, rgba(16, 35, 42, 0.62) 0%, rgba(16, 35, 42, 0.1) 70%),
+    linear-gradient(to bottom, var(--c-ink) 0%, transparent 18%, transparent 82%, var(--c-ink) 100%);
+}
+body[data-page="bio"] .bio-chapter__text { max-width: 60ch; }
+body[data-page="bio"] .bio-chapter:nth-of-type(even) .bio-chapter__text { justify-self: end; }
+body[data-page="bio"] .bio-chapter p { color: rgba(241, 236, 224, 0.92); text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35); }
+body[data-page="bio"] .bio-chapter__num {
+  font-weight: 900;
+  font-size: clamp(4rem, 2rem + 6vw, 8rem);
+  -webkit-text-stroke: 1px rgba(233, 255, 107, 0.7);
+}
+@media (max-width: 760px) {
+  body[data-page="bio"] .bio-chapter,
+  body[data-page="bio"] .bio-chapter:nth-of-type(even) { min-height: 0; padding-block: 64px; }
+  body[data-page="bio"] .bio-chapter__photo::after,
+  body[data-page="bio"] .bio-chapter:nth-of-type(even) .bio-chapter__photo::after {
+    background: linear-gradient(to bottom, var(--c-ink) 0%, rgba(16, 35, 42, 0.35) 20%, rgba(16, 35, 42, 0.35) 80%, var(--c-ink) 100%);
+  }
+  body[data-page="bio"] .bio-chapter:nth-of-type(even) .bio-chapter__text { justify-self: start; }
+}
