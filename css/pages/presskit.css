@@ -142,10 +142,11 @@ body[data-page="presskit"] .press-labels {
   padding-block: 0 clamp(40px, 6vw, 80px);
 }
 .press-labels__row {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
   align-items: center;
-  gap: clamp(18px, 4vw, 48px);
+  justify-items: center;
+  gap: clamp(18px, 3vw, 32px) clamp(12px, 3vw, 32px);
   padding-top: 16px;
   border-top: 1px solid var(--color-border-soft);
 }
