@@ -16,7 +16,12 @@
   <link rel="stylesheet" href="css/scrollytelling.css">
   <link rel="stylesheet" href="css/theme.css" />
 
-  <link rel="canonical" href="https://manupavez.com/" />
+  <link rel="canonical" href="https://manupavez.com/presskit.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Presskit — Manu Pavez" />
+  <meta property="og:description" content="Bio, datos clave, fotos y descarga del presskit de Manu Pavez." />
+  <meta property="og:url" content="https://manupavez.com/presskit.html" />
+  <meta property="og:image" content="https://manupavez.com/img/live/live8.jpg" />
   <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
 
   <!-- Scrollytelling: smooth scroll (Lenis) + animaciones (GSAP/ScrollTrigger).
@@ -66,24 +71,80 @@
 </header>
 
 <main class="presskit">
-  <section class="bio tone-light" data-sb-block="presskit_bio" data-fade-up>
-    <h1>PRESSKIT</h1>
-    <h2>Biografía Profesional</h2>
-    <p>
-      <strong>MANU PAVEZ</strong> es un artista argentino con años de trabajo minucioso en estudio, llevando su frequency storytelling al corazón del progressive house. 
-      Su firma aparece en sellos de referencia como <strong>Sound Avenue, Mango Alley, Droid9 South America, 3rd Avenue, Coral Tide y Traful</strong>, consolidando un perfil moderno, exportable y curado. 
-    </p>
-    <p>
-      Su música y su número cuentan con el aval de figuras de primera línea: <strong>Sahar Z, Graziano Raffa, Ezequiel Arias, John Cosani, Hernán Cattáneo, Nick Warren y Mariano Mellino han respaldado su sonido; </strong>
-      además, compartió cabina e hizo warm-ups para <strong>Roy Rosenfeld, Alex O'Rion, Soundexile, Graziano Raffa</strong>, confirmando tracción real en booth y programación. 
-      Con releases consistentes y una propuesta artística clara, <strong>Manu Pavez se proyecta como joven promesa del progresivo sudamericano: </strong>
-      confiable para promotores, atractivo para audiencias exigentes y listo para escalar line-ups de salas boutique y festivales internacionales.
-    </p>
+  <!-- Portada a sangre (como Booking) -->
+  <header class="mp-bleed presskit-bleed" aria-labelledby="presskit-title">
+    <img class="mp-bleed__img" src="img/live/live8.jpg" alt="Manos de Manu Pavez sobre el mixer, en blanco y negro" width="1600" height="1066" fetchpriority="high" decoding="async" />
+    <div class="mp-bleed__head">
+      <p class="presskit-eyebrow">Booking · prensa · promoters</p>
+      <h1 id="presskit-title">PRESSKIT</h1>
+      <p>Manu Pavez — artista de progressive house. Pergamino, Argentina.</p>
+      <div class="mp-bleed__actions">
+        <a href="#" id="descarga" class="mp-btn primary" data-sb="presskit-download" download>DESCARGAR PRESSKIT <span aria-hidden="true">↓</span></a>
+        <a href="index.html#booking" class="mp-btn ghost">PEDIR FECHA</a>
+      </div>
+    </div>
+  </header>
 
+  <!-- Bio (bloque arena) -->
+  <section class="press-bio tone-light" aria-labelledby="press-bio-title">
+    <div class="pk-wrap">
+      <p class="presskit-eyebrow">Biografía profesional</p>
+      <h2 id="press-bio-title">MANU PAVEZ</h2>
+      <div class="press-bio__text" data-sb-block="presskit_bio">
+        <p>
+          <strong>MANU PAVEZ</strong> es un artista argentino con años de trabajo minucioso en estudio, llevando su frequency storytelling al corazón del progressive house. 
+          Su firma aparece en sellos de referencia como <strong>Sound Avenue, Mango Alley, Droid9 South America, 3rd Avenue, Coral Tide y Traful</strong>, consolidando un perfil moderno, exportable y curado. 
+        </p>
+        <p>
+          Su música y su número cuentan con el aval de figuras de primera línea: <strong>Sahar Z, Graziano Raffa, Ezequiel Arias, John Cosani, Hernán Cattáneo, Nick Warren y Mariano Mellino han respaldado su sonido; </strong>
+          además, compartió cabina e hizo warm-ups para <strong>Roy Rosenfeld, Alex O'Rion, Soundexile, Graziano Raffa</strong>, confirmando tracción real en booth y programación. 
+          Con releases consistentes y una propuesta artística clara, <strong>Manu Pavez se proyecta como joven promesa del progresivo sudamericano: </strong>
+          confiable para promotores, atractivo para audiencias exigentes y listo para escalar line-ups de salas boutique y festivales internacionales.
+        </p>
+      </div>
+    </div>
   </section>
 
-  <!-- SLIDER -->
-  <section class="slider" data-slider="presskit" data-autoplay="5500" aria-label="Galería de fotos" data-fade-up>
+  <!-- Franjas: respaldos, cabina compartida y ciudades -->
+  <div class="press-marquees" aria-hidden="true">
+    <div class="mp-marquee">
+      <div class="mp-marquee__track"><span><b>Compartió cabina con</b> ★ Alex O'Rion · Graziano Raffa · Mayro · Emi Galvan · Soundexile · Roy Rosenfeld ★</span><span><b>Compartió cabina con</b> ★ Alex O'Rion · Graziano Raffa · Mayro · Emi Galvan · Soundexile · Roy Rosenfeld ★</span></div>
+    </div>
+    <div class="mp-marquee mp-marquee--alt">
+      <div class="mp-marquee__track"><span><b>Tocó en</b> ✦ Rosario · Buenos Aires · Chacabuco · Junín · Pergamino · Villa Gesell · Pinamar ✦</span><span><b>Tocó en</b> ✦ Rosario · Buenos Aires · Chacabuco · Junín · Pergamino · Villa Gesell · Pinamar ✦</span></div>
+    </div>
+    <div class="mp-marquee">
+      <div class="mp-marquee__track"><span><b>Respaldaron su sonido</b> ● Sahar Z · Graziano Raffa · Ezequiel Arias · John Cosani · Hernán Cattáneo · Nick Warren · Mariano Mellino ●</span><span><b>Respaldaron su sonido</b> ● Sahar Z · Graziano Raffa · Ezequiel Arias · John Cosani · Hernán Cattáneo · Nick Warren · Mariano Mellino ●</span></div>
+    </div>
+  </div>
+  <p class="sr-only">Compartió cabina con Alex O'Rion, Graziano Raffa, Mayro, Emi Galvan, Soundexile y Roy Rosenfeld. Tocó en Rosario, Buenos Aires, Chacabuco, Junín, Pergamino, Villa Gesell y Pinamar. Respaldaron su sonido Sahar Z, Graziano Raffa, Ezequiel Arias, John Cosani, Hernán Cattáneo, Nick Warren y Mariano Mellino.</p>
+
+  <!-- Datos clave -->
+  <section class="press-facts pk-wrap" aria-labelledby="press-facts-title" data-fade-up>
+    <div class="press-facts__nums">
+      <p class="presskit-eyebrow">En números</p>
+      <h2 id="press-facts-title">DATOS CLAVE</h2>
+      <ul class="press-stats">
+        <li><span class="press-stats__num">7+</span><span class="press-stats__label">años en cabina</span></li>
+        <li><span class="press-stats__num">3.521</span><span class="press-stats__label">seguidores</span></li>
+        <li><span class="press-stats__num">492K</span><span class="press-stats__label">reproducciones</span></li>
+      </ul>
+    </div>
+    <ul class="mp-facts">
+      <li><span class="k">Origen</span><span class="v">Pergamino, Argentina</span></li>
+      <li><span class="k">Género</span><span class="v">Progressive House</span></li>
+      <li><span class="k">En cabina</span><span class="v">7+ años</span></li>
+      <li><span class="k">Primer release</span><span class="v">2020</span></li>
+      <li><span class="k">Sellos</span><span class="v">6+ internacionales</span></li>
+      <li><span class="k">Seguidores</span><span class="v">3.521</span></li>
+      <li><span class="k">Reproducciones</span><span class="v">492.000</span></li>
+      <li><span class="k">Sets</span><span class="v">Warm-up · prime time hipnótico</span></li>
+      <li><span class="k">Rider</span><span class="v">3× CDJ + DJM-900 / V10</span></li>
+    </ul>
+  </section>
+
+  <!-- Fotos -->
+  <section class="slider pk-wrap" data-slider="presskit" data-autoplay="5500" aria-label="Galería de fotos" data-fade-up>
     <div class="slides" data-sb="presskit-slides">
       <img src="img/live/live1.jpg" alt="Manu Pavez en vivo" class="active" loading="lazy" decoding="async">
       <img src="img/live/live4.jpg" alt="Manu Pavez en cabina" loading="lazy" decoding="async">
@@ -92,64 +153,25 @@
     <div class="slider-dots"></div>
   </section>
 
-  <!-- HIGHLIGHTS / DATOS CLAVE -->
-  <section class="press-highlights" data-fade-up>
-    <h2>Datos clave</h2>
-    <ul class="highlight-grid">
-      <li><span class="k">Origen</span><span class="v">Pergamino, Argentina</span></li>
-      <li><span class="k">Género</span><span class="v">Progressive House</span></li>
-      <li><span class="k">Primer release</span><span class="v">2020</span></li>
-      <li><span class="k">Sellos</span><span class="v">6+ internacionales</span></li>
-      <li><span class="k">Sets</span><span class="v">Warm-up · prime time hipnótico</span></li>
-      <li><span class="k">Para</span><span class="v">Booking · prensa · promoters</span></li>
-    </ul>
-    <p class="note">
-      Perfil moderno, exportable y curado: confiable para promotores y listo para
-      escalar line-ups de salas boutique y festivales internacionales.
-    </p>
-  </section>
-
-  <!-- MURO DE APOYOS -->
-  <section class="press-support" data-fade-up>
-    <h2>Respaldo &amp; tracción</h2>
-
-    <div class="support-block">
-      <p class="sub">Respaldaron su sonido</p>
-      <div class="support-chips">
-        <span class="chip">Sahar Z</span>
-        <span class="chip">Graziano Raffa</span>
-        <span class="chip">Ezequiel Arias</span>
-        <span class="chip">John Cosani</span>
-        <span class="chip">Hernán Cattáneo</span>
-        <span class="chip">Nick Warren</span>
-        <span class="chip">Mariano Mellino</span>
-      </div>
-    </div>
-
-    <div class="support-block">
-      <p class="sub">Compartió cabina / warm-up</p>
-      <div class="support-chips">
-        <span class="chip">Roy Rosenfeld</span>
-        <span class="chip">Alex O'Rion</span>
-        <span class="chip">Soundexile</span>
-      </div>
-    </div>
-
-    <div class="support-block">
-      <p class="sub">Sellos</p>
-      <div class="support-logos">
-        <img class="logo" src="logos/SOUNDAVENUE.png" alt="Sound Avenue" loading="lazy" decoding="async" onerror="this.style.display='none'">
-        <img class="logo" src="logos/THEMANGOALLEY.png" alt="The Mango Alley" loading="lazy" decoding="async" onerror="this.style.display='none'">
-        <img class="logo" src="logos/D9SA.svg" alt="Droid9 South America" loading="lazy" decoding="async" onerror="this.style.display='none'">
-        <img class="logo" src="logos/3RDAVENUE.svg" alt="3rd Avenue" loading="lazy" decoding="async" onerror="this.style.display='none'">
-        <img class="logo" src="logos/TRAFUL.png" alt="Traful" loading="lazy" decoding="async" onerror="this.style.display='none'">
-      </div>
+  <!-- Sellos: fila discreta -->
+  <section class="press-labels pk-wrap" aria-label="Sellos">
+    <p class="presskit-eyebrow">Sellos</p>
+    <div class="press-labels__row">
+      <img src="logos/SOUNDAVENUE.png" alt="Sound Avenue" loading="lazy" decoding="async" onerror="this.style.display='none'">
+      <img src="logos/THEMANGOALLEY.png" alt="The Mango Alley" loading="lazy" decoding="async" onerror="this.style.display='none'">
+      <img src="logos/D9SA.svg" alt="Droid9 South America" loading="lazy" decoding="async" onerror="this.style.display='none'">
+      <img src="logos/3RDAVENUE.svg" alt="3rd Avenue" loading="lazy" decoding="async" onerror="this.style.display='none'">
+      <img src="logos/TRAFUL.png" alt="Traful" loading="lazy" decoding="async" onerror="this.style.display='none'">
     </div>
   </section>
 
-  <!-- BOTÓN DE DESCARGA -->
-  <section class="press-download" data-fade-up>
-    <a href="#" class="mp-btn primary" data-sb="presskit-download" download>DESCARGAR PRESSKIT</a>
+  <!-- Cierre -->
+  <section class="mp-band press-band" aria-label="Booking">
+    <p class="mp-band__title">¿LO QUERÉS<br>EN TU LINE-UP?</p>
+    <div class="mp-bleed__actions">
+      <a href="index.html#booking" class="mp-btn primary">PEDIR FECHA <span aria-hidden="true">→</span></a>
+      <a href="#descarga" class="mp-btn ghost">DESCARGAR PRESSKIT</a>
+    </div>
   </section>
 </main>
 
