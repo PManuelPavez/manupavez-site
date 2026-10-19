@@ -649,3 +649,22 @@ body[data-page="clinicas"] .lab-hero.lab-bleed {
 .lab-bleed .hero-ctas { justify-content: flex-start; }
 .lab-bleed .lab-scroll-indicator { display: none; }
 .lab-bleed .mp-bleed__head > * { text-align: left; margin-inline: 0; }
+
+/* Frequency Beat · franja al pie de la intro */
+.beat-marquee { margin: clamp(28px, 5vw, 48px) calc(50% - 50vw) 0; }
+
+/* Alumnos · encabezado editorial del ingreso */
+.lab-login__kicker { font-family: var(--font-mono); letter-spacing: 0.04em; text-transform: none; }
+.lab-login__title {
+  font-size: clamp(2.8rem, 1.8rem + 5vw, 4.4rem);
+  font-weight: 900;
+  line-height: 0.86;
+}
+.lab-login__title::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 4px;
+  margin: 14px auto 0;
+  background: currentColor;
+}
