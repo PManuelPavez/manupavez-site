@@ -633,3 +633,19 @@ body[data-page="bio"] .bio-chapter__num {
   }
   body[data-page="bio"] .bio-chapter:nth-of-type(even) .bio-chapter__text { justify-self: start; }
 }
+
+/* Clínicas · portada a sangre con la foto del estudio (textos sin cambios) */
+body[data-page="clinicas"] main > .lab-hero-section { padding-top: 0; }
+body[data-page="clinicas"] .lab-hero.lab-bleed {
+  min-height: clamp(540px, 92vh, 880px);
+  padding: 0;
+  margin-bottom: 0;
+  text-align: left;
+}
+.lab-hero.mp-bleed::after { display: block; z-index: 0; }
+.lab-bleed .mp-bleed__img { object-position: 50% 50%; }
+.lab-bleed .lab-wave { margin-inline: 0; }
+.lab-bleed .lab-lead { max-width: 40ch; }
+.lab-bleed .hero-ctas { justify-content: flex-start; }
+.lab-bleed .lab-scroll-indicator { display: none; }
+.lab-bleed .mp-bleed__head > * { text-align: left; margin-inline: 0; }
