@@ -202,8 +202,10 @@
   .booking-flyer__media::after {
     background: linear-gradient(to top, var(--c-ink) 0%, rgba(16, 35, 42, 0.6) 45%, transparent 75%);
   }
-  .booking-flyer__bar { grid-template-columns: 1fr; }
-  .booking-stats { justify-content: space-between; }
+  .booking-flyer__bar { grid-template-columns: minmax(0, 1fr); }
+  .booking-stats { justify-content: space-between; gap: 12px; }
+  .booking-stats__num { font-size: clamp(1.6rem, 1rem + 3vw, 2rem); }
+  .booking-facts dd { white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) {
   .booking-flyer__img { transform: none; }
