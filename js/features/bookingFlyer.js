@@ -1,29 +1,62 @@
 // Home: video opcional del hero + panel desplegable del formulario de booking.
 
 // El <video data-hero-video> queda vacío hasta que se complete data-src.
+// data-src admite varios videos separados por coma: arranca por uno al azar
+// y al terminar pasa al siguiente con un fundido. Con uno solo, queda en loop.
 // Recién cuando puede reproducirse oculta la foto (si falla, queda la foto).
 export function initHeroVideo() {
   const video = document.querySelector("[data-hero-video]");
   if (!video) return;
 
   const isMobile = window.matchMedia("(max-width: 720px)").matches;
-  const src = (isMobile && video.dataset.srcMobile) || video.dataset.src;
-  if (!src) return;
+  const raw = (isMobile && video.dataset.srcMobile) || video.dataset.src || "";
+  const list = raw.split(",").map((s) => s.trim()).filter(Boolean);
+  if (!list.length) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   const card = video.closest(".hero-card");
-  video.addEventListener(
-    "canplay",
-    () => {
+  let index = Math.floor(Math.random() * list.length);
+  video.loop = list.length === 1;
+
+  const play = () => video.play().catch(() => {});
+  const load = (i) => {
+    index = (i + list.length) % list.length;
+    video.src = list[index];
+    video.load();
+  };
+
+  video.addEventListener("canplay", () => {
+    if (video.hidden) {
       video.hidden = false;
       card?.classList.add("has-video");
-      video.play().catch(() => {});
-    },
-    { once: true }
-  );
-  video.addEventListener("error", () => video.remove(), { once: true });
-  video.src = src;
-  video.load();
+    }
+    video.classList.remove("is-switching");
+    play();
+  });
+
+  video.addEventListener("ended", () => {
+    video.classList.add("is-switching");
+    setTimeout(() => load(index + 1), 450);
+  });
+
+  video.addEventListener("error", () => {
+    // Si un archivo falla lo sacamos de la lista; sin videos, queda la foto.
+    list.splice(index, 1);
+    if (!list.length) {
+      card?.classList.remove("has-video");
+      video.remove();
+      return;
+    }
+    video.loop = list.length === 1;
+    load(index);
+  });
+
+  // El navegador pausa los videos en pestañas ocultas: retomamos al volver.
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && !video.hidden && video.paused) play();
+  });
+
+  load(index);
 }
 
 export function initBookingPanel() {

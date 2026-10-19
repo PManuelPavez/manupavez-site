@@ -222,8 +222,10 @@
 .hero-card-video[hidden] { display: none; }
 .hero-card-video {
   object-position: 50% 45%;
-  animation: heroVideoIn 1.2s ease both;
+  animation: heroVideoIn 1.2s ease backwards;
 }
 @keyframes heroVideoIn { from { opacity: 0; } to { opacity: 1; } }
+.hero-card-video { transition: opacity 0.45s ease; }
+.hero-card-video.is-switching { opacity: 0; }
 .hero-card picture .hero-card-img { transition: opacity 1.2s ease; }
 .hero-card.has-video picture .hero-card-img { opacity: 0; }
