@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Página no encontrada — Manu Pavez</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#10232a" />
+  <link rel="icon" href="/logos/CUBO%20BLANCO%20MP.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=JetBrains+Mono:wght@400;500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Rutas absolutas: GitHub Pages sirve esta página en cualquier URL que no exista -->
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/theme.css" />
+  <style>
+    body { min-height: 100svh; display: flex; flex-direction: column; background: var(--c-ink); }
+    .nf { flex: 1; display: flex; align-items: flex-end; position: relative; overflow: hidden; }
+    .nf img.nf__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 35%; opacity: 0.55; filter: grayscale(1); }
+    .nf::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--c-ink) 10%, rgba(16, 35, 42, 0.5) 60%, rgba(16, 35, 42, 0.3)); }
+    .nf__head { position: relative; z-index: 1; width: min(1120px, 100%); margin: 0 auto; padding: 96px clamp(16px, 4vw, 40px) clamp(32px, 6vw, 72px); }
+    .nf__code { margin: 0 0 10px; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.04em; color: var(--c-lime); }
+    .nf h1 { margin: 0 0 16px; font-size: clamp(3.4rem, 1.6rem + 9vw, 9rem); font-weight: 900; line-height: 0.84; color: #fff; }
+    .nf p { max-width: 44ch; margin: 0 0 24px; color: rgba(241, 236, 224, 0.88); }
+    .nf__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .nf__logo { position: absolute; top: 18px; left: clamp(16px, 4vw, 40px); z-index: 2; line-height: 0; }
+  </style>
+</head>
+<body>
+  <main class="nf">
+    <a class="nf__logo" href="/" aria-label="Ir al inicio"><img src="/logos/CUBO%20BLANCO%20MP.png" alt="Manu Pavez" width="32" height="32" /></a>
+    <img class="nf__bg" src="/img/live/live4.jpg" alt="" width="1600" height="1066" />
+    <div class="nf__head">
+      <p class="nf__code">Error 404</p>
+      <h1>ACÁ NO HAY<br>NADA SONANDO</h1>
+      <p>Esta página no existe o cambió de lugar. Elegí por dónde seguir:</p>
+      <div class="nf__actions">
+        <a class="mp-btn primary" href="/booking.html">BOOKING</a>
+        <a class="mp-btn ghost" href="/">INICIO</a>
+        <a class="mp-btn ghost" href="/clinicas.html">FREQUENCY LAB</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
