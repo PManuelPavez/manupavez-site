@@ -77,17 +77,27 @@
 
 <main class="story-page">
   <!-- ============ INTRO ============ -->
-  <section class="bio-hero tone-light" aria-labelledby="bio-title">
-    <p class="bio-eyebrow">FREQUENCY STORYTELLER</p>
-    <h1 id="bio-title">MANU PAVEZ</h1>
-    <p class="bio-tagline">Artist — Pergamino, Argentina · b. 2001</p>
+  <header class="mp-bleed bio-bleed" aria-labelledby="bio-title">
+    <img class="mp-bleed__img" src="../img/live/live4.jpg" alt="Manu Pavez in the booth" width="1600" height="1066" fetchpriority="high" decoding="async" />
+    <div class="mp-bleed__head">
+      <p class="bio-eyebrow">FREQUENCY STORYTELLER</p>
+      <h1 id="bio-title">MANU PAVEZ</h1>
+      <p class="bio-tagline">Artist — Pergamino, Argentina · b. 2001</p>
+    </div>
+  </header>
 
-    <ul class="bio-stats" aria-label="Quick facts">
-      <li><span>2020</span><small>First release</small></li>
-      <li><span>6+</span><small>International labels</small></li>
-      <li><span>∞</span><small>Hours in the studio</small></li>
-    </ul>
+  <section class="bio-hero tone-light" aria-label="Quick facts">
+      <ul class="bio-stats" aria-label="Quick facts">
+        <li><span>2020</span><small>First release</small></li>
+        <li><span>6+</span><small>International labels</small></li>
+        <li><span>∞</span><small>Hours in the studio</small></li>
+      </ul>
   </section>
+
+  <div class="mp-marquee mp-marquee--alt bio-marquee" aria-hidden="true">
+    <div class="mp-marquee__track"><span><b>Played in</b> ✦ Rosario · Buenos Aires · Chacabuco · Junín · Pergamino · Villa Gesell · Pinamar ✦</span><span><b>Played in</b> ✦ Rosario · Buenos Aires · Chacabuco · Junín · Pergamino · Villa Gesell · Pinamar ✦</span></div>
+  </div>
+  <p class="sr-only">He has played in Rosario, Buenos Aires, Chacabuco, Junín, Pergamino, Villa Gesell and Pinamar.</p>
 
   <!-- ============ STORY ============
        Cada capítulo: texto + foto lado a lado (alternan de lado en desktop). -->
@@ -167,8 +177,8 @@
       </figure>
     </article>
 
-    <footer class="bio-cta" data-fade-up>
-      <p class="bio-cta__line">Warm-ups &amp; opening sets · Worldwide</p>
+    <footer class="bio-cta mp-band" data-fade-up>
+      <p class="bio-cta__line mp-band__title">Warm-ups &amp; opening sets · Worldwide</p>
       <div class="bio-cta__actions">
         <a class="mp-btn primary" href="index.html#booking">BOOK A DATE</a>
         <a class="mp-btn ghost" href="../presskit.html">VIEW PRESSKIT</a>

@@ -240,7 +240,7 @@ input, select, textarea {
    BIO
    ===================================================================== */
 body[data-page="bio"] .story-page::before { display: none; }
-body[data-page="bio"] .story-page { padding-top: var(--header-height); }
+body[data-page="bio"] .story-page { padding-top: 0; }
 
 .bio-hero.tone-light {
   width: 100%;
@@ -422,3 +422,188 @@ body[data-page="presskit"] .presskit .bio p:first-of-type::first-letter { color:
   .lab-compact__text { padding: 4px 18px 0; }
   .lab-compact__cta { justify-self: stretch; width: auto; margin: 0 18px 20px; }
 }
+
+/* =====================================================================
+   PIEZAS DE LA HOME REUTILIZABLES EN TODA LA WEB
+   ===================================================================== */
+/* ---------- Franja que pasa (marquesina) ----------
+   .mp-marquee = lima · .mp-marquee--alt = petróleo, sentido contrario */
+.mp-marquee {
+  overflow: hidden;
+  background: var(--c-lime);
+  color: var(--c-ink);
+  border-block: 1px solid var(--c-ink);
+}
+.mp-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: mpMarquee 38s linear infinite;
+}
+.mp-marquee__track span {
+  padding: 12px 0;
+  padding-right: 3rem;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.6rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+@keyframes mpMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.mp-marquee:hover .mp-marquee__track { animation-play-state: paused; }
+
+.mp-marquee__track b { font-family: var(--font-mono); font-weight: 500; font-size: 0.6em; letter-spacing: 0.04em; vertical-align: 0.25em; margin-right: 0.6rem; }
+.mp-marquee--alt {
+  background: var(--c-ink-2);
+  color: var(--c-sand);
+  border-top: 0;
+}
+.mp-marquee--alt .mp-marquee__track {
+  animation-direction: reverse;
+  animation-duration: 44s;
+}
+.mp-marquee--alt .mp-marquee__track b { color: var(--c-lime); }
+@media (prefers-reduced-motion: reduce) { .mp-marquee__track { animation: none; } }
+
+/* ---------- Portada con foto a sangre (como Booking) ----------
+   <header class="mp-bleed"><img class="mp-bleed__img"><div class="mp-bleed__head">…</div></header> */
+.mp-bleed {
+  position: relative;
+  min-height: clamp(460px, 82vh, 820px);
+  margin-inline: calc(50% - 50vw);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  background: var(--c-ink);
+  color: #fff;
+}
+.mp-bleed__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: mpBleedIn 1.8s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+@keyframes mpBleedIn { from { transform: scale(1.07); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }
+.mp-bleed::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, var(--c-ink) 0%, rgba(16, 35, 42, 0.55) 40%, transparent 72%),
+    linear-gradient(to bottom, rgba(16, 35, 42, 0.6) 0%, transparent 22%);
+}
+.mp-bleed__head {
+  position: relative;
+  z-index: 1;
+  width: min(1120px, 100%);
+  margin-inline: auto;
+  padding: calc(var(--header-height) + 24px) clamp(16px, 4vw, 40px) clamp(28px, 4.5vw, 56px);
+  text-align: left;
+}
+.mp-bleed__head [class*="eyebrow"],
+.mp-bleed__head [class*="kicker"] { color: var(--c-lime) !important; margin: 0 0 12px; }
+.mp-bleed__head h1,
+body[data-page] .mp-bleed__head h1 {
+  margin: 0 0 16px;
+  font-size: clamp(3.6rem, 1.6rem + 9vw, 10rem) !important;
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: 0 !important;
+  color: #fff;
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+}
+.mp-bleed__head h1::after { display: none !important; }
+.mp-bleed__head p { max-width: 50ch; color: rgba(241, 236, 224, 0.9); }
+.mp-bleed__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+@media (prefers-reduced-motion: reduce) { .mp-bleed__img { animation: none; } }
+
+/* ---------- Ficha de datos (filas mono, como Booking) ---------- */
+.mp-facts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.mp-facts > * {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+.mp-facts > *:first-child { border-top: 2px solid currentColor; }
+.mp-facts dt, .mp-facts .k { color: var(--color-text-muted); }
+.mp-facts dd, .mp-facts .v { margin: 0; text-align: right; color: var(--color-text); }
+
+/* ---------- Banda de cierre (CTA grande a sangre, lima) ---------- */
+.mp-band {
+  margin-inline: calc(50% - 50vw);
+  padding: clamp(40px, 7vw, 96px) clamp(16px, 4vw, 40px);
+  background: var(--c-lime);
+  color: var(--c-ink);
+  text-align: left;
+}
+.mp-band > * { width: min(1120px, 100%); margin-inline: auto; }
+.mp-band__title {
+  margin-block: 0 22px;
+  font-family: var(--font-primary);
+  font-weight: 900;
+  font-size: clamp(2.6rem, 1.4rem + 5vw, 6rem);
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+.mp-band .mp-btn.primary { background: var(--c-ink); border-color: var(--c-ink); color: var(--c-lime); }
+.mp-band .mp-btn.ghost { border-color: var(--c-ink); color: var(--c-ink); }
+
+/* Bio: portada a sangre + números en arena + franja + cierre lima */
+.bio-bleed .mp-bleed__img { object-position: 30% 35%; }
+.bio-bleed .bio-tagline { color: rgba(241, 236, 224, 0.85); }
+.bio-hero.tone-light { padding-block: clamp(28px, 4vw, 48px); margin-bottom: 0; }
+.bio-marquee { margin-inline: calc(50% - 50vw); margin-bottom: clamp(40px, 6vw, 80px); }
+.bio-cta.mp-band { border-top: 0; text-align: left; padding-top: clamp(40px, 7vw, 96px); margin-top: clamp(40px, 6vw, 80px); }
+.bio-cta.mp-band .bio-cta__line {
+  font-family: var(--font-primary);
+  letter-spacing: 0 !important;
+  font-size: clamp(2.6rem, 1.4rem + 5vw, 6rem);
+  color: var(--c-ink);
+  text-transform: uppercase;
+}
+.bio-cta.mp-band .bio-cta__actions { justify-content: flex-start; }
+
+/* Clínicas · "Quién te va a guiar" con dinámica de Booking */
+body[data-page="clinicas"] .lab-author--flyer {
+  max-width: none;
+  padding-inline: 0;
+  padding-block: clamp(32px, 5vw, 64px) clamp(28px, 4vw, 48px);
+  text-align: left;
+}
+.lab-author--flyer .lab-author__media { min-height: clamp(440px, 72vh, 720px); }
+.lab-author--flyer .mp-bleed__img { object-position: 50% 28%; }
+.lab-author--flyer .mp-bleed__head { padding-top: 40px; }
+body[data-page="clinicas"] .lab-author--flyer h2 {
+  margin: 0 0 16px;
+  font-size: clamp(3rem, 1.6rem + 6vw, 7rem);
+  line-height: 0.86;
+  color: #fff;
+}
+body[data-page="clinicas"] .lab-author--flyer h2::after { display: none; }
+body[data-page="clinicas"] .lab-author--flyer .lab-author__lead {
+  margin: 0;
+  max-width: 52ch;
+  text-align: left;
+  color: rgba(241, 236, 224, 0.9);
+}
+.lab-author--flyer .lab-author__marquee { margin-inline: calc(50% - 50vw); }
+.lab-author--flyer .lab-author__cta {
+  display: flex;
+  width: fit-content;
+  margin: clamp(22px, 3vw, 36px) auto 0;
+}
+.lab-author--flyer .section-kicker { display: block; text-align: left; margin: 0 0 12px; }

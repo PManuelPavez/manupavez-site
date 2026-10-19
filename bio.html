@@ -79,17 +79,27 @@
 
 <main class="story-page">
   <!-- ============ INTRO ============ -->
-  <section class="bio-hero tone-light" aria-labelledby="bio-title">
-    <p class="bio-eyebrow">FREQUENCY STORYTELLER</p>
-    <h1 id="bio-title">MANU PAVEZ</h1>
-    <p class="bio-tagline">Artista — Pergamino, Argentina · n. 2001</p>
+  <header class="mp-bleed bio-bleed" aria-labelledby="bio-title">
+    <img class="mp-bleed__img" src="img/live/live4.jpg" alt="Manu Pavez en cabina" width="1600" height="1066" fetchpriority="high" decoding="async" />
+    <div class="mp-bleed__head">
+      <p class="bio-eyebrow">FREQUENCY STORYTELLER</p>
+      <h1 id="bio-title">MANU PAVEZ</h1>
+      <p class="bio-tagline">Artista — Pergamino, Argentina · n. 2001</p>
+    </div>
+  </header>
 
-    <ul class="bio-stats" aria-label="Datos rápidos">
-      <li><span>2020</span><small>Primer release</small></li>
-      <li><span>6+</span><small>Sellos internacionales</small></li>
-      <li><span>∞</span><small>Horas en estudio</small></li>
-    </ul>
+  <section class="bio-hero tone-light" aria-label="Datos rápidos">
+      <ul class="bio-stats" aria-label="Datos rápidos">
+        <li><span>2020</span><small>Primer release</small></li>
+        <li><span>6+</span><small>Sellos internacionales</small></li>
+        <li><span>∞</span><small>Horas en estudio</small></li>
+      </ul>
   </section>
+
+  <div class="mp-marquee mp-marquee--alt bio-marquee" aria-hidden="true">
+    <div class="mp-marquee__track"><span><b>Tocó en</b> ✦ Rosario · Buenos Aires · Chacabuco · Junín · Pergamino · Villa Gesell · Pinamar ✦</span><span><b>Tocó en</b> ✦ Rosario · Buenos Aires · Chacabuco · Junín · Pergamino · Villa Gesell · Pinamar ✦</span></div>
+  </div>
+  <p class="sr-only">Tocó en Rosario, Buenos Aires, Chacabuco, Junín, Pergamino, Villa Gesell y Pinamar.</p>
 
   <!-- ============ STORY ============
        Cada capítulo: texto + foto lado a lado (alternan de lado en desktop). -->
@@ -167,8 +177,8 @@
       </figure>
     </article>
 
-    <footer class="bio-cta" data-fade-up>
-      <p class="bio-cta__line">Warm-ups y opening sets · Argentina &amp; LATAM</p>
+    <footer class="bio-cta mp-band" data-fade-up>
+      <p class="bio-cta__line mp-band__title">Warm-ups y opening sets · Argentina &amp; LATAM</p>
       <div class="bio-cta__actions">
         <a class="mp-btn primary" href="index.html#booking">RESERVAR FECHA</a>
         <a class="mp-btn ghost" href="presskit.html">VER PRESSKIT</a>
