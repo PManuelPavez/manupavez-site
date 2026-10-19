@@ -7,7 +7,7 @@
   <title>Aplicar al Frequency Lab — Manu Pavez</title>
   <meta name="description" content="Mentoría 1:1 para DJs y productores. Trabajamos sobre tu proyecto real. Cupos limitados por trimestre." />
   <meta name="robots" content="noindex,follow" />
-  <meta name="theme-color" content="#050711" />
+  <meta name="theme-color" content="#10232a" />
 
   <!-- Canonical apunta a la landing completa (evita duplicados) -->
   <link rel="canonical" href="https://manupavez.com/clinicas.html" />
@@ -18,7 +18,7 @@
   <meta property="og:description" content="Mentoría 1:1 para DJs y productores. Cupos limitados." />
   <meta property="og:url" content="https://manupavez.com/aplicar" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://manupavez.com/logos/CUBO%20BLANCO%20MP.png" />
+  <meta property="og:image" content="https://manupavez.com/img/live/live9.jpg" />
 
   <!-- Fuentes (compartidas con el resto) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -38,7 +38,7 @@
   <style>
     body[data-page="aplicar"] {
       background: var(--c-ink);
-      color: #f9f9ff;
+      color: var(--c-sand);
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -56,9 +56,9 @@
     .apply-header__brand { line-height: 0; }
     .apply-header__brand img { width: 32px; height: 32px; opacity: 0.9; }
     .apply-header__more {
-      font-size: 0.7rem;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
       color: rgba(255, 255, 255, 0.6);
       text-decoration: none;
       border-bottom: 1px solid rgba(255, 255, 255, 0.18);
@@ -66,79 +66,46 @@
     }
     .apply-header__more:hover { color: #fff; border-color: #fff; }
 
-    /* Hero mínimo */
-    .apply-hero {
-      position: relative;
-      padding: clamp(90px, 15vh, 130px) clamp(20px, 5vw, 48px) clamp(28px, 4vw, 44px);
-      text-align: center;
-    }
-    .apply-hero__bg {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background:
-        linear-gradient(180deg, rgba(16, 35, 42, 0.55), rgba(16, 35, 42, 1)),
-        url("img/live/live8.jpg") center / cover no-repeat;
-      opacity: 0.9;
-      pointer-events: none;
-    }
-    .apply-hero__inner {
-      position: relative;
-      z-index: 1;
-      max-width: 720px;
-      margin: 0 auto;
-    }
+    /* Portada a sangre (pieza .mp-bleed de theme.css) */
+    .apply-bleed { min-height: clamp(440px, 72vh, 680px); }
+    .apply-bleed .mp-bleed__img { object-position: 50% 40%; }
+    .apply-bleed .mp-bleed__head { width: min(720px, 100%); }
     .apply-eyebrow {
-      margin: 0 0 14px;
-      font-size: 0.72rem;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: #59c6ba;
-      font-weight: 600;
+      margin: 0 0 12px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      color: var(--c-lime);
     }
-    .apply-title {
-      margin: 0 0 18px;
-      font-family: var(--font-primary);
-      font-size: clamp(2.1rem, 6.5vw, 3.6rem);
-      font-weight: 700;
-      line-height: 1;
-      letter-spacing: -0.02em;
+    .apply-bleed .apply-title {
+      font-size: clamp(3.2rem, 1.6rem + 6vw, 5.4rem) !important;
     }
     .apply-lead {
-      margin: 0 auto 22px;
+      margin: 0 0 22px;
       max-width: 540px;
       font-size: clamp(0.98rem, 1.5vw, 1.1rem);
       line-height: 1.55;
-      color: rgba(249, 249, 255, 0.82);
+      color: rgba(241, 236, 224, 0.88);
     }
+    .apply-lead strong { color: #fff; }
     .apply-points {
       list-style: none;
       margin: 0;
       padding: 0;
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px 14px;
-      max-width: 640px;
-      margin-inline: auto;
-    }
-    .apply-points li {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(89, 198, 186, 0.28);
-      background: rgba(89, 198, 186, 0.08);
+      gap: 6px 18px;
+      font-family: var(--font-mono);
       font-size: 0.78rem;
-      color: #f0f5f4;
+      letter-spacing: 0.04em;
+      color: var(--c-sand);
     }
+    .apply-points li { display: inline-flex; align-items: center; gap: 8px; }
     .apply-points li::before {
       content: "";
       width: 6px;
       height: 6px;
-      border-radius: 50%;
-      background: #59c6ba;
+      background: var(--c-lime);
     }
 
     /* Form container */
@@ -157,10 +124,10 @@
     }
     .apply-after h3 {
       margin: 0 0 12px;
-      font-size: 0.72rem;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: #59c6ba;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      color: var(--c-teal);
     }
     .apply-after__steps {
       list-style: none;
@@ -174,9 +141,11 @@
     .apply-after__steps li {
       counter-increment: after-step;
       padding: 16px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(16, 35, 42, 0.6);
+      border-radius: 0;
+      border: 0;
+      border-top: 2px solid var(--c-sand);
+      background: none;
+      text-align: left;
       font-size: 0.82rem;
       line-height: 1.5;
       color: rgba(249, 249, 255, 0.82);
@@ -187,10 +156,10 @@
       display: block;
       margin: 0 0 4px;
       font-family: var(--font-primary);
-      font-size: 0.7rem;
-      letter-spacing: 0.24em;
-      color: #59c6ba;
-      font-weight: 600;
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--c-lime);
+      font-weight: 900;
     }
     @media (max-width: 520px) {
       .apply-after__steps { grid-template-columns: 1fr; }
@@ -200,10 +169,10 @@
     .apply-footer {
       padding: 22px 16px 30px;
       text-align: center;
-      font-size: 0.7rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.5);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      color: rgba(241, 236, 224, 0.6);
     }
     .apply-footer a { color: inherit; }
 
@@ -230,11 +199,11 @@
 
   <main>
     <!-- HERO MINI -->
-    <section class="apply-hero">
-      <div class="apply-hero__bg" aria-hidden="true"></div>
-      <div class="apply-hero__inner">
+    <header class="mp-bleed apply-bleed" aria-labelledby="apply-title">
+      <img class="mp-bleed__img" src="img/live/live9.jpg" alt="" width="1600" height="1066" fetchpriority="high" decoding="async" />
+      <div class="mp-bleed__head">
         <p class="apply-eyebrow">Frequency Lab · Mentoría 1:1</p>
-        <h1 class="apply-title">APLICAR AL LAB</h1>
+        <h1 class="apply-title" id="apply-title">APLICAR AL LAB</h1>
         <p class="apply-lead">
           Trabajamos sobre <strong>tu proyecto real</strong> — no teoría genérica.
           Terminás tracks, tomás decisiones con criterio y salís con dirección clara.
@@ -246,7 +215,7 @@
           <li>Respuesta en 48hs</li>
         </ul>
       </div>
-    </section>
+    </header>
 
     <!-- FORM (mismo markup que clinicas.html — reutiliza CSS y JS) -->
     <div class="apply-form-wrap">
