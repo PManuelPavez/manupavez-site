@@ -57,3 +57,15 @@ enabled = true
 # Solo admin: el JWT y profiles.is_admin se verifican adentro
 verify_jwt = false
 entrypoint = "./functions/order-mark-paid/index.ts"
+
+[functions.tickets-checkout]
+enabled = true
+# Público (página /pergamino con Turnstile); la reserva de stock vive en la base (ticket_reserve)
+verify_jwt = false
+entrypoint = "./functions/tickets-checkout/index.ts"
+
+[functions.tickets-webhook]
+enabled = true
+# Lo llama MercadoPago: se valida la firma x-signature y se re-consulta el pago
+verify_jwt = false
+entrypoint = "./functions/tickets-webhook/index.ts"

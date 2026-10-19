@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Manu Pavez en Pergamino — Viernes 13.11</title>
+  <meta name="description" content="Manu Pavez en Pergamino, viernes 13 de noviembre. Warm up: Facu Arce. Entradas por tanda." />
+  <meta property="og:title" content="Manu Pavez en Pergamino — Viernes 13.11" />
+  <meta property="og:description" content="Main: Manu Pavez · Warm up: Facu Arce. Entradas online." />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://psnprhzowknhfylvgcci.supabase.co; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://psnprhzowknhfylvgcci.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'" />
+  <meta name="theme-color" content="#5A0F14" />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pages/pergamino.css" />
+  <script type="module" src="js/supabase-config.js"></script>
+  <script type="module" src="js/pages/pergamino.js"></script>
+</head>
+<body>
+  <main class="pg">
+    <header class="pg-hero">
+      <figure class="pg-flyer" data-flyer>
+        <div class="pg-flyer__ph" aria-hidden="true">
+          <span class="pg-flyer__date">13.11</span>
+          <span class="pg-flyer__city">Pergamino</span>
+        </div>
+      </figure>
+
+      <p class="pg-kicker" data-date>Viernes 13 de noviembre</p>
+      <h1 class="pg-title" data-name>Manu Pavez en Pergamino</h1>
+
+      <ul class="pg-lineup" data-lineup aria-label="Line up">
+        <li><span class="pg-lineup__role">Main</span><span class="pg-lineup__name">Manu Pavez</span></li>
+        <li><span class="pg-lineup__role">Warm up</span><span class="pg-lineup__name">Facu Arce</span></li>
+      </ul>
+
+      <dl class="pg-info">
+        <div><dt>Horario</dt><dd data-time>A confirmar</dd></div>
+        <div><dt>Lugar</dt><dd data-venue>A confirmar</dd></div>
+        <div><dt>Dirección</dt><dd data-address>A confirmar</dd></div>
+      </dl>
+    </header>
+
+    <section class="pg-card" data-result hidden aria-live="polite"></section>
+
+    <section class="pg-card" data-sale hidden>
+      <div class="pg-tier">
+        <div>
+          <p class="pg-tier__name" data-tier-name></p>
+          <p class="pg-tier__price" data-tier-price></p>
+        </div>
+        <p class="pg-tier__left" data-tier-left></p>
+      </div>
+      <ol class="pg-tiers" data-tiers aria-label="Tandas"></ol>
+
+      <form class="pg-form" data-buy novalidate>
+        <fieldset>
+          <legend>Cantidad de entradas</legend>
+          <div class="pg-qty">
+            <button type="button" class="pg-qty__btn" data-qty="-1" aria-label="Una menos">−</button>
+            <output class="pg-qty__n" data-qty-n aria-live="polite">1</output>
+            <button type="button" class="pg-qty__btn" data-qty="1" aria-label="Una más">+</button>
+            <span class="pg-qty__total" data-total></span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Tus datos</legend>
+          <div class="pg-row">
+            <label>Nombre<input name="first_name" autocomplete="given-name" required maxlength="60" /></label>
+            <label>Apellido<input name="last_name" autocomplete="family-name" required maxlength="60" /></label>
+          </div>
+          <label>Teléfono<input name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" placeholder="Ej. 2477 123456" /></label>
+          <label>Mail<input name="email" type="email" inputmode="email" autocomplete="email" required maxlength="200" /></label>
+          <p class="pg-hint">Al mail te llega la confirmación.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>¿Quiénes van?</legend>
+          <p class="pg-hint">Un nombre por entrada. En la puerta se entra con DNI.</p>
+          <div class="pg-people" data-people></div>
+        </fieldset>
+
+        <label class="pg-rrpp"><span>Código RRPP <em>(opcional)</em></span>
+          <input name="rrpp" maxlength="20" autocapitalize="characters" autocomplete="off" spellcheck="false" />
+        </label>
+
+        <div class="pg-captcha" data-captcha></div>
+        <p class="pg-error" data-error role="alert" hidden></p>
+        <button class="pg-btn" type="submit" data-submit>Pagar con Mercado Pago</button>
+        <p class="pg-hint pg-center">Te guardamos las entradas 15 minutos mientras pagás.</p>
+      </form>
+    </section>
+
+    <section class="pg-card" data-waitlist hidden>
+      <h2 class="pg-h2">Entradas agotadas por ahora</h2>
+      <p>Dejá tus datos y te avisamos primero si se libera una tanda.</p>
+      <form class="pg-form" data-wait novalidate>
+        <label>Nombre y apellido<input name="name" autocomplete="name" required maxlength="120" /></label>
+        <label>Teléfono<input name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" /></label>
+        <label>Mail<input name="email" type="email" inputmode="email" autocomplete="email" required maxlength="200" /></label>
+        <div class="pg-captcha" data-captcha-wait></div>
+        <p class="pg-error" data-wait-error role="alert" hidden></p>
+        <button class="pg-btn" type="submit">Anotarme</button>
+      </form>
+    </section>
+
+    <p class="pg-loading" data-loading>Cargando…</p>
+
+    <footer class="pg-foot">
+      <a href="index.html">manupavez.com</a>
+    </footer>
+  </main>
+</body>
+</html>
