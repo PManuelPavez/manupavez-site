@@ -13,6 +13,7 @@ import { initCounters } from "./features/counters.js";
 import { initDetailsFocus } from "./features/detailsFocus.js";
 import { initViewportPause } from "./features/viewportPause.js";
 import { initCrtWarp } from "./features/crtWarp.js";
+import { initHeroVideo, initBookingPanel } from "./features/bookingFlyer.js";
 import { initHome } from "./pages/home.js";
 import { initPresskit } from "./pages/presskit.js";
 import { initClinicas } from "./pages/clinicas.js";
@@ -41,6 +42,8 @@ safeInit("counters", initCounters);
 safeInit("detailsFocus", initDetailsFocus);
 safeInit("viewportPause", initViewportPause);
 safeInit("crtWarp", initCrtWarp);
+safeInit("heroVideo", initHeroVideo);
+safeInit("bookingPanel", initBookingPanel);
 safeInit("eventos", initEventos);
 
 // Inits que dependen de Supabase: esperar a que la config esté cargada (timeout: 5s)

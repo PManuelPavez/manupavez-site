@@ -220,34 +220,6 @@ input, select, textarea {
   letter-spacing: -0.005em;
 }
 
-/* Booking sobre arena: el pitch suelto, el formulario en bloque petróleo */
-.tone-light .booking-shell {
-  background: none;
-  border: 0;
-  box-shadow: none;
-  padding-inline: 0;
-}
-.tone-light .booking-card {
-  background: var(--c-ink);
-  border: 0;
-  border-radius: 6px;
-}
-.tone-light .booking-points li::before {
-  border-radius: 0;
-  background: var(--c-ink);
-  box-shadow: none;
-}
-.tone-light .booking-highlight {
-  background: rgba(16, 35, 42, 0.06);
-  border: 0;
-  border-left: 3px solid var(--c-ink);
-  border-radius: 0;
-}
-.tone-light .booking-direct a {
-  color: var(--c-ink);
-  border-bottom-color: var(--c-ink);
-}
-
 .live-sets__card,
 .lab-compact__card,
 .creds-hero {
@@ -421,4 +393,32 @@ body[data-page="presskit"] .presskit .bio p:first-of-type::first-letter { color:
 .tone-light .bio-stats li small { color: var(--c-sand-muted); overflow-wrap: anywhere; }
 @media (max-width: 640px) {
   .bio-stats li small { font-size: 0.64rem; }
+}
+
+/* Home · Lab: foto del estudio + texto (sin hueco vacío en el medio) */
+.lab-compact__card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  grid-template-areas: "photo text" "photo cta";
+  align-items: end;
+  gap: 18px clamp(22px, 3vw, 40px);
+  max-width: 1100px;
+  padding: 0;
+  overflow: hidden;
+  background: var(--c-ink-2);
+}
+.lab-compact__photo { grid-area: photo; margin: 0; align-self: stretch; }
+.lab-compact__photo img { width: 100%; height: 100%; min-height: 280px; object-fit: cover; }
+.lab-compact__text { grid-area: text; padding-top: clamp(22px, 3vw, 40px); padding-right: clamp(18px, 3vw, 36px); }
+.lab-compact__cta { grid-area: cta; justify-self: start; margin-bottom: clamp(22px, 3vw, 40px); }
+#lab.lab-compact h2 { font-size: clamp(2.2rem, 1.4rem + 2.6vw, 3.4rem); font-weight: 900; }
+@media (max-width: 760px) {
+  .lab-compact__card {
+    grid-template-columns: 1fr;
+    grid-template-areas: "photo" "text" "cta";
+    gap: 14px;
+  }
+  .lab-compact__photo img { min-height: 0; aspect-ratio: 16 / 10; }
+  .lab-compact__text { padding: 4px 18px 0; }
+  .lab-compact__cta { justify-self: stretch; width: auto; margin: 0 18px 20px; }
 }

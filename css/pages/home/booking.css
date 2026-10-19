@@ -1,120 +1,223 @@
-/* =================== BOOKING (destacado, 2 columnas) =================== */
+/* =================== BOOKING — flyer en vivo (opción A) ===================
+   Foto de cabina a lo ancho + marquesina de nombres + datos rápidos y un
+   solo botón. El formulario vive en un panel que se despliega (js/features/
+   bookingFlyer.js). Colores y tipos: tokens de base.css.
+   ======================================================================== */
 
-.booking--featured {
-  padding-block: clamp(32px, 5vw, 64px);
-}
-
-.booking-shell {
-  display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  gap: clamp(28px, 5vw, 72px);
-  align-items: center;
-  max-width: 1100px;
-  margin-inline: auto;
-  padding: clamp(18px, 3vw, 32px);
-  border-radius: clamp(20px, 3vw, 32px);
-  background:
-    radial-gradient(120% 120% at 0% 0%, rgba(89, 198, 186, 0.10), transparent 55%),
-    radial-gradient(120% 120% at 100% 100%, rgba(49, 64, 151, 0.18), transparent 55%),
-    rgba(23, 50, 59, 0.92);
-  border: 1px solid var(--mp-border);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-}
-
-/* Columna izquierda: pitch */
-.booking-intro { text-align: left; }
-
-.booking-eyebrow {
-  margin: 0 0 14px;
-  font-size: clamp(0.78rem, 1.1vw, 0.9rem);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--mp-accent-2);
-}
-
-.booking--featured #booking-title {
-  margin: 0 0 16px;
-  font-size: clamp(1.9rem, 4.4vw, 3rem);
-  line-height: 1.02;
-  letter-spacing: -0.01em;
-}
-
-.booking-lead {
-  margin: 0 0 22px;
-  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
-  line-height: 1.6;
-  color: var(--color-text-muted);
-  max-width: 42ch;
-}
-
-.booking-points {
-  list-style: none;
-  margin: 0 0 22px;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.booking-points li {
+.booking-flyer {
   position: relative;
-  padding-left: 26px;
-  font-size: 0.95rem;
-  color: var(--mp-text);
+  margin-block: clamp(32px, 5vw, 72px) 0;
+  background: var(--c-ink);
+  color: var(--color-text);
 }
-.booking-points li::before {
+
+/* --- Foto + titular --- */
+.booking-flyer__media {
+  position: relative;
+  min-height: clamp(420px, 78vh, 760px);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+.booking-flyer__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 28% 40%;
+  transform: scale(1.06);
+  transition: transform 1.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.booking-flyer.is-visible .booking-flyer__img { transform: scale(1); }
+.booking-flyer__media::after {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0.5em;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--mp-accent-2);
-  box-shadow: 0 0 0 4px rgba(89, 198, 186, 0.18);
+  inset: 0;
+  background:
+    linear-gradient(to top, var(--c-ink) 0%, rgba(16, 35, 42, 0.55) 38%, transparent 70%),
+    linear-gradient(to left, rgba(16, 35, 42, 0.7) 0%, transparent 55%);
 }
 
-.booking-highlight {
+.booking-flyer__head {
+  position: relative;
+  z-index: 1;
+  width: min(1120px, 100%);
+  margin-inline: auto;
+  padding: 0 clamp(16px, 4vw, 40px) clamp(24px, 4vw, 48px);
+}
+.booking-flyer .booking-eyebrow {
+  margin: 0 0 12px;
+  color: var(--c-lime);
+}
+.booking-flyer #booking-title {
   margin: 0 0 16px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(89, 198, 186, 0.22);
-  background: rgba(89, 198, 186, 0.06);
-  font-size: 0.88rem;
-  line-height: 1.55;
-  color: var(--mp-text);
+  font-size: clamp(3.4rem, 1.6rem + 8vw, 9rem);
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: 0;
+  color: #fff;
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
 }
-.booking-highlight strong { font-weight: 600; }
-
-.booking-direct {
+.booking-flyer .booking-lead {
   margin: 0;
+  max-width: 46ch;
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+  line-height: 1.55;
+  color: rgba(241, 236, 224, 0.88);
+}
+
+/* --- Marquesina lima --- */
+.booking-marquee {
+  overflow: hidden;
+  background: var(--c-lime);
+  color: var(--c-ink);
+  border-block: 1px solid var(--c-ink);
+}
+.booking-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: bookingMarquee 38s linear infinite;
+}
+.booking-marquee__track span {
+  padding: 12px 0;
+  padding-right: 3rem;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.6rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+@keyframes bookingMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.booking-marquee:hover .booking-marquee__track { animation-play-state: paused; }
+
+/* --- Barra de datos + botón --- */
+.booking-flyer__bar {
+  width: min(1120px, 100%);
+  margin-inline: auto;
+  padding: clamp(24px, 3.5vw, 44px) clamp(16px, 4vw, 40px);
+  display: grid;
+  grid-template-columns: auto minmax(280px, 1fr) auto;
+  align-items: center;
+  gap: clamp(20px, 3vw, 48px);
+}
+.booking-stats {
+  display: flex;
+  gap: clamp(18px, 3vw, 40px);
+  margin: 0;
+  padding: 0;
+}
+.booking-stats li { display: flex; flex-direction: column; gap: 4px; }
+.booking-stats__num {
+  font-family: var(--font-primary);
+  font-weight: 900;
+  font-size: clamp(2rem, 1.3rem + 2.2vw, 3.2rem);
+  line-height: 0.9;
+  white-space: nowrap;
+  color: #fff;
+}
+.booking-stats__label {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+.booking-facts {
+  margin: 0;
+  display: grid;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+.booking-facts div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+.booking-facts dt { color: var(--color-text-muted); }
+.booking-facts dd { margin: 0; color: var(--color-text); text-align: right; white-space: nowrap; }
+
+.booking-flyer .booking-open {
+  padding: 18px 30px;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+.booking-flyer .booking-open[aria-expanded="true"] {
+  background: transparent;
+  color: var(--c-lime);
+}
+
+/* --- Panel del formulario --- */
+.booking-panel {
+  scroll-margin-top: calc(var(--header-height) + 12px);
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.4s ease, opacity 0.3s ease;
+}
+.booking-panel.is-open { grid-template-rows: 1fr; opacity: 1; }
+.booking-panel > .booking-panel__inner { overflow: hidden; }
+.booking-panel__inner {
+  position: relative;
+  width: min(820px, 100%);
+  margin-inline: auto;
+  padding: 0 clamp(16px, 4vw, 40px) clamp(32px, 5vw, 56px);
+}
+.booking-panel .booking-card {
+  background: var(--c-ink-2);
+  border: 1px solid var(--color-border-soft);
+  border-radius: 6px;
+  padding: clamp(20px, 3vw, 36px);
+}
+.booking-panel .contact-form { margin: 0; }
+.booking-panel .form-submit { width: 100%; }
+.booking-panel__close {
+  position: absolute;
+  top: 10px;
+  right: calc(clamp(16px, 4vw, 40px) + 10px);
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.booking-direct {
+  margin: 18px 0 0;
   font-size: 0.9rem;
   color: var(--color-text-muted);
 }
-.booking-direct a {
-  color: #fff;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-  padding-bottom: 1px;
-  transition: border-color 0.2s ease;
-}
-.booking-direct a:hover { border-color: #fff; }
+.booking-direct a { color: var(--c-lime); }
 
-/* Columna derecha: card con el form */
-.booking-card {
-  background: rgba(16, 35, 42, 0.7);
-  border: 1px solid var(--mp-border);
-  border-radius: clamp(16px, 2vw, 22px);
-  padding: clamp(20px, 3vw, 32px);
+/* --- Responsive --- */
+@media (max-width: 1080px) {
+  .booking-flyer__bar { grid-template-columns: 1fr 1fr; }
+  .booking-flyer .booking-open { grid-column: 1 / -1; width: 100%; }
 }
-.booking-card .contact-form { margin: 0; }
-.booking-card .form-submit { width: 100%; }
-
-@media (max-width: 820px) {
-  .booking-shell {
-    grid-template-columns: 1fr;
-    gap: clamp(24px, 6vw, 36px);
+@media (max-width: 640px) {
+  .booking-flyer__media { min-height: 520px; }
+  .booking-flyer__img { object-position: 30% 30%; }
+  .booking-flyer__media::after {
+    background: linear-gradient(to top, var(--c-ink) 0%, rgba(16, 35, 42, 0.6) 45%, transparent 75%);
   }
-  .booking-intro { text-align: center; }
-  .booking-lead { margin-inline: auto; }
-  .booking-points { align-items: flex-start; max-width: 320px; margin-inline: auto; }
+  .booking-flyer__bar { grid-template-columns: 1fr; }
+  .booking-stats { justify-content: space-between; }
 }
+@media (prefers-reduced-motion: reduce) {
+  .booking-marquee__track { animation: none; }
+  .booking-flyer__img { transform: none; }
+}
+
+/* Video del hero (opcional): cuando carga, reemplaza la foto */
+.hero-card-video[hidden] { display: none; }
+.hero-card.has-video picture .hero-card-img { display: none; }

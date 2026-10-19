@@ -148,6 +148,10 @@
           <source srcset="../img/indexPERFIL.webp" type="image/webp" />
           <img class="hero-card-img" src="../img/indexPERFIL.webp" alt="Manu Pavez" width="1600" height="893" decoding="async" fetchpriority="high" />
         </picture>
+        <!-- VIDEO DEL HERO (opcional): subí el archivo a /video y poné la ruta en data-src
+             (ej. data-src="../video/hero.mp4"; data-src-mobile para una versión vertical/liviana).
+             Mientras data-src esté vacío se ve la foto de abajo, sin pedir nada al servidor. -->
+        <video class="hero-card-img hero-card-video" data-hero-video data-src="" data-src-mobile="" muted loop playsinline preload="none" aria-hidden="true" hidden></video>
         <span class="hero-card-veil" aria-hidden="true"></span>
 
         <p class="hero-eyebrow"><a href="bio.html">FREQUENCY STORYTELLER</a></p>
@@ -178,22 +182,6 @@
       </div>
     </section>
 
-    <!-- ============ DYNAMIC PHOTO STRIP ============ -->
-    <section class="photo-strip reveal" aria-label="Image gallery">
-      <div class="photo-strip-track" aria-hidden="true">
-        <img src="../img/fotos/slide1.jpg" alt="" loading="lazy" />
-        <img src="../img/fotos/slide2.jpg" alt="" loading="lazy" />
-        <img src="../img/fotos/slide3.jpg" alt="" loading="lazy" />
-        <img src="../img/fotos/slide4.jpg" alt="" loading="lazy" />
-        <img src="../img/fotos/slide5.jpg" alt="" loading="lazy" />
-        <!-- duplicado para loop infinito -->
-        <img src="../img/fotos/slide1.jpg" alt="" loading="lazy" />
-        <img src="../img/fotos/slide2.jpg" alt="" loading="lazy" />
-        <img src="../img/fotos/slide3.jpg" alt="" loading="lazy" />
-        <img src="../img/fotos/slide4.jpg" alt="" loading="lazy" />
-        <img src="../img/fotos/slide5.jpg" alt="" loading="lazy" />
-      </div>
-    </section>
 
     <!-- ============ STATS / EN NÚMEROS ============ -->
     <section class="section stats reveal section-centered tone-light" aria-label="Manu Pavez in numbers">
@@ -411,35 +399,41 @@
     </section>
 
     <!-- ============ BOOKING ============ -->
-    <section id="booking" class="section booking booking--featured reveal tone-light" aria-labelledby="booking-title">
-      <div class="booking-shell">
-        <div class="booking-intro">
-          <p class="booking-eyebrow">+ Booking · Worldwide</p>
-          <h2 id="booking-title" data-animate="heading">WARM-UPS &amp;<br>OPENING SETS</h2>
-          <p class="booking-lead">
-            Progressive &amp; melodic house for clubs, boutique festivals and curated nights.
-            An elegant warm-up or an opening set built with a narrative arc.
-          </p>
-
-          <ul class="booking-points">
-            <li><strong>Format:</strong> Warm-up · Opening set</li>
-            <li><strong>Genre:</strong> Progressive &amp; melodic house</li>
-            <li><strong>Based in:</strong> Pergamino, Argentina — available to travel</li>
-            <li><strong>Rider:</strong> 3× CDJ + DJM-900 / V10</li>
-            <li><strong>Reply time:</strong> 24–48&nbsp;h</li>
-          </ul>
-
-          <p class="booking-highlight">
-            <strong>Nick Warren · Sahar Z · DJ Ruby</strong> have supported his sound.
-            He has shared the booth with <strong>Alex O'Rion · Roy Rosenfeld · Soundexile · Graziano Raffa · Ezequiel Arias</strong>.
-          </p>
-
-          <p class="booking-direct">
-            Direct contact: <a href="mailto:manupavez22@gmail.com?subject=Booking%20Manu%20Pavez%20(EN)">manupavez22@gmail.com</a>
-          </p>
+    <section id="booking" class="booking-flyer reveal" aria-labelledby="booking-title">
+      <div class="booking-flyer__media">
+        <img class="booking-flyer__img" src="../img/fotos/slide3.jpg" alt="Manu Pavez in the booth, blue lights" width="1620" height="1080" loading="lazy" decoding="async" />
+        <div class="booking-flyer__head">
+          <p class="booking-eyebrow">Booking · Worldwide</p>
+          <h2 id="booking-title">WARM-UPS &amp;<br>OPENING SETS</h2>
+          <p class="booking-lead">Progressive &amp; melodic house for clubs, boutique festivals and curated nights. An elegant warm-up or an opening set built with a narrative arc.</p>
         </div>
+      </div>
 
-        <div class="booking-card tone-dark">
+      <!-- Marquesina: quiénes respaldaron / compartieron cabina -->
+      <div class="booking-marquee" aria-hidden="true">
+        <div class="booking-marquee__track"><span>★ Nick Warren · Sahar Z · DJ Ruby · Alex O'Rion · Roy Rosenfeld · Soundexile · Graziano Raffa · Ezequiel Arias</span><span>★ Nick Warren · Sahar Z · DJ Ruby · Alex O'Rion · Roy Rosenfeld · Soundexile · Graziano Raffa · Ezequiel Arias</span></div>
+      </div>
+      <p class="sr-only">His sound has been supported by Nick Warren, Sahar Z and DJ Ruby. He has shared the booth with Alex O'Rion, Roy Rosenfeld, Soundexile, Graziano Raffa and Ezequiel Arias.</p>
+
+      <div class="booking-flyer__bar">
+        <ul class="booking-stats">
+          <li><span class="booking-stats__num" data-counter data-count-source="plays" data-count-base="271022" data-count-suffix="+">0</span><span class="booking-stats__label">plays</span></li>
+          <li><span class="booking-stats__num" data-counter data-count-to="6" data-count-suffix="+">0</span><span class="booking-stats__label">international labels</span></li>
+          <li><span class="booking-stats__num">24–48&nbsp;h</span><span class="booking-stats__label">reply time</span></li>
+        </ul>
+        <dl class="booking-facts">
+          <div><dt>Format</dt><dd>Warm-up · Opening</dd></div>
+          <div><dt>Rider</dt><dd>3× CDJ + DJM-900 / V10</dd></div>
+          <div><dt>Based in</dt><dd>Pergamino · travels</dd></div>
+        </dl>
+        <button type="button" class="mp-btn primary booking-open" data-booking-open aria-expanded="false" aria-controls="booking-panel">REQUEST A DATE <span aria-hidden="true">→</span></button>
+      </div>
+
+      <!-- Formulario: se despliega al tocar el botón -->
+      <div id="booking-panel" class="booking-panel" data-booking-panel hidden>
+        <div class="booking-panel__inner">
+          <button type="button" class="booking-panel__close" data-booking-close aria-label="Close form">×</button>
+        <div class="booking-card">
           <form id="contact-form" class="contact-form" action="#" method="post" novalidate>
             <div class="form-grid">
               <div class="form-field">
@@ -496,6 +490,9 @@
             <h3>MESSAGE SENT!</h3>
             <p>Thanks for reaching out. I'll get back to you soon at the email you left. If it's urgent, write to me directly at <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>.</p>
           </div>
+          <p class="booking-direct">
+            Direct contact: <a href="mailto:manupavez22@gmail.com?subject=Booking%20Manu%20Pavez%20(EN)">manupavez22@gmail.com</a>
+          </p>
         </div>
       </div>
     </section>
