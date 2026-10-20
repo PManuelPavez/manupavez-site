@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Puerta — Manu Pavez</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; connect-src 'self' https://psnprhzowknhfylvgcci.supabase.co; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'" />
+  <meta name="theme-color" content="#062C33" />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pages/puerta.css" />
+  <script src="js/supabase-config.js"></script>
+  <script type="module" src="js/pages/puerta.js"></script>
+</head>
+<body>
+  <!-- Ingreso con el código de 4 dígitos -->
+  <main class="pt-login" data-login hidden>
+    <img src="logos/CUBO%20BLANCO%20MP.png" alt="" width="40" height="40" />
+    <h1>Control de puerta</h1>
+    <p>Ingresá el código de 4 números que te pasaron.</p>
+    <form data-login-form novalidate>
+      <label class="pt-sr" for="pt-code">Código</label>
+      <input id="pt-code" name="code" class="pt-code" type="password" inputmode="numeric" autocomplete="one-time-code"
+        pattern="[0-9]{4}" maxlength="4" placeholder="····" required />
+      <p class="pt-msg" data-login-msg role="alert"></p>
+      <button class="pt-btn" type="submit">ENTRAR</button>
+    </form>
+  </main>
+
+  <!-- Lista -->
+  <main class="pt-app" data-app hidden>
+    <header class="pt-top">
+      <div class="pt-top__row">
+        <div>
+          <p class="pt-top__event" data-event></p>
+          <p class="pt-top__count"><strong data-in>0</strong> adentro de <span data-total>0</span></p>
+        </div>
+        <button class="pt-out" type="button" data-logout>Salir</button>
+      </div>
+      <div class="pt-search">
+        <label class="pt-sr" for="pt-q">Buscar</label>
+        <input id="pt-q" type="search" inputmode="search" autocomplete="off" autocapitalize="off" spellcheck="false"
+          placeholder="Buscar nombre, apellido o código" data-q />
+        <button type="button" class="pt-clear" data-clear aria-label="Borrar búsqueda" hidden>×</button>
+      </div>
+      <div class="pt-tabs" role="group" aria-label="Filtro">
+        <button type="button" data-filter="pending" aria-pressed="true">Faltan</button>
+        <button type="button" data-filter="in" aria-pressed="false">Adentro</button>
+        <button type="button" data-filter="all" aria-pressed="false">Todos</button>
+      </div>
+    </header>
+    <p class="pt-hint" data-hint>Escribí las primeras letras del nombre o del apellido.</p>
+    <ul class="pt-list" data-list aria-live="polite"></ul>
+  </main>
+
+  <div class="pt-toast" data-toast role="status" aria-live="assertive" hidden></div>
+</body>
+</html>

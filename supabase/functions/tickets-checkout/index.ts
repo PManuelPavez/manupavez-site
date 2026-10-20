@@ -103,6 +103,10 @@ Deno.serve(async (req) => {
   if (attendees.length !== quantity || attendees.some((a) => !validName(a.first_name) || !validName(a.last_name))) {
     return json({ error: "invalid_attendees" }, 400);
   }
+  // Una entrada por persona: sin nombres repetidos dentro de la compra (en la puerta se entra con DNI)
+  const norm = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+  const keys = attendees.map((a) => `${norm(a.first_name)}|${norm(a.last_name)}`);
+  if (new Set(keys).size !== keys.length) return json({ error: "duplicate_attendees" }, 400);
 
   const rrppCode = /^[A-Za-z0-9]{2,20}$/.test(String(body.rrpp || "")) ? String(body.rrpp).toUpperCase() : "";
   const tierId = /^[0-9a-f-]{36}$/i.test(String(body.tier_id || "")) ? String(body.tier_id) : null;

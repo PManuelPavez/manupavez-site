@@ -2,5 +2,8 @@ User-agent: *
 Allow: /
 Disallow: /admin.html
 Disallow: /alumnos.html
+Disallow: /puerta.html
+Disallow: /ventas.html
+Disallow: /baja.html
 
 Sitemap: https://manupavez.com/sitemap.xml

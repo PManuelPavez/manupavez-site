@@ -1,0 +1,80 @@
+/* =================== VENTAS — panel de entradas (solo admin) =================== */
+body[data-page="ventas"] { background: var(--c-ink); }
+.vt { width: min(1120px, 100%); margin: 0 auto; padding: max(20px, env(safe-area-inset-top)) 16px 64px; display: grid; gap: 16px; }
+.vt-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--color-border-soft); }
+.vt-kicker { margin: 0 0 6px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-lime); }
+.vt-head h1 { margin: 0; font-size: clamp(1.8rem, 1.2rem + 2vw, 2.6rem); }
+.vt-sub { margin: 6px 0 0; color: var(--color-text-muted); }
+.vt-head__actions { display: flex; gap: 8px; }
+.vt-status { color: var(--color-text-muted); }
+.vt-status:empty { display: none; }
+
+.vt-card { padding: clamp(16px, 2.4vw, 24px); border: 1px solid var(--color-border-soft); border-radius: 8px; background: var(--c-ink-2); }
+.vt-card h2 { margin: 0 0 12px; font-size: 1.25rem; }
+.vt-card__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.vt-card__head h2 { margin: 0; }
+.vt-card__tools { display: flex; flex-wrap: wrap; gap: 8px; }
+.vt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; }
+.vt-help { margin: 0 0 12px; font-size: 0.9rem; color: var(--color-text-muted); }
+.vt-help a { color: var(--c-lime); }
+.vt-note { min-height: 1.2em; margin: 8px 0 0; font-size: 0.88rem; color: var(--color-text-muted); }
+.vt-note.is-error { color: #ff9b9b; }
+
+.vt input {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 16px;
+}
+.vt-inline { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.vt-inline input { flex: 1 1 160px; min-width: 0; }
+
+.vt-login { max-width: 420px; }
+.vt-login form { display: grid; gap: 10px; }
+.vt-pin { font-size: 1.6rem !important; letter-spacing: 0.4em; text-align: center; }
+
+/* Números */
+.vt-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.vt-kpi { padding: 14px; border: 1px solid var(--color-border-soft); border-top: 3px solid var(--c-lime); border-radius: 6px; background: var(--c-ink-2); }
+.vt-kpi__n { display: block; font-size: 1.9rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.vt-kpi__l { display: block; margin-top: 4px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-muted); }
+
+/* Tandas */
+.vt-tiers { display: grid; gap: 12px; }
+.vt-tier__top { display: flex; justify-content: space-between; gap: 10px; font-size: 0.95rem; }
+.vt-tier__top span:last-child { color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+.vt-bar { height: 10px; margin-top: 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.08); overflow: hidden; display: flex; }
+.vt-bar i { display: block; height: 100%; }
+.vt-bar .is-sold { background: var(--c-lime); }
+.vt-bar .is-res { background: rgba(233, 255, 107, 0.35); }
+.vt-tier.is-off { opacity: 0.55; }
+
+/* Tablas */
+.vt-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.vt-table th, .vt-table td { padding: 8px 6px; border-bottom: 1px solid var(--color-border-soft); text-align: left; }
+.vt-table th { font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600; }
+.vt-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.vt-copy { padding: 4px 8px; border: 1px solid var(--color-border-soft); border-radius: 4px; background: transparent; color: var(--color-text-muted); font: inherit; font-size: 0.78rem; cursor: pointer; }
+
+/* Códigos de puerta */
+.vt-codes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.vt-codes li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border: 1px solid var(--color-border-soft); border-radius: 6px; }
+.vt-codes li.is-off { opacity: 0.55; }
+.vt-codes small { display: block; color: var(--color-text-muted); }
+.vt-newcode { margin: 12px 0 0; padding: 14px; border: 2px dashed var(--c-lime); border-radius: 6px; font-size: 1rem; }
+.vt-newcode strong { display: block; font-size: 2.4rem; letter-spacing: 0.3em; color: var(--c-lime); }
+
+/* Pedidos */
+.vt-orders { display: grid; gap: 8px; }
+.vt-order { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 10px 12px; border: 1px solid var(--color-border-soft); border-radius: 6px; font-size: 0.92rem; }
+.vt-order__who { font-weight: 600; }
+.vt-order__meta, .vt-order__people { grid-column: 1 / -1; color: var(--color-text-muted); font-size: 0.84rem; overflow-wrap: anywhere; }
+.vt-order__right { text-align: right; font-variant-numeric: tabular-nums; }
+.vt-tag { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.vt-tag.is-approved { background: rgba(124, 242, 165, 0.18); color: #7cf2a5; }
+.vt-tag.is-pending { background: rgba(255, 197, 107, 0.18); color: #ffc56b; }
+.vt-tag.is-guest { background: rgba(89, 198, 186, 0.2); color: var(--c-teal); }
