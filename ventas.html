@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Ventas — Manu Pavez</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#10232a" />
+  <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/pages/ventas.css" />
+  <script src="js/supabase-config.js"></script>
+  <script type="module" src="js/pages/ventas.js"></script>
+</head>
+<body data-page="ventas">
+  <main class="vt">
+    <header class="vt-head">
+      <div>
+        <p class="vt-kicker">Panel de ventas</p>
+        <h1 data-title>Entradas</h1>
+        <p class="vt-sub" data-sub></p>
+      </div>
+      <div class="vt-head__actions" data-head-actions hidden>
+        <button type="button" class="mp-btn ghost small" data-refresh>ACTUALIZAR</button>
+        <button type="button" class="mp-btn ghost small" data-logout>SALIR</button>
+      </div>
+    </header>
+
+    <p class="vt-status" data-status>Cargando…</p>
+
+    <!-- Login admin (mismo PIN de siempre) -->
+    <section class="vt-card vt-login" data-login hidden>
+      <h2>Entrá con tu PIN de admin</h2>
+      <form data-pin-form novalidate>
+        <input class="sr-only" type="text" name="username" autocomplete="username" value="Frequency Lab (admin)" tabindex="-1" aria-hidden="true" readonly />
+        <label for="vt-pin">PIN (6 números)</label>
+        <input id="vt-pin" name="password" class="vt-pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="6" placeholder="······" required />
+        <div data-captcha></div>
+        <p class="vt-note" data-note role="status" aria-live="polite"></p>
+        <button type="submit" class="mp-btn primary">ENTRAR</button>
+      </form>
+    </section>
+
+    <div data-dash hidden>
+      <!-- Números -->
+      <section class="vt-kpis" data-kpis></section>
+
+      <!-- Tandas -->
+      <section class="vt-card">
+        <h2>Tandas</h2>
+        <div class="vt-tiers" data-tiers></div>
+      </section>
+
+      <div class="vt-grid">
+        <!-- RRPP -->
+        <section class="vt-card">
+          <h2>Por RRPP</h2>
+          <table class="vt-table" data-rrpp-table></table>
+          <form class="vt-inline" data-rrpp-form novalidate>
+            <input name="name" placeholder="Nombre" required maxlength="60" />
+            <input name="code" placeholder="Código (ej. JUAN)" required maxlength="20" autocapitalize="characters" />
+            <button type="submit" class="mp-btn primary small">SUMAR RRPP</button>
+          </form>
+          <p class="vt-note" data-rrpp-note></p>
+        </section>
+
+        <!-- Puerta -->
+        <section class="vt-card">
+          <h2>Puerta</h2>
+          <p class="vt-help">Cada persona de seguridad entra a <a href="puerta.html" target="_blank" rel="noopener">manupavez.com/puerta.html</a> con su código de 4 números.</p>
+          <ul class="vt-codes" data-codes></ul>
+          <form class="vt-inline" data-code-form novalidate>
+            <input name="label" placeholder="Nombre (ej. Seguridad 1)" required maxlength="40" />
+            <button type="submit" class="mp-btn primary small">CREAR CÓDIGO</button>
+          </form>
+          <p class="vt-newcode" data-newcode hidden></p>
+        </section>
+      </div>
+
+      <!-- Invitados -->
+      <section class="vt-card">
+        <h2>Invitados</h2>
+        <p class="vt-help">Entran sin pagar y aparecen en la lista de puerta como "Invitado". Cuentan para la capacidad total.</p>
+        <form class="vt-inline" data-guest-form novalidate>
+          <input name="first" placeholder="Nombre" required maxlength="60" />
+          <input name="last" placeholder="Apellido" required maxlength="60" />
+          <button type="submit" class="mp-btn primary small">SUMAR INVITADO</button>
+        </form>
+        <p class="vt-note" data-guest-note></p>
+      </section>
+
+      <!-- Pedidos -->
+      <section class="vt-card">
+        <div class="vt-card__head">
+          <h2>Pedidos</h2>
+          <div class="vt-card__tools">
+            <input type="search" placeholder="Buscar nombre, mail o código" data-order-q />
+            <button type="button" class="mp-btn ghost small" data-csv>LISTA DE PUERTA (CSV)</button>
+          </div>
+        </div>
+        <div class="vt-orders" data-orders></div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

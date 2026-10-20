@@ -20,6 +20,7 @@ const ERRORS = {
   invalid_phone: "Revisá el teléfono (con código de área).",
   invalid_name: "Revisá tu nombre y apellido.",
   invalid_attendees: "Completá nombre y apellido de cada entrada.",
+  duplicate_attendees: "Cada entrada tiene que ser de una persona distinta: hay nombres repetidos. En la puerta se entra con DNI.",
   invalid_quantity: "Elegí entre 1 y 6 entradas.",
   too_many_orders: "Tenés varios pedidos sin pagar. Esperá unos minutos y probá de nuevo.",
   sold_out: "Se agotaron las entradas mientras completabas.",
@@ -173,6 +174,10 @@ function setupBuy(ev, rrpp) {
     if (v("phone").replace(/\D/g, "").length < 8) return showErr(ERRORS.invalid_phone);
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("email"))) return showErr(ERRORS.invalid_email);
     if (attendees.some((a) => !a.first_name || !a.last_name)) return showErr(ERRORS.invalid_attendees);
+    // Una entrada por persona: no se aceptan nombres repetidos dentro de la compra
+    const norm = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+    const keys = attendees.map((a) => `${norm(a.first_name)}|${norm(a.last_name)}`);
+    if (new Set(keys).size !== keys.length) return showErr(ERRORS.duplicate_attendees);
 
     const btn = $("[data-submit]");
     btn.disabled = true;

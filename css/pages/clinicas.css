@@ -2228,6 +2228,7 @@ html.gate-open { overflow: hidden; }
 }
 
 .entry-gate__panel {
+  position: relative;
   padding: clamp(28px, 5vw, 40px) clamp(20px, 4vw, 32px);
   border-radius: var(--radius-lg);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -2242,6 +2243,38 @@ html.gate-open { overflow: hidden; }
   color: var(--color-text-muted);
 }
 .entry-gate__actions { display: grid; gap: 12px; }
+
+/* Salidas del popup: × arriba a la derecha y "Seguir mirando el Lab" */
+.entry-gate__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.entry-gate__close:hover { border-color: rgba(255, 255, 255, 0.45); }
+.entry-gate__skip {
+  margin-top: 16px;
+  padding: 8px 4px;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.88rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.entry-gate__skip:hover { color: var(--color-text); }
+.entry-gate__close:focus-visible,
+.entry-gate__skip:focus-visible { outline: 2px solid var(--c-lime, #e9ff6b); outline-offset: 2px; }
 .entry-gate__actions .mp-btn { width: 100%; justify-content: center; }
 
 .entry-gate__view[data-gate-view="pin"] { display: grid; gap: 14px; }
@@ -2471,3 +2504,41 @@ body[data-page="clinicas"] main > .has-photo-bg {
 }
 /* Dos bloques con fondo seguidos: separados por un solo hueco */
 body[data-page="clinicas"] main > .section--light + .has-photo-bg { margin-top: calc(var(--cl-gap) * 2); }
+
+/* =========================================================
+   Botón fijo "APLICAR AL LAB" (solo celular)
+   ========================================================= */
+.lab-apply-bar { display: none; }
+@media (max-width: 760px) {
+  .lab-apply-bar {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    z-index: 16;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 52px;
+    border-radius: 4px;
+    background: var(--c-lime, #e9ff6b);
+    color: var(--c-ink, #10232a);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transform: translateY(16px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .lab-apply-bar.is-on { opacity: 1; transform: none; pointer-events: auto; }
+  /* Con el botón a la vista, los flotantes suben para no pisarse */
+  body.has-apply-bar .beat-float,
+  body.has-apply-bar .scroll-top { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 64px); transition: bottom 0.25s ease, opacity 0.25s ease, transform 0.25s ease; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-apply-bar { transition: none; }
+}

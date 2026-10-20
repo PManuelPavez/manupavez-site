@@ -16,6 +16,7 @@ import { initCrtWarp } from "./features/crtWarp.js";
 import { initHeroVideo, initBookingPanel } from "./features/bookingFlyer.js";
 import { initFanSignup } from "./features/fanSignup.js";
 import { initAnalytics } from "./core/analytics.js";
+import { initApplyBar } from "./features/applyBar.js";
 import { initHome } from "./pages/home.js";
 import { initPresskit } from "./pages/presskit.js";
 import { initClinicas } from "./pages/clinicas.js";
@@ -48,6 +49,7 @@ safeInit("crtWarp", initCrtWarp);
 safeInit("heroVideo", initHeroVideo);
 safeInit("bookingPanel", initBookingPanel);
 safeInit("fanSignup", initFanSignup);
+safeInit("applyBar", initApplyBar);
 safeInit("eventos", initEventos);
 
 // Inits que dependen de Supabase: esperar a que la config esté cargada (timeout: 5s)

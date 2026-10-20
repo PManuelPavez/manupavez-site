@@ -27,6 +27,7 @@ function build() {
   dlg.setAttribute("aria-label", "Entrar a Frequency Lab");
   dlg.innerHTML = `
     <div class="entry-gate__panel">
+      <button type="button" class="entry-gate__close" data-gate-close aria-label="Cerrar y ver la página">×</button>
       <p class="entry-gate__kicker">Frequency Lab</p>
 
       <div class="entry-gate__view" data-gate-view="choice">
@@ -34,6 +35,7 @@ function build() {
           <button type="button" class="mp-btn primary" data-gate-start>QUIERO EMPEZAR</button>
           <button type="button" class="mp-btn ghost" data-gate-student>YA SOY ALUMNO</button>
         </div>
+        <button type="button" class="entry-gate__skip" data-gate-close>Seguir mirando el Lab →</button>
       </div>
 
       <form class="entry-gate__view" data-gate-view="pin" hidden novalidate>
@@ -129,7 +131,9 @@ function open(initialView) {
     close(() => scrollToId("alumnos"));
   });
 
-  // Esc cierra igual que "seguir mirando"
+  // Cerrar para ver la página: ×, "Seguir mirando", tocar afuera del panel o Esc
+  dlg.querySelectorAll("[data-gate-close]").forEach((b) => b.addEventListener("click", () => close()));
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) close(); });
   dlg.addEventListener("cancel", (e) => { e.preventDefault(); close(); });
 
   input.addEventListener("input", () => {
