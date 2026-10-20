@@ -182,6 +182,108 @@
 </section>
 
     <!-- RESULTADOS -->
+    <section id="reservar" class="section section-centered" data-fade-up>
+      <span class="section-kicker">Aplicación</span>
+      <h2>ENTRAR AL LAB</h2>
+
+      <p class="muted">
+        Este es el primer paso. Contame dónde estás y qué querés cambiar.
+      </p>
+
+      <div class="lab-form-panel">
+        <div class="lab-form-panel__head">
+          <span class="lab-form-panel__tag">Aplicación al Lab</span>
+
+          <div class="form-progress" aria-live="polite">
+            <span class="form-progress__label">Paso <span id="step-number">1</span> <span class="form-progress__total">de 4</span></span>
+            <span class="form-progress-bar" aria-hidden="true" style="--progress: 25%"></span>
+          </div>
+        </div>
+
+      <form data-clinic-form class="lab-form" novalidate aria-label="Formulario de aplicación al Lab">
+
+        <!-- STEP 1 — identidad -->
+        <fieldset class="form-step is-active" data-step="1">
+          <div class="field">
+            <label for="name">Nombre</label>
+            <input id="name" name="name" type="text" required autocomplete="name" placeholder="Cómo te llamás">
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required autocomplete="email" placeholder="tu@email.com">
+          </div>
+
+          <button type="button" data-next class="mp-btn primary">Continuar</button>
+        </fieldset>
+
+        <!-- STEP 2 — nivel como chips -->
+        <fieldset class="form-step" data-step="2">
+          <div class="field">
+            <label>¿En qué nivel estás?</label>
+            <div class="cl-chips" role="radiogroup" aria-label="Nivel">
+              <input type="radio" id="level-p" name="level" value="principiante" required>
+              <label for="level-p">Principiante</label>
+
+              <input type="radio" id="level-i" name="level" value="intermedio">
+              <label for="level-i">Intermedio</label>
+
+              <input type="radio" id="level-a" name="level" value="avanzado">
+              <label for="level-a">Avanzado</label>
+            </div>
+          </div>
+
+          <div class="form-nav">
+            <button type="button" data-prev class="mp-btn ghost">Atrás</button>
+            <button type="button" data-next class="mp-btn primary">Continuar</button>
+          </div>
+        </fieldset>
+
+        <!-- STEP 3 — objetivo -->
+        <fieldset class="form-step" data-step="3">
+          <div class="field">
+            <label for="goal">¿Qué querés cambiar en tu música?</label>
+            <input id="goal" name="goal" type="text" placeholder="Terminar tracks, mejorar mezcla, encontrar identidad…">
+          </div>
+
+          <div class="form-nav">
+            <button type="button" data-prev class="mp-btn ghost">Atrás</button>
+            <button type="button" data-next class="mp-btn primary">Continuar</button>
+          </div>
+        </fieldset>
+
+        <!-- STEP 4 — mensaje + submit -->
+        <fieldset class="form-step" data-step="4">
+          <div class="field">
+            <label for="message">Contame en qué punto estás</label>
+            <textarea id="message" name="message" rows="4" placeholder="Dónde te sentís trabado hoy"></textarea>
+          </div>
+
+          <div class="form-nav">
+            <button type="button" data-prev class="mp-btn ghost">Atrás</button>
+            <button type="submit" class="mp-btn orange">Entrar al Lab</button>
+          </div>
+
+          <p class="form-error" data-form-error hidden role="alert"></p>
+        </fieldset>
+
+      </form>
+
+        <!-- Success state (oculto por defecto) -->
+        <div class="form-success" data-form-success hidden>
+          <div class="form-success__icon" aria-hidden="true"></div>
+          <h3>RECIBIDO</h3>
+          <p>Te respondo en menos de 48hs al mail que dejaste. Si querés adelantar algo, escribime directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>.</p>
+        </div>
+      </div><!-- /lab-form-panel -->
+
+      <p class="muted lab-form-alt">
+        ¿Preferís el mail? Escribime directo a
+        <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>
+      </p>
+    </section>
+
+    <!-- ÁREA DE ALUMNOS -->
     <section class="section section-centered section--light" data-fade-up>
       <span class="section-kicker">Resultados</span>
       <h2>LO QUE EMPIEZA A PASAR</h2>
@@ -411,108 +513,6 @@
 
  
     <!-- RESERVA -->
-    <section id="reservar" class="section section-centered" data-fade-up>
-      <span class="section-kicker">Aplicación</span>
-      <h2>ENTRAR AL LAB</h2>
-
-      <p class="muted">
-        Este es el primer paso. Contame dónde estás y qué querés cambiar.
-      </p>
-
-      <div class="lab-form-panel">
-        <div class="lab-form-panel__head">
-          <span class="lab-form-panel__tag">Aplicación al Lab</span>
-
-          <div class="form-progress" aria-live="polite">
-            <span class="form-progress__label">Paso <span id="step-number">1</span> <span class="form-progress__total">de 4</span></span>
-            <span class="form-progress-bar" aria-hidden="true" style="--progress: 25%"></span>
-          </div>
-        </div>
-
-      <form data-clinic-form class="lab-form" novalidate aria-label="Formulario de aplicación al Lab">
-
-        <!-- STEP 1 — identidad -->
-        <fieldset class="form-step is-active" data-step="1">
-          <div class="field">
-            <label for="name">Nombre</label>
-            <input id="name" name="name" type="text" required autocomplete="name" placeholder="Cómo te llamás">
-          </div>
-
-          <div class="field">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" required autocomplete="email" placeholder="tu@email.com">
-          </div>
-
-          <button type="button" data-next class="mp-btn primary">Continuar</button>
-        </fieldset>
-
-        <!-- STEP 2 — nivel como chips -->
-        <fieldset class="form-step" data-step="2">
-          <div class="field">
-            <label>¿En qué nivel estás?</label>
-            <div class="cl-chips" role="radiogroup" aria-label="Nivel">
-              <input type="radio" id="level-p" name="level" value="principiante" required>
-              <label for="level-p">Principiante</label>
-
-              <input type="radio" id="level-i" name="level" value="intermedio">
-              <label for="level-i">Intermedio</label>
-
-              <input type="radio" id="level-a" name="level" value="avanzado">
-              <label for="level-a">Avanzado</label>
-            </div>
-          </div>
-
-          <div class="form-nav">
-            <button type="button" data-prev class="mp-btn ghost">Atrás</button>
-            <button type="button" data-next class="mp-btn primary">Continuar</button>
-          </div>
-        </fieldset>
-
-        <!-- STEP 3 — objetivo -->
-        <fieldset class="form-step" data-step="3">
-          <div class="field">
-            <label for="goal">¿Qué querés cambiar en tu música?</label>
-            <input id="goal" name="goal" type="text" placeholder="Terminar tracks, mejorar mezcla, encontrar identidad…">
-          </div>
-
-          <div class="form-nav">
-            <button type="button" data-prev class="mp-btn ghost">Atrás</button>
-            <button type="button" data-next class="mp-btn primary">Continuar</button>
-          </div>
-        </fieldset>
-
-        <!-- STEP 4 — mensaje + submit -->
-        <fieldset class="form-step" data-step="4">
-          <div class="field">
-            <label for="message">Contame en qué punto estás</label>
-            <textarea id="message" name="message" rows="4" placeholder="Dónde te sentís trabado hoy"></textarea>
-          </div>
-
-          <div class="form-nav">
-            <button type="button" data-prev class="mp-btn ghost">Atrás</button>
-            <button type="submit" class="mp-btn orange">Entrar al Lab</button>
-          </div>
-
-          <p class="form-error" data-form-error hidden role="alert"></p>
-        </fieldset>
-
-      </form>
-
-        <!-- Success state (oculto por defecto) -->
-        <div class="form-success" data-form-success hidden>
-          <div class="form-success__icon" aria-hidden="true"></div>
-          <h3>RECIBIDO</h3>
-          <p>Te respondo en menos de 48hs al mail que dejaste. Si querés adelantar algo, escribime directo a <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>.</p>
-        </div>
-      </div><!-- /lab-form-panel -->
-
-      <p class="muted lab-form-alt">
-        ¿Preferís el mail? Escribime directo a
-        <a href="mailto:manupavez22@gmail.com">manupavez22@gmail.com</a>
-      </p>
-    </section>
-
-    <!-- ÁREA DE ALUMNOS -->
     <section id="alumnos" class="section section-centered reveal" aria-labelledby="alumnos-title" data-fade-up>
       <span class="section-kicker">Acceso privado</span>
       <h2 id="alumnos-title">ÁREA DE ALUMNOS</h2>
@@ -614,6 +614,9 @@
       <p>© <time datetime="2026">2026</time> MANU PAVEZ · TODOS LOS DERECHOS RESERVADOS</p>
     </div>
   </footer>
+
+  <!-- Celular: botón fijo al formulario (js/features/applyBar.js lo muestra fuera de la portada y del form) -->
+  <a class="lab-apply-bar" href="#reservar" data-apply-bar hidden>APLICAR AL LAB <span aria-hidden="true">→</span></a>
 
   <a class="beat-float" href="frequency-beat.html">
     <span class="beat-float__eq" aria-hidden="true"><i></i><i></i><i></i></span>
