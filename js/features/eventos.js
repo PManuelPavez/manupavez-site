@@ -7,7 +7,8 @@ import { locale, siteUrl, t } from "../core/i18n.js";
  * renderiza la lista de próximas fechas en el contenedor [data-eventos].
  *
  * Estructura esperada de cada evento:
- *   { "fecha": "...", "lugar": "...", "ciudad": "...", "tickets": "..." | null }
+ *   { "fecha": "...", "lugar": "...", "ciudad": "...", "tickets": "..." | null, "flyer": "..." (opcional) }
+ * "tickets" y "flyer" pueden ser rutas del sitio (ej. "pergamino.html") o URLs completas.
  */
 
 // Escape básico para no inyectar HTML crudo desde la planilla.
@@ -41,19 +42,29 @@ function formatearFecha(fecha) {
   });
 }
 
+// Rutas del sitio ("pergamino.html") → URL desde la raíz, así funcionan también desde /en/.
+// Links externos (https://...) se abren en otra pestaña.
+const esExterno = (url) => /^https?:\/\//i.test(url) && !url.startsWith(location.origin);
+const resolver = (url) => (/^https?:\/\//i.test(url) ? url : siteUrl(url));
+
 function plantillaEvento(ev) {
   const fecha = formatearFecha(ev.fecha);
   const lugar = esc(ev.lugar);
   const ciudad = esc(ev.ciudad);
-  const cta = ev.tickets
-    ? `<a class="mp-btn primary show-cta" href="${esc(ev.tickets)}" target="_blank" rel="noopener">TICKETS</a>`
+  const tickets = ev.tickets ? String(ev.tickets) : "";
+  const cta = tickets
+    ? `<a class="mp-btn primary show-cta" href="${esc(resolver(tickets))}"${esExterno(tickets) ? ' target="_blank" rel="noopener"' : ""}>${t.buyTicket}</a>`
     : `<span class="muted show-soon">${t.comingSoon}</span>`;
+  const flyer = ev.flyer
+    ? `<a class="show-flyer" href="${esc(resolver(tickets || ev.flyer))}"${tickets && esExterno(tickets) ? ' target="_blank" rel="noopener"' : ""} tabindex="-1" aria-hidden="true"><img src="${esc(resolver(ev.flyer))}" alt="${esc(t.flyerAlt(ev.lugar || ""))}" width="1200" height="400" loading="lazy" decoding="async" /></a>`
+    : "";
 
   // OJO: NO ponemos la clase `reveal` acá porque la inyección ocurre DESPUÉS
   // del init de scrollytelling.js (que escanea `.reveal` al cargar la página).
   // Las filas se animan con el IntersectionObserver de revelarFilas() abajo.
   return `
-    <article class="show-row">
+    <article class="show-row${flyer ? " show-row--flyer" : ""}">
+      ${flyer}
       <span class="show-date">${fecha}</span>
       <span class="show-venue">${lugar}${ciudad ? ` · ${ciudad}` : ""}</span>
       ${cta}

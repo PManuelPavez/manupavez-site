@@ -1,14 +1,17 @@
 /* =================== PERGAMINO — venta de entradas =================== */
-/* Página propia (sin el resto del sitio): fondo bordó oscuro, mobile first. */
+/* Página propia (sin el resto del sitio): paleta turquesa del flyer del 13.11, mobile first.
+   Contraste WCAG AA verificado: blanco/fondo 14.8 · secundario/tarjeta 8.0 · acento/tarjeta 5.6
+   · texto del botón (#062C33 sobre acento) 7.2. */
 
 :root {
-  --pg-bg: #5A0F14;
-  --pg-bg-deep: #3d0a0e;
-  --pg-card: rgba(20, 3, 5, 0.38);
-  --pg-line: rgba(255, 228, 228, 0.14);
-  --pg-text: #f8eeee;
-  --pg-muted: rgba(248, 238, 238, 0.68);
-  --pg-accent: #f3d6c2;
+  --pg-bg: #062C33;           /* fondo principal */
+  --pg-bg-deep: #04222a;      /* parte baja del degradé */
+  --pg-card: #0B3F48;         /* superficies / tarjetas */
+  --pg-line: rgba(159, 227, 232, 0.2);
+  --pg-text: #FFFFFF;         /* texto principal */
+  --pg-muted: #9FE3E8;        /* texto secundario */
+  --pg-accent: #3FC6D3;       /* botones, links, "Quedan X" */
+  --pg-accent-hover: #6ad6e0;
   --pg-ok: #9fe3b4;
   --pg-bad: #ffb3a8;
   --pg-radius: 16px;
@@ -63,7 +66,7 @@ a { color: inherit; }
   gap: 4px;
   background:
     repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 2px, transparent 2px 14px),
-    radial-gradient(80% 60% at 50% 40%, rgba(255, 210, 190, 0.12), transparent 70%);
+    radial-gradient(80% 60% at 50% 40%, rgba(63, 198, 211, 0.16), transparent 70%);
 }
 .pg-flyer__date {
   font-family: var(--font-title);
@@ -75,11 +78,12 @@ a { color: inherit; }
 .pg-flyer__city {
   font-family: var(--font-title);
   font-weight: 600;
-  letter-spacing: 0.4em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: clamp(11px, 3.2vw, 14px);
   color: var(--pg-muted);
-  padding-left: 0.4em;
+  padding-left: 0.22em;
+  white-space: nowrap;
 }
 
 .pg-kicker {
@@ -143,7 +147,8 @@ a { color: inherit; }
   font-weight: 600;
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--pg-accent);
+  color: var(--pg-bg);
 }
 
 .pg-tiers { list-style: none; display: grid; gap: 2px; font-size: 14px; }
@@ -175,7 +180,7 @@ a { color: inherit; }
   font: inherit;
   font-size: 16px; /* evita el zoom de iOS */
 }
-.pg-form input::placeholder { color: rgba(248, 238, 238, 0.4); }
+.pg-form input::placeholder { color: rgba(159, 227, 232, 0.7); }
 .pg-form input:focus { outline: 2px solid var(--pg-accent); outline-offset: 1px; border-color: transparent; }
 
 .pg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -186,11 +191,13 @@ a { color: inherit; }
   height: 46px;
   border-radius: 50%;
   border: 1px solid var(--pg-line);
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(159, 227, 232, 0.08);
   color: var(--pg-text);
   font-size: 22px;
   cursor: pointer;
 }
+.pg-qty__btn:hover:not(:disabled) { border-color: var(--pg-accent); color: var(--pg-accent); }
+.pg-qty__btn:focus-visible { outline: 2px solid var(--pg-accent); outline-offset: 2px; }
 .pg-qty__btn:disabled { opacity: 0.35; cursor: default; }
 .pg-qty__n { min-width: 28px; text-align: center; font-family: var(--font-title); font-weight: 800; font-size: 26px; }
 .pg-qty__total { margin-left: auto; font-weight: 600; }
@@ -205,7 +212,7 @@ a { color: inherit; }
 .pg-hint { font-size: 13px; color: var(--pg-muted); }
 
 /* Casilla de la lista de fans (opcional) */
-.pg-form label.pg-check { display: flex; align-items: flex-start; gap: 10px; color: var(--pg-text, #f8eeee); font-size: 14px; line-height: 1.4; cursor: pointer; }
+.pg-form label.pg-check { display: flex; align-items: flex-start; gap: 10px; color: var(--pg-text); font-size: 14px; line-height: 1.4; cursor: pointer; }
 .pg-form .pg-check input { width: 20px; min-height: 0; height: 20px; flex: none; margin: 1px 0 0; padding: 0; accent-color: var(--pg-accent); }
 .pg-check em { display: block; font-style: normal; font-size: 12px; color: var(--pg-muted); }
 .pg-center { text-align: center; }
@@ -217,14 +224,16 @@ a { color: inherit; }
   min-height: 54px;
   border: 0;
   border-radius: 999px;
-  background: var(--pg-text);
-  color: var(--pg-bg-deep);
+  background: var(--pg-accent);
+  color: var(--pg-bg);
   font-family: var(--font-title);
   font-weight: 700;
   font-size: 17px;
   cursor: pointer;
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
+.pg-btn:hover:not(:disabled) { background: var(--pg-accent-hover); }
+.pg-btn:focus-visible { outline: 3px solid var(--pg-text); outline-offset: 3px; }
 .pg-btn:active { transform: scale(0.98); }
 .pg-btn:disabled { opacity: 0.6; cursor: progress; }
 
@@ -233,7 +242,9 @@ a { color: inherit; }
 
 .pg-loading { text-align: center; color: var(--pg-muted); }
 .pg-foot { text-align: center; font-size: 13px; color: var(--pg-muted); }
-.pg-foot a { text-decoration: none; }
+.pg-foot a { text-decoration: none; color: var(--pg-accent); }
+.pg-foot a:hover { text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--pg-accent); outline-offset: 2px; }
 
 @media (min-width: 720px) {
   .pg { padding-top: 40px; gap: 24px; }

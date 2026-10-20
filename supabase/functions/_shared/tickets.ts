@@ -52,17 +52,17 @@ export async function sendTicketConfirmation(db: any, orderId: string): Promise<
 
   const tbc = "A confirmar";
   const lineup = (Array.isArray(ev.lineup) ? ev.lineup : [])
-    .map((a: { name: string; role?: string }) => `${esc(a.name)}${a.role ? ` <span style="color:#b98a8d">(${esc(a.role)})</span>` : ""}`)
+    .map((a: { name: string; role?: string }) => `${esc(a.name)}${a.role ? ` <span style="color:#9FE3E8">(${esc(a.role)})</span>` : ""}`)
     .join("<br>");
   const names = (people || []).map((p: { first_name: string; last_name: string }) =>
     `<li style="margin:2px 0">${esc(p.first_name)} ${esc(p.last_name)}</li>`).join("");
   const code = o.id.slice(0, 8).toUpperCase();
   const row = (k: string, v: string) =>
-    `<tr><td style="padding:4px 12px 4px 0;color:#b98a8d;vertical-align:top">${k}</td><td style="padding:4px 0">${v}</td></tr>`;
+    `<tr><td style="padding:4px 12px 4px 0;color:#9FE3E8;vertical-align:top">${k}</td><td style="padding:4px 0">${v}</td></tr>`;
 
-  const html = `<div style="background:#5A0F14;padding:28px 16px;font-family:system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#f6ecec">
-  <div style="max-width:520px;margin:0 auto;background:#3d0a0e;border-radius:16px;padding:28px 24px;line-height:1.55">
-    <p style="margin:0 0 4px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#d9a7aa">Entrada confirmada</p>
+  const html = `<div style="background:#062C33;padding:28px 16px;font-family:system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#FFFFFF">
+  <div style="max-width:520px;margin:0 auto;background:#0B3F48;border-radius:16px;padding:28px 24px;line-height:1.55">
+    <p style="margin:0 0 4px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9FE3E8">Entrada confirmada</p>
     <h1 style="margin:0 0 16px;font-size:24px;line-height:1.2">${esc(ev.name)}</h1>
     <p style="margin:0 0 20px;font-size:18px"><strong>Estás en la lista. Presentá tu DNI en la puerta.</strong></p>
     <table style="border-collapse:collapse;font-size:15px;margin-bottom:20px">
@@ -74,8 +74,8 @@ export async function sendTicketConfirmation(db: any, orderId: string): Promise<
     </table>
     <p style="margin:0 0 6px;font-size:15px"><strong>${o.quantity === 1 ? "En la lista:" : `En la lista (${o.quantity}):`}</strong></p>
     <ul style="margin:0 0 20px;padding-left:20px;font-size:15px">${names}</ul>
-    <p style="margin:0;font-size:13px;color:#d9a7aa">${esc(o.tier_name || "")}${o.total_ars ? ` · ${ars(o.total_ars)}` : ""} · Pedido ${code}</p>
-    <p style="margin:16px 0 0;font-size:13px;color:#d9a7aa">Cada persona entra con su DNI. Si necesitás cambiar un nombre, respondé este mail.</p>
+    <p style="margin:0;font-size:13px;color:#9FE3E8">${esc(o.tier_name || "")}${o.total_ars ? ` · ${ars(o.total_ars)}` : ""} · Pedido ${code}</p>
+    <p style="margin:16px 0 0;font-size:13px;color:#9FE3E8">Cada persona entra con su DNI. Si necesitás cambiar un nombre, respondé este mail.</p>
   </div>
 </div>`;
 

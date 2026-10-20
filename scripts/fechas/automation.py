@@ -53,6 +53,7 @@ COL_FECHA = "FECHA"
 COL_LUGAR = "LUGAR"
 COL_CIUDAD = "CIUDAD"
 COL_LINK_TICKETS = "Link_Tickets"
+COL_FLYER = "Flyer"  # opcional: ruta del sitio (img/eventos/...) o URL de la imagen
 COL_ESTADO_SOUNDCLOUD = "Estado_Soundcloud"
 
 # Valores de estado usados en las celdas.
@@ -268,7 +269,7 @@ def generar_eventos_json(filas):
     """Genera eventos.json con los eventos FUTUROS, ordenados por fecha.
 
     Estructura de cada evento:
-        {"fecha": "...", "lugar": "...", "ciudad": "...", "tickets": "..." | null}
+        {"fecha": "...", "lugar": "...", "ciudad": "...", "tickets": "..." | null, "flyer": "..." (opcional)}
 
     - Filtra los eventos cuya fecha ya pasó (si la fecha se pudo interpretar).
     - Si 'Link_Tickets' está vacío, 'tickets' queda en null.
@@ -293,15 +294,19 @@ def generar_eventos_json(filas):
 
         # Tickets: null si está vacío.
         tickets = str(fila.get(COL_LINK_TICKETS, "")).strip()
+        flyer = str(fila.get(COL_FLYER, "")).strip()
 
-        eventos.append({
+        evento = {
             "fecha": fecha_raw,
             "lugar": str(fila.get(COL_LUGAR, "")).strip(),
             "ciudad": str(fila.get(COL_CIUDAD, "")).strip(),
             "tickets": tickets if tickets else None,
             # Clave temporal solo para ordenar (se elimina antes de guardar).
             "_orden": fecha_dt or date.max,
-        })
+        }
+        if flyer:
+            evento["flyer"] = flyer
+        eventos.append(evento)
 
     # Ordenar por fecha ascendente (lo más próximo primero).
     eventos.sort(key=lambda e: e["_orden"])
