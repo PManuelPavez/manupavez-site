@@ -1,8 +1,9 @@
 [
   {
-    "fecha": "2026-08-14",
-    "lugar": "Club 74",
-    "ciudad": "Pergamino, Argentina",
-    "tickets": null
+    "fecha": "2026-11-13",
+    "lugar": "Creme Music Club",
+    "ciudad": "Pergamino, Buenos Aires",
+    "tickets": "pergamino.html",
+    "flyer": "img/eventos/pergamino-13nov-1200.jpg"
   }
 ]
