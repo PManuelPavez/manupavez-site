@@ -586,3 +586,16 @@ body[data-page="admin"] { overflow-x: clip; }
 }
 
 .admin-linkform textarea { border-radius: 14px; resize: vertical; min-height: 96px; line-height: 1.5; }
+
+/* ── Resumen ── */
+.ov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px; }
+.ov-card { display: flex; flex-direction: column; gap: 4px; padding: 16px; border: 1px solid var(--color-border-soft); border-radius: var(--radius-md); }
+.ov-card h3 { margin: 0 0 6px; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600; }
+.ov-big { margin: 0; font-size: 1.8rem; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.ov-line { margin: 0; font-size: 0.88rem; color: var(--color-text-muted); }
+.ov-actions { display: flex; flex-wrap: wrap; gap: 6px; margin: auto 0 0; padding-top: 12px; }
+.ov-sub { margin: 24px 0 10px; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600; }
+.ov-links { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 8px; }
+.ov-links a { display: grid; gap: 2px; min-height: 44px; padding: 10px 12px; border: 1px solid var(--color-border-soft); border-radius: var(--radius-md); color: inherit; text-decoration: none; }
+.ov-links a:hover, .ov-links a:focus-visible { border-color: var(--color-accent-2); }
+.ov-links span { font-size: 0.84rem; color: var(--color-text-muted); }

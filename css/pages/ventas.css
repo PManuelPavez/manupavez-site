@@ -78,3 +78,17 @@ body[data-page="ventas"] { background: var(--c-ink); }
 .vt-tag.is-approved { background: rgba(124, 242, 165, 0.18); color: #7cf2a5; }
 .vt-tag.is-pending { background: rgba(255, 197, 107, 0.18); color: #ffc56b; }
 .vt-tag.is-guest { background: rgba(89, 198, 186, 0.2); color: var(--c-teal); }
+
+/* Pestañas de acceso (Manu / Socio) */
+.vt-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--color-border-soft); border-radius: 6px; }
+.vt-tabs button { min-height: 44px; border: 0; border-radius: 4px; background: transparent; color: var(--color-text-muted); font: inherit; font-weight: 600; cursor: pointer; }
+.vt-tabs button[aria-selected="true"] { background: var(--c-lime); color: var(--c-ink); }
+.vt-tabs button:focus-visible { outline: 2px solid var(--c-lime); outline-offset: 2px; }
+.vt-login form[hidden] { display: none; }
+
+/* Invitados */
+.vt-guests { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 6px; }
+.vt-guests li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding: 8px 12px; border: 1px solid var(--color-border-soft); border-radius: 6px; }
+.vt-guests li.vt-help { border: 0; padding: 0; }
+.vt-guests small { color: var(--color-text-muted); }
+.vt-guests li.is-in small { color: #7cf2a5; }
