@@ -32,12 +32,23 @@
     <p class="admin-msg" data-admin-msg role="status" aria-live="polite">Verificando acceso…</p>
 
     <nav class="admin-nav" data-admin-nav hidden aria-label="Secciones del panel">
+      <a href="#resumen">Resumen</a>
       <a href="#alumnos">Alumnos</a>
       <a href="#pedidos">Pedidos</a>
       <a href="#productos">Productos y servicios</a>
       <a href="#link-especial">Link especial</a>
       <a href="#mi-acceso">Mi acceso</a>
     </nav>
+
+    <!-- ── RESUMEN: todo de un vistazo, con accesos directos ── -->
+    <section class="admin-block admin-overview" id="resumen" data-overview hidden aria-labelledby="resumen-title">
+      <header class="admin-block__head">
+        <h2 id="resumen-title" class="admin-block__title">Resumen</h2>
+      </header>
+      <div class="ov-grid" data-ov-cards></div>
+      <h3 class="ov-sub">Accesos rápidos</h3>
+      <ul class="ov-links" data-ov-links></ul>
+    </section>
 
     <!-- ── ALUMNOS ── -->
     <section class="admin-block" id="alumnos" data-admin-table hidden aria-labelledby="alumnos-title">

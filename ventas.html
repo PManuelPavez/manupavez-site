@@ -6,6 +6,7 @@
   <title>Ventas — Manu Pavez</title>
   <meta name="robots" content="noindex,nofollow" />
   <meta name="referrer" content="no-referrer" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://esm.sh https://challenges.cloudflare.com; connect-src 'self' https://esm.sh https://psnprhzowknhfylvgcci.supabase.co wss://psnprhzowknhfylvgcci.supabase.co; frame-src https://challenges.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'" />
   <meta name="theme-color" content="#10232a" />
   <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -32,18 +33,49 @@
 
     <p class="vt-status" data-status>Cargando…</p>
 
-    <!-- Login admin (mismo PIN de siempre) -->
+    <!-- Login: Manu (PIN de admin) o Socio (PIN propio, solo recaudación + invitados) -->
     <section class="vt-card vt-login" data-login hidden>
-      <h2>Entrá con tu PIN de admin</h2>
-      <form data-pin-form novalidate>
+      <div class="vt-tabs" role="tablist" aria-label="Tipo de acceso">
+        <button type="button" role="tab" id="vt-tab-admin" aria-controls="vt-panel-admin" aria-selected="true" data-tab="admin">Manu (admin)</button>
+        <button type="button" role="tab" id="vt-tab-partner" aria-controls="vt-panel-partner" aria-selected="false" data-tab="partner">Socio</button>
+      </div>
+      <form id="vt-panel-admin" role="tabpanel" aria-labelledby="vt-tab-admin" data-pin-form novalidate>
         <input class="sr-only" type="text" name="username" autocomplete="username" value="Frequency Lab (admin)" tabindex="-1" aria-hidden="true" readonly />
-        <label for="vt-pin">PIN (6 números)</label>
+        <label for="vt-pin">PIN de admin (6 números)</label>
         <input id="vt-pin" name="password" class="vt-pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="6" placeholder="······" required />
         <div data-captcha></div>
         <p class="vt-note" data-note role="status" aria-live="polite"></p>
         <button type="submit" class="mp-btn primary">ENTRAR</button>
       </form>
+      <form id="vt-panel-partner" role="tabpanel" aria-labelledby="vt-tab-partner" data-partner-form novalidate hidden>
+        <input class="sr-only" type="text" name="username" autocomplete="username" value="Socio (ventas)" tabindex="-1" aria-hidden="true" readonly />
+        <label for="vt-ppin">PIN de socio (6 números)</label>
+        <input id="vt-ppin" name="password" class="vt-pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="6" placeholder="······" required />
+        <p class="vt-note" data-partner-note role="status" aria-live="polite"></p>
+        <button type="submit" class="mp-btn primary">ENTRAR</button>
+        <p class="vt-help">Con este acceso ves cómo va la recaudación y podés sumar invitados.</p>
+      </form>
     </section>
+
+    <!-- Vista del socio: recaudación + invitados (sin pedidos, mails, RRPP ni códigos) -->
+    <div data-partner hidden>
+      <section class="vt-kpis" data-p-kpis></section>
+      <section class="vt-card">
+        <h2>Tandas</h2>
+        <div class="vt-tiers" data-p-tiers></div>
+      </section>
+      <section class="vt-card">
+        <h2>Invitados</h2>
+        <p class="vt-help">Entran sin pagar y aparecen en la lista de puerta. Cuentan para la capacidad total.</p>
+        <form class="vt-inline" data-p-guest-form novalidate>
+          <input name="first" placeholder="Nombre" required maxlength="60" autocomplete="off" />
+          <input name="last" placeholder="Apellido" required maxlength="60" autocomplete="off" />
+          <button type="submit" class="mp-btn primary small">SUMAR INVITADO</button>
+        </form>
+        <p class="vt-note" data-p-guest-note role="status" aria-live="polite"></p>
+        <ul class="vt-guests" data-p-guests></ul>
+      </section>
+    </div>
 
     <div data-dash hidden>
       <!-- Números -->
@@ -79,6 +111,18 @@
           </form>
           <p class="vt-newcode" data-newcode hidden></p>
         </section>
+
+        <!-- Socio -->
+        <section class="vt-card">
+          <h2>Acceso del socio</h2>
+          <p class="vt-help">PIN de 6 números para tu socio: entra en esta misma página, pestaña "Socio". Solo ve la recaudación y puede sumar invitados.</p>
+          <ul class="vt-codes" data-partners></ul>
+          <form class="vt-inline" data-partner-create novalidate>
+            <input name="label" placeholder="Nombre (ej. Facu)" required maxlength="40" />
+            <button type="submit" class="mp-btn primary small">CREAR PIN</button>
+          </form>
+          <p class="vt-newcode" data-newpin hidden></p>
+        </section>
       </div>
 
       <!-- Invitados -->
@@ -91,6 +135,7 @@
           <button type="submit" class="mp-btn primary small">SUMAR INVITADO</button>
         </form>
         <p class="vt-note" data-guest-note></p>
+        <ul class="vt-guests" data-guests></ul>
       </section>
 
       <!-- Pedidos -->

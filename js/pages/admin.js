@@ -706,6 +706,63 @@ document.addEventListener("click", async (e) => {
 
 msg.addEventListener("click", () => { if (msg.classList.contains("is-toast")) say(""); });
 
+// ── Resumen: todo de un vistazo (admin_overview) + accesos directos ──
+const SB_EDITOR = "https://supabase.com/dashboard/project/psnprhzowknhfylvgcci/editor";
+const QUICK_LINKS = [
+  ["ventas.html", "Panel de ventas", "Entradas, RRPP, invitados, códigos de puerta y PIN del socio"],
+  ["puerta.html", "Puerta", "Para seguridad: buscan nombres y marcan INGRESÓ (código de 4 números)"],
+  ["#alumnos", "Alumnos del Lab", "Acceso, PIN y seguimiento"],
+  ["#pedidos", "Pedidos del shop", "Marcar transferencias como pagadas"],
+  ["#link-especial", "Link de pago especial", "Precio a medida para un alumno"],
+  ["booking.html", "Booking", "La página pública con el calendario de fechas ocupadas"],
+  [SB_EDITOR, "Base de datos", "Fechas ocupadas (booking_busy), fans, consultas del Lab (lab_leads)"],
+];
+
+const dayLabel = (d) => new Date(`${d}T12:00:00-03:00`).toLocaleDateString("es-AR", { weekday: "short", day: "numeric", month: "short" });
+const money = (n) => `$${Math.round(Number(n) || 0).toLocaleString("es-AR")}`;
+
+function ovCard(title, big, lines, links) {
+  return `<article class="ov-card">
+    <h3>${esc(title)}</h3>
+    <p class="ov-big">${esc(big)}</p>
+    ${lines.map((l) => `<p class="ov-line">${esc(l)}</p>`).join("")}
+    <p class="ov-actions">${links.map(([href, label]) => `<a class="mp-btn ghost small" href="${esc(href)}"${/^https?:/.test(href) ? ' target="_blank" rel="noopener"' : ""}>${esc(label)}</a>`).join("")}</p>
+  </article>`;
+}
+
+async function loadOverview() {
+  const box = $("[data-overview]");
+  $("[data-ov-links]").innerHTML = QUICK_LINKS.map(([href, label, help]) =>
+    `<li><a href="${esc(href)}"${/^https?:/.test(href) ? ' target="_blank" rel="noopener"' : ""}><strong>${esc(label)}</strong><span>${esc(help)}</span></a></li>`).join("");
+  box.hidden = false;
+
+  const { data: o, error } = await supabase.rpc("admin_overview");
+  if (error || !o) { $("[data-ov-cards]").innerHTML = `<p class="admin-note">No se pudo cargar el resumen.</p>`; return; }
+
+  const cards = (o.events || []).map((ev) => {
+    const used = (ev.tickets || 0) + (ev.guests || 0);
+    return ovCard(
+      `${ev.name}${ev.date ? ` · ${dayLabel(ev.date)}` : ""}`,
+      money(ev.revenue),
+      [`${ev.tickets} entradas vendidas · ${ev.guests} invitados`, ev.capacity ? `${used} de ${ev.capacity} lugares` : "", ev.venue || ""].filter(Boolean),
+      [[`ventas.html?evento=${encodeURIComponent(ev.slug)}`, "VENTAS"], ["puerta.html", "PUERTA"], [`${ev.slug}.html`, "PÁGINA DE VENTA"]],
+    );
+  });
+  cards.push(ovCard("Consultas del Lab", String(o.leads_30d ?? 0),
+    ["en los últimos 30 días", o.followups_pending ? `${o.followups_pending} sin seguimiento todavía` : "Seguimientos al día"],
+    [[`${SB_EDITOR}`, "VER CONSULTAS"], ["#alumnos", "ALUMNOS"]]));
+  cards.push(ovCard("Fans", String(o.fans ?? 0),
+    [o.fans_7d ? `+${o.fans_7d} esta semana` : "Sin altas esta semana"],
+    [[SB_EDITOR, "VER LISTA"]]));
+  cards.push(ovCard("Booking", `${o.busy_days_90 ?? 0} días ocupados`,
+    ["próximos 90 días", (o.next_busy || []).length ? `Próximos: ${(o.next_busy || []).slice(0, 3).map(dayLabel).join(", ")}` : "Sin fechas ocupadas cargadas"],
+    [["booking.html", "VER CALENDARIO"], [SB_EDITOR, "CARGAR FECHAS"]]));
+  cards.push(ovCard("Shop", `${o.shop_pending ?? 0} pendientes`,
+    [`${o.shop_paid_30d ?? 0} pagados en los últimos 30 días`],
+    [["#pedidos", "VER PEDIDOS"]]));
+  $("[data-ov-cards]").innerHTML = cards.join("");
+}
+
 async function boot() {
   if (!hasSupabase() || !supabase) { say("Supabase no configurado.", true); return; }
   const { data: { session } } = await supabase.auth.getSession();
@@ -722,6 +779,7 @@ async function boot() {
   $("[data-admin-nav]").hidden = false;
   // El shop usa la lista de alumnos (selector del link de pago): primero alumnos
   await Promise.all([
+    loadOverview().catch((e) => console.error("[admin] resumen", e)),
     reloadAll().then(() => loadShop()).catch((e) => console.error("[admin]", e)),
     loadSync().catch(() => {}),
   ]);
