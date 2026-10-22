@@ -35,24 +35,23 @@ export async function notifyAdmin(subject: string, html: string) {
 
 const INSTAGRAM_URL = "https://www.instagram.com/manupavez_";
 
-const dateLong = (d: string) =>
-  new Date(`${d}T12:00:00-03:00`).toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" });
-
 type TicketEvent = { name: string; event_date: string; venue?: string; address?: string; time_text?: string; lineup?: unknown; flyer_url?: string | null };
 type TicketOrder = { id: string; quantity: number; tier_name?: string; total_ars?: number };
 type Person = { first_name: string; last_name: string };
 
 // HTML del mail "Estás en la lista" (también lo usa el envío de ejemplo de tickets-sample).
 export function ticketEmailHtml(ev: TicketEvent, o: TicketOrder, people: Person[]) {
-  const tbc = "A confirmar";
-  const lineup = (Array.isArray(ev.lineup) ? ev.lineup : [])
-    .map((a: { name: string; role?: string }) => `${esc(a.name)}${a.role ? ` <span style="color:#9FE3E8">(${esc(a.role)})</span>` : ""}`)
-    .join("<br>");
   const names = people.map((p) =>
     `<li style="margin:2px 0">${esc(p.first_name)} ${esc(p.last_name)}</li>`).join("");
   const code = o.id.slice(0, 8).toUpperCase();
-  const row = (k: string, v: string) =>
-    `<tr><td style="padding:4px 12px 4px 0;color:#9FE3E8;vertical-align:top">${k}</td><td style="padding:4px 0">${v}</td></tr>`;
+
+  // Una sola línea: 13/11/2026 · 23:30HS · CREME MUSIC CLUB (el line up ya está en el flyer)
+  const [y, m, d] = ev.event_date.split("-");
+  const whenWhere = [
+    `${d}/${m}/${y}`,
+    ev.time_text ? ev.time_text.replace(/\s+/g, "").toUpperCase() : "",
+    (ev.venue || "").toUpperCase(),
+  ].filter(Boolean).join(" · ");
 
   const flyer = ev.flyer_url && /^https:\/\//.test(ev.flyer_url)
     ? `<img src="${esc(ev.flyer_url)}" alt="Flyer: ${esc(ev.name)}" width="520" style="display:block;width:100%;max-width:520px;height:auto;border-radius:16px 16px 0 0;border:0">`
@@ -65,13 +64,7 @@ export function ticketEmailHtml(ev: TicketEvent, o: TicketOrder, people: Person[
     <p style="margin:0 0 4px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9FE3E8">Entrada confirmada</p>
     <h1 style="margin:0 0 16px;font-size:24px;line-height:1.2">${esc(ev.name)}</h1>
     <p style="margin:0 0 20px;font-size:18px"><strong>Estás en la lista. Presentá tu DNI en la puerta.</strong></p>
-    <table style="border-collapse:collapse;font-size:15px;margin-bottom:20px">
-      ${row("Fecha", esc(dateLong(ev.event_date)))}
-      ${row("Horario", esc(ev.time_text || tbc))}
-      ${row("Lugar", esc(ev.venue || tbc))}
-      ${row("Dirección", esc(ev.address || tbc))}
-      ${lineup ? row("Line up", lineup) : ""}
-    </table>
+    <p style="margin:0 0 20px;font-size:17px;font-weight:700;letter-spacing:.03em;color:#9FE3E8">${esc(whenWhere)}</p>
     <p style="margin:0 0 6px;font-size:15px"><strong>${o.quantity === 1 ? "En la lista:" : `En la lista (${o.quantity}):`}</strong></p>
     <ul style="margin:0 0 20px;padding-left:20px;font-size:15px">${names}</ul>
     <p style="margin:0;font-size:13px;color:#9FE3E8">${esc(o.tier_name || "")}${o.total_ars ? ` · ${ars(o.total_ars)}` : ""} · Pedido ${code}</p>
