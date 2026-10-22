@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
   let err = await sendMail(to, subject, html);
   if (err) {
     usedFallback = true;
-    err = await sendMail(to, subject, html, "Manu Pavez <onboarding@resend.dev>");
+    err = await sendMail(to, subject, html, "LOWTIDE.ART <onboarding@resend.dev>");
   }
   return json({ sent: !err, to, usedFallback, error: err });
 });
