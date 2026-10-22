@@ -76,6 +76,12 @@ enabled = true
 verify_jwt = false
 entrypoint = "./functions/tickets-resend/index.ts"
 
+[functions.tickets-sample]
+enabled = true
+# Se llama a mano con una clave de servicio (se verifica adentro): manda un ejemplo del mail de entradas
+verify_jwt = false
+entrypoint = "./functions/tickets-sample/index.ts"
+
 [functions.lab-apply]
 enabled = true
 # Público (formularios de /aplicar y /clinicas): campo trampa + límites por mail/día
