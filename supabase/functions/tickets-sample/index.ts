@@ -27,7 +27,7 @@ Deno.serve(async (req) => {
 
   const db = createClient(Deno.env.get("SUPABASE_URL")!, key, { auth: { persistSession: false } });
   const { data: ev } = await db.from("events")
-    .select("id, name, event_date, venue, address, time_text, lineup").eq("slug", slug).maybeSingle();
+    .select("id, name, event_date, venue, address, time_text, lineup, flyer_url").eq("slug", slug).maybeSingle();
   if (!ev) return json({ error: "no_event" }, 404);
   const { data: tier } = await db.from("ticket_tiers").select("name, price_ars")
     .eq("event_id", ev.id).eq("active", true).order("sort").limit(1).maybeSingle();

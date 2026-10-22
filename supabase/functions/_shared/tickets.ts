@@ -33,10 +33,12 @@ export async function notifyAdmin(subject: string, html: string) {
   await sendMail(to, subject, html);
 }
 
+const INSTAGRAM_URL = "https://www.instagram.com/manupavez_";
+
 const dateLong = (d: string) =>
   new Date(`${d}T12:00:00-03:00`).toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" });
 
-type TicketEvent = { name: string; event_date: string; venue?: string; address?: string; time_text?: string; lineup?: unknown };
+type TicketEvent = { name: string; event_date: string; venue?: string; address?: string; time_text?: string; lineup?: unknown; flyer_url?: string | null };
 type TicketOrder = { id: string; quantity: number; tier_name?: string; total_ars?: number };
 type Person = { first_name: string; last_name: string };
 
@@ -52,8 +54,14 @@ export function ticketEmailHtml(ev: TicketEvent, o: TicketOrder, people: Person[
   const row = (k: string, v: string) =>
     `<tr><td style="padding:4px 12px 4px 0;color:#9FE3E8;vertical-align:top">${k}</td><td style="padding:4px 0">${v}</td></tr>`;
 
+  const flyer = ev.flyer_url && /^https:\/\//.test(ev.flyer_url)
+    ? `<img src="${esc(ev.flyer_url)}" alt="Flyer: ${esc(ev.name)}" width="520" style="display:block;width:100%;max-width:520px;height:auto;border-radius:16px 16px 0 0;border:0">`
+    : "";
+
   return `<div style="background:#062C33;padding:28px 16px;font-family:system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#FFFFFF">
-  <div style="max-width:520px;margin:0 auto;background:#0B3F48;border-radius:16px;padding:28px 24px;line-height:1.55">
+  <div style="max-width:520px;margin:0 auto;background:#0B3F48;border-radius:16px;overflow:hidden;line-height:1.55">
+  ${flyer}
+  <div style="padding:28px 24px">
     <p style="margin:0 0 4px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9FE3E8">Entrada confirmada</p>
     <h1 style="margin:0 0 16px;font-size:24px;line-height:1.2">${esc(ev.name)}</h1>
     <p style="margin:0 0 20px;font-size:18px"><strong>Estás en la lista. Presentá tu DNI en la puerta.</strong></p>
@@ -67,7 +75,16 @@ export function ticketEmailHtml(ev: TicketEvent, o: TicketOrder, people: Person[
     <p style="margin:0 0 6px;font-size:15px"><strong>${o.quantity === 1 ? "En la lista:" : `En la lista (${o.quantity}):`}</strong></p>
     <ul style="margin:0 0 20px;padding-left:20px;font-size:15px">${names}</ul>
     <p style="margin:0;font-size:13px;color:#9FE3E8">${esc(o.tier_name || "")}${o.total_ars ? ` · ${ars(o.total_ars)}` : ""} · Pedido ${code}</p>
+    <div style="margin:22px 0 0;padding:16px 18px;border-radius:12px;background:#062C33;border-left:4px solid #9FE3E8">
+      <p style="margin:0 0 6px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9FE3E8">En la pista</p>
+      <p style="margin:0;font-size:20px;font-weight:700;letter-spacing:.02em">Permiso, perdón y gracias.</p>
+      <p style="margin:6px 0 0;font-size:14px;color:#D5F2F4">Tres palabras que hacen la noche de todos. Cuidemos la pista y a quien tenemos al lado.</p>
+    </div>
+    <p style="margin:22px 0 0;text-align:center">
+      <a href="${INSTAGRAM_URL}" style="display:inline-block;padding:12px 20px;border-radius:999px;background:#9FE3E8;color:#062C33;font-weight:700;font-size:15px;text-decoration:none">Seguime en Instagram → @manupavez_</a>
+    </p>
     <p style="margin:16px 0 0;font-size:13px;color:#9FE3E8">Cada persona entra con su DNI. Si necesitás cambiar un nombre, respondé este mail.</p>
+  </div>
   </div>
 </div>`;
 }
@@ -81,7 +98,7 @@ export async function sendTicketConfirmation(db: any, orderId: string): Promise<
     .eq("id", orderId).maybeSingle();
   if (!o?.buyer_email) return "no_email";
   const [{ data: ev }, { data: people }] = await Promise.all([
-    db.from("events").select("name, event_date, venue, address, time_text, lineup").eq("id", o.event_id).maybeSingle(),
+    db.from("events").select("name, event_date, venue, address, time_text, lineup, flyer_url").eq("id", o.event_id).maybeSingle(),
     db.from("attendees").select("first_name, last_name").eq("order_id", o.id).order("created_at"),
   ]);
   if (!ev) return "no_event";
