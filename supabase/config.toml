@@ -70,6 +70,24 @@ enabled = true
 verify_jwt = false
 entrypoint = "./functions/tickets-webhook/index.ts"
 
+[functions.tickets-resend]
+enabled = true
+# Solo admin (panel de ventas): el JWT y profiles.is_admin se verifican adentro
+verify_jwt = false
+entrypoint = "./functions/tickets-resend/index.ts"
+
+[functions.tickets-sample]
+enabled = true
+# Se llama a mano con una clave de servicio (se verifica adentro): manda un ejemplo del mail de entradas
+verify_jwt = false
+entrypoint = "./functions/tickets-sample/index.ts"
+
+[functions.tickets-change-notice]
+enabled = true
+# Se llama a mano con una clave de servicio (se verifica adentro): aviso de cambio de fecha a compradores
+verify_jwt = false
+entrypoint = "./functions/tickets-change-notice/index.ts"
+
 [functions.lab-apply]
 enabled = true
 # Público (formularios de /aplicar y /clinicas): campo trampa + límites por mail/día

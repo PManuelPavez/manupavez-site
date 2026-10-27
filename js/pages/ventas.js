@@ -224,10 +224,75 @@ function showNewCode(box, data, what) {
   box.innerHTML = `${what} para <b>${esc(data.label)}</b> (anotalo: no se vuelve a mostrar)<strong>${esc(data.code)}</strong>`;
 }
 
+// Reenvía el mail "Estás en la lista" a los pedidos pagos que todavía no lo recibieron
+// (por ejemplo, cuando Resend no tenía el dominio verificado).
+async function resendMails() {
+  const btn = $("[data-resend-mails]");
+  const note = $("[data-resend-note]");
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { note.hidden = false; note.textContent = "La sesión venció. Volvé a entrar."; return; }
+  btn.disabled = true;
+  note.hidden = false;
+  note.textContent = "Enviando…";
+  try {
+    const res = await fetch(`${cfg.url}/functions/v1/tickets-resend`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" },
+      body: "{}",
+    });
+    const r = await res.json().catch(() => ({}));
+    if (!res.ok) note.textContent = "No se pudo reenviar (sin permiso o error del servidor).";
+    else if (!r.total) note.textContent = "No hay mails pendientes: a todos los compradores ya les llegó.";
+    else if (!r.failed) note.textContent = `Listo: ${r.sent} mail(s) enviado(s).`;
+    else note.textContent = `Enviados ${r.sent} de ${r.total}. Fallaron ${r.failed}: ${r.error?.includes("403") ? "Resend todavía no tiene el dominio verificado." : r.error || "error desconocido"}`;
+  } catch {
+    note.textContent = "Sin conexión. Probá de nuevo.";
+  }
+  btn.disabled = false;
+}
+
+// Aviso "Cambio de fecha y lugar" a quienes ya compraron. Pide confirmar con un segundo toque;
+// el servidor no le repite el mail a quien ya lo recibió.
+async function sendChangeNotice() {
+  const btn = $("[data-change-notice]");
+  const note = $("[data-resend-note]");
+  note.hidden = false;
+  if (btn.dataset.armed !== "1") {
+    btn.dataset.armed = "1";
+    btn.textContent = "¿SEGURO? TOCÁ DE NUEVO PARA ENVIAR";
+    note.textContent = "Le llega el aviso de cambio de fecha a cada comprador que todavía no lo recibió.";
+    setTimeout(() => { btn.dataset.armed = ""; btn.textContent = "AVISAR CAMBIO DE FECHA"; }, 8000);
+    return;
+  }
+  btn.dataset.armed = "";
+  btn.textContent = "AVISAR CAMBIO DE FECHA";
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { note.textContent = "La sesión venció. Volvé a entrar."; return; }
+  btn.disabled = true;
+  note.textContent = "Enviando…";
+  try {
+    const res = await fetch(`${cfg.url}/functions/v1/tickets-change-notice`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ send: true }),
+    });
+    const r = await res.json().catch(() => ({}));
+    if (!res.ok) note.textContent = "No se pudo enviar (sin permiso o error del servidor).";
+    else if (!r.total) note.textContent = "No hay a quién avisar: todos los compradores ya recibieron el aviso.";
+    else if (!r.failed) note.textContent = `Listo: aviso enviado a ${r.sent} comprador(es).`;
+    else note.textContent = `Enviados ${r.sent} de ${r.total}. Fallaron ${r.failed}: ${r.error || "error desconocido"}`;
+  } catch {
+    note.textContent = "Sin conexión. Probá de nuevo.";
+  }
+  btn.disabled = false;
+}
+
 function bindAdmin() {
   $("[data-refresh]").addEventListener("click", load);
   $("[data-logout]").addEventListener("click", async () => { await supabase.auth.signOut(); location.reload(); });
   $("[data-order-q]").addEventListener("input", renderOrders);
+  $("[data-resend-mails]").addEventListener("click", resendMails);
+  $("[data-change-notice]").addEventListener("click", sendChangeNotice);
 
   document.addEventListener("click", async (e) => {
     const copy = e.target.closest("[data-copy]");
