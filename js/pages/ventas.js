@@ -251,11 +251,48 @@ async function resendMails() {
   btn.disabled = false;
 }
 
+// Aviso "Cambio de fecha y lugar" a quienes ya compraron. Pide confirmar con un segundo toque;
+// el servidor no le repite el mail a quien ya lo recibió.
+async function sendChangeNotice() {
+  const btn = $("[data-change-notice]");
+  const note = $("[data-resend-note]");
+  note.hidden = false;
+  if (btn.dataset.armed !== "1") {
+    btn.dataset.armed = "1";
+    btn.textContent = "¿SEGURO? TOCÁ DE NUEVO PARA ENVIAR";
+    note.textContent = "Le llega el aviso de cambio de fecha a cada comprador que todavía no lo recibió.";
+    setTimeout(() => { btn.dataset.armed = ""; btn.textContent = "AVISAR CAMBIO DE FECHA"; }, 8000);
+    return;
+  }
+  btn.dataset.armed = "";
+  btn.textContent = "AVISAR CAMBIO DE FECHA";
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { note.textContent = "La sesión venció. Volvé a entrar."; return; }
+  btn.disabled = true;
+  note.textContent = "Enviando…";
+  try {
+    const res = await fetch(`${cfg.url}/functions/v1/tickets-change-notice`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ send: true }),
+    });
+    const r = await res.json().catch(() => ({}));
+    if (!res.ok) note.textContent = "No se pudo enviar (sin permiso o error del servidor).";
+    else if (!r.total) note.textContent = "No hay a quién avisar: todos los compradores ya recibieron el aviso.";
+    else if (!r.failed) note.textContent = `Listo: aviso enviado a ${r.sent} comprador(es).`;
+    else note.textContent = `Enviados ${r.sent} de ${r.total}. Fallaron ${r.failed}: ${r.error || "error desconocido"}`;
+  } catch {
+    note.textContent = "Sin conexión. Probá de nuevo.";
+  }
+  btn.disabled = false;
+}
+
 function bindAdmin() {
   $("[data-refresh]").addEventListener("click", load);
   $("[data-logout]").addEventListener("click", async () => { await supabase.auth.signOut(); location.reload(); });
   $("[data-order-q]").addEventListener("input", renderOrders);
   $("[data-resend-mails]").addEventListener("click", resendMails);
+  $("[data-change-notice]").addEventListener("click", sendChangeNotice);
 
   document.addEventListener("click", async (e) => {
     const copy = e.target.closest("[data-copy]");
