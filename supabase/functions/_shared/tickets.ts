@@ -45,7 +45,7 @@ export function ticketEmailHtml(ev: TicketEvent, o: TicketOrder, people: Person[
     `<li style="margin:2px 0">${esc(p.first_name)} ${esc(p.last_name)}</li>`).join("");
   const code = o.id.slice(0, 8).toUpperCase();
 
-  // Una sola línea: 13/11/2026 · 23:30HS · CREME MUSIC CLUB (el line up ya está en el flyer)
+  // Una sola línea: 14/11/2026 · 23:30HS · MANDALA INDOOR (el line up ya está en el flyer)
   const [y, m, d] = ev.event_date.split("-");
   const whenWhere = [
     `${d}/${m}/${y}`,
@@ -101,4 +101,35 @@ export async function sendTicketConfirmation(db: any, orderId: string): Promise<
     .update(err ? { email_error: err } : { email_sent_at: new Date().toISOString(), email_error: null })
     .eq("id", o.id);
   return err;
+}
+
+// Mail "Cambio de fecha y lugar" para quienes ya compraron. Mismo estilo que la confirmación.
+export function ticketChangeHtml(ev: TicketEvent, people: Person[]) {
+  const [y, m, d] = ev.event_date.split("-");
+  const when = `${d}/${m}/${y}`;
+  const flyer = ev.flyer_url && /^https:\/\//.test(ev.flyer_url)
+    ? `<img src="${esc(ev.flyer_url)}" alt="Flyer: ${esc(ev.name)}" width="520" style="display:block;width:100%;max-width:520px;height:auto;border:0">`
+    : "";
+  const names = people.map((p) => `<li style="margin:2px 0">${esc(p.first_name)} ${esc(p.last_name)}</li>`).join("");
+
+  return `<div style="background:#062C33;padding:28px 16px;font-family:system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#FFFFFF">
+  <div style="max-width:520px;margin:0 auto;background:#0B3F48;border-radius:16px;overflow:hidden;line-height:1.55">
+  ${flyer}
+  <div style="padding:28px 24px">
+    <p style="margin:0 0 4px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9FE3E8">Cambio de fecha y lugar</p>
+    <h1 style="margin:0 0 16px;font-size:24px;line-height:1.2">Nos vemos el sábado</h1>
+    <p style="margin:0 0 16px;font-size:16px">La fiesta se pasa al <strong>sábado 14 de noviembre</strong> y cambia de lugar. Tu entrada sigue valiendo: no tenés que hacer nada.</p>
+    <p style="margin:0 0 20px;font-size:17px;font-weight:700;letter-spacing:.03em;color:#9FE3E8">SÁB ${esc(when)} · ${esc((ev.time_text || "").replace(/\s+/g, "").toUpperCase())} · ${esc((ev.venue || "").toUpperCase())}</p>
+    <table style="border-collapse:collapse;font-size:15px;margin-bottom:20px">
+      <tr><td style="padding:3px 12px 3px 0;color:#9FE3E8">23:30</td><td>Puertas + Facu Arce (warm up)</td></tr>
+      <tr><td style="padding:3px 12px 3px 0;color:#9FE3E8">02:00</td><td>Manu Pavez (4 horas)</td></tr>
+    </table>
+    ${names ? `<p style="margin:0 0 6px;font-size:15px"><strong>Siguen en la lista:</strong></p><ul style="margin:0 0 20px;padding-left:20px;font-size:15px">${names}</ul>` : ""}
+    <p style="margin:0 0 16px;font-size:15px">Se entra con DNI, como siempre. Si no podés ir el sábado, respondé este mail y lo vemos.</p>
+    <p style="margin:22px 0 0;text-align:center">
+      <a href="${INSTAGRAM_URL}" style="display:inline-block;padding:12px 20px;border-radius:999px;background:#9FE3E8;color:#062C33;font-weight:700;font-size:15px;text-decoration:none">Seguime en Instagram → @manupavez_</a>
+    </p>
+  </div>
+  </div>
+</div>`;
 }
