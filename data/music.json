@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28T11:55:50.165Z",
+  "updated_at": "2026-10-29T12:03:45.302Z",
   "artist": {
     "id": "1m15KTr2Qsf1JkdkBam27h",
     "name": "Manu Pavez",
@@ -89,14 +89,14 @@
       "spotify_url": "https://open.spotify.com/track/02oJhfqEGlVZqwFfax0tA9"
     },
     {
-      "id": "61HCjjfHBRIZX0H3kQuAmQ",
-      "title": "Storm - Joaquin Salmain Remix",
-      "artwork": "https://i.scdn.co/image/ab67616d0000b273d42d03a66dd1dd94268dca40",
-      "album": "Hollow / Storm",
-      "release_date": "2025-07-31",
-      "popularity": 2,
-      "duration_ms": 452000,
-      "spotify_url": "https://open.spotify.com/track/61HCjjfHBRIZX0H3kQuAmQ"
+      "id": "7LI0644CJKOaoNQL4Q8Ag7",
+      "title": "Vortex - Manu Pavez Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b273f1c04e395e02a2219fe4c255",
+      "album": "Vortex (Manu Pavez Remix)",
+      "release_date": "2025-04-21",
+      "popularity": 0,
+      "duration_ms": 440329,
+      "spotify_url": "https://open.spotify.com/track/7LI0644CJKOaoNQL4Q8Ag7"
     },
     {
       "id": "2FhAKX5okvh5Nv1vNV56ED",
@@ -109,14 +109,14 @@
       "spotify_url": "https://open.spotify.com/track/2FhAKX5okvh5Nv1vNV56ED"
     },
     {
-      "id": "7LI0644CJKOaoNQL4Q8Ag7",
-      "title": "Vortex - Manu Pavez Remix",
-      "artwork": "https://i.scdn.co/image/ab67616d0000b273f1c04e395e02a2219fe4c255",
-      "album": "Vortex (Manu Pavez Remix)",
-      "release_date": "2025-04-21",
+      "id": "6glb69y14OvEJIBWEznTMp",
+      "title": "Essence of Soul - Christian Monique Remix",
+      "artwork": "https://i.scdn.co/image/ab67616d0000b27360a7f3556b4bed58cf1128b5",
+      "album": "Ataraxia (Remixes)",
+      "release_date": "2023-02-06",
       "popularity": 0,
-      "duration_ms": 440329,
-      "spotify_url": "https://open.spotify.com/track/7LI0644CJKOaoNQL4Q8Ag7"
+      "duration_ms": 442046,
+      "spotify_url": "https://open.spotify.com/track/6glb69y14OvEJIBWEznTMp"
     }
   ]
 }
