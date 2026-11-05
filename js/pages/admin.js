@@ -8,7 +8,7 @@ import {
   adminLastSync, adminRunSync, membershipIsActive,
   adminSetStudentPin, adminClearStudentPin, adminSetMyPin, adminPinOverview,
   adminListProducts, adminUpdateProduct, adminSaveProduct, adminListOrders, adminCreatePaymentLink,
-  adminMarkOrderPaid, adminCancelOrder, adminSetSessionDate,
+  adminMarkOrderPaid, adminCancelOrder, adminSetSessionDate, adminNotifyPortal, adminAssignPlanOrder,
 } from "../data/lab.js";
 
 const $ = (sel) => document.querySelector(sel);
@@ -134,6 +134,7 @@ function renderRow(st) {
         ${st.status === "active" ? `
           <button type="button" class="mp-btn primary small" data-act="extend">${active ? "+30 DÍAS" : "ACTIVAR 30 DÍAS"}</button>
           ${active ? `<button type="button" class="mp-btn danger small" data-act="revoke">REVOCAR</button>` : ""}
+          <button type="button" class="mp-btn ghost small" data-act="notify-portal" ${st.email ? "" : "disabled title=\"Cargá el email primero\""}>AVISAR QUE ACTUALICÉ SU PORTAL</button>
           <button type="button" class="admin-linkbtn admin-deactivate" data-act="deactivate">pasar a inactivo</button>`
         : `<button type="button" class="mp-btn ghost small" data-act="reactivate">REACTIVAR</button>`}
       </td>
@@ -217,6 +218,14 @@ tableWrap.addEventListener("click", async (e) => {
       const base = cur && new Date(cur) > new Date() && st.membership?.status === "active" ? cur : new Date();
       await adminSetMembership(id, { status: "active", current_period_end: addDays(base, 30) });
       say(`${st.full_name}: acceso activo hasta ${fmt(addDays(base, 30))}.`);
+    } else if (btn.dataset.act === "notify-portal") {
+      if (!st.email) throw new Error("Primero cargá el email del alumno.");
+      const note = prompt(`Aviso a ${st.full_name}: «Actualicé tu portal».\n\nNota opcional (la ve en el mail). Dejala vacía si no hace falta:`, "");
+      if (note === null) return;
+      const out = await adminNotifyPortal(id, note.trim().slice(0, 500));
+      if (out?.result !== "queued") throw new Error("No se pudo encolar el aviso.");
+      say(`${st.full_name}: le llega el mail en unos minutos.`);
+      return;
     } else if (btn.dataset.act === "reactivate") {
       await adminUpdateStudent(id, { status: "active" });
       say(`${st.full_name}: vuelve a la lista de activos. Si va a tomar clases, activale el acceso.`);
@@ -394,6 +403,10 @@ function renderOrder(o) {
         ${canCopy ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(o.init_point)}">COPIAR LINK</button>` : ""}
         ${o.status === "pending" || o.status === "expired" ? `<button type="button" class="mp-btn ok small" data-markpaid-open="${esc(o.id)}">MARCAR COMO PAGADO</button>` : ""}
         ${o.status === "pending" ? `<button type="button" class="mp-btn danger small" data-cancel-order="${esc(o.id)}">CANCELAR</button>` : ""}
+        ${o.status === "paid" && o.kind === "plan" && !o.fulfilled_at ? `
+          <small>Pagó con un mail que no es de ningún alumno:</small>
+          <select data-assign-student aria-label="Alumno para este pago"><option value="">Elegí el alumno…</option>${students.map((s) => `<option value="${esc(s.id)}">${esc(s.full_name)}</option>`).join("")}</select>
+          <button type="button" class="mp-btn ok small" data-assign-order="${esc(o.id)}">ASIGNAR Y ACTIVAR 30 DÍAS</button>` : ""}
       </td>
     </tr>`;
 }
@@ -409,7 +422,7 @@ async function loadShop() {
     : `<tr><td colspan="6">Todavía no hay pedidos.</td></tr>`;
 
   const prodSel = linkForm.elements.namedItem("product");
-  // También los ocultos del shop (ej. "EP listo para enviar"): se venden con link de admin
+  // También los ocultos del shop (ej. Resonancia): se venden con link de admin
   prodSel.innerHTML = prods.map((p) => `<option value="${esc(p.id)}">${esc(p.name)}${p.price_usd ? ` — ${usd(p.price_usd)} por ${esc(p.unit)}` : ""}${p.active ? "" : " (no visible en el shop)"}</option>`).join("");
   const stSel = linkForm.elements.namedItem("student");
   stSel.innerHTML = `<option value="">Otra persona (no es alumno)</option>` +
@@ -616,6 +629,30 @@ function closeMarkPaid() {
 }
 
 ordersEl.addEventListener("click", async (e) => {
+  const assignBtn = e.target.closest("[data-assign-order]");
+  if (assignBtn) {
+    const order = orders.find((o) => o.id === assignBtn.dataset.assignOrder);
+    const studentId = assignBtn.closest("td")?.querySelector("[data-assign-student]")?.value;
+    if (!order) return;
+    if (!studentId) { say("Elegí el alumno para este pago.", true); return; }
+    const st = students.find((s) => s.id === studentId);
+    if (!confirm(`¿Asignar el pago de ${order.buyer_name} (${order.product_name}) a ${st?.full_name}?\n\nLe activa 30 días y le llega el mail de mes confirmado.`)) return;
+    assignBtn.disabled = true;
+    try {
+      const out = await adminAssignPlanOrder(order.id, studentId);
+      if (out?.result === "activated") {
+        say(`${st?.full_name}: acceso activo hasta el ${new Date(out.until).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit" })}. Le llega el mail en unos minutos.`);
+        await reloadAll().then(() => loadShop()).catch(() => {});
+      } else {
+        say(out?.result === "already_fulfilled" ? "Ese pago ya estaba asignado." : "No se pudo asignar. Recargá la página.", true);
+        assignBtn.disabled = false;
+      }
+    } catch (err) {
+      say(err.message || "No se pudo asignar.", true);
+      assignBtn.disabled = false;
+    }
+    return;
+  }
   const cancelBtn = e.target.closest("[data-cancel-order]");
   if (cancelBtn) {
     const order = orders.find((o) => o.id === cancelBtn.dataset.cancelOrder);

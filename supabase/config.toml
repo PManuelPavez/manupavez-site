@@ -105,3 +105,9 @@ enabled = true
 # Público ("Avisame de nuevas fechas"): campo trampa
 verify_jwt = false
 entrypoint = "./functions/fans-subscribe/index.ts"
+
+[functions.lab-mail-sample]
+enabled = true
+# Se llama a mano con una clave de servicio (se verifica adentro): manda ejemplos de los mails del Lab
+verify_jwt = false
+entrypoint = "./functions/lab-mail-sample/index.ts"
