@@ -279,7 +279,7 @@ export async function adminSaveProduct({ id, name, description, category, price_
 export async function adminListOrders() {
   const { data, error } = await ensure()
     .from("orders")
-    .select("id, product_name, kind, student_id, buyer_name, buyer_email, source, price_usd, fx_mep, amount_ars, status, init_point, created_at, paid_at, expires_at, note, payment_method, manual_note")
+    .select("id, product_name, kind, student_id, buyer_name, buyer_email, source, price_usd, fx_mep, amount_ars, status, init_point, created_at, paid_at, fulfilled_at, expires_at, note, payment_method, manual_note")
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) throw error;
@@ -311,6 +311,21 @@ export async function adminCreatePaymentLink({ product_id, student_id, price_usd
 
 // Pago recibido por fuera de MercadoPago (transferencia / efectivo): lo procesa el servidor,
 // que también anula el link de MP de esa orden. Devuelve el resultado tal cual.
+// Mail al alumno «Actualicé tu portal» (lo manda lab-notify en los próximos minutos)
+export async function adminNotifyPortal(studentId, note) {
+  const { data, error } = await ensure().rpc("admin_notify_portal", { p_student_id: studentId, p_note: note || "" });
+  if (error) throw error;
+  return data;
+}
+
+// Orden de plan pagada por MercadoPago con un mail que no era de ningún alumno:
+// se la asigna, activa/extiende 30 días y le llega el mail de «mes confirmado».
+export async function adminAssignPlanOrder(orderId, studentId) {
+  const { data, error } = await ensure().rpc("admin_assign_plan_order", { p_order_id: orderId, p_student_id: studentId });
+  if (error) throw error;
+  return data;
+}
+
 export async function adminMarkOrderPaid({ order_id, student_id, method, note }) {
   const { data: { session } } = await ensure().auth.getSession();
   if (!session) return { result: "no_session" };

@@ -538,7 +538,7 @@ body[data-page="shop"] {
 }
 .shop-card__price span { -webkit-text-fill-color: var(--color-text-muted); }
 
-/* Planes: el primero en verde, el segundo (Lanzar) en violeta */
+/* Planes: el primero en verde, el segundo (Resonancia) en violeta */
 .shop-grid--featured .shop-card--featured:nth-child(odd) {
   border-color: rgba(62, 230, 154, 0.4);
   background:
