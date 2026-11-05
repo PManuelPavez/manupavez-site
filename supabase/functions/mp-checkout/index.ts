@@ -113,8 +113,8 @@ Deno.serve(async (req) => {
   if (mode === "admin_link" && !isAdmin) return json({ error: "unauthorized" }, 401);
   if (mode === "shop" && !(await verifyTurnstile(String(body.captcha || ""), ip))) return json({ error: "captcha" }, 403);
 
-  // Medio de pago: transferencia solo desde el shop (el link de admin es siempre MercadoPago)
-  const method = mode === "shop" && body.method === "transferencia" ? "transferencia" : "mercadopago";
+  // Medio de pago: "transferencia" (shop o pago especial del admin) o MercadoPago (por defecto)
+  const method = body.method === "transferencia" ? "transferencia" : "mercadopago";
   const bank = method === "transferencia" ? transferInfo() : null;
   if (method === "transferencia" && !bank) return json({ error: "transfer_not_configured" }, 503);
   const token = Deno.env.get("MP_ACCESS_TOKEN");
@@ -222,6 +222,15 @@ Deno.serve(async (req) => {
   if (method === "transferencia") {
     const code = order.id.slice(0, 8).toUpperCase();
     const money = (n: number) => `$${Math.round(n).toLocaleString("es-AR")}`;
+    // Pago especial por transferencia: lo armó el propio admin, no hace falta avisarle.
+    // Devuelve los datos para que el panel arme el mensaje listo para copiar.
+    if (mode === "admin_link") {
+      return json({
+        order_id: order.id, method, code, amount_ars: amountArs, fx_mep: mep, price_usd: priceUsd, quantity,
+        expires_at: order.expires_at, transfer: bank, buyer_name: buyerName,
+        concept: quantity > 1 ? `${product.name} ×${quantity}` : product.name,
+      });
+    }
     await notifyAdmin(`Frequency Lab — Pedido por transferencia: ${product.name} (${buyerName})`,
       `<div style="font-family:system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;line-height:1.55;color:#0a0a0a;max-width:560px">
         <p><strong>${esc(buyerName)}</strong> (${esc(buyerEmail)}) eligió pagar <strong>${esc(quantity > 1 ? `${product.name} ×${quantity}` : product.name)}</strong> por transferencia.</p>

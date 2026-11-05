@@ -388,6 +388,13 @@ function renderProduct(p) {
     </li>`;
 }
 
+// Método de cobro de un vistazo: link de MercadoPago / transferencia / efectivo…
+function renderMethod(o) {
+  const m = o.payment_method || "mercadopago";
+  const text = m === "mercadopago" ? (o.source === "admin_link" ? "Link de MercadoPago" : "MercadoPago") : (METHOD_LABEL[m] || m);
+  return `<span class="admin-method admin-method--${esc(m)}">${esc(text)}</span>`;
+}
+
 function renderOrder(o) {
   const [label, cls] = STATUS[o.status] || [o.status, "off"];
   const when = new Date(o.created_at).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" });
@@ -398,7 +405,8 @@ function renderOrder(o) {
       <td>${esc(o.buyer_name)}<small>${esc(o.buyer_email)}</small></td>
       <td>${esc(o.product_name)}${o.source === "admin_link" ? "<small>Precio especial</small>" : ""}${o.note ? `<small>${esc(o.note)}</small>` : ""}</td>
       <td>${usd(o.price_usd)}<small>${ars(o.amount_ars)} · MEP ${esc(Number(o.fx_mep).toLocaleString("es-AR"))}</small></td>
-      <td><span class="admin-pill admin-pill--${cls}">${esc(label)}</span>${o.status === "paid" ? `<small>${esc(METHOD_LABEL[o.payment_method] || o.payment_method)}${o.manual_note ? ` · ${esc(o.manual_note)}` : ""}</small>` : o.payment_method === "transferencia" ? `<small>Eligió transferencia · código ${esc(o.id.slice(0, 8).toUpperCase())}</small>` : ""}</td>
+      <td>${renderMethod(o)}</td>
+      <td><span class="admin-pill admin-pill--${cls}">${esc(label)}</span>${o.status === "paid" && o.manual_note ? `<small>${esc(o.manual_note)}</small>` : o.status === "pending" && o.payment_method === "transferencia" ? `<small>Código ${esc(o.id.slice(0, 8).toUpperCase())}</small>` : ""}</td>
       <td class="admin-actions">
         ${canCopy ? `<button type="button" class="mp-btn ghost small" data-copy="${esc(o.init_point)}">COPIAR LINK</button>` : ""}
         ${o.status === "pending" || o.status === "expired" ? `<button type="button" class="mp-btn ok small" data-markpaid-open="${esc(o.id)}">MARCAR COMO PAGADO</button>` : ""}
@@ -419,7 +427,7 @@ async function loadShop() {
   productsEl.innerHTML = prods.length ? prods.map(renderProduct).join("") : `<li class="admin-product">Todavía no hay productos.</li>`;
   ordersEl.innerHTML = orders.length
     ? orders.map(renderOrder).join("")
-    : `<tr><td colspan="6">Todavía no hay pedidos.</td></tr>`;
+    : `<tr><td colspan="7">Todavía no hay pedidos.</td></tr>`;
 
   const prodSel = linkForm.elements.namedItem("product");
   // También los ocultos del shop (ej. Resonancia): se venden con link de admin
@@ -444,6 +452,11 @@ function syncLinkForm() {
 }
 linkForm.addEventListener("change", (e) => {
   if (["product", "quantity", "student"].includes(e.target.name)) syncLinkForm();
+  // Cambiar el método no toca el precio (puede ser un precio especial ya escrito)
+  if (e.target.name === "method") {
+    $("[data-link-submit]").textContent = e.target.value === "transferencia" ? "GENERAR PEDIDO" : "GENERAR LINK";
+    linkResult.hidden = true;
+  }
 });
 
 linkForm.addEventListener("submit", async (e) => {
@@ -461,7 +474,29 @@ linkForm.addEventListener("submit", async (e) => {
       quantity: Number(f.namedItem("quantity").value || 1),
       price_usd: Number(f.namedItem("price").value),
       note: f.namedItem("note").value.trim(),
+      method: f.namedItem("method").value,
     });
+    if (out.method === "transferencia") {
+      // Sin MercadoPago: queda un pedido pendiente y el mensaje listo para mandar.
+      // Alias y titular vienen del servidor (secretos TRANSFER_*), no del HTML.
+      const firstName = String(out.buyer_name || "").split(/\s+/)[0] || "";
+      const message = [
+        `Hola ${firstName}! Te paso los datos para el pago de ${out.concept}:`,
+        `Monto: ${ars(out.amount_ars)} ARS (USD ${Number(out.price_usd).toLocaleString("es-AR", { maximumFractionDigits: 2 })} a dólar MEP del día)`,
+        `Alias: ${out.transfer?.alias || ""}`,
+        `Titular: ${out.transfer?.holder || ""}`,
+        "Cuando hagas la transferencia avisame y lo dejo registrado.",
+      ].join("\n");
+      linkResult.innerHTML = `
+        <p>Pedido por transferencia creado: <strong>${usd(out.price_usd)}</strong> → <strong>${ars(out.amount_ars)}</strong> (MEP ${esc(out.fx_mep)}). Quedó <strong>pendiente</strong> en Pedidos: cuando te transfiera, tocá <strong>MARCAR COMO PAGADO</strong>.</p>
+        <textarea class="admin-linkresult__msg" readonly rows="6" aria-label="Mensaje para el alumno">${esc(message)}</textarea>
+        <div class="admin-linkresult__row">
+          <button type="button" class="mp-btn primary small" data-copy="${esc(message)}">COPIAR MENSAJE</button>
+        </div>`;
+      linkResult.hidden = false;
+      await loadShop();
+      return;
+    }
     linkResult.innerHTML = `
       <p>Link listo: <strong>${usd(out.price_usd)}</strong> → <strong>${ars(out.amount_ars)}</strong> (MEP ${esc(out.fx_mep)}). Vence en 7 días.</p>
       <div class="admin-linkresult__row">
