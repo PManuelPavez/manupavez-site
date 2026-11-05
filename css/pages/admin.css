@@ -187,6 +187,36 @@ body { background: var(--color-bg); color: var(--color-text); }
 .admin-linkresult__row { display: flex; gap: 8px; }
 .admin-linkresult__row input { flex: 1; min-width: 0; }
 
+/* Pago especial por transferencia: mensaje listo para copiar */
+.admin-linkresult__msg {
+  display: block;
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(4, 6, 15, 0.6);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+/* Método de cobro en la lista de pedidos */
+.admin-method {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-soft);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.admin-method--mercadopago { border-color: rgba(0, 158, 227, 0.55); color: #6cc7f0; }
+.admin-method--transferencia { border-color: rgba(89, 198, 186, 0.55); color: var(--color-accent-2); }
+.admin-method--efectivo,
+.admin-method--otro { border-color: rgba(240, 195, 107, 0.55); color: #f0c36b; }
+
 /* Alta / edición de productos */
 .admin-linkform .admin-switch { display: inline-flex; align-self: end; color: var(--color-text); }
 .admin-table th [data-edit-product],

@@ -92,6 +92,7 @@
                 <th scope="col">Comprador</th>
                 <th scope="col">Producto</th>
                 <th scope="col">Precio</th>
+                <th scope="col">Método</th>
                 <th scope="col">Estado</th>
                 <th scope="col"><span class="sr-only">Acciones</span></th>
               </tr>
@@ -183,8 +184,14 @@
           <label data-other>Email <input name="email" type="email" maxlength="200" autocomplete="off" /></label>
           <label>Cantidad <input name="quantity" type="number" min="1" max="20" value="1" /></label>
           <label>Precio total USD <input name="price" type="number" step="0.01" min="1" max="100000" required /></label>
+          <label>Método de cobro
+            <select name="method">
+              <option value="mercadopago" selected>Link de MercadoPago</option>
+              <option value="transferencia">Transferencia</option>
+            </select>
+          </label>
           <label class="admin-linkform__wide">Nota (opcional) <input name="note" type="text" maxlength="500" autocomplete="off" /></label>
-          <button type="submit" class="mp-btn primary small">GENERAR LINK</button>
+          <button type="submit" class="mp-btn primary small" data-link-submit>GENERAR LINK</button>
         </form>
         <div class="admin-linkresult" data-link-result hidden></div>
       </section>

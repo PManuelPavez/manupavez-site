@@ -295,14 +295,21 @@ const CHECKOUT_ERRORS = {
   fx_unavailable: "No pude obtener el dólar MEP ahora. Probá en un minuto.",
   mp_failed: "MercadoPago rechazó la creación del link. Revisá las credenciales.",
   unauthorized: "Tu sesión no tiene permisos de admin.",
+  transfer_not_configured: "Faltan los datos bancarios en Supabase (TRANSFER_ALIAS, TRANSFER_CBU, TRANSFER_HOLDER).",
+  invalid_name: "Poné el nombre de la persona.",
+  invalid_email: "Revisá el email de la persona.",
 };
-export async function adminCreatePaymentLink({ product_id, student_id, price_usd, quantity = 1, note, name, email }) {
+// method: "mercadopago" (link de pago, por defecto) o "transferencia" (pedido pendiente sin MP)
+export async function adminCreatePaymentLink({ product_id, student_id, price_usd, quantity = 1, note, name, email, method = "mercadopago" }) {
   const { data: { session } } = await ensure().auth.getSession();
   if (!session) throw new Error("Iniciá sesión de nuevo.");
   const res = await fetch(`${window.MP_SUPABASE.url}/functions/v1/mp-checkout`, {
     method: "POST",
     headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ mode: "admin_link", product_id, student_id: student_id || null, price_usd, quantity, note, name, email }),
+    body: JSON.stringify({
+      mode: "admin_link", product_id, student_id: student_id || null, price_usd, quantity, note, name, email,
+      method: method === "transferencia" ? "transferencia" : "mercadopago",
+    }),
   });
   const body = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(CHECKOUT_ERRORS[body.error] || "No se pudo generar el link.");
