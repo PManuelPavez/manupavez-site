@@ -1,4 +1,4 @@
-/* =================== PUERTA — control de ingreso (solo seguridad) ===================
+/* =================== PUERTA — control de ingreso (búsqueda, sin lista ni totales) ===================
    Pantalla pensada para usar rápido, con una mano y con poca luz: letras grandes,
    botones de 56px, alto contraste. Paleta del evento (turquesa). */
 :root {
@@ -82,8 +82,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .pt-top__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .pt-top__event { font-size: 13px; color: var(--muted); }
-.pt-top__count { font-size: 20px; }
-.pt-top__count strong { font-size: 26px; color: var(--ok); font-variant-numeric: tabular-nums; }
 .pt-out {
   height: 40px;
   padding: 0 14px;
@@ -118,17 +116,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: 24px;
   line-height: 1;
 }
-.pt-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.pt-tabs button {
-  height: 40px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 15px;
-  font-weight: 600;
-}
-.pt-tabs button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 
 .pt-hint { padding: 14px; color: var(--muted); font-size: 15px; text-align: center; }
 
@@ -166,26 +153,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .pt-person.is-in .pt-person__name { color: var(--ok); }
 .pt-person__in { grid-row: 1 / span 2; grid-column: 2; text-align: right; font-size: 14px; color: var(--ok); font-weight: 700; }
 .pt-person__in small { display: block; font-weight: 500; color: var(--muted); }
-.pt-person__undo {
-  margin-top: 4px;
-  padding: 6px 8px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 12px;
-}
-.pt-group {
-  grid-column: 1 / -1;
-  justify-self: start;
-  padding: 8px 12px;
-  border: 1px dashed var(--accent);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 600;
-}
 .pt-empty { padding: 24px 8px; text-align: center; color: var(--muted); }
 
 /* ---------- Aviso ---------- */

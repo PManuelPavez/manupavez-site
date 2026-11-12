@@ -112,12 +112,14 @@
         <!-- Puerta -->
         <section class="vt-card">
           <h2>Puerta</h2>
-          <p class="vt-help">Cada persona de seguridad entra a <a href="puerta.html" target="_blank" rel="noopener">manupavez.com/puerta.html</a> con su código de 4 números.</p>
+          <p class="vt-help">Quien hace la puerta entra a <a href="puerta.html" target="_blank" rel="noopener">manupavez.com/puerta.html</a> con el código de 6 números que le asignes. Solo puede buscar nombres: no ve la lista, ni totales, ni cuántos entraron.</p>
           <ul class="vt-codes" data-codes></ul>
           <form class="vt-inline" data-code-form novalidate>
-            <input name="label" placeholder="Nombre (ej. Seguridad 1)" required maxlength="40" />
+            <input name="label" placeholder="Nombre (ej. Manu, Mapu)" required maxlength="40" />
+            <input name="code" placeholder="Código: 6 números" required inputmode="numeric" maxlength="6" pattern="[0-9]{6}" autocomplete="off" />
             <button type="submit" class="mp-btn primary small">CREAR CÓDIGO</button>
           </form>
+          <p class="vt-note" data-code-note role="status" aria-live="polite"></p>
           <p class="vt-newcode" data-newcode hidden></p>
         </section>
 
@@ -133,6 +135,36 @@
           <p class="vt-newcode" data-newpin hidden></p>
         </section>
       </div>
+
+      <!-- Celulares conectados (puerta y socio) -->
+      <section class="vt-card">
+        <div class="vt-card__head">
+          <h2>Celulares conectados</h2>
+          <div class="vt-card__tools">
+            <button type="button" class="mp-btn ghost small" data-end-all="door">CERRAR TODOS LOS DE PUERTA</button>
+            <button type="button" class="mp-btn ghost small" data-end-all="partner">CERRAR TODOS LOS DEL SOCIO</button>
+          </div>
+        </div>
+        <p class="vt-help" data-failed></p>
+        <ul class="vt-codes" data-sessions></ul>
+      </section>
+
+      <!-- Lista de puerta (solo Manu): deshacer ingresos e imprimir -->
+      <section class="vt-card">
+        <div class="vt-card__head">
+          <h2>Lista de puerta</h2>
+          <div class="vt-card__tools">
+            <input type="search" placeholder="Buscar nombre o código" data-door-q autocomplete="off" aria-label="Buscar en la lista de puerta" />
+          </div>
+        </div>
+        <form class="vt-inline vt-print-form" data-print-form novalidate>
+          <label>Imprimir apellidos de <select name="from" data-letter></select></label>
+          <label>a <select name="to" data-letter></select></label>
+          <button type="submit" class="mp-btn primary small">IMPRIMIR LISTA</button>
+        </form>
+        <p class="vt-help">La hoja sale sin números, sin totales y sin datos de contacto: solo un casillero, apellido, nombre, tipo y quién compró. Podés imprimir una parte (ej. A a L) para delegarla y llevar el resto vos.</p>
+        <ul class="vt-door" data-door></ul>
+      </section>
 
       <!-- Invitados -->
       <section class="vt-card">
@@ -163,5 +195,8 @@
       </section>
     </div>
   </main>
+
+  <!-- Hoja para imprimir (solo se ve en papel) -->
+  <section class="vt-print" data-print aria-hidden="true"></section>
 </body>
 </html>

@@ -1,20 +1,20 @@
-// puerta.js — Control de ingreso para seguridad (/puerta).
-// Entra con un código de 4 números que Manu crea en /ventas. La sesión dura 16 h en este celular.
-// Lista + buscador local (instantáneo); cada INGRESÓ se confirma en el servidor (door_checkin):
-// si otro celular ya lo marcó, avisa con la hora y quién. La lista se refresca sola cada 15 s.
+// puerta.js — Control de ingreso (/puerta).
+// Entra con un código de 6 números que Manu elige para cada persona en /ventas. La sesión dura 16 h.
+// La puerta NUNCA descarga la lista ni muestra totales: cada búsqueda va al servidor (door_search),
+// que devuelve solo las coincidencias (mínimo 3 letras, máximo 8). Cada INGRESÓ se confirma en el
+// servidor (door_checkin): si otro celular ya lo marcó, avisa con la hora. Deshacer solo desde /ventas.
 
 const cfg = window.MP_SUPABASE || {};
 const TOKEN_KEY = "mp_door";
-const REFRESH_MS = 15_000;
+const DEBOUNCE_MS = 250;
 
 const $ = (s, el = document) => el.querySelector(s);
-const norm = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
 const hhmm = (iso) => new Date(iso).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "America/Argentina/Buenos_Aires" });
 
 let token = null;
-let people = [];
-let filter = "pending";
-let timer = null;
+let results = [];
+let seq = 0;          // descarta respuestas viejas si se escribe rápido
+let debounce = null;
 
 async function rpc(fn, args) {
   const res = await fetch(`${cfg.url}/rest/v1/rpc/${fn}`, {
@@ -39,7 +39,9 @@ function readToken() {
 function logout(msg = "") {
   try { localStorage.removeItem(TOKEN_KEY); } catch {}
   token = null;
-  clearInterval(timer);
+  results = [];
+  $("[data-list]").replaceChildren();
+  $("[data-q]").value = "";
   $("[data-app]").hidden = true;
   $("[data-login]").hidden = false;
   $("[data-login-msg]").textContent = msg;
@@ -60,43 +62,41 @@ function toast(text, kind = "ok") {
   else navigator.vibrate?.(40);
 }
 
-// ---------- Lista ----------
-async function load() {
-  let data;
-  try { data = await rpc("door_list", { p_token: token }); }
-  catch { return; } // sin señal: se queda con la última lista
-  if (data?.error === "session") return logout("La sesión venció o el código se desactivó. Pedí uno nuevo.");
-  people = (data.people || []).map((p) => ({ ...p, key: norm(`${p.name} ${p.buyer} ${p.code}`) }));
-  $("[data-event]").textContent = `${data.event?.name || ""} · ${data.label || ""}`;
+// ---------- Búsqueda ----------
+function hint(text) {
+  $("[data-hint]").textContent = text;
+  $("[data-hint]").hidden = !text;
+}
+
+async function search() {
+  const q = $("[data-q]").value.trim();
+  $("[data-clear]").hidden = !q;
+  const mine = ++seq;
+  if (q.replace(/\s/g, "").length < 3) {
+    results = [];
+    render();
+    hint("Pedí el DNI y escribí nombre y apellido (mínimo 3 letras).");
+    return;
+  }
+  let r;
+  try { r = await rpc("door_search", { p_token: token, p_q: q }); }
+  catch {
+    if (mine === seq) hint("Sin conexión. Usá la lista en papel y avisale a Manu.");
+    return;
+  }
+  if (mine !== seq) return;
+  if (r?.error === "session") return logout("La sesión se cerró. Pedile a Manu un código.");
+  results = r.people || [];
+  if (r.more) hint("Hay muchas personas con eso. Escribí nombre y apellido completos.");
+  else if (r.short) hint("Escribí al menos 3 letras.");
+  else if (!results.length) hint("No está en la lista. Revisá cómo se escribe o pedí el nombre de quien compró.");
+  else hint("");
   render();
 }
 
 function render() {
-  const total = people.length;
-  const inside = people.filter((p) => p.in_at).length;
-  $("[data-in]").textContent = inside;
-  $("[data-total]").textContent = total;
-
-  const q = norm($("[data-q]").value);
-  $("[data-clear]").hidden = !q;
-  const words = q.split(" ").filter(Boolean);
-  let list = people.filter((p) => words.every((w) => p.key.includes(w)));
-  if (filter === "pending") list = list.filter((p) => !p.in_at);
-  if (filter === "in") list = list.filter((p) => p.in_at).sort((a, b) => b.in_at.localeCompare(a.in_at));
-
-  // Sin búsqueda en "Faltan" con lista larga: mostramos un tope para no hacer scroll infinito
-  const MAX = 60;
-  const shown = list.slice(0, q ? 100 : MAX);
-  $("[data-hint]").hidden = Boolean(q) || filter !== "pending";
   const ul = $("[data-list]");
-  if (!shown.length) {
-    ul.innerHTML = `<li class="pt-empty">${q ? "No hay nadie con ese nombre en esta lista." : filter === "in" ? "Todavía no entró nadie." : "No falta nadie. 🎉"}</li>`;
-    return;
-  }
-  const groups = new Map();
-  for (const p of people) groups.set(p.code, [...(groups.get(p.code) || []), p]);
-
-  ul.replaceChildren(...shown.map((p) => {
+  ul.replaceChildren(...results.map((p) => {
     const li = document.createElement("li");
     li.className = `pt-person${p.in_at ? " is-in" : ""}`;
     const name = document.createElement("p");
@@ -104,134 +104,100 @@ function render() {
     name.textContent = p.name;
     const meta = document.createElement("p");
     meta.className = "pt-person__meta";
-    meta.textContent = `${p.tier || ""} · Compra ${p.code}${p.buyer && norm(p.buyer) !== norm(p.name) ? ` de ${p.buyer}` : ""}`;
+    meta.textContent = `${p.tier || ""} · Compra ${p.code}${p.buyer ? ` de ${p.buyer}` : ""}`;
     li.append(name, meta);
 
     if (p.in_at) {
       const box = document.createElement("div");
       box.className = "pt-person__in";
-      box.innerHTML = `✓ ADENTRO<small></small>`;
+      box.innerHTML = `✓ YA ENTRÓ<small></small>`;
       box.querySelector("small").textContent = `${hhmm(p.in_at)}${p.in_by ? ` · ${p.in_by}` : ""}`;
-      const undo = document.createElement("button");
-      undo.type = "button";
-      undo.className = "pt-person__undo";
-      undo.textContent = "Deshacer";
-      undo.addEventListener("click", () => {
-        if (confirm(`¿Sacar a ${p.name} de "adentro"? Usalo solo si lo marcaste por error.`)) checkin(p, true);
-      });
-      box.append(undo);
       li.append(box);
     } else {
       const go = document.createElement("button");
       go.type = "button";
       go.className = "pt-person__go";
       go.textContent = "INGRESÓ";
-      go.addEventListener("click", () => checkin(p, false, go));
+      go.addEventListener("click", () => checkin(p, go));
       li.append(go);
-      const pending = (groups.get(p.code) || []).filter((x) => !x.in_at);
-      if (pending.length > 1) {
-        const all = document.createElement("button");
-        all.type = "button";
-        all.className = "pt-group";
-        all.textContent = `Ingresan todos los de esta compra (${pending.length})`;
-        all.addEventListener("click", () => checkinGroup(pending, all));
-        li.append(all);
-      }
     }
     return li;
   }));
 }
 
-async function checkin(p, undo = false, btn = null) {
-  if (btn) btn.disabled = true;
-  let r;
-  try { r = await rpc("door_checkin", { p_token: token, p_attendee: p.id, p_undo: undo }); }
-  catch {
-    if (btn) btn.disabled = false;
-    return toast("Sin conexión. Probá de nuevo.", "bad");
-  }
-  if (r?.error === "session") return logout("La sesión venció. Volvé a ingresar el código.");
-  if (r?.error) { if (btn) btn.disabled = false; return toast("No se encontró en la lista.", "bad"); }
-
-  if (r.result === "already") {
-    p.in_at = r.in_at; p.in_by = r.in_by;
-    toast(`⚠ ${p.name} YA INGRESÓ a las ${hhmm(r.in_at)}${r.in_by ? ` (${r.in_by})` : ""}`, "warn");
-  } else if (r.result === "undone") {
-    p.in_at = null; p.in_by = null;
-    toast(`${p.name} quedó como pendiente`, "warn");
-  } else {
-    p.in_at = r.in_at; p.in_by = r.in_by;
-    toast(`✓ ${p.name} adentro`);
-    // Listo para el próximo: búsqueda limpia y teclado arriba
-    const q = $("[data-q]");
-    if (q.value) { q.value = ""; }
-    q.focus();
-  }
-  render();
-}
-
-async function checkinGroup(list, btn) {
+async function checkin(p, btn) {
   btn.disabled = true;
-  let ok = 0;
-  const already = [];
-  for (const p of list) {
-    try {
-      const r = await rpc("door_checkin", { p_token: token, p_attendee: p.id, p_undo: false });
-      if (r?.error === "session") return logout("La sesión venció. Volvé a ingresar el código.");
-      if (r?.result === "ok") { p.in_at = r.in_at; p.in_by = r.in_by; ok++; }
-      else if (r?.result === "already") { p.in_at = r.in_at; p.in_by = r.in_by; already.push(p.name); }
-    } catch { /* sigue con el resto */ }
+  let r;
+  try { r = await rpc("door_checkin", { p_token: token, p_attendee: p.id }); }
+  catch {
+    btn.disabled = false;
+    return toast("Sin conexión. Probá de nuevo o usá la lista en papel.", "bad");
   }
-  if (already.length) toast(`✓ ${ok} adentro · ⚠ ya habían ingresado: ${already.join(", ")}`, "warn");
-  else toast(`✓ ${ok} adentro`);
+  if (r?.error === "session") return logout("La sesión se cerró. Pedile a Manu un código.");
+  if (r?.error) { btn.disabled = false; return toast("No se encontró en la lista.", "bad"); }
+
+  p.in_at = r.in_at;
+  p.in_by = r.in_by;
+  if (r.result === "already") {
+    toast(`⚠ ${p.name} YA ENTRÓ a las ${hhmm(r.in_at)}${r.in_by ? ` (${r.in_by})` : ""}`, "warn");
+    render();
+    return;
+  }
+  toast(`✓ ${p.name} adentro`);
+  // Listo para el próximo: búsqueda limpia y teclado arriba
   $("[data-q]").value = "";
+  results = [];
   render();
+  hint("Pedí el DNI y escribí nombre y apellido (mínimo 3 letras).");
+  $("[data-clear]").hidden = true;
+  $("[data-q]").focus();
 }
 
 // ---------- Inicio ----------
-function startApp() {
+async function startApp(label = "") {
   $("[data-login]").hidden = true;
   $("[data-app]").hidden = false;
-  load();
-  clearInterval(timer);
-  timer = setInterval(load, REFRESH_MS);
+  $("[data-event]").textContent = label;
+  hint("Pedí el DNI y escribí nombre y apellido (mínimo 3 letras).");
   $("[data-q]").focus();
+  // Confirma que la sesión sigue viva y trae el nombre del evento (sin personas)
+  try {
+    const d = await rpc("door_list", { p_token: token });
+    if (d?.error === "session") return logout("La sesión se cerró. Pedile a Manu un código.");
+    $("[data-event]").textContent = `${d.event?.name || ""} · ${d.label || ""}`;
+  } catch { /* sin señal: se puede seguir intentando */ }
 }
 
 $("[data-login-form]").addEventListener("submit", async (e) => {
   e.preventDefault();
   const code = $("#pt-code").value.trim();
   const msg = $("[data-login-msg]");
-  if (!/^\d{4}$/.test(code)) { msg.textContent = "El código tiene 4 números."; return; }
+  if (!/^\d{6}$/.test(code)) { msg.textContent = "El código tiene 6 números."; return; }
   msg.textContent = "Verificando…";
   let r;
   try { r = await rpc("door_login", { p_code: code }); }
   catch { msg.textContent = "Sin conexión. Probá de nuevo."; return; }
+  $("#pt-code").value = "";
   if (r?.token) {
     token = r.token;
     saveToken(token);
     msg.textContent = "";
-    startApp();
+    startApp(`${r.event || ""} · ${r.label || ""}`);
     return;
   }
-  $("#pt-code").value = "";
-  if (r?.error === "locked") msg.textContent = r.scope === "global" ? "Acceso pausado por seguridad. Avisale a Manu." : "Demasiados intentos. Esperá 15 minutos.";
-  else msg.textContent = r?.remaining > 0 ? `Código incorrecto. Te quedan ${r.remaining} intentos.` : "Código incorrecto.";
+  msg.textContent = "Código incorrecto.";
 });
 $("#pt-code").addEventListener("input", (e) => {
-  e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4);
-  if (e.target.value.length === 4) $("[data-login-form]").requestSubmit();
+  e.target.value = e.target.value.replace(/\D/g, "").slice(0, 6);
+  if (e.target.value.length === 6) $("[data-login-form]").requestSubmit();
 });
 
-$("[data-q]").addEventListener("input", render);
-$("[data-clear]").addEventListener("click", () => { $("[data-q]").value = ""; render(); $("[data-q]").focus(); });
-document.querySelectorAll("[data-filter]").forEach((b) => b.addEventListener("click", () => {
-  filter = b.dataset.filter;
-  document.querySelectorAll("[data-filter]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-  render();
-}));
+$("[data-q]").addEventListener("input", () => {
+  clearTimeout(debounce);
+  debounce = setTimeout(search, DEBOUNCE_MS);
+});
+$("[data-clear]").addEventListener("click", () => { $("[data-q]").value = ""; search(); $("[data-q]").focus(); });
 $("[data-logout]").addEventListener("click", () => { if (confirm("¿Salir de la puerta en este celular?")) logout(); });
-document.addEventListener("visibilitychange", () => { if (!document.hidden && token) load(); });
 
 token = readToken();
 if (token) startApp();

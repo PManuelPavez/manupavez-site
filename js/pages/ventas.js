@@ -2,7 +2,9 @@
 //  · Manu: PIN de admin (sesión de Supabase). Todo sale de admin_ticket_dashboard (la base verifica is_admin).
 //    Se cierra solo tras 20 min sin tocar nada.
 //  · Socio: PIN propio de 6 números (partner_login). Solo ve recaudación y tandas, y suma invitados.
-//    La base no le devuelve pedidos, mails, teléfonos, RRPP ni códigos.
+//    La base no le devuelve pedidos, mails, teléfonos, RRPP, códigos ni cuántos entraron.
+//  · Puerta (solo Manu): códigos de 6 números elegidos a mano, celulares conectados (se cierran
+//    uno por uno o todos), lista completa con "Deshacer" y hoja para imprimir sin números ni totales.
 // Se refresca cada 30 s.
 import { supabase } from "../data/supabaseClient.js";
 import { loginWithPin, rememberPin } from "../features/pinLogin.js";
@@ -25,6 +27,8 @@ const nowHHMM = () => new Date().toLocaleTimeString("es-AR", { hour: "2-digit", 
 
 let mode = null; // "admin" | "partner"
 let dash = null;
+let doorList = [];
+let doorSessions = null;
 let partnerToken = null;
 let timer = null;
 let idleTimer = null;
@@ -119,8 +123,7 @@ async function showLogin(msg = "") {
       return;
     }
     pnote.classList.add("is-error");
-    if (r?.error === "locked") pnote.textContent = r.scope === "global" ? "Acceso pausado por seguridad. Avisale a Manu." : "Demasiados intentos. Esperá 15 minutos.";
-    else pnote.textContent = r?.remaining > 0 ? `PIN incorrecto. Te quedan ${r.remaining} intentos.` : "PIN incorrecto.";
+    pnote.textContent = "PIN incorrecto.";
   });
 
   for (const [f, input] of [[form, "#vt-pin"], [pform, "#vt-ppin"]]) {
@@ -134,7 +137,13 @@ async function showLogin(msg = "") {
 
 // ================= MANU (admin) =================
 async function load() {
-  const { data, error } = await supabase.rpc("admin_ticket_dashboard", { p_slug: SLUG });
+  const [{ data, error }, ses, list] = await Promise.all([
+    supabase.rpc("admin_ticket_dashboard", { p_slug: SLUG }),
+    supabase.rpc("admin_door_sessions", { p_slug: SLUG }),
+    supabase.rpc("admin_door_list", { p_slug: SLUG }),
+  ]);
+  if (!ses.error && !ses.data?.error) doorSessions = ses.data;
+  if (!list.error && Array.isArray(list.data)) doorList = list.data;
   if (error) {
     if (/forbidden|permission/i.test(error.message)) {
       clearInterval(timer);
@@ -201,6 +210,54 @@ function render() {
   $("[data-guests]").innerHTML = guestItems(guests);
 
   renderOrders();
+  renderSessions();
+  renderDoor();
+}
+
+// Navegador → texto corto ("iPhone · Safari")
+function deviceName(ua = "") {
+  const os = /iPhone/.test(ua) ? "iPhone" : /iPad/.test(ua) ? "iPad" : /Android/.test(ua) ? "Android"
+    : /Mac OS X/.test(ua) ? "Mac" : /Windows/.test(ua) ? "Windows" : "Otro";
+  const br = /CriOS|Chrome/.test(ua) && !/Edg/.test(ua) ? "Chrome" : /Edg/.test(ua) ? "Edge" : /Firefox|FxiOS/.test(ua) ? "Firefox"
+    : /Safari/.test(ua) ? "Safari" : "";
+  return [os, br].filter(Boolean).join(" · ");
+}
+
+function renderSessions() {
+  const s = doorSessions;
+  if (!s) return;
+  $("[data-failed]").textContent = `Códigos mal ingresados: ${num(s.failed_1h)} en la última hora · ${num(s.failed_24h)} en 24 h.`
+    + (s.failed_1h >= 10 ? " ⚠ Alguien está probando códigos: cambiá los de puerta." : "");
+  $("[data-sessions]").innerHTML = (s.sessions || []).map((x) => `
+    <li><div><strong>${esc(x.label)}</strong> <span class="vt-tag ${x.role === "partner" ? "is-guest" : "is-approved"}">${x.role === "partner" ? "Socio" : "Puerta"}</span>
+      <small>${esc(deviceName(x.device || ""))} · entró ${when(x.created_at)}${x.last_seen_at ? ` · última actividad ${when(x.last_seen_at)}` : ""}</small></div>
+      <button type="button" class="mp-btn ghost small" data-end="${x.id}">CERRAR</button></li>`).join("")
+    || `<li>No hay ningún celular conectado.</li>`;
+}
+
+function renderDoor() {
+  const q = norm($("[data-door-q]").value);
+  const list = doorList.filter((p) => !q || norm(`${p.first} ${p.last} ${p.buyer} ${p.code}`).includes(q));
+  $("[data-door]").innerHTML = list.map((p) => `
+    <li class="${p.in_at ? "is-in" : ""}"><div><strong>${esc(p.last)}, ${esc(p.first)}</strong>
+      <small>${esc(p.tier || "")} · ${esc(p.code)}${norm(p.buyer) !== norm(`${p.first} ${p.last}`) ? ` · compró ${esc(p.buyer)}` : ""}${p.in_at ? ` · ✓ entró ${when(p.in_at)}${p.in_by ? ` (${esc(p.in_by)})` : ""}` : ""}</small></div>
+      ${p.in_at ? `<button type="button" class="mp-btn ghost small" data-undo="${p.id}" data-name="${esc(`${p.first} ${p.last}`)}">DESHACER</button>` : ""}</li>`).join("")
+    || `<li class="vt-help">${q ? "Nadie con esa búsqueda." : "Todavía no hay nadie en la lista."}</li>`;
+}
+
+// Hoja para imprimir: casillero, apellido, nombre, tipo y quién compró. Sin números ni totales.
+function printDoorList(from, to) {
+  const letter = (p) => norm(p.last).trim().charAt(0).toUpperCase();
+  const rows = doorList.filter((p) => { const l = letter(p); return l >= from && l <= to; });
+  const ev = dash?.event || {};
+  const fecha = ev.date ? new Date(`${ev.date}T12:00:00-03:00`).toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" }) : "";
+  $("[data-print]").innerHTML = `
+    <h1>${esc(ev.name || "Lista de puerta")}</h1>
+    <p>${esc(fecha)}${ev.venue ? ` · ${esc(ev.venue)}` : ""} · Apellidos ${esc(from)} a ${esc(to)} · Pedir DNI</p>
+    <table><thead><tr><th></th><th>Apellido</th><th>Nombre</th><th>Tipo</th><th>Compró</th></tr></thead>
+    <tbody>${rows.map((p) => `<tr><td class="box"></td><td>${esc(p.last)}</td><td>${esc(p.first)}</td><td>${esc(p.tier || "")}</td>
+      <td>${norm(p.buyer) !== norm(`${p.first} ${p.last}`) ? esc(p.buyer) : ""}</td></tr>`).join("")}</tbody></table>`;
+  window.print();
 }
 
 function renderOrders() {
@@ -291,6 +348,18 @@ function bindAdmin() {
   $("[data-refresh]").addEventListener("click", load);
   $("[data-logout]").addEventListener("click", async () => { await supabase.auth.signOut(); location.reload(); });
   $("[data-order-q]").addEventListener("input", renderOrders);
+  $("[data-door-q]").addEventListener("input", renderDoor);
+  const letters = [..."ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"].filter((l) => l !== "Ñ");
+  document.querySelectorAll("[data-letter]").forEach((sel, i) => {
+    sel.innerHTML = letters.map((l) => `<option${(i === 0 ? l === "A" : l === "Z") ? " selected" : ""}>${l}</option>`).join("");
+  });
+  $("[data-print-form]").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const from = e.target.from.value;
+    const to = e.target.to.value;
+    if (from > to) { status("La primera letra tiene que ir antes que la segunda."); return; }
+    printDoorList(from, to);
+  });
   $("[data-resend-mails]").addEventListener("click", resendMails);
   $("[data-change-notice]").addEventListener("click", sendChangeNotice);
 
@@ -300,6 +369,29 @@ function bindAdmin() {
       try { await navigator.clipboard.writeText(copy.dataset.copy); copy.textContent = "¡Copiado!"; }
       catch { prompt("Copiá el link:", copy.dataset.copy); }
       setTimeout(() => (copy.textContent = "Copiar link"), 1500);
+      return;
+    }
+    const end = e.target.closest("[data-end]");
+    if (end) {
+      if (!confirm("¿Cerrar la sesión de este celular? Para volver a entrar va a necesitar el código.")) return;
+      await supabase.rpc("admin_door_session_end", { p_id: end.dataset.end });
+      load();
+      return;
+    }
+    const all = e.target.closest("[data-end-all]");
+    if (all) {
+      const who = all.dataset.endAll === "partner" ? "del socio" : "de puerta";
+      if (!confirm(`¿Cerrar TODOS los celulares ${who}? Los códigos siguen activos: con el código pueden volver a entrar.`)) return;
+      const { data } = await supabase.rpc("admin_door_sessions_end_all", { p_slug: SLUG, p_role: all.dataset.endAll });
+      status(`Se cerraron ${num(data)} sesión(es).`);
+      load();
+      return;
+    }
+    const undo = e.target.closest("[data-undo]");
+    if (undo) {
+      if (!confirm(`¿Marcar a ${undo.dataset.name} como que NO entró? Queda registrado.`)) return;
+      await supabase.rpc("admin_checkin_undo", { p_attendee: undo.dataset.undo });
+      load();
       return;
     }
     const tog = e.target.closest("[data-toggle]");
@@ -317,10 +409,26 @@ function bindAdmin() {
   $("[data-code-form]").addEventListener("submit", async (e) => {
     e.preventDefault();
     const label = e.target.label.value.trim();
-    if (!label) return;
-    const { data, error } = await supabase.rpc("admin_door_code_create", { p_slug: SLUG, p_label: label });
-    showNewCode($("[data-newcode]"), error || data?.error ? null : data, "Código de puerta");
-    if (!error && !data?.error) { e.target.reset(); load(); }
+    const code = e.target.code.value.trim();
+    const note = $("[data-code-note]");
+    note.classList.add("is-error");
+    if (!label) { note.textContent = "Poné el nombre de quien lo va a usar."; return; }
+    if (!/^\d{6}$/.test(code)) { note.textContent = "El código tiene que tener 6 números."; return; }
+    const { data, error } = await supabase.rpc("admin_door_code_create", { p_slug: SLUG, p_label: label, p_code: code });
+    const err = error ? "error" : data?.error;
+    if (err) {
+      note.textContent = {
+        code_weak: "Ese código es muy fácil de adivinar (repetido o en escalera). Elegí otro.",
+        code_taken: "Ese código ya se usó antes. Elegí otro.",
+        code_format: "El código tiene que tener 6 números.",
+      }[err] || "No se pudo crear.";
+      return;
+    }
+    note.classList.remove("is-error");
+    note.textContent = "";
+    showNewCode($("[data-newcode]"), data, "Código de puerta");
+    e.target.reset();
+    load();
   });
 
   $("[data-partner-create]").addEventListener("submit", async (e) => {
@@ -439,7 +547,6 @@ async function loadPartner() {
     [num(t.tickets), "Entradas vendidas"],
     [ars(t.revenue), "Recaudado"],
     [num(t.guests), "Invitados"],
-    [`${num(d.checked_in)} / ${num((t.tickets || 0) + (t.guests || 0))}`, "Adentro"],
     ...(cap ? [[`${num((t.tickets || 0) + (t.guests || 0))} / ${num(cap)}`, "Capacidad usada"]] : []),
   ]);
   renderTiers($("[data-p-tiers]"), d.tiers);
