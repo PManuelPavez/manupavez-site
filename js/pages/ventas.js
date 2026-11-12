@@ -443,11 +443,26 @@ async function loadPartner() {
     ...(cap ? [[`${num((t.tickets || 0) + (t.guests || 0))} / ${num(cap)}`, "Capacidad usada"]] : []),
   ]);
   renderTiers($("[data-p-tiers]"), d.tiers);
+  partnerSales = d.sales || [];
+  renderPartnerSales();
   $("[data-p-guests]").innerHTML = guestItems(d.guests || []);
+}
+
+// Quién compró: nombre · cantidad · tanda · fecha y hora · monto (sin mails, teléfonos ni RRPP)
+let partnerSales = [];
+function renderPartnerSales() {
+  const q = norm($("[data-p-sales-q]").value);
+  const list = partnerSales.filter((s) => !q || norm(s.buyer).includes(q));
+  $("[data-p-sales]").innerHTML = list.map((s) => `<article class="vt-order">
+      <div class="vt-order__who">${esc(s.buyer)}</div>
+      <div class="vt-order__right">${num(s.quantity)} ${Number(s.quantity) === 1 ? "entrada" : "entradas"} · ${ars(s.amount)}</div>
+      <div class="vt-order__meta">${esc(s.tier || "")} · ${when(s.at)}</div>
+    </article>`).join("") || `<p class="vt-help">${q ? "Nadie con ese nombre." : "Todavía no hay compras."}</p>`;
 }
 
 function startPartner() {
   mode = "partner";
+  $("[data-p-sales-q]").addEventListener("input", renderPartnerSales);
   $("[data-refresh]").addEventListener("click", loadPartner);
   $("[data-logout]").addEventListener("click", () => {
     if (confirm("¿Salir del panel en este dispositivo?")) partnerLogout();

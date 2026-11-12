@@ -57,9 +57,18 @@
       </form>
     </section>
 
-    <!-- Vista del socio: recaudación + invitados (sin pedidos, mails, RRPP ni códigos) -->
+    <!-- Vista del socio: recaudación, quién compró e invitados (sin mails, teléfonos, RRPP ni códigos) -->
     <div data-partner hidden>
       <section class="vt-kpis" data-p-kpis></section>
+      <section class="vt-card">
+        <div class="vt-card__head">
+          <h2>Quién compró</h2>
+          <div class="vt-card__tools">
+            <input type="search" placeholder="Buscar por nombre" data-p-sales-q autocomplete="off" aria-label="Buscar comprador por nombre" />
+          </div>
+        </div>
+        <div class="vt-orders" data-p-sales></div>
+      </section>
       <section class="vt-card">
         <h2>Tandas</h2>
         <div class="vt-tiers" data-p-tiers></div>
