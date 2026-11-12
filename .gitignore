@@ -1,12 +1,6 @@
 .DS_Store
 node_modules/
 .env
-
-# Fotos originales sin optimizar (la web usa las versiones de img/live/)
-img/fotos/live*.JPG
-img/fotos/live*.jpg
-img/fotos/live*.jpeg
-
 .env.local
 .vscode/
 
@@ -22,15 +16,3 @@ __pycache__/
 venv/
 env/
 *.pyc
-img/indexPERFIL.png
-img/press/
-img/bg-*.webm
-
-# Supabase CLI (archivos locales de la herramienta)
-supabase/.temp/
-
-# Claude Code: preferencias locales de esta máquina
-.claude/settings.local.json
-
-# Apps Script con la clave real (se pega a mano en Google, nunca se commitea)
-apps_script/*.local.gs
