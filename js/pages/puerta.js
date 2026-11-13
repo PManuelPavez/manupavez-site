@@ -1,10 +1,14 @@
 // puerta.js — Control de ingreso (/puerta).
 // Entra con un código de 6 números que Manu elige para cada persona en /ventas. La sesión dura 16 h.
+// Manu también puede entrar con su PIN de admin (queda registrado como "Manu (admin)").
 // La puerta NUNCA descarga la lista ni muestra totales: cada búsqueda va al servidor (door_search),
 // que devuelve solo las coincidencias (mínimo 3 letras, máximo 8). Cada INGRESÓ se confirma en el
 // servidor (door_checkin): si otro celular ya lo marcó, avisa con la hora. Deshacer solo desde /ventas.
 
+import { mountTurnstile } from "../features/turnstile.js";
+
 const cfg = window.MP_SUPABASE || {};
+const SLUG = new URLSearchParams(location.search).get("evento") || "pergamino";
 const TOKEN_KEY = "mp_door";
 const DEBOUNCE_MS = 250;
 
@@ -89,7 +93,7 @@ async function search() {
   results = r.people || [];
   if (r.more) hint("Hay muchas personas con eso. Escribí nombre y apellido completos.");
   else if (r.short) hint("Escribí al menos 3 letras.");
-  else if (!results.length) hint("No está en la lista. Revisá cómo se escribe o pedí el nombre de quien compró.");
+  else if (!results.length) hint("No está en la lista. Revisá cómo se escribe o pedí el código de compra que le llegó por mail.");
   else hint("");
   render();
 }
@@ -190,6 +194,91 @@ $("[data-login-form]").addEventListener("submit", async (e) => {
 $("#pt-code").addEventListener("input", (e) => {
   e.target.value = e.target.value.replace(/\D/g, "").slice(0, 6);
   if (e.target.value.length === 6) $("[data-login-form]").requestSubmit();
+});
+
+// ---------- Manu con PIN de admin ----------
+// pin-login valida el PIN (Turnstile + límite de intentos) y devuelve una sesión de Supabase.
+// Con esa sesión se pide una sesión de puerta (admin_door_open, la base verifica is_admin).
+// La sesión de Supabase no se guarda: este celular queda solo con la sesión de puerta, igual que los demás.
+const ADMIN_MSG = {
+  invalid_format: "El PIN tiene 6 números.",
+  network: "Sin conexión. Probá de nuevo.",
+  captcha: "No se pudo verificar que no sos un robot. Esperá un segundo y probá de nuevo.",
+  locked_ip: "Demasiados intentos. Esperá 15 minutos.",
+  locked_global: "El acceso con PIN está pausado por seguridad. Usá un código de puerta.",
+  not_admin: "Ese PIN no es de admin.",
+  unavailable: "No se pudo entrar. Probá de nuevo en un momento.",
+};
+let captcha = null;
+
+$("[data-admin-toggle]").addEventListener("click", async () => {
+  const toAdmin = $("[data-admin-form]").hidden;
+  $("[data-admin-form]").hidden = !toAdmin;
+  $("[data-login-form]").hidden = toAdmin;
+  $("[data-admin-toggle]").textContent = toAdmin ? "Volver al código de puerta" : "Soy Manu · entrar con PIN de admin";
+  $("[data-login-intro]").textContent = toAdmin ? "Ingresá tu PIN de admin." : "Ingresá el código de 6 números que te pasaron.";
+  $("[data-admin-msg]").textContent = "";
+  $("[data-login-msg]").textContent = "";
+  $(toAdmin ? "#pt-admin-pin" : "#pt-code").focus();
+  if (toAdmin && !captcha) captcha = await mountTurnstile($("[data-captcha]"));
+});
+
+async function adminLogin(pin) {
+  if (!/^\d{6}$/.test(pin)) return { message: ADMIN_MSG.invalid_format };
+  let res, body = {};
+  try {
+    const cap = captcha ? await captcha.getToken() : "";
+    res = await fetch(`${cfg.url}/functions/v1/pin-login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pin, captcha: cap }),
+    });
+    body = await res.json().catch(() => ({}));
+  } catch { return { message: ADMIN_MSG.network }; }
+  finally { captcha?.reset(); }
+
+  if (!res.ok || !body.access_token) {
+    if (body.error === "locked") return { message: body.scope === "global" ? ADMIN_MSG.locked_global : ADMIN_MSG.locked_ip };
+    if (body.error === "invalid") {
+      const left = Number(body.remaining);
+      return { message: left > 0 ? `PIN incorrecto. Te quedan ${left} ${left === 1 ? "intento" : "intentos"}.` : ADMIN_MSG.locked_ip };
+    }
+    return { message: ADMIN_MSG[body.error] || ADMIN_MSG.unavailable };
+  }
+  if (body.redirect !== "admin.html") return { message: ADMIN_MSG.not_admin };
+
+  try {
+    const r = await fetch(`${cfg.url}/rest/v1/rpc/admin_door_open`, {
+      method: "POST",
+      headers: { apikey: cfg.anonKey, Authorization: `Bearer ${body.access_token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ p_slug: SLUG }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && d?.token) return { token: d.token, label: `${d.event || ""} · ${d.label || ""}` };
+    return { message: r.status === 403 ? ADMIN_MSG.not_admin : ADMIN_MSG.unavailable };
+  } catch { return { message: ADMIN_MSG.network }; }
+}
+
+$("[data-admin-form]").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const input = $("#pt-admin-pin");
+  const msg = $("[data-admin-msg]");
+  msg.textContent = "Verificando…";
+  const r = await adminLogin(input.value.trim());
+  input.value = "";
+  if (!r.token) { msg.textContent = r.message; return; }
+  token = r.token;
+  saveToken(token);
+  msg.textContent = "";
+  $("[data-admin-form]").hidden = true;
+  $("[data-login-form]").hidden = false;
+  $("[data-admin-toggle]").textContent = "Soy Manu · entrar con PIN de admin";
+  $("[data-login-intro]").textContent = "Ingresá el código de 6 números que te pasaron.";
+  startApp(r.label);
+});
+$("#pt-admin-pin").addEventListener("input", (e) => {
+  e.target.value = e.target.value.replace(/\D/g, "").slice(0, 6);
+  if (e.target.value.length === 6) $("[data-admin-form]").requestSubmit();
 });
 
 $("[data-q]").addEventListener("input", () => {

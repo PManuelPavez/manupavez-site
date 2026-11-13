@@ -6,6 +6,7 @@
 //  2. Se vuelve a pedir el pago a la API de MP.
 //  3. Aprobado, en ARS y por el total → ticket_confirm + mail "Estás en la lista".
 //     Rechazado/cancelado → ticket_release (libera el stock).
+//     Devuelto/desconocido → ticket_refund (sale de la puerta y de la recaudación, libera el lugar).
 //  4. Cada pago+estado se procesa una sola vez (ticket_payment_events).
 // external_reference = "tk_<uuid>": así mp-webhook (shop) lo ignora si también le llega.
 
@@ -81,9 +82,17 @@ Deno.serve(async (req) => {
     if (["rejected", "cancelled"].includes(pay.status)) {
       await db.rpc("ticket_release", { p_order_id: order.id, p_status: "rejected" });
     }
-    if ((pay.status === "refunded" || pay.status === "charged_back") && order.status === "approved") {
+    if ((pay.status === "refunded" || pay.status === "charged_back") && ["approved", "pending"].includes(order.status)) {
+      // Sale de la puerta, de la recaudación y de la lista del socio; el lugar vuelve a la tanda.
+      const { data: rf, error: rErr } = await db.rpc("ticket_refund", { p_order_id: order.id });
+      if (rErr) {
+        await db.from("ticket_payment_events").delete().eq("id", eventId); // que el reintento de MP lo procese
+        return ok({ error: "refund_failed" }, 500);
+      }
+      const warnIn = rf?.checked_in ? `<p><strong>⚠ Esta persona ya había entrado.</strong></p>` : "";
       await notifyAdmin(`Pergamino — Pago devuelto (${who})`,
-        `<p>El pago de <strong>${esc(who)}</strong> (${esc(order.buyer_email)}) por ${order.quantity} entrada(s) fue devuelto o desconocido (${esc(pay.status)}).</p><p>Sacalo de la lista de puerta.</p>`);
+        `<p>El pago de <strong>${esc(who)}</strong> (${esc(order.buyer_email)}) por ${order.quantity} entrada(s) fue devuelto o desconocido (${esc(pay.status)}).</p>
+         ${warnIn}<p>Ya se sacó solo de la lista de puerta, de la recaudación y de la lista del socio. No tenés que hacer nada.</p>`);
     }
     return ok({ status: pay.status });
   }
@@ -103,6 +112,12 @@ Deno.serve(async (req) => {
     return ok({ error: "confirm_failed" }, 500);
   }
   if (result?.result === "already_approved") return ok({ already_approved: true });
+  if (result?.result === "refunded") {
+    await notifyAdmin(`Pergamino — ⚠ Pago aprobado en una compra devuelta (${who})`,
+      `<p>Llegó un pago aprobado (${esc(pay.id)}) para una compra de <strong>${esc(who)}</strong> que ya estaba devuelta.</p>
+       <p>No se volvió a sumar a la lista. Revisalo en MercadoPago.</p>`);
+    return ok({ ignored: "order_refunded" });
+  }
 
   const mailErr = await sendTicketConfirmation(db, order.id);
   if (mailErr) console.error("[tickets-webhook] mail", mailErr);
