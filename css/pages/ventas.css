@@ -31,7 +31,8 @@ body[data-page="ventas"] { background: var(--c-ink); }
   font-size: 16px;
 }
 .vt-inline { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.vt-inline input { flex: 1 1 160px; min-width: 0; }
+.vt-inline input, .vt-inline select { flex: 1 1 160px; min-width: 0; }
+.vt-inline [hidden] { display: none; }
 
 .vt-login { max-width: 420px; }
 .vt-login form { display: grid; gap: 10px; }
@@ -74,6 +75,7 @@ body[data-page="ventas"] { background: var(--c-ink); }
 .vt-order__who { font-weight: 600; }
 .vt-order__meta, .vt-order__people { grid-column: 1 / -1; color: var(--color-text-muted); font-size: 0.84rem; overflow-wrap: anywhere; }
 .vt-order__right { text-align: right; font-variant-numeric: tabular-nums; }
+.vt-order__actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; }
 .vt-tag { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
 .vt-tag.is-approved { background: rgba(124, 242, 165, 0.18); color: #7cf2a5; }
 .vt-tag.is-pending { background: rgba(255, 197, 107, 0.18); color: #ffc56b; }

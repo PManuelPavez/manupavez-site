@@ -265,12 +265,15 @@ function renderOrders() {
   const list = (dash?.orders || []).filter((o) => !q || norm(`${o.buyer} ${o.email} ${o.code} ${(o.people || []).join(" ")} ${o.rrpp || ""} ${o.added_by || ""}`).includes(q));
   $("[data-orders]").innerHTML = list.map((o) => {
     const tag = o.method === "invitado" ? `<span class="vt-tag is-guest">Invitado${o.added_by ? ` · ${esc(o.added_by)}` : ""}</span>`
+      : o.method === "transferencia" && o.status === "approved" ? `<span class="vt-tag is-approved">Transferencia${o.added_by ? ` · ${esc(o.added_by)}` : ""}</span>`
       : o.status === "approved" ? `<span class="vt-tag is-approved">Pagado</span>` : `<span class="vt-tag is-pending">Pagando</span>`;
     return `<article class="vt-order">
       <div class="vt-order__who">${esc(o.buyer)} ${tag}</div>
       <div class="vt-order__right">${o.quantity}× ${esc(o.tier_name || "")} · ${ars(o.total_ars)}</div>
       <div class="vt-order__meta">${esc(o.code)} · ${when(o.created_at)}${o.email ? ` · ${esc(o.email)}` : ""}${o.phone ? ` · ${esc(o.phone)}` : ""}${o.rrpp ? ` · RRPP ${esc(o.rrpp)}` : ""}</div>
       <div class="vt-order__people">Entran: ${esc((o.people || []).join(", "))}</div>
+      ${o.id && o.status === "approved" && o.added_by && ["invitado", "transferencia"].includes(o.method) && !o.checked_in
+        ? `<div class="vt-order__actions"><button type="button" class="mp-btn ghost small" data-remove="${esc(o.id)}" data-kind="${esc(o.method)}" data-name="${esc(o.buyer)}">QUITAR</button></div>` : ""}
     </article>`;
   }).join("") || `<p class="vt-help">${q ? "Nada con esa búsqueda." : "Todavía no hay pedidos."}</p>`;
 }
@@ -387,6 +390,20 @@ function bindAdmin() {
       load();
       return;
     }
+    const rm = e.target.closest("[data-remove]");
+    if (rm) {
+      if (!confirm(`¿Quitar a ${rm.dataset.name}? Sale de la puerta${rm.dataset.kind === "transferencia" ? ", de la recaudación y de la lista del socio" : ""}.`)) return;
+      rm.disabled = true;
+      const { data, error } = await supabase.rpc("admin_remove_manual", { p_order_id: rm.dataset.remove });
+      if (error || data?.error) {
+        rm.disabled = false;
+        alert(data?.error === "checked_in" ? "Ya entró. Primero deshacé el ingreso en la lista de puerta." : "No se pudo quitar.");
+        return;
+      }
+      status(`Se quitó a ${rm.dataset.name}.`);
+      load();
+      return;
+    }
     const undo = e.target.closest("[data-undo]");
     if (undo) {
       if (!confirm(`¿Marcar a ${undo.dataset.name} como que NO entró? Queda registrado.`)) return;
@@ -455,14 +472,46 @@ function bindAdmin() {
     load();
   });
 
-  $("[data-guest-form]").addEventListener("submit", async (e) => {
+  // Carga a mano: invitado o transferencia (una persona por vez)
+  const gform = $("[data-guest-form]");
+  const syncGuestForm = async () => {
+    const transfer = gform.method.value === "transferencia";
+    gform.amount.hidden = !transfer;
+    $("[data-guest-submit]").textContent = transfer ? "SUMAR TRANSFERENCIA" : "SUMAR INVITADO";
+    if (transfer && !gform.amount.value) {
+      // Precio de la tanda actual como sugerencia (se puede cambiar)
+      const { data } = await supabase.rpc("public_event", { p_slug: SLUG });
+      const price = data?.current?.price_ars;
+      if (price && !gform.amount.value && gform.method.value === "transferencia") gform.amount.value = price;
+    }
+  };
+  gform.method.addEventListener("change", syncGuestForm);
+  gform.addEventListener("submit", async (e) => {
     e.preventDefault();
     const note = $("[data-guest-note]");
-    const { data, error } = await supabase.rpc("admin_add_guest", { p_slug: SLUG, p_first: e.target.first.value, p_last: e.target.last.value });
-    if (error || data?.error) { note.textContent = "Completá nombre y apellido."; note.classList.add("is-error"); return; }
+    const f = e.target;
+    const method = f.method.value;
+    const first = f.first.value.trim();
+    const last = f.last.value.trim();
+    const fail = (t) => { note.textContent = t; note.classList.add("is-error"); };
+    if (!first || !last) return fail("Completá nombre y apellido.");
+    let amount = null;
+    if (method === "transferencia") {
+      amount = Number(f.amount.value);
+      if (!f.amount.value || !Number.isInteger(amount) || amount < 0) return fail("Poné el monto transferido (solo números).");
+    }
+    const btn = $("[data-guest-submit]");
+    btn.disabled = true;
+    const { data, error } = await supabase.rpc("admin_add_manual", { p_slug: SLUG, p_first: first, p_last: last, p_method: method, p_amount: amount });
+    btn.disabled = false;
+    if (error || data?.error) return fail(data?.error === "name" ? "Completá nombre y apellido." : "No se pudo sumar. Probá de nuevo.");
     note.classList.remove("is-error");
-    note.textContent = `Sumado: ${e.target.first.value} ${e.target.last.value}.`;
-    e.target.reset();
+    note.textContent = method === "transferencia"
+      ? `Sumado: ${first} ${last} · transferencia ${ars(data.amount)} (${data.tier}).`
+      : `Sumado: ${first} ${last} · invitado.`;
+    f.first.value = "";
+    f.last.value = "";
+    f.first.focus();
     load();
   });
 

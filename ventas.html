@@ -166,14 +166,19 @@
         <ul class="vt-door" data-door></ul>
       </section>
 
-      <!-- Invitados -->
+      <!-- Carga a mano: invitado o transferencia -->
       <section class="vt-card">
-        <h2>Invitados</h2>
-        <p class="vt-help">Entran sin pagar y aparecen en la lista de puerta como "Invitado". Cuentan para la capacidad total.</p>
+        <h2>Cargar a mano</h2>
+        <p class="vt-help">Una persona por vez. <b>Invitado</b>: entra sin pagar. <b>Transferencia</b>: cuenta como venta de la tanda actual (suma a la recaudación y a la lista del socio). Las dos aparecen en la puerta y cuentan para la capacidad. Si te equivocás, quitalo desde "Pedidos" con el botón QUITAR.</p>
         <form class="vt-inline" data-guest-form novalidate>
           <input name="first" placeholder="Nombre" required maxlength="60" />
           <input name="last" placeholder="Apellido" required maxlength="60" />
-          <button type="submit" class="mp-btn primary small">SUMAR INVITADO</button>
+          <select name="method" aria-label="Tipo">
+            <option value="invitado">Invitado</option>
+            <option value="transferencia">Pagó por transferencia</option>
+          </select>
+          <input name="amount" type="number" inputmode="numeric" min="0" step="1" placeholder="Monto ($)" aria-label="Monto transferido" hidden />
+          <button type="submit" class="mp-btn primary small" data-guest-submit>SUMAR INVITADO</button>
         </form>
         <p class="vt-note" data-guest-note></p>
         <ul class="vt-guests" data-guests></ul>
