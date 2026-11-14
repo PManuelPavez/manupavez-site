@@ -99,7 +99,9 @@ function renderTiers(ev) {
   const cur = ev.current;
   $("[data-tier-name]").textContent = cur.name;
   $("[data-tier-price]").textContent = ars(cur.price_ars);
-  $("[data-tier-left]").textContent = cur.left === 1 ? "Queda 1 en esta tanda" : `Quedan ${cur.left} en esta tanda`;
+  // Sin "Quedan X": la cantidad disponible no se muestra (pedido de Manu, 14/11)
+  $("[data-tier-left]").textContent = "";
+  $("[data-tier-left]").hidden = true;
   const list = $("[data-tiers]");
   list.replaceChildren(...(ev.tiers || []).map((t) => {
     const li = document.createElement("li");
