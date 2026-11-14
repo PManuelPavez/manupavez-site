@@ -6,7 +6,7 @@
   <title>Puerta — Manu Pavez</title>
   <meta name="robots" content="noindex,nofollow" />
   <meta name="referrer" content="no-referrer" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://challenges.cloudflare.com; connect-src 'self' https://psnprhzowknhfylvgcci.supabase.co; frame-src https://challenges.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; connect-src 'self' https://psnprhzowknhfylvgcci.supabase.co; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'" />
   <meta name="theme-color" content="#062C33" />
   <link rel="icon" href="logos/CUBO%20BLANCO%20MP.png" />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -28,13 +28,12 @@
       <button class="pt-btn" type="submit">ENTRAR</button>
     </form>
 
-    <!-- Manu: PIN de admin (pin-login con Turnstile y límite de intentos) -->
+    <!-- Manu: PIN de admin (door_admin_login, sin anti-robots; abre solo la puerta) -->
     <form data-admin-form novalidate hidden>
       <input class="pt-sr" type="text" name="username" autocomplete="username" value="Frequency Lab (admin)" tabindex="-1" aria-hidden="true" readonly />
       <label class="pt-sr" for="pt-admin-pin">PIN de admin</label>
       <input id="pt-admin-pin" name="password" class="pt-code" type="password" inputmode="numeric" autocomplete="current-password"
         pattern="[0-9]{6}" maxlength="6" placeholder="······" required />
-      <div data-captcha></div>
       <p class="pt-msg" data-admin-msg role="alert"></p>
       <button class="pt-btn" type="submit">ENTRAR COMO MANU</button>
     </form>

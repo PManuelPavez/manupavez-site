@@ -5,8 +5,6 @@
 // que devuelve solo las coincidencias (mínimo 3 letras, máximo 8). Cada INGRESÓ se confirma en el
 // servidor (door_checkin): si otro celular ya lo marcó, avisa con la hora. Deshacer solo desde /ventas.
 
-import { mountTurnstile } from "../features/turnstile.js";
-
 const cfg = window.MP_SUPABASE || {};
 const SLUG = new URLSearchParams(location.search).get("evento") || "pergamino";
 const TOKEN_KEY = "mp_door";
@@ -197,21 +195,16 @@ $("#pt-code").addEventListener("input", (e) => {
 });
 
 // ---------- Manu con PIN de admin ----------
-// pin-login valida el PIN (Turnstile + límite de intentos) y devuelve una sesión de Supabase.
-// Con esa sesión se pide una sesión de puerta (admin_door_open, la base verifica is_admin).
-// La sesión de Supabase no se guarda: este celular queda solo con la sesión de puerta, igual que los demás.
+// Sin verificación anti-robots: door_admin_login valida el PIN en la base (1 s por intento fallido,
+// 5 fallos desde la misma conexión → 15 min de espera) y abre una sesión SOLO de puerta.
 const ADMIN_MSG = {
   invalid_format: "El PIN tiene 6 números.",
   network: "Sin conexión. Probá de nuevo.",
-  captcha: "No se pudo verificar que no sos un robot. Esperá un segundo y probá de nuevo.",
-  locked_ip: "Demasiados intentos. Esperá 15 minutos.",
-  locked_global: "El acceso con PIN está pausado por seguridad. Usá un código de puerta.",
-  not_admin: "Ese PIN no es de admin.",
+  locked: "Demasiados intentos. Esperá 15 minutos o usá un código de puerta.",
   unavailable: "No se pudo entrar. Probá de nuevo en un momento.",
 };
-let captcha = null;
 
-$("[data-admin-toggle]").addEventListener("click", async () => {
+$("[data-admin-toggle]").addEventListener("click", () => {
   const toAdmin = $("[data-admin-form]").hidden;
   $("[data-admin-form]").hidden = !toAdmin;
   $("[data-login-form]").hidden = toAdmin;
@@ -220,43 +213,20 @@ $("[data-admin-toggle]").addEventListener("click", async () => {
   $("[data-admin-msg]").textContent = "";
   $("[data-login-msg]").textContent = "";
   $(toAdmin ? "#pt-admin-pin" : "#pt-code").focus();
-  if (toAdmin && !captcha) captcha = await mountTurnstile($("[data-captcha]"));
 });
 
 async function adminLogin(pin) {
   if (!/^\d{6}$/.test(pin)) return { message: ADMIN_MSG.invalid_format };
-  let res, body = {};
-  try {
-    const cap = captcha ? await captcha.getToken() : "";
-    res = await fetch(`${cfg.url}/functions/v1/pin-login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pin, captcha: cap }),
-    });
-    body = await res.json().catch(() => ({}));
-  } catch { return { message: ADMIN_MSG.network }; }
-  finally { captcha?.reset(); }
-
-  if (!res.ok || !body.access_token) {
-    if (body.error === "locked") return { message: body.scope === "global" ? ADMIN_MSG.locked_global : ADMIN_MSG.locked_ip };
-    if (body.error === "invalid") {
-      const left = Number(body.remaining);
-      return { message: left > 0 ? `PIN incorrecto. Te quedan ${left} ${left === 1 ? "intento" : "intentos"}.` : ADMIN_MSG.locked_ip };
-    }
-    return { message: ADMIN_MSG[body.error] || ADMIN_MSG.unavailable };
+  let d;
+  try { d = await rpc("door_admin_login", { p_pin: pin, p_slug: SLUG }); }
+  catch { return { message: ADMIN_MSG.network }; }
+  if (d?.token) return { token: d.token, label: `${d.event || ""} · ${d.label || ""}` };
+  if (d?.error === "locked") return { message: ADMIN_MSG.locked };
+  if (d?.error === "invalid") {
+    const left = Number(d.remaining);
+    return { message: left > 0 ? `PIN incorrecto. Te quedan ${left} ${left === 1 ? "intento" : "intentos"}.` : ADMIN_MSG.locked };
   }
-  if (body.redirect !== "admin.html") return { message: ADMIN_MSG.not_admin };
-
-  try {
-    const r = await fetch(`${cfg.url}/rest/v1/rpc/admin_door_open`, {
-      method: "POST",
-      headers: { apikey: cfg.anonKey, Authorization: `Bearer ${body.access_token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ p_slug: SLUG }),
-    });
-    const d = await r.json().catch(() => ({}));
-    if (r.ok && d?.token) return { token: d.token, label: `${d.event || ""} · ${d.label || ""}` };
-    return { message: r.status === 403 ? ADMIN_MSG.not_admin : ADMIN_MSG.unavailable };
-  } catch { return { message: ADMIN_MSG.network }; }
+  return { message: ADMIN_MSG.unavailable };
 }
 
 $("[data-admin-form]").addEventListener("submit", async (e) => {
