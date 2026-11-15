@@ -170,6 +170,7 @@ async function load() {
   $("[data-dash]").hidden = false;
   $("[data-head-actions]").hidden = false;
   render();
+  renderVenue();
 }
 
 function render() {
@@ -263,22 +264,35 @@ function renderDoor() {
     || `<li class="vt-help">${q ? "Nadie con esa búsqueda." : "Todavía no hay nadie en la lista."}</li>`;
 }
 
-// Hoja para imprimir: casillero, apellido, nombre, tipo y quién compró. Sin números ni totales.
-// Vista boliche: personas que la puerta marcó como ingresadas (registro de puerta), sin montos
-async function openVenue() {
-  const { data, error } = await supabase.rpc("admin_venue_count", { p_slug: SLUG });
-  if (error || data?.error) { status("No se pudo traer el conteo de la puerta."); return; }
-  const total = Number(data.total || 0);
-  const guests = Number(data.guests || 0);
-  $("[data-venue-event]").textContent = dash?.event?.name || "";
+// Vista boliche: el mismo "Adentro" del panel de ventas, sin montos, refrescando solo mientras está abierta
+const VENUE_REFRESH_MS = 5_000;
+let venueTimer = null;
+const venueOpen = () => !$("[data-venue]").hidden;
+function renderVenue() {
+  if (!dash || !venueOpen()) return;
+  const total = Number(dash.checked_in || 0);
+  const guests = doorList.filter((p) => p.in_at && p.tier === "Invitado").length;
+  $("[data-venue-event]").textContent = dash.event?.name || "";
   $("[data-venue-total]").textContent = num(total);
-  $("[data-venue-paid]").textContent = num(total - guests);
+  $("[data-venue-paid]").textContent = num(Math.max(0, total - guests));
   $("[data-venue-guests]").textContent = num(guests);
+  $("[data-venue-updated]").textContent = `actualizado ${nowHHMM()}`;
+}
+function openVenue() {
   $("[data-venue]").hidden = false;
+  renderVenue();
+  load();
+  clearInterval(venueTimer);
+  venueTimer = setInterval(() => { if (!document.hidden) load(); }, VENUE_REFRESH_MS);
   $("[data-venue-close]").focus();
 }
-function closeVenue() { $("[data-venue]").hidden = true; }
+function closeVenue() {
+  clearInterval(venueTimer);
+  venueTimer = null;
+  $("[data-venue]").hidden = true;
+}
 
+// Hoja para imprimir: casillero, apellido, nombre, tipo y quién compró. Sin números ni totales.
 function printDoorList(from, to) {
   const letter = (p) => norm(p.last).trim().charAt(0).toUpperCase();
   const rows = doorList.filter((p) => { const l = letter(p); return l >= from && l <= to; });
