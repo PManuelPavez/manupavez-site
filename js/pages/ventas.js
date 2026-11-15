@@ -677,6 +677,7 @@ function renderPartnerSales() {
 
 function startPartner() {
   mode = "partner";
+  $("[data-venue-open]").hidden = true; // la vista boliche es solo para el admin
   $("[data-p-sales-q]").addEventListener("input", renderPartnerSales);
   $("[data-refresh]").addEventListener("click", loadPartner);
   $("[data-logout]").addEventListener("click", () => {
