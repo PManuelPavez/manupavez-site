@@ -7,7 +7,6 @@ const REFRESH_MS = 10_000;
 
 const $ = (s) => document.querySelector(s);
 const num = (n) => Number(n || 0).toLocaleString("es-AR");
-const nowHHMM = () => new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", hour12: false });
 let timer = null;
 
 async function load() {
@@ -36,7 +35,7 @@ async function load() {
   $("[data-total]").textContent = num(total);
   $("[data-paid]").textContent = num(Math.max(0, total - guests));
   $("[data-guests]").textContent = num(guests);
-  $("[data-note]").textContent = `actualizado ${nowHHMM()}`;
+  $("[data-note]").textContent = ""; // sin hora, para que la captura quede limpia
 }
 
 if (!KEY) {
