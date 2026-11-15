@@ -292,6 +292,15 @@ function closeVenue() {
   $("[data-venue]").hidden = true;
 }
 
+// Link sin PIN (/conteo.html?k=...) con cuánta gente entró, para marketing. Sin plata ni nombres.
+async function copyCountLink() {
+  const { data, error } = await supabase.rpc("admin_count_link", { p_slug: SLUG });
+  if (error || !data?.key) { status("No se pudo armar el link de conteo."); return; }
+  const url = `${SITE}/conteo.html?k=${data.key}`;
+  try { await navigator.clipboard.writeText(url); status("Link de conteo copiado. Cualquiera que lo tenga ve cuánta gente entró (sin plata ni nombres)."); }
+  catch { prompt("Link de conteo (copialo):", url); }
+}
+
 // Hoja para imprimir: casillero, apellido, nombre, tipo y quién compró. Sin números ni totales.
 function printDoorList(from, to) {
   const letter = (p) => norm(p.last).trim().charAt(0).toUpperCase();
@@ -408,6 +417,7 @@ function bindAdmin() {
   });
   $("[data-door-q]").addEventListener("input", renderDoor);
   $("[data-venue-open]").addEventListener("click", openVenue);
+  $("[data-count-link]").addEventListener("click", copyCountLink);
   $("[data-venue-close]").addEventListener("click", closeVenue);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeVenue(); });
   const letters = [..."ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"].filter((l) => l !== "Ñ");
@@ -677,7 +687,8 @@ function renderPartnerSales() {
 
 function startPartner() {
   mode = "partner";
-  $("[data-venue-open]").hidden = true; // la vista boliche es solo para el admin
+  $("[data-venue-open]").hidden = true; // la vista boliche y el link de conteo son solo para el admin
+  $("[data-count-link]").hidden = true;
   $("[data-p-sales-q]").addEventListener("input", renderPartnerSales);
   $("[data-refresh]").addEventListener("click", loadPartner);
   $("[data-logout]").addEventListener("click", () => {

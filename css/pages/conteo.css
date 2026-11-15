@@ -1,0 +1,28 @@
+/* =================== CONTEO — link sin PIN con cuánta gente entró =================== */
+:root {
+  --bg: #062C33;
+  --line: rgba(159, 227, 232, 0.35);
+  --text: #FFFFFF;
+  --muted: #9FE3E8;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Archivo", system-ui, sans-serif;
+}
+.ct { width: min(520px, 100%); display: grid; gap: 14px; justify-items: center; text-align: center; }
+.ct-kicker { color: var(--muted); font-size: .95rem; }
+.ct h1 { font-size: 1.2rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; }
+.ct-big { font-size: clamp(5rem, 28vw, 10rem); font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.ct-rows { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ct-rows div { padding: 12px; border: 1px solid var(--line); border-radius: 10px; }
+.ct-rows dt { font-size: .85rem; color: var(--muted); }
+.ct-rows dd { margin-top: 4px; font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ct-note { color: var(--muted); font-size: .85rem; min-height: 1.2em; }
