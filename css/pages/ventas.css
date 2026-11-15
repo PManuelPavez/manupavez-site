@@ -122,3 +122,19 @@ body[data-page="ventas"] { background: var(--c-ink); }
   .vt-print tr { break-inside: avoid; }
   .vt-print thead { display: table-header-group; }
 }
+
+/* Comisión MP (cálculo en el panel) */
+.vt-fee { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.vt-fee label { display: flex; align-items: center; gap: 8px; }
+.vt-fee input { width: 90px; }
+
+/* Vista boliche: pantalla completa, solo cantidad de gente */
+.vt-venue { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px; background: var(--bg, #10232a); }
+.vt-venue[hidden] { display: none; }
+.vt-venue__box { width: min(520px, 100%); text-align: center; display: grid; gap: 12px; justify-items: center; }
+.vt-venue h2 { margin: 0; font-size: 1.2rem; letter-spacing: .08em; text-transform: uppercase; }
+.vt-venue__big { margin: 0; font-size: clamp(5rem, 28vw, 10rem); font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.vt-venue__rows { margin: 0; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.vt-venue__rows div { padding: 12px; border: 1px solid currentColor; border-radius: 10px; }
+.vt-venue__rows dt { font-size: .85rem; opacity: .75; }
+.vt-venue__rows dd { margin: 4px 0 0; font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; }

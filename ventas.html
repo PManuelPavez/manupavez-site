@@ -26,6 +26,7 @@
         <p class="vt-sub" data-sub></p>
       </div>
       <div class="vt-head__actions" data-head-actions hidden>
+        <button type="button" class="mp-btn primary small" data-venue-open>VISTA BOLICHE</button>
         <button type="button" class="mp-btn ghost small" data-refresh>ACTUALIZAR</button>
         <button type="button" class="mp-btn ghost small" data-logout>SALIR</button>
       </div>
@@ -89,6 +90,10 @@
     <div data-dash hidden>
       <!-- Números -->
       <section class="vt-kpis" data-kpis></section>
+      <p class="vt-help vt-fee">
+        <label>Comisión Mercado Pago (%) <input type="number" step="0.01" min="0" max="50" inputmode="decimal" data-fee-pct /></label>
+        <small>Se aplica solo a lo cobrado por Mercado Pago (no a transferencias ni invitados). Es un cálculo aproximado.</small>
+      </p>
 
       <!-- Tandas -->
       <section class="vt-card">
@@ -200,6 +205,21 @@
       </section>
     </div>
   </main>
+
+  <!-- Vista boliche: solo cuánta gente entró (sin plata), para mostrar en pantalla -->
+  <section class="vt-venue" data-venue hidden role="dialog" aria-modal="true" aria-labelledby="vt-venue-title">
+    <div class="vt-venue__box">
+      <p class="vt-kicker" data-venue-event></p>
+      <h2 id="vt-venue-title">Ingresaron</h2>
+      <p class="vt-venue__big" data-venue-total></p>
+      <dl class="vt-venue__rows">
+        <div><dt>Con entrada</dt><dd data-venue-paid></dd></div>
+        <div><dt>Invitados</dt><dd data-venue-guests></dd></div>
+      </dl>
+      <p class="vt-help">Registro de la puerta: cada persona que marcaron como ingresada.</p>
+      <button type="button" class="mp-btn ghost small" data-venue-close>CERRAR</button>
+    </div>
+  </section>
 
   <!-- Hoja para imprimir (solo se ve en papel) -->
   <section class="vt-print" data-print aria-hidden="true"></section>

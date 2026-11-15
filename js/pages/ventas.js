@@ -16,6 +16,14 @@ const SITE = "https://manupavez.com";
 const REFRESH_MS = 30_000;
 const IDLE_MS = 20 * 60_000;
 const PARTNER_KEY = "mp_partner";
+const FEE_KEY = "mp_fee_pct";
+const FEE_DEFAULT = 7.61; // 6,29% + IVA (cobro inmediato)
+const MANUAL = ["transferencia", "efectivo", "otro"];
+function feePct() {
+  let v = NaN;
+  try { v = parseFloat(localStorage.getItem(FEE_KEY)); } catch {}
+  return Number.isFinite(v) && v >= 0 ? v : FEE_DEFAULT;
+}
 
 const $ = (s, el = document) => el.querySelector(s);
 const ars = (n) => `$${Math.round(Number(n) || 0).toLocaleString("es-AR")}`;
@@ -169,12 +177,22 @@ function render() {
   setHeader(d.event, "Panel de ventas · Manu");
 
   const t = d.totals || {};
+  // Cálculo en el panel: comisión MP solo sobre lo cobrado por Mercado Pago (no manual ni invitados)
+  const paid = (d.orders || []).filter((o) => o.status === "approved" && o.method !== "invitado");
+  const manualGross = paid.filter((o) => MANUAL.includes(o.method)).reduce((s, o) => s + Number(o.total_ars || 0), 0);
+  const mpGross = Math.max(0, Number(t.revenue || 0) - manualGross);
+  const fee = mpGross * feePct() / 100;
+  const people = (t.tickets || 0) + (t.guests || 0);
   $("[data-kpis]").innerHTML = kpiHTML([
+    [num(people), "Total de gente"],
     [num(t.tickets), "Entradas vendidas"],
-    [ars(t.revenue), "Recaudado"],
-    [num(t.orders), "Compras"],
     [num(t.guests), "Invitados"],
-    [`${num(d.checked_in)} / ${num((t.tickets || 0) + (t.guests || 0))}`, "Adentro"],
+    [ars(t.revenue), "Recaudado (bruto)"],
+    [ars(fee), `Comisión MP (${feePct().toLocaleString("es-AR")}%)`],
+    [ars(t.revenue - fee), "Neto"],
+    [`${ars(mpGross)} / ${ars(manualGross)}`, "Mercado Pago / Transferencia"],
+    [num(t.orders), "Compras"],
+    [`${num(d.checked_in)} / ${num(people)}`, "Adentro"],
     [num(t.pending), "Reservadas pagando"],
     [num(d.waitlist), "Lista de espera"],
     [num(d.fans), "Fans en la lista"],
@@ -246,6 +264,21 @@ function renderDoor() {
 }
 
 // Hoja para imprimir: casillero, apellido, nombre, tipo y quién compró. Sin números ni totales.
+// Vista boliche: personas que la puerta marcó como ingresadas (registro de puerta), sin montos
+async function openVenue() {
+  const { data, error } = await supabase.rpc("admin_venue_count", { p_slug: SLUG });
+  if (error || data?.error) { status("No se pudo traer el conteo de la puerta."); return; }
+  const total = Number(data.total || 0);
+  const guests = Number(data.guests || 0);
+  $("[data-venue-event]").textContent = dash?.event?.name || "";
+  $("[data-venue-total]").textContent = num(total);
+  $("[data-venue-paid]").textContent = num(total - guests);
+  $("[data-venue-guests]").textContent = num(guests);
+  $("[data-venue]").hidden = false;
+  $("[data-venue-close]").focus();
+}
+function closeVenue() { $("[data-venue]").hidden = true; }
+
 function printDoorList(from, to) {
   const letter = (p) => norm(p.last).trim().charAt(0).toUpperCase();
   const rows = doorList.filter((p) => { const l = letter(p); return l >= from && l <= to; });
@@ -351,7 +384,18 @@ function bindAdmin() {
   $("[data-refresh]").addEventListener("click", load);
   $("[data-logout]").addEventListener("click", async () => { await supabase.auth.signOut(); location.reload(); });
   $("[data-order-q]").addEventListener("input", renderOrders);
+  const feeInput = $("[data-fee-pct]");
+  feeInput.value = feePct();
+  feeInput.addEventListener("input", () => {
+    const v = parseFloat(String(feeInput.value).replace(",", "."));
+    if (!Number.isFinite(v) || v < 0 || v > 50) return;
+    try { localStorage.setItem(FEE_KEY, String(v)); } catch {}
+    if (dash) render();
+  });
   $("[data-door-q]").addEventListener("input", renderDoor);
+  $("[data-venue-open]").addEventListener("click", openVenue);
+  $("[data-venue-close]").addEventListener("click", closeVenue);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeVenue(); });
   const letters = [..."ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"].filter((l) => l !== "Ñ");
   document.querySelectorAll("[data-letter]").forEach((sel, i) => {
     sel.innerHTML = letters.map((l) => `<option${(i === 0 ? l === "A" : l === "Z") ? " selected" : ""}>${l}</option>`).join("");
@@ -593,6 +637,7 @@ async function loadPartner() {
   const t = d.totals || {};
   const cap = d.event?.capacity;
   $("[data-p-kpis]").innerHTML = kpiHTML([
+    [num((t.tickets || 0) + (t.guests || 0)), "Total de gente"],
     [num(t.tickets), "Entradas vendidas"],
     [ars(t.revenue), "Recaudado"],
     [num(t.guests), "Invitados"],
