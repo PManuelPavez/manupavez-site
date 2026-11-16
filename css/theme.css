@@ -783,3 +783,8 @@ body[data-page="clinicas"] h1,
   .show-row--flyer .show-venue { padding-inline: 16px; }
   .show-row--flyer .show-cta { margin: 4px 16px 0; justify-self: stretch; text-align: center; padding: 14px 18px; }
 }
+
+/* Fechas pasadas (debajo de las próximas) */
+.show-past-title { margin: 32px 0 8px; font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+.show-row--past { opacity: .6; }
+.show-row--past .show-flyer img { filter: grayscale(1); }

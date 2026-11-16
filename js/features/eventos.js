@@ -47,12 +47,23 @@ function formatearFecha(fecha) {
 const esExterno = (url) => /^https?:\/\//i.test(url) && !url.startsWith(location.origin);
 const resolver = (url) => (/^https?:\/\//i.test(url) ? url : siteUrl(url));
 
-function plantillaEvento(ev) {
+// true si la fecha ya pasó (comparando solo el día, hora local)
+function yaPaso(ev) {
+  const d = aDateLocal(ev.fecha);
+  if (!d) return false;
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+  return d < hoy;
+}
+
+function plantillaEvento(ev, pasado = false) {
   const fecha = formatearFecha(ev.fecha);
   const lugar = esc(ev.lugar);
   const ciudad = esc(ev.ciudad);
-  const tickets = ev.tickets ? String(ev.tickets) : "";
-  const cta = tickets
+  const tickets = !pasado && ev.tickets ? String(ev.tickets) : "";
+  const cta = pasado
+    ? `<span class="muted show-soon">${t.pastShow}</span>`
+    : tickets
     ? `<a class="mp-btn primary show-cta" href="${esc(resolver(tickets))}"${esExterno(tickets) ? ' target="_blank" rel="noopener"' : ""}>${t.buyTicket}</a>`
     : `<span class="muted show-soon">${t.comingSoon}</span>`;
   const flyer = ev.flyer
@@ -63,7 +74,7 @@ function plantillaEvento(ev) {
   // del init de scrollytelling.js (que escanea `.reveal` al cargar la página).
   // Las filas se animan con el IntersectionObserver de revelarFilas() abajo.
   return `
-    <article class="show-row${flyer ? " show-row--flyer" : ""}">
+    <article class="show-row${flyer ? " show-row--flyer" : ""}${pasado ? " show-row--past" : ""}">
       ${flyer}
       <span class="show-date">${fecha}</span>
       <span class="show-venue">${lugar}${ciudad ? ` · ${ciudad}` : ""}</span>
@@ -129,12 +140,19 @@ export async function initEventos() {
 
     const eventos = await res.json();
 
-    if (!Array.isArray(eventos) || eventos.length === 0) {
+    const lista = Array.isArray(eventos) ? eventos : [];
+    const proximos = lista.filter((ev) => !yaPaso(ev));
+    // Pasados: los más recientes primero, máximo 3
+    const pasados = lista.filter(yaPaso).sort((a, b) => aDateLocal(b.fecha) - aDateLocal(a.fecha)).slice(0, 3);
+
+    if (!proximos.length && !pasados.length) {
       cont.innerHTML = `<p class="muted">${t.noShows}</p>`;
       return;
     }
 
-    cont.innerHTML = eventos.map(plantillaEvento).join("");
+    cont.innerHTML =
+      (proximos.length ? proximos.map((ev) => plantillaEvento(ev)).join("") : `<p class="muted">${t.noShows}</p>`) +
+      (pasados.length ? `<h3 class="show-past-title">${t.pastTitle}</h3>${pasados.map((ev) => plantillaEvento(ev, true)).join("")}` : "");
 
     // Las filas se inyectan DESPUÉS del init de GSAP, así que su fade-up no se
     // registró en scrollytelling.js. Lo creamos acá explícitamente.

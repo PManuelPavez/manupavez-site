@@ -307,6 +307,13 @@ async function showReturn(orderId, estado) {
   }
   renderEvent(ev);
 
+  // Evento terminado: sin venta ni lista de espera
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "America/Argentina/Buenos_Aires" });
+  if (ev.event_date && ev.event_date < today) {
+    $("[data-ended]").hidden = false;
+    return;
+  }
+
   // Si acaba de comprar, no le mostramos el formulario hasta saber cómo salió el pago
   if (paid && (await paid)) return;
 
